@@ -365,4 +365,4 @@ async def on_message(message):
         await send("Hmmmm fuck you {}".format(name))
 
 #Client key - this is required to run
-client.run('NzExOTM0MTAyOTA2OTk0Njk5.XsKPrw.bnx0fHFbS72nS3gskojP017M-aU')
+client.run('')
