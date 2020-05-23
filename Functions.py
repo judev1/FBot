@@ -3,12 +3,11 @@
 
 import time, random, datetime, os
 
-
-
 class functions():
     def wait(wait):
         time.sleep(wait)
 
+    #Removes known prefix's and suffix's from a string
     def remove(oldtext, front, back):
         length = 0
         text = ""
@@ -25,7 +24,8 @@ class functions():
                 newtext = "{}{}".format(newtext, letters)
                 length -= 1
         return newtext
-    
+
+    #Sets up and checks files for severs
     def create(client):
         
         newpath = r"Servers"
@@ -37,8 +37,8 @@ class functions():
 
         for server in client.guilds:
             server = str(server)
-            if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-                server = "anime"
+            if server == "IRREGULAR NAME":
+                server = "normal name"
             newpath = r"Servers\{}".format(server)
             if os.path.exists(newpath):
                 print(" > There is already a folder to store {}'s infomation".format(server))
@@ -54,10 +54,11 @@ class functions():
                 file = open("Servers\{}\Data.txt".format(server), "w+")
                 file.close()
 
+    #Checks if there is a name for the gayscale feature
     def checkname(name, server):
         server = str(server)
-        if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-            server = "anime"
+        if server == "IRREGULAR NAME":
+            server = "normal name"
         file = open("Servers\{}\Data.txt".format(server), "r")
         data = file.readlines()
         file.close()
@@ -74,20 +75,22 @@ class functions():
         info = [getname, repeat]
         return info
 
+    #Gets the sexuality of a member if their name was found
     def getsex(name, repeat, server):
         server = str(server)
-        if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-            server = "anime"
+        if server == "IRREGULAR NAME":
+            server = "normal name"
         file = open("Servers\{}\Data.txt".format(server), "r")
         data = file.readlines()
         repeat += 1
         getsex = functions.remove(data[repeat], 12, 2)
         return getsex
-    
+
+    #Writes the sexuality of a member if their name isn't found
     def createsex(name, usersex, server):
         server = str(server)
-        if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-            server = "anime"
+        if server == "IRREGULAR NAME":
+            server = "normal name"
         file = open("Servers\{}\Data.txt".format(server), "r+")
         data = file.readlines()
         file.close()
@@ -103,18 +106,20 @@ class functions():
         file.writelines(data)
         file.close()
 
+    #Creates a file for FBot's status
     def setfbot(status, server):
         server = str(server)
-        if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-            server = "anime"
+        if server == "IRREGULAR NAME":
+            server = "normal name"
         file = open("Servers\{}\Status.txt".format(server), "w+")
         file.writelines(status)
         file.close()
 
+    #Gets FBot's status
     def getfbot(server):
         server = str(server)
-        if server == "＊*•̩̩͙✩•̩̩͙*˚ANIME˚*•̩̩͙✩•̩̩͙*˚＊":
-            server = "anime"
+        if server == "IRREGULAR NAME":
+            server = "normal name"
         file = open("Servers\{}\Status.txt".format(server), "r")
         info = file.readlines()
         return info
