@@ -1,7 +1,10 @@
 # FBot
 The most annoying bot on discord
 
-Currently FBot is only being used on 4 Servers
+Currently FBot is only being used on 5 Servers with more than 100 members
+
+550+ lines of code
+
 
 Invite FBot using this link:
 https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot
