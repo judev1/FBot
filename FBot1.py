@@ -41,6 +41,7 @@ async def on_ready():
 #Message Replies
 @client.event
 async def on_message(message):
+    
     #Variable setups for ease of use
     name = message.author
     name = str(name)
@@ -51,13 +52,14 @@ async def on_message(message):
     content = message.content
     startswith = content.startswith
     send = message.channel.send
-    #Check for a FBot Status file
+    
+    #Check for a FBot's Status file
     try:
         getfbot(server)
     except:
         setfbot("on", server)
 
-    #Get FBot Statu
+    #Get FBot's Status
     status = getfbot(server)
     status = remove(status, 0, 0)
 
@@ -65,10 +67,15 @@ async def on_message(message):
     if message.author == client.user:
                 return
 
-    #Only lets justjude use it
-    elif "fuck" in content:
-        await message.delete()
-        await send("That message violates the community guidelines")
+    #Prevents USER from sending any messages
+    #elif name == "USER":
+        #await message.delete()
+        #await send("You violate the community guidelines")
+
+    #Prevents members who are not MR. USER from sending any messages
+    #elif name != "MR. USER":
+        #await message.delete()
+        #await send("You violate the community guidelines")
 
     #The gay gif
     elif "https://cdn.zerotwo.dev/LICK/36dd6ed1-f77e-4dc3-9f4f-1a77abe2519b.gif" in content:
@@ -82,7 +89,7 @@ async def on_message(message):
     elif status == "off":
         return
 
-    #Get a random sexuality
+    #Get a random sexuality for yourself (new one for each server)
     elif content == "gayscale" or content == "Gayscale":
         num = len(sexuality) - 1
         num = random.randint(0, num)
@@ -145,6 +152,13 @@ async def on_message(message):
         time.sleep(3)
         await message.channel.send("Feet pics {} be granted!".format(choice))
 
+    #Call on FBot
+    elif startswith("fbot ") or startswith("Fbot ") or startswith("FBot "):
+        content = remove(content, 5, 0)
+        await send("No {}, {}".format(name, content))
+    elif content in fbot:
+        await send("Yes {}...?".format(name))
+    
     #Fuck FBot, Fuck me, Fuck you
     elif startswith("fuck ") or startswith("Fuck "):
         name = fn.remove(content, 5, 0)
@@ -155,12 +169,12 @@ async def on_message(message):
             await send("Wait no")
         elif content == "fuck you" or content == "Fuck you":
             await send("No fuck you")
-        elif fbotcheck == "me":
-            await send("Fuck you, fuck you {}".format(name))
+        elif content == "fuck me" or content == "Fuck me":
+            await send("Oh yes, fuck you {}".format(name))
         else:
             await send("Yeah fuck {}".format(name))
 
-    #I am, I have, I will
+    #I am, I have, I will, I would
     elif startswith("im ") or startswith("Im "):
         content = fn.remove(content, 3, 0)
         await send("Yeah {}'s {}".format(name, content))
@@ -190,8 +204,24 @@ async def on_message(message):
     elif startswith("i will ") or startswith("I will "):
         content = fn.remove(content, 7, 0)
         await send("Yeah {} will {}".format(name, content))
+    
+    elif startswith("id ") or startswith("Id "):
+        content = fn.remove(content, 3, 0)
+        await send("Yeah {} would {}".format(name, content))
+    elif startswith("i'd ") or startswith("I'd "):
+        content = fn.remove(content, 4, 0)
+        await send("Yeah {} would {}".format(name, content))
+    elif startswith("i would ") or startswith("I would "):
+        content = fn.remove(content, 8, 0)
+        await send("Yeah {} would {}".format(name, content))
 
     #You, Your, You are, You have
+    elif startswith("u ") or startswith("U "):
+        content = fn.remove(content, 2, 0)
+        await send("Yeah you {}".format(content))
+    elif startswith("ur ") or startswith("Ur "):
+        content = fn.remove(content, 3, 0)
+        await send("Yeah your {}".format(content))
     elif startswith("you ") or startswith("You "):
         content = fn.remove(content, 4, 0)
         await send("Yeah you {}".format(content))
@@ -344,12 +374,27 @@ async def on_message(message):
         await send("Die motherfucker")
         
 
-    #Meme talk, Nice, F, Oof, Bruh, Hmm
+    #Meme talk, Nice, No you, Cool, Lol, Lmao, Lmfao, F, Oof, Bruh, Hmm, Ree
     elif content == "nice" or content == "Nice":
         await message.channel.send("Not nice")
     elif content == "not nice" or content == "Not nice":
         await message.channel.send("Nice")
 
+    elif content == "no u" or content == "No u" or content == "no you" or content == "No you":
+        await message.channel.send("No you")
+
+    elif content == "cool" or content == "Cool":
+        await message.channel.send("Not cool")
+    elif startswith("cooo") or startswith("Cooo"):
+        await message.channel.send("Not {}".format(content))
+
+    elif content == "lol" or content == "Lol" or content == "LOL":
+        await send("No, actually, not funny")
+    elif content == "lmao" or content == "Lmao" or content == "LMAO":
+        await send("No, actually, not funny")
+    elif content == "lfmao" or content == "Lmfao" or content == "LMFAO":
+        await send("No, actually, not funny")
+        
     elif content == "f" or content == "F":
         await send("F")
 
@@ -360,9 +405,14 @@ async def on_message(message):
         await send("Yeah {}?".format(content))
 
     elif startswith("hm"):
-        await send("Hmmmm fuck you {}".format(name))
+        content = remove(content, 1, 0)
+        await send("H{} fuck you {}".format(content, name))
     elif startswith("Hm"):
-        await send("Hmmmm fuck you {}".format(name))
+        await send("{} fuck you {}".format(content, name))
+
+    elif startswith("ree") or startswith("Ree"):
+        content = remove(content, 1, 0)
+        await send("R{}".format(content))
 
 #Client key - this is required to run
 client.run('')
