@@ -2,12 +2,20 @@
 #   File: FBot.py
 
 from Functions import functions as fn
-import discord, random, time
+import discord, random, time, os
 
 client = discord.Client()
 remove = fn.remove
 
 create = fn.create
+checkserver = fn.checkserverid
+getserver = fn.getserverid
+createserver = fn.createserverid
+checkchannel = fn.checkchannelid
+getchannel = fn.getchannelid
+createchannel = fn.createchannelid
+
+
 checkname = fn.checkname
 getsex = fn.getsex
 createsex = fn.createsex
@@ -33,9 +41,8 @@ async def on_connect():
 @client.event
 async def on_ready():
     name = client.user
-    server = client.guilds
     print(" > Finished signing into discord as {}\n".format(name))
-
+        
     create(client)
 
 #Message Replies
@@ -47,20 +54,56 @@ async def on_message(message):
     name = str(name)
     name = remove(name, 0, 5)
 
-    server = message.guild
-    
     content = message.content
     startswith = content.startswith
     send = message.channel.send
+
+    server = message.guild
+    channel = message.channel
+
+    #Check for the Server's data
+    serverid = str(server.id)
+    info = checkserver(serverid)
+            
+    if info[0] == serverid:
+        server = getserver(info[0], info[1])
+    else:
+        createserver(serverid, info[1])
+        server = getserver(info[0], info[1])
+
+    #Create a file for the Channel
+    try:
+        file = open("Servers\{}\Channel_Names.txt".format(server), "r")
+        file.close()
+        
+    except:
+        file = open("Servers\{}\Channel_Names.txt".format(server), "w+")
+        file.close()  
+            
+    #Check for the Channel's data
+    channelid = str(channel.id)
+    info = checkchannel(channelid, server)
+            
+    if info[0] == channelid:
+        channel = getchannel(info[0], info[1], server)
+    else:
+        createchannel(channelid, info[1], server)
+        channel = getchannel(info[0], info[1], server)
+
+    #Create a folder for the Channel
+    newpath = r"Servers\{}\{}".format(server, channel)
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
     
     #Check for a FBot's Status file
     try:
-        getfbot(server)
+        getfbot(server, channel)
     except:
-        setfbot("on", server)
+        setfbot("on", server, channel)
+
 
     #Get FBot's Status
-    status = getfbot(server)
+    status = getfbot(server, channel)
     status = remove(status, 0, 0)
 
     #Don't let FBot reply to it's self
@@ -82,12 +125,14 @@ async def on_message(message):
         await message.delete()
 
     #Toggle FBot
-    elif content == "fbot1 off" or content == "Fbot1 off" or content == "FBot1 off":
-        setfbot("off", server)
-    elif content == "fbot1 on" or content == "Fbot1 on" or content == "FBot1 on":
-        setfbot("on", server)
+    elif content == "fbot off" or content == "Fbot off" or content == "FBot off":
+        setfbot("off", server, channel)
+    elif content == "fbot on" or content == "Fbot on" or content == "FBot on":
+        setfbot("on", server, channel)
     elif status == "off":
         return
+    #elif content != "fbot off":
+        #await send("Just a notice to all servers: FBot is migrating from the command `fbot1 on/off` to `fbot on/off`, in the meanwhile use the command `fbot off` to stop spam. Please wait up to 5mins. Sorry for the inconvieniance")
 
     #Get a random sexuality for yourself (new one for each server)
     elif content == "gayscale" or content == "Gayscale":
@@ -389,11 +434,11 @@ async def on_message(message):
         await message.channel.send("Not {}".format(content))
 
     elif content == "lol" or content == "Lol" or content == "LOL":
-        await send("No, actually, not funny")
+        await send("No actually, not funny")
     elif content == "lmao" or content == "Lmao" or content == "LMAO":
-        await send("No, actually, not funny")
+        await send("No actually, not funny")
     elif content == "lfmao" or content == "Lmfao" or content == "LMFAO":
-        await send("No, actually, not funny")
+        await send("No actually, not funny")
         
     elif content == "f" or content == "F":
         await send("F")
