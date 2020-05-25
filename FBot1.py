@@ -8,13 +8,7 @@ client = discord.Client()
 remove = fn.remove
 
 create = fn.create
-checkserver = fn.checkserverid
-getserver = fn.getserverid
-createserver = fn.createserverid
-checkchannel = fn.checkchannelid
-getchannel = fn.getchannelid
-createchannel = fn.createchannelid
-
+setup = fn.setup
 
 checkname = fn.checkname
 getsex = fn.getsex
@@ -23,19 +17,23 @@ createsex = fn.createsex
 setfbot = fn.setfbot
 getfbot = fn.getfbot
 
+
 #Variables you can change
 sexuality = ["gay", "straight", "definitley not straight", "I have no fucking clue", "like mostly gay", "half gay", "just a pedo", "bixsexual probaly"]
 twss = ["That's big", "that's big", "Thats big", "thats big"]
+banned = []
 
 #Variables you should not change
 fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "fBOt",  "fBoT",  "fbOT",  "FBOt",  "FbOT",  "fBOT",  "FBOT"]
 tf = ["will", "will not"]
+
 
 #When the Client connects to the server
 @client.event
 async def on_connect():
     name = client.user
     print("\n > Began signing into discord as {}".format(name))
+
 
 #When the Client - Server connection is ready  
 @client.event
@@ -44,6 +42,8 @@ async def on_ready():
     print(" > Finished signing into discord as {}\n".format(name))
         
     create(client)
+    create(client)
+
 
 #Message Replies
 @client.event
@@ -61,39 +61,11 @@ async def on_message(message):
     server = message.guild
     channel = message.channel
 
-    #Check for the Server's data
-    serverid = str(server.id)
-    info = checkserver(serverid)
-            
-    if info[0] == serverid:
-        server = getserver(info[0], info[1])
-    else:
-        createserver(serverid, info[1])
-        server = getserver(info[0], info[1])
-
-    #Create a file for the Channel
-    try:
-        file = open("Servers\{}\Channel_Names.txt".format(server), "r")
-        file.close()
-        
-    except:
-        file = open("Servers\{}\Channel_Names.txt".format(server), "w+")
-        file.close()  
-            
-    #Check for the Channel's data
-    channelid = str(channel.id)
-    info = checkchannel(channelid, server)
-            
-    if info[0] == channelid:
-        channel = getchannel(info[0], info[1], server)
-    else:
-        createchannel(channelid, info[1], server)
-        channel = getchannel(info[0], info[1], server)
-
-    #Create a folder for the Channel
-    newpath = r"Servers\{}\{}".format(server, channel)
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
+    setup(server, channel)
+    data = setup(server, channel)
+    
+    server = data[0]
+    channel = data[1]
     
     #Check for a FBot's Status file
     try:
@@ -108,10 +80,10 @@ async def on_message(message):
 
     #Don't let FBot reply to it's self
     if message.author == client.user:
-                return
+        return
 
     #Prevents USER from sending any messages
-    #elif name == "USER":
+    #elif name == "":
         #await message.delete()
         #await send("You violate the community guidelines")
 
@@ -120,6 +92,11 @@ async def on_message(message):
         #await message.delete()
         #await send("You violate the community guidelines")
 
+    #Checks if phrase is banned
+    #elif banned in content:
+        #await message.delete()
+        #await send("{}, your message violates the community guidelines")
+
     #The gay gif
     elif "https://cdn.zerotwo.dev/LICK/36dd6ed1-f77e-4dc3-9f4f-1a77abe2519b.gif" in content:
         await message.delete()
@@ -127,8 +104,10 @@ async def on_message(message):
     #Toggle FBot
     elif content == "fbot off" or content == "Fbot off" or content == "FBot off":
         setfbot("off", server, channel)
+        print("FBot is off and wishes it wasn't")
     elif content == "fbot on" or content == "Fbot on" or content == "FBot on":
         setfbot("on", server, channel)
+        print("FBot is on and ready to annoy")
     elif status == "off":
         return
     #elif content != "fbot off":
@@ -175,6 +154,9 @@ async def on_message(message):
 
     #Zero Two
     elif startswith("zt!") or startswith("Zt!"):
+        await send("That's too gay for me, please kill me")
+    #Aki
+    elif startswith("aki") or startswith("Aki"):
         await send("That's too gay for me, please kill me")
 
     #Gifs
@@ -326,6 +308,17 @@ async def on_message(message):
         content = fn.remove(content, 7, 0)
         await send("Yeah that's {}".format(content))
 
+    #Let us
+    elif startswith("let ") or startswith("Let "):
+        content = fn.remove(content, 4, 0)
+        await send("Yeah let {}".format(content))
+    elif startswith("lets ") or startswith("Lets "):
+        content = fn.remove(content, 5, 0)
+        await send("Yeah let's {}".format(content))
+    elif startswith("let's ") or startswith("Let's "):
+        content = fn.remove(content, 6, 0)
+        await send("Yeah let's {}".format(content))
+
     #Who, What, When, Where, Why and How
     elif startswith("Who ") or startswith("Who "):
         content = fn.remove(content, 4, 0)
@@ -458,6 +451,7 @@ async def on_message(message):
     elif startswith("ree") or startswith("Ree"):
         content = remove(content, 1, 0)
         await send("R{}".format(content))
+
 
 #Client key - this is required to run
 client.run('')
