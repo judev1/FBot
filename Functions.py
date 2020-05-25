@@ -3,9 +3,8 @@
 
 import time, random, datetime, os
 
+
 class functions():
-    def wait(wait):
-        time.sleep(wait)
 
     #Removes known prefix's and suffix's from a string
     def remove(oldtext, front, back):
@@ -25,25 +24,23 @@ class functions():
                 length -= 1
         return newtext
 
+
     #Sets up and checks files for severs
     def create(client):
         serverlist = client.guilds
         
         newpath = r"Servers"
-        if os.path.exists(newpath):
-            print(" > There is already a folder to store server data")
         if not os.path.exists(newpath):
             os.makedirs(newpath)
-            print(" > Created a folder to store server data called 'Servers'")
+            print(" > Created a folder to store server data")
 
         try:
             file = open("Servers\Server_Names.txt", "r")
             file.close()
-            print(" > There is already a file to store server names\n")
         except:
             file = open("Servers\Server_Names.txt", "w+")
             file.close()
-            print(" > Created a file to store server names called 'Server_Names.txt'\n")
+            print(" > Created a file to store server names called\n")
             
         for server in serverlist:
             serverid = str(server.id)
@@ -51,32 +48,72 @@ class functions():
             
             if info[0] == serverid:
                 serverid = functions.getserverid(info[0], info[1])
-                print(" > {} was already in the datbase".format(server))
             else:
                 functions.createserverid(serverid, info[1])
                 serverid = functions.getserverid(info[0], info[1])
-                print(" > Added {}'s to the database as 'Server {}'".format(server, serverid))  
+                print(" > Added {}'s to the database".format(server, serverid))  
             
             newpath = r"Servers\{}".format(serverid)
-            if os.path.exists(newpath):
-                print(" > There is already a folder to store {}'s infomation".format(server))
             if not os.path.exists(newpath):
                 os.makedirs(newpath)
-                print(" > Created a folder to store {}'s infomation called '{}'".format(server, serverid))            
+                print(" > Created a folder to store {}'s infomation".format(server))
+
+
+    #Channel setup
+    def setup(server, channel):
+        fn = functions
+        checkserver = fn.checkserverid
+        getserver = fn.getserverid
+        createserver = fn.createserverid
+        checkchannel = fn.checkchannelid
+        getchannel = fn.getchannelid
+        createchannel = fn.createchannelid
         
-            try:
-                file = open("Servers\{}\Data.txt".format(serverid), "r")
-                file.close()
-                print(" > There is already a file to store {}'s data\n".format(server))
+        #Check for the Server's data
+        serverid = str(server.id)
+        info = checkserver(serverid)
                 
-            except:
-                file = open("Servers\{}\Data.txt".format(serverid), "w+")
-                file.close()
-                print(" > Created a file to store {}'s data called 'Data.txt'\n".format(server))
+        if info[0] == serverid:
+            server = getserver(info[0], info[1])
+        else:
+            createserver(serverid, info[1])
+            server = getserver(info[0], info[1])
+
+        #Create a file for the Channel
+        try:
+            file = open("Servers\{}\Channel_Names.txt".format(server), "r")
+            file.close()
+        except:
+            file = open("Servers\{}\Channel_Names.txt".format(server), "w+")
+            file.close()  
+                
+        #Check for the Channel's data
+        channelid = str(channel.id)
+        info = checkchannel(channelid, server)
+                
+        if info[0] == channelid:
+            channel = getchannel(info[0], info[1], server)
+        else:
+            createchannel(channelid, info[1], server)
+            channel = getchannel(info[0], info[1], server)
+            
+        #Create a folder for the Channel
+        newpath = r"Servers\{}\{}".format(server, channel)
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+        data = [server, channel]
+        return data
+
 
     #Checks if there is a name for the gayscale feature
     def checkname(name, server):
-        file = open("Servers\{}\Data.txt".format(server), "r")
+        try:
+            file = open("Servers\{}\Gayscale.txt".format(serverid), "r")
+            file.close()                
+        except:
+            file = open("Servers\{}\Gayscale.txt".format(serverid), "w+")
+            file.close()
+            print(" > Created a file to store {}'s gayscale data\n".format(server))
         data = file.readlines()
         file.close()
         getname = ""
@@ -88,13 +125,12 @@ class functions():
             getname = functions.remove(data[repeat], 7, 2)
             if name == getname:
                 break
-            
         info = [getname, repeat]
         return info
 
     #Gets the sexuality of a member if their name was found
     def getsex(name, repeat, server):
-        file = open("Servers\{}\Data.txt".format(server), "r")
+        file = open("Servers\{}\Gayscale.txt".format(server), "r")
         data = file.readlines()
         repeat += 1
         getsex = functions.remove(data[repeat], 12, 2)
@@ -117,6 +153,7 @@ class functions():
         file.writelines(data)
         file.close()
 
+
     #Creates a file for FBot's status
     def setfbot(status, server, channel):
         file = open("Servers\{}\{}\Status.txt".format(server, channel), "w+")
@@ -128,6 +165,7 @@ class functions():
         file = open("Servers\{}\{}\Status.txt".format(server, channel), "r")
         info = file.readlines()
         return info
+
 
     #Checks for the Server ID
     def checkserverid(name):
@@ -223,7 +261,7 @@ class functions():
         else:
             lastrow = ""
             data = [""]
-        data[length] = "{}Channel ID: '{}'\nChannel Name: '{}'\n".format(lastrow, serverid, name)
+        data[length] = "{}Channel ID: '{}'\nChannel Name: '{}'\n".format(lastrow, channelid, name)
         file = open("Servers\{}\Channel_Names.txt".format(serverid), "w+")
         file.writelines(data)
         file.close()
