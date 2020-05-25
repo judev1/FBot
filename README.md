@@ -9,7 +9,7 @@ Currently FBot is only being used on 8 Servers with more than 120 members
 Invite FBot using this link:
 https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot
 
-If you'd like to discuss anything with me or if you have any feedback, recomendations or any additionsyou think I could add, I'd be delighted, you can DM at @justjude#2296
+If you'd like to discuss anything with me or if you have any feedback, recomendations or any additions you think I could add, I'd be delighted, you can DM at @justjude#2296
 
 
 
