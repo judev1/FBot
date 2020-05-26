@@ -48,7 +48,7 @@ async def on_ready():
 #Message Replies
 @client.event
 async def on_message(message):
-    
+
     #Variable setups for ease of use
     name = message.author
     name = str(name)
@@ -71,7 +71,7 @@ async def on_message(message):
     try:
         getfbot(server, channel)
     except:
-        setfbot("on", server, channel)
+        setfbot("off", server, channel)
 
 
     #Get FBot's Status
@@ -82,13 +82,15 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    #Prevents USER from sending any messages
-    #elif name == "":
+    #Prevents USER from sending any messages or interacting with FBot
+    #elif name == "USER":
+        #return
         #await message.delete()
         #await send("You violate the community guidelines")
 
-    #Prevents members who are not MR. USER from sending any messages
-    #elif name != "MR. USER":
+    #Prevents members who are not USER from sending any messages
+    #elif name != "USER":
+        #return
         #await message.delete()
         #await send("You violate the community guidelines")
 
@@ -104,12 +106,11 @@ async def on_message(message):
     #Toggle FBot
     elif content == "fbot off" or content == "Fbot off" or content == "FBot off":
         setfbot("off", server, channel)
-        print("FBot is off and wishes it wasn't")
     elif content == "fbot on" or content == "Fbot on" or content == "FBot on":
         setfbot("on", server, channel)
-        print("FBot is on and ready to annoy")
     elif status == "off":
         return
+
     #elif content != "fbot off":
         #await send("Just a notice to all servers: FBot is migrating from the command `fbot1 on/off` to `fbot on/off`, in the meanwhile use the command `fbot off` to stop spam. Please wait up to 5mins. Sorry for the inconvieniance")
 
