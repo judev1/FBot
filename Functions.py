@@ -108,11 +108,9 @@ class functions():
     #Checks if there is a name for the gayscale feature
     def checkname(name, server):
         try:
-            file = open("Servers\{}\Gayscale.txt".format(serverid), "r")
-            file.close()                
+            file = open("Servers\{}\Gayscale.txt".format(server), "r")           
         except:
-            file = open("Servers\{}\Gayscale.txt".format(serverid), "w+")
-            file.close()
+            file = open("Servers\{}\Gayscale.txt".format(server), "w+")
             print(" > Created a file to store {}'s gayscale data\n".format(server))
         data = file.readlines()
         file.close()
@@ -138,7 +136,7 @@ class functions():
 
     #Writes the sexuality of a member if their name isn't found
     def createsex(name, usersex, server):
-        file = open("Servers\{}\Data.txt".format(server), "r+")
+        file = open("Servers\{}\Gayscale.txt".format(server), "r+")
         data = file.readlines()
         file.close()
         length = len(data)
@@ -149,7 +147,7 @@ class functions():
             lastrow = ""
             data = [""]
         data[length] = "{}Name: '{}'\nSexuality: '{}'\n".format(lastrow, name, usersex)
-        file = open("Servers\{}\Data.txt".format(server), "w+")
+        file = open("Servers\{}\Gayscale.txt".format(server), "w+")
         file.writelines(data)
         file.close()
 
