@@ -40,7 +40,7 @@ class functions():
         except:
             file = open("Servers\Server_Names.txt", "w+")
             file.close()
-            print(" > Created a file to store server names called\n")
+            print(" > Created a file to store server names\n")
             
         for server in serverlist:
             serverid = str(server.id)
@@ -51,7 +51,7 @@ class functions():
             else:
                 functions.createserverid(serverid, info[1])
                 serverid = functions.getserverid(info[0], info[1])
-                print(" > Added {}'s to the database".format(server, serverid))  
+                print(" > Added {}'s to the database".format(server))  
             
             newpath = r"Servers\{}".format(serverid)
             if not os.path.exists(newpath):
