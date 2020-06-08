@@ -8,9 +8,6 @@
 ### [Invite FBot here](https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot)
 
 ### [Visit FBot's Top.gg](https://top.gg/bot/711934102906994699)
-<a href="https://top.gg/bot/711934102906994699" >
-  <img src="https://top.gg/api/widget/711934102906994699.svg" alt="FBot" />
-</a>
 
 ### [Vote for FBot!](https://top.gg/bot/711934102906994699/vote)
 
