@@ -289,6 +289,7 @@ class functions():
 
         timethen_ms /= 1000
         timenow_ms /= 1000
+        
         if timethen_ms > timenow_ms:
             ms = 1000 - timethen_ms
             ms += timenow_ms
