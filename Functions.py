@@ -115,8 +115,7 @@ class functions():
         data = file.readlines()
         file.close()
         getname = ""
-        length = len(data)
-        length -= 2
+        length = len(data) - 2
         repeat = -2
         while repeat != length:
             repeat += 2
@@ -263,3 +262,42 @@ class functions():
         file = open("Servers\{}\Channel_Names.txt".format(serverid), "w+")
         file.writelines(data)
         file.close()
+
+    #Gets the ping
+    def ping(timestart):
+        
+        timenow = datetime.datetime.now()
+        timethen_m = int(timestart.strftime("%M"))
+        timenow_m = int(timenow.strftime("%M"))
+        timethen_s = int(timestart.strftime("%S"))
+        timenow_s = int(timenow.strftime("%S"))
+        timethen_ms = int(timestart.strftime("%f"))
+        timenow_ms = int(timenow.strftime("%f"))
+        
+        if timethen_m > timenow_m:
+            minutes = 60 - timethen_m
+            minutes += timenow_m          
+        else:
+            minutes = timenow_m - timethen_m
+            
+        if timethen_s > timenow_s:
+            seconds = 60 - timethen_s
+            seconds += timenow_s
+            minutes -= 1
+        else:
+            seconds = timenow_s - timethen_s
+
+        timethen_ms /= 1000
+        timenow_ms /= 1000
+        if timethen_ms > timenow_ms:
+            ms = 1000 - timethen_ms
+            ms += timenow_ms
+            seconds -= 1
+        else:
+            ms = timenow_ms - timethen_ms
+
+        ms = ms + (minutes * 1000 * 60)
+        ms = ms + (seconds * 1000)
+        ms = round(ms)
+
+        return ms
