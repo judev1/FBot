@@ -19,6 +19,7 @@
 - Can handle any server or channel name
 - New on/off toggle key: fbot (as opposed to fbot1)
 - Can be toggled on/off on individual channels
+- 'FBot help' and 'FBot info' have been added!
 
 ### Here is a handy little guide of triggers words
 
