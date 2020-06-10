@@ -3,6 +3,7 @@
 
 import time, random, datetime, os
 
+fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "fBOt",  "fBoT",  "fbOT",  "FBOt",  "FbOT",  "fBOT",  "FBOT", "<@711934102906994699>"]
 
 class functions():
 
@@ -289,7 +290,6 @@ class functions():
 
         timethen_ms /= 1000
         timenow_ms /= 1000
-        
         if timethen_ms > timenow_ms:
             ms = 1000 - timethen_ms
             ms += timenow_ms
@@ -302,3 +302,18 @@ class functions():
         ms = round(ms)
 
         return ms
+
+    #Checks if FBot is in content
+    def fbotin(content):
+        for fbots in fbot:
+            if fbots in content:
+                return True
+        return False
+
+    #Checks if FBot is in a command
+    def fbotcmd(content, name):
+        for fbots in fbot:
+            cmdname = "{} {}".format(fbots, name)
+            if content == cmdname:
+                return True
+        return False
