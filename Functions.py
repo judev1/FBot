@@ -3,7 +3,9 @@
 
 import time, random, datetime, os
 
-fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "fBOt",  "fBoT",  "fbOT",  "FBOt",  "FbOT",  "fBOT",  "FBOT", "<@711934102906994699>"]
+fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "fBOt",  "fBoT",  "fbOT",  "FBOt",  "FbOT",  "fBOT",  "FBOT",
+        "f bot", "F bot",  "f Bot",  "f bOt",  "f boT",  "F Bot",  "F bOt",  "F boT",  "f BOt",  "f BoT",  "f bOT",  "F BOt",  "F bOT",  "f BOT",  "F BOT",
+        "<@711934102906994699>", "<@!711934102906994699>"]
 
 class functions():
 
