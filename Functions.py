@@ -9,23 +9,11 @@ fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "
 
 class functions():
 
-    #Removes known prefix's and suffix's from a string
-    def remove(oldtext, front, back):
-        length = 0
-        text = ""
-        for letters in oldtext:
-            if length >= front:
-                text = "{}{}".format(text, letters)
-            length += 1
-    
-        length = len(text)  
-        newtext = ""  
-        length = length - back
-        for letters in text:
-            if length != 0:
-                newtext = "{}{}".format(newtext, letters)
-                length -= 1
-        return newtext
+    # Removes known prefixes and suffixes from a string
+    def remove(old_text, left_chars, right_chars):
+        return (old_text[:len(old_text)-right_chars])[left_chars:]
+        # [:len(old_text)-right_chars] removes right chars
+        # [left_chars:] removes left chars
 
 
     #Sets up and checks files for severs
