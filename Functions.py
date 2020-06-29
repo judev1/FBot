@@ -9,24 +9,9 @@ fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "
 
 class functions():
 
-    #Removes known prefix's and suffix's from a string
+    #Removes known prefixes and suffixes from a string
     def remove(oldtext, front, back):
-        length = 0
-        text = ""
-        for letters in oldtext:
-            if length >= front:
-                text = "{}{}".format(text, letters)
-            length += 1
-    
-        length = len(text)  
-        newtext = ""  
-        length = length - back
-        for letters in text:
-            if length != 0:
-                newtext = "{}{}".format(newtext, letters)
-                length -= 1
-        return newtext
-
+        return oldtext[front:-back]
 
     #Sets up and checks files for severs
     def create(client):
@@ -265,45 +250,6 @@ class functions():
         file = open("Servers\{}\Channel_Names.txt".format(serverid), "w+")
         file.writelines(data)
         file.close()
-
-    #Gets the ping
-    def ping(timestart):
-        
-        timenow = datetime.datetime.now()
-        timethen_m = int(timestart.strftime("%M"))
-        timenow_m = int(timenow.strftime("%M"))
-        timethen_s = int(timestart.strftime("%S"))
-        timenow_s = int(timenow.strftime("%S"))
-        timethen_ms = int(timestart.strftime("%f"))
-        timenow_ms = int(timenow.strftime("%f"))
-        
-        if timethen_m > timenow_m:
-            minutes = 60 - timethen_m
-            minutes += timenow_m          
-        else:
-            minutes = timenow_m - timethen_m
-            
-        if timethen_s > timenow_s:
-            seconds = 60 - timethen_s
-            seconds += timenow_s
-            minutes -= 1
-        else:
-            seconds = timenow_s - timethen_s
-
-        timethen_ms /= 1000
-        timenow_ms /= 1000
-        if timethen_ms > timenow_ms:
-            ms = 1000 - timethen_ms
-            ms += timenow_ms
-            seconds -= 1
-        else:
-            ms = timenow_ms - timethen_ms
-
-        ms = ms + (minutes * 1000 * 60)
-        ms = ms + (seconds * 1000)
-        ms = round(ms)
-
-        return ms
 
     #Checks if FBot is in content
     def fbotin(content):
