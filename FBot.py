@@ -15,8 +15,6 @@ remove = fn.remove
 create = fn.create
 setup = fn.setup
 
-ping = fn.ping
-
 checkname = fn.checkname
 getsex = fn.getsex
 createsex = fn.createsex
@@ -245,7 +243,7 @@ async def on_message(message):
                                     "LAST UPDATED: `{}`\n"
                                     "SESSION START: `{}`\n"
                                     "VERSION: `v{}`\n"
-                                    "PING: `{}ms`".format(len(client.guilds), totalmembers, lastupdated, sessionstart, ver, ping(message.created_at)), colour=0xF42F42)
+                                    "PING: `{}ms`".format(len(client.guilds), totalmembers, lastupdated, sessionstart, ver, int(client.latency * 1000)), colour=0xF42F42)
         embed.set_footer(text="Info requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
         await message.channel.send(embed=embed)
         
@@ -284,9 +282,8 @@ async def on_message(message):
 
     #FBot Ping
     elif fbotcmd(content, "ping"):
-        embed = discord.Embed(title="The ping is `{}ms`".format(ping(message.created_at)), colour=0xF42F42)
+        embed = discord.Embed(title="The ping is `{}ms`".format(int(client.latency * 1000)), colour=0xF42F42)
         embed.set_footer(text="Ping requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
-        await message.channel.send(embed=embed)
         await message.channel.send(embed=embed)
 
 
