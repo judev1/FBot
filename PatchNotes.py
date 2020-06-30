@@ -104,12 +104,38 @@ def v6():
           "Totl: 1314 lines (+358)")
     return pn
 
+def v6_7():
+    pn = ("What's new in v1.6.7?\n"
+          "- Simplified the code with help from a new collaborator\n"
+          "- Added link commands and more debug commands\n"
+          "- Removed Gayscale\n"
+          "- Cleaned Cmds, Info and a few others commands\n"
+          "- Removed unnecessary functions including ping\n"
+          "- Removed Gayscale functions\n"
+          "- Simplified the Remove function\n"
+          "- Made the folders created hidden, so to hide the clutter\n"
+          "- Added a function to get the uptime\n"
+          "- Added a function to get the current time\n"
+          "- Prevented people from using FBot say to @everyone\n"
+          "- Added a logging feature to output joins and removals of FBot in servers\n"
+          "- Added a logging feature to track file creation\n"
+          "- Added a feature to prevent FBot from interacting with channels before setup is complete\n"
+          "- Added a presence for FBot\n"
+          "- Prevented FBot from interacting with other bots\n"
+          "- Added a response to question marks\n"
+          "- Added hello FBot\n"
+          "Main:  871 lines (+085)\n"
+          "Func:  321 lines (+002)\n"
+          "PatN:  153 lines (+029\n"
+          "BkPg:   82 lines (+000)\n"
+          "Totl: 1430 lines (+116)")
+
 class patchnotes():
 
     def get(content):
         
         if content == "recent":
-            return v6()
+            return v6_7()
         elif content == "1.1":
             return v1()
         elif content == "1.2":
@@ -122,5 +148,7 @@ class patchnotes():
             return v5()
         elif content == "1.6":
             return v6()
+        elif content == "1.6.7":
+            return v6_7()
         else:
             return "invalid"
