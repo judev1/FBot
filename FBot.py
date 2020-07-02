@@ -397,11 +397,14 @@ async def on_message(message):
 
     #FBot quote
     elif cmd(content, "quote"):
-        #await send("We have removed this feature, we hope to re-add it soon")
-        quote = book.quote()
-        embed = discord.Embed(title="{}".format(quote), colour=0x000000)
-        embed.set_footer(text="- Adolf Hitler".format(name, creator), icon_url=hitlerurl)
-        await send(embed=embed)
+        #Check for Mein_Kampf.txt
+        if os.path.exists('./Mein_Kampf.txt'):
+            quote = book.quote()
+            embed = discord.Embed(title="{}".format(quote), colour=0x000000)
+            embed.set_footer(text="- Adolf Hitler".format(name, creator), icon_url=hitlerurl)
+            await send(embed=embed)
+        else:
+            await send("This feature is currently disabled, we hope to re-add it soon")
     
     #Toggle FBot
     elif cmd(content, "off"):
