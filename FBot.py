@@ -1,4 +1,5 @@
 # Note to self: Remember to delete the token before uploading to GitHub :^)
+BOT_TOKEN = ""
 
 # Folder: DiscordBots\FBot
 #   File: FBot.py
@@ -457,4 +458,4 @@ async def on_message(message):
             await send(response)
 
 #Client key - this is required to run
-client.run("")
+client.run(BOT_TOKEN)
