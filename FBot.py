@@ -1,13 +1,17 @@
 # Folder: DiscordBots\FBot
 #   File: FBot.py
 
-#FEATURES TO BE ADDED AT SOME POINT:
-#BYE, IKR, BRO, WTF, HEY, FUCKING, DANG IT, DUMBASS, SUCK, OH, UWU, WILL, UM, I (word), TRUE, OMG, HE'S/SHE'S, WUT, CALM, ’, ?, DOES, L, E, LEMME, GIMME, HELLO FBOT, YEE, CRINGE, BASED
+import discord, random, time, os, sys, datetime
+try:
+    from TriggerResponse import trigger_response as tr
+    from PatchNotes import patchnotes as pn
+    from Functions import functions as fn
+    from BookProgram import book
+except:
+    input(" > Unable to install some of the dependencies, shutting down")
+    sys.exit()
 
-import discord, random, time, os, datetime
-from PatchNotes import patchnotes as pn
-from Functions import functions as fn
-from BookProgram import book
+
 
 client = discord.Client()
 remove = fn.remove
@@ -15,7 +19,6 @@ remove = fn.remove
 create = fn.create
 setup = fn.setup
 
-ping = fn.ping
 gettime = fn.gettime
 
 setfbot = fn.setfbot
@@ -33,7 +36,6 @@ except:
 file.close()
 
 
-
 # |---------------------------| FBOT VARIABLES |---------------------------|
 
 
@@ -41,10 +43,9 @@ file.close()
 #Variables you can change
 twss = ["That's big", "that's big", "Thats big", "thats big"]
 banned = []
-answer = "NO ONE FUCKING CARES"
+answer = "NO ONE CARES"
 
 #Variables you should not change
-fbot = ["fbot", "Fbot",  "fBot",  "fbOt",  "fboT",  "FBot",  "FbOt",  "FboT",  "fBOt",  "fBoT",  "fbOT",  "FBOt",  "FbOT",  "fBOT",  "FBOT", "<@711934102906994699>"]
 tf = ["will", "will not"]
 
 fboturl = "https://images.discordapp.net/avatars/711934102906994699/6ab406f40bc3517802fd4402955da1b0.png?size=512"
@@ -55,23 +56,34 @@ inviteurl = "https://discord.com/oauth2/authorize?client_id=711934102906994699&p
 githuburl = "https://github.com/judev1/FBot"
 topggurl = "https://top.gg/bot/711934102906994699"
 serverurl = "https://discord.gg/BDpXRq9"
+prplhzurl = "https://discord.gg/zW2k2yK"
+rhurl = "https://discord.gg/6SBBM3J"
 
 #Variables for infomation
 ready = False
 creator = "justjude#2296"
-ver = "1.6.7"
-lastupdated = "29.06.20"
+ver = "1.7"
+lastupdated = "03.07.20"
 
 notices = '''**We are currently holding an event!**
-*Use* `FBot events` *or* [*visit FBot's Server for more info*](https://discord.gg/BDpXRq9)
+*Use* `FBot events` *or* [visit FBot's Server for more info](https://discord.gg/BDpXRq9)
 
-**FBot v{} has been released! as of {}**'''.format(ver, lastupdated)
+**FBot v{} has been released! as of {}**
+#LinesGuys#9260 has contributed massivley to the newest release of FBot, however, **major** changes have been made to the code, so please let us know immediately if anything isn't working properly'''.format(ver, lastupdated)
 
 serverlogs = "Server Log Channel"
+
+#Final Setup
+timenow = datetime.datetime.now()
+m = timenow.strftime("%M")
+h = timenow.strftime("%H")
+d = timenow.strftime("%d")
 
 sessionstart = gettime()
 print(" > Session started at {}".format(sessionstart))
 log("Session started at {}".format(sessionstart))
+
+tr.trigger_load()
 
 
 
@@ -158,10 +170,12 @@ async def on_message(message):
     name = str(name)
     name = remove(name, 0, 5)
 
+    original_message = message.content
     content = message.content.lower()
     startswith = content.startswith
     endswith = content.endswith
     send = message.channel.send
+    
 
     server = message.guild
     channel = message.channel
@@ -182,7 +196,7 @@ async def on_message(message):
 
     #Get FBot's Status
     status = getfbot(server, channel)
-    status = remove(status, 0, 0)
+    status = remove(str(status), 2, 2)
 
 
 
@@ -212,8 +226,8 @@ async def on_message(message):
             pns = pn.get(content)
 
             if content == "list":
-                embed = discord.Embed(title="**Patch Note Arguments**", description="`recent`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, `1.6.7`", colour=0xF42F42)
-                embed.set_footer(text="PN requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+                embed = discord.Embed(title="**Patch Note Arguments**", description="`recent`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, `1.6.7`, `1.7`", colour=0xF42F42)
+                embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
                 await send(embed=embed)
 
             elif pns != "invalid":
@@ -222,12 +236,12 @@ async def on_message(message):
                     
                 embed = discord.Embed(title="FBot Patch Notes", colour=0xF42F42)
                 embed.add_field(name="Patch notes for `v{}`".format(content), value="`{}`".format(pns), inline=False)
-                embed.set_footer(text="PN requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+                embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
                 await send(embed=embed)
 
             else:
                 embed = discord.Embed(title="**Error**", description="The argument `'{}'` was not recognised, use `FBot pn list` for all arguments".format(content), colour=0xF42F42)
-                embed.set_footer(text="PN requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+                embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
                 await send(embed=embed)
 
     #Don't let FBot reply to its self or to other bots
@@ -255,12 +269,13 @@ async def on_message(message):
                                                                  "`vote`: *Gives a link to vote for this FBot*\n"
                                                                  "`invite`: *Gives a link to invite FBot to your server*\n"
                                                                  "`github`: *Gives a link to view FBots Github page*\n"
-                                                                 "`top.gg`: *Gives a link to view FBots Top.gg page*\n"
+                                                                 "`Top.gg`: *Gives a link to view FBots Top.gg page*\n"
                                                                  "`server`: *Gives a link to join FBots server*\n"
+                                                                 "`Minecraft`/`MC`: *Gives infomation to join our MC server*\n"
                                                                  "\n**Fun Commands**\n"
                                                                  "`say` `<message>`: *Makes FBot say whatever you want*\n"
                                                                  "`quote`: *Quotes a random part from Mein Kampf*\n".format(status), colour=0xF42F42)
-        embed.set_footer(text="Commands requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Commands requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Help
@@ -273,7 +288,7 @@ async def on_message(message):
                                                              "[Join my server!]({})\n\n"
                                                              "**You can help FBot too!**\n"
                                                              "[Vote here!]({})".format(topggurl, serverurl, voteurl), colour=0xF42F42)
-        embed.set_footer(text="Help requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Help requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Info
@@ -286,16 +301,16 @@ async def on_message(message):
         embed.add_field(name="Session start", value=sessionstart)
         embed.add_field(name="Servers", value=len(client.guilds) - 1)
         embed.add_field(name="Last Updated", value=lastupdated)
-        embed.add_field(name="Uptime", value=fn.uptime(sessionstart))
+        embed.add_field(name="Uptime", value=fn.uptime(m, h, d))
         embed.add_field(name="Members", value=totalmembers)
         embed.add_field(name="Version", value=ver)
-        embed.set_footer(text="Info requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Created by justjude#2296 & LinesGuy#9260 | Version v{}".format(ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Status
     elif cmd(content, "status"):
         embed = discord.Embed(title="FBot is currently set to `{}` in this channel".format(status), colour=0xF42F42)
-        embed.set_footer(text="Status requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Status requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Uptime
@@ -303,21 +318,21 @@ async def on_message(message):
         embed = discord.Embed(title="FBots session", colour=0xF42F42)
         embed.add_field(name="Session start", value=sessionstart)
         embed.add_field(name="Uptime", value=fn.uptime(m, h, d))
-        embed.set_footer(text="Session requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Session requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Version
     elif cmd(content, "version") or cmd(content, "ver"):
         embed = discord.Embed(title="FBots Version as of {}".format(lastupdated), colour=0xF42F42)
         embed.add_field(name="Version", value=ver)
-        embed.set_footer(text="Version requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Version requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Ping
     elif cmd(content, "ping"):
         embed = discord.Embed(title="FBots Ping", colour=0xF42F42)
         embed.add_field(name="Ping", value="{}ms".format(int(client.latency * 1000)))
-        embed.set_footer(text="Ping requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Ping requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Events
@@ -325,49 +340,57 @@ async def on_message(message):
         embed = discord.Embed(title="FBot Events", description="**We are currently holding an event!**\n"
                                                                "We are creating an about page for FBot and we would like your help!\n\n"
                                                                "[Visit FBot's Server for more info](https://discord.gg/BDpXRq9)", colour=0xF42F42)
-        embed.set_footer(text="Events requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Events requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
         
     #FBot Notice Board
     elif cmd(content, "nb") or cmd(content, "noticeboard") or cmd(content, "notice board"):
         embed = discord.Embed(title="FBot Notice Board", description=notices, colour=0xF42F42)
-        embed.set_footer(text="NB requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="NB requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
             
     #FBot Patch Notes
     elif cmd(content, "pn") or cmd(content, "patchnotes") or cmd(content, "patch notes"):
         embed = discord.Embed(title="**Error**", description="You didn't add an argument, for all arguments use `FBot pn list`".format(content), colour=0xF42F42)
-        embed.set_footer(text="PN requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Vote
     elif cmd(content, "vote"):
         embed = discord.Embed(title="FBot Vote", description="[Vote for FBot on Top.gg!]({})".format(voteurl), colour=0xF42F42)
-        embed.set_footer(text="Vote requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Vote requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Invite
     elif cmd(content, "invite"):
         embed = discord.Embed(title="FBot Invite", description="[Invite FBot to your server!]({})".format(inviteurl), colour=0xF42F42)
-        embed.set_footer(text="Invite requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Invite requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Github
     elif cmd(content, "github"):
         embed = discord.Embed(title="FBot Github", description="[View FBots code on Github!]({})".format(githuburl), colour=0xF42F42)
-        embed.set_footer(text="Github requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Github requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Top.gg
     elif cmd(content, "top.gg"):
         embed = discord.Embed(title="FBot Top.gg", description="[View FBots Top.gg page!]({})".format(topggurl), colour=0xF42F42)
-        embed.set_footer(text="Top.gg requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Top.gg requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
         
     #FBot Server
     elif cmd(content, "server"):
         embed = discord.Embed(title="FBot Server", description="[Join FBots server!]({})".format(serverurl), colour=0xF42F42)
-        embed.set_footer(text="Server requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Server requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
+        await send(embed=embed)
+        
+    #FBot Minecraft Server
+    elif cmd(content, "mc") or cmd(content, "minecraft"):
+        embed = discord.Embed(title="Join PURPLE HAZE x RIAS HUB x FBOTs Minecraft Server!",
+                              description="We are a whitelist server so dm `@LinesGuy#9260` with your username to gain access\n\n"
+                                          "Also join [Purple Haze]({}), [Rias Hub]({}) and [FBot's Server]({})".format(prplhzurl, rhurl, serverurl), colour=0xF42F42)
+        embed.set_footer(text="Minecraft requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
     #FBot Links
@@ -377,7 +400,7 @@ async def on_message(message):
                                                               "[View FBots code on Github!]({})\n"
                                                               "[View FBots Top.gg page!]({})\n"
                                                               "[Join FBots server!]({})".format(voteurl, inviteurl, githuburl, topggurl, serverurl), colour=0xF42F42)
-        embed.set_footer(text="Links requested by {} | Created by {}".format(name, creator), icon_url=fboturl)
+        embed.set_footer(text="Links requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
 
@@ -387,29 +410,24 @@ async def on_message(message):
 
 
     #FBot Say - Makes FBot say anything you input
-    elif cmd(content, "say ") and ("@everyone" not in content and "@here" not in content):
+    elif (startswith("fbot say ") or startswith("f bot say ")) and ("@" not in content):
         if startswith("f "):
-            content = remove(content, 10, 0)
+            content = remove(message.content, 10, 0) # f bot say
         else:
-            content = remove(content, 9, 0)
+            content = remove(message.content, 9, 0) # fbot say
         await message.delete()
         await send(content)
 
     #FBot quote
     elif cmd(content, "quote"):
-        #await send("We have removed this feature, we hope to re-add it soon")
-        quote = book.quote()
-        embed = discord.Embed(title="{}".format(quote), colour=0x000000)
-        embed.set_footer(text="- Adolf Hitler".format(name, creator), icon_url=hitlerurl)
-        await send(embed=embed)
-    
-    #Toggle FBot
-    elif cmd(content, "off"):
-        setfbot("off", server, channel)
-    elif cmd(content, "on"):
-        setfbot("on", server, channel)
-    elif status == "off":
-        return
+        #Check for Mein_Kampf.txt
+        if os.path.exists('./Mein_Kampf.txt'):
+            quote = book.quote()
+            embed = discord.Embed(title="{}".format(quote), colour=0x000000)
+            embed.set_footer(text="- Adolf Hitler".format(name, creator), icon_url=hitlerurl)
+            await send(embed=embed)
+        else:
+            await send("This feature is currently disabled, we hope to re-add it soon")
     
     #Instant link reply
     elif startswith("https://"):
@@ -435,432 +453,41 @@ async def on_message(message):
     elif content in twss:
         await send("That's what she said")
 
+    # [dev] Reload triggers.
+    elif content == "fbotdev treload" and (str(name.id) == "671791003065384987" or str(name.id) == "216260005827969024"):
+        start = time.time()
+        tr.trigger_load()
+        print(" > [dev] treload command by " + name)
+        await send("`[dev] Reloaded triggers.csv in " + str(round(time.time() - start, 4)*1000) + "ms`")
+    
+    #Toggle FBot Triggers
+    elif cmd(content, "off"):
+        setfbot("off", server, channel)
+    elif cmd(content, "on"):
+        setfbot("on", server, channel)
+    elif status == "off":
+        return
+
 
 
 # |---------------------------| FBOT TRIGGERS |---------------------------|
 
 
 
-    #Fuck FBot, Fuck me, Fuck you, Fuck
-    elif startswith("fuck "):
-        name = fn.remove(content, 5, 0)
-        fbotcheck = fn.remove(name, 4, 0)
-        if "fbot" in fbotcheck or "f bot" in fbotcheck or "fbot" in name or "f bot" in name:
-            await send("Yeah fuck me")
-            time.sleep(1)
-            await send("Wait no")
-        elif content == "fuck you" or content == "fuck u":
-            await send("No fuck you")
-        elif content == "fuck me":
-            await send("Oh yes, fuck me")
-        elif content == "fuck me ":
-            await send("Oh yes, fuck you {}".format(name))
-        else:
-            await send("Yeah fuck {}".format(name))
+    else:
+        trigger_detected, response = tr.trigger_respond(message.content)
+        if trigger_detected:
+            response = response.replace("{username}", name)
+            response = response.replace("{ping}", "`" + str(int(client.latency*100000)/100) + "ms`")
+            response = response.replace("{answer}", answer)
+            await send(response)
 
-    elif startswith("f "):
-        name = fn.remove(content, 2, 0)
-        fbotcheck = fn.remove(name, 4, 0)
-        if "fbot" in fbotcheck or "f bot" in fbotcheck or "fbot" in name or "f bot" in name:
-            await send("Yeah fuck me")
-            time.sleep(1)
-            await send("Wait no")
-        elif content == "f you"or content == "f u" or content == "fu":
-            await send("No fuck you")
-        elif content == "f me":
-            await send("Oh yes, fuck me")
-        else:
-            await send("Yeah fuck {}".format(name))
 
-    elif content == "fuck":
-        await send("FUCK!")
-
-    #I am, I have, I will, I would, I should, I could
-    elif startswith("im "):
-        content = fn.remove(content, 3, 0)
-        await send("Yeah {} is {}".format(name, content))
-    elif startswith("i'm "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah {} is {}".format(name, content))
-    elif startswith("i am "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah {} is {}".format(name, content))
-
-    elif startswith("ive "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah {} has {}".format(name, content))
-    elif startswith("i've "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah {} has {}".format(name, content))
-    elif startswith("i have "):
-        content = fn.remove(content, 7, 0)
-        await send("Yeah {} has {}".format(name, content))
-
-    elif startswith("ill "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah {} will {}".format(name, content))
-    elif startswith("i'll "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah {} will {}".format(name, content))
-    elif startswith("i will "):
-        content = fn.remove(content, 7, 0)
-        await send("Yeah {} will {}".format(name, content))
-    
-    elif startswith("id "):
-        content = fn.remove(content, 3, 0)
-        await send("Yeah {} would {}".format(name, content))
-    elif startswith("i'd "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah {} would {}".format(name, content))
-    elif startswith("i would "):
-        content = fn.remove(content, 8, 0)
-        await send("Yeah {} would {}".format(name, content))
-        
-    elif startswith("i should "):
-        content = fn.remove(content, 9, 0)
-        await send("Yeah {} should {}".format(name, content))
-    elif startswith("i could "):
-        content = fn.remove(content, 8, 0)
-        await send("Yeah {} could {}".format(name, content))
-
-    #You, Your, You are, You have
-    elif startswith("u "):
-        content = fn.remove(content, 2, 0)
-        await send("Yeah you {}".format(content))
-    elif startswith("ur "):
-        content = fn.remove(content, 3, 0)
-        await send("Yeah your {}".format(content))
-    elif startswith("you "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah you {}".format(content))
-    elif startswith("your "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah your {}".format(content))
-        
-    elif startswith("youre "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah you're {}".format(content))
-    elif startswith("you're "):
-        content = fn.remove(content, 7, 0)
-        await send("Yeah you're {}".format(content))
-        
-    elif startswith("youve "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah you have {}".format(content))
-    elif startswith("you've "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah you have {}".format(content))
-
-    #It, It is, It will
-    elif startswith("it "):
-        content = fn.remove(content, 3, 0)
-        await send("Yeah it {}".format(content))
-        
-    elif startswith("its "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah its {}".format(content))
-    elif startswith("it's "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah it's {}".format(content))
-
-    elif startswith("itll "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah it will {}".format(content))
-    elif startswith("it'll "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah it will {}".format(content))
-
-    #This, There, That, That is
-    elif startswith("this "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah this {}".format(content))
-
-    elif startswith("there "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah there {}".format(content))
-
-    elif startswith("that "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah that {}".format(content))
-    elif startswith("thats "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah that's {}".format(content))
-    elif startswith("that's "):
-        content = fn.remove(content, 7, 0)
-        await send("Yeah that's {}".format(content))
-
-    #Let us
-    elif startswith("let "):
-        content = fn.remove(content, 4, 0)
-        await send("Yeah let {}".format(content))
-    elif startswith("lets "):
-        content = fn.remove(content, 5, 0)
-        await send("Yeah let's {}".format(content))
-    elif startswith("let's "):
-        content = fn.remove(content, 6, 0)
-        await send("Yeah let's {}".format(content))
-
-    #Question Words:
-    #Who, What, When, Where, Why and How
-    #Can, Will, Should, Could, Would
-    elif startswith("Who"):
-        content = fn.remove(content, 4, 0)
-        await send(answer)
-    elif startswith("whos "):
-        content = fn.remove(content, 5, 0)
-        await send(answer)
-    elif startswith("Who's "):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-        
-    elif startswith("what"):
-        content = fn.remove(content, 5, 0)
-        await send(answer)
-    elif startswith("whats "):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-    elif startswith("what's "):
-        content = fn.remove(content, 7, 0)
-        await send(answer)
-        
-    elif startswith("when"):
-        content = fn.remove(content, 5, 0)
-        await send(answer)
-    elif startswith("whens "):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-    elif startswith("When's "):
-        content = fn.remove(content, 7, 0)
-        await send(answer)
-        
-    elif startswith("where"):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-    elif startswith("wheres "):
-        content = fn.remove(content, 7, 0)
-        await send(answer)
-    elif startswith("where's "):
-        content = fn.remove(content, 8, 0)
-        await send(answer)
-        
-    elif startswith("why"):
-        content = fn.remove(content, 4, 0)
-        await send(answer)
-    elif startswith("whys "):
-        content = fn.remove(content, 5, 0)
-        await send(answer)
-    elif startswith("why's "):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-        
-    elif startswith("how"):
-        content = fn.remove(content, 4, 0)
-        await send(answer)
-    elif startswith("hows "):
-        content = fn.remove(content, 5, 0)
-        await send(answer)
-    elif startswith("how's "):
-        content = fn.remove(content, 6, 0)
-        await send(answer)
-
-    elif startswith("can "):
-        content = fn.remove(content, 4, 0)
-        await send("No")
-    elif startswith("will "):
-        content = fn.remove(content, 5, 0)
-        await send("No")
-    elif startswith("should "):
-        content = fn.remove(content, 7, 0)
-        await send("No")
-    elif startswith("could "):
-        content = fn.remove(content, 6, 0)
-        await send("No")
-    elif startswith("would "):
-        content = fn.remove(content, 6, 0)
-        await send("No")
-
-    #Yes and No
-    elif message.content.startswith("YES"):
-        await send("NO")
-    elif startswith("yes"):
-        await send("No")
-
-    elif message.content == "NO" or message.content.startswith("NOO"):
-        await send("YES")
-    elif content == "no" or startswith("Noo"):
-        await send("Yes")
-
-    #Yeah - Are you mocking me?
-    elif startswith("yeah"):
-        await send("Yeah! Sounds good {}".format(name))      
-
-    #Meme talk:
-    #Nice, Cool, No you, Die, F
-    #Lol, Lmao, Lmfao, Stfu
-    #Ooo, Oof, Bruh, Hmm, Ree
-    elif content == "nice":
-        await send("Not nice")
-    elif content == "not nice":
-        await send("Nice")
-
-    elif content == "cool":
-        await send("Not cool")
-    elif startswith("cooo") and endswith("l"):
-        await send("Not {}".format(content))
-
-    elif content == "no u" or content == "no you":
-        await send("No you")
-
-    elif startswith("die "):
-        content = remove(content, 4, 0)
-        await send("Yes die {}".format(content))
-    elif content == "die":
-        await send("Die motherfucker")
-        
-    elif content == "f":
-        await send("F")
-
-    elif content == "lol":
-        await send("No actually, not funny")
-    elif content == "lmao":
-        await send("No actually, not funny")
-    elif content == "lfmao":
-        await send("No actually, not funny")
-
-    elif startswith("stfu "):
-        content = remove(content, 5, 0)
-        await send("No, {}, *you* shut the fuck up".format(content))
-    elif content == "stfu":
-        await send("No *you* shut the fuck up")
-
-    elif startswith("oo") and endswith("oo"):
-        content = remove(content, 1, 0)
-        await send("No, not o{}".format(content))
-
-    elif startswith("oo") and endswith("f"):
-        await send("Oof")
-    
-    elif startswith("bru"):
-        content = remove(content, 1, 0)
-        await send("Yeah b{}?".format(content))
-
-    elif startswith("hm"):
-        content = remove(content, 1, 0)
-        await send("H{} fuck you {}".format(content, name))
-
-    elif startswith("ree"):
-        content = remove(content, 1, 0)
-        await send("R{}".format(content))
-
-    #Hehe and Haha
-    elif startswith("he") and endswith("he"):
-        content = remove(content, 1, 0)
-        await send("H{}, you sound pathetic, fuck you".format(content))
-    elif startswith("ha") and endswith("ha"):
-        content = remove(content, 1, 0)
-        await send("H{}, you sound pathetic, fuck you".format(content))
-        
-    elif startswith("eh") and endswith("he"):
-        content = remove(content, 1, 0)
-        await send("E{}, you sound pathetic, fuck you".format(content))
-    elif startswith("ah") and endswith("ha"):
-        content = remove(content, 1, 0)
-        await send("A{}, you sound pathetic, fuck you".format(content))
-
-    elif startswith("he") and endswith("eh"):
-        content = remove(content, 1, 0)
-        await send("H{}, you sound pathetic, fuck you".format(content))
-    elif startswith("ha") and endswith("ah"):
-        content = remove(content, 1, 0)
-        await send("H{}, you sound pathetic, fuck you".format(content))
-        
-    elif startswith("eh")  and endswith("eh"):
-        content = remove(content, 1, 0)
-        await send("E{}, you sound pathetic, fuck you".format(content))
-    elif startswith("ah")  and endswith("ah"):
-        content = remove(content, 1, 0)
-        await send("A{}, you sound pathetic, fuck you".format(content))
-
-    #Thanks, Thank you, Tysm
-    elif content == "thanks"or content == "thank you" or content == "ty":
-        await send("Actually no thank you")
-    elif startswith("thanks ") or startswith("thank you ") or startswith("ty "):
-        await send("No, just no, they didn't do anything")
-    elif content == "tysm":
-        await send("That's a stupid thing to be *so* thankful for")
-
-    #Hello, Hi and Welcome
-    elif content == "hello" or content == "hi":
-        await send("SHUT UP, NO ONE CARES")
-    elif startswith("hello ") or startswith("hi "):
-        if startswith("hello "):
-            remove(content, 6, 0)
-        elif startswith("hi "):
-            remove(content, 3, 0)
-
-        if startswith("fbot") or startswith("f bot"):
-            await send("Hello " + name)
-        else:
-            await send("WHY DONT I GET A HELLO!?")
-    elif startswith("welcome "):
-        content = remove(content, 8, 0)
-        await send("Welcome {}".format(content))
-    elif startswith("welcome"):
-        await send("WELCOME!")
-
-    #Smiley faces
-    elif startswith(":(") or content == "D:":
-        await send("Be happy bitch")
-    elif startswith(":)") or content == ":D":
-        await send("Wish I could be happy, but I'm just a bot")
-    elif startswith("<3") or content == ":3":
-        await send("Cute...")
-    elif content == ":O" or content == ":0" or content == ":o":
-        time.sleep(1)
-        await send("What the-")
-        time.sleep(1)
-        await send("Bad time?")
-    elif content == ":|":
-        await send("Seriously?")
-
-    #West Viginia
-    elif startswith("country roads"):
-        await send("Take me home")
-    elif startswith("to the place"):
-        await send("I BELONG")
-    elif startswith("west virginia"):
-        await send("Mountain mama")
-    elif startswith("take me home"):
-        await send("Country roads")
-
-    #?????????????????
-    elif endswith("?"):
-        await send(answer)
-
-    #Call on FBot
-    elif startswith("fbot "):
-        content = remove(content, 5, 0)
-        await send("No {} {}".format(name, content))
-    elif startswith("f bot "):
-        content = remove(content, 6, 0)
-        await send("No {} {}".format(name, content))
-    elif startswith("fbots "):
-        content = remove(content, 6, 0)
-        await send("No {}'s {}".format(name, content))
-    elif startswith("f bots "):
-        content = remove(content, 7, 0)
-        await send("No {}'s {}".format(name, content))
-    elif startswith("fbot's "):
-        content = remove(content, 7, 0)
-        await send("No {}'s {}".format(name, content))
-    elif startswith("f bot's "):
-        content = remove(content, 8, 0)
-        await send("No {}'s {}".format(name, content))
-    elif "fbot" in content or "f bot" in content:
-        await send("Yes {}...?".format(name))
 
 
 #Client key - this is required to run
 client.run("")
-#Testing FBot - a seperate client key I have for testing only
-#client.run("")
+#Client key - Jude's testing one
+client.run("")
+#Client key - LinesGuy's testing one
+client.run("")
