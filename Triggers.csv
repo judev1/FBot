@@ -1,0 +1,82 @@
+FBot Ping\ F Bot Ping\<@!711934102906994699> Ping,whole,any,FBot's Ping: {ping}
+FBot Say \F Bot Say\<@!711934102906994699> Say,start,any,{after}
+Fuck Fbot\Fuck F Bot\Fuck <@711934102906994699>,whole,any,"No, fuck *you*"
+Fuck \F ,start,any,"Yeah, fuck {after}"
+Fuck e\F me,whole,any,"Yeah, fuck {username}"
+Fuck you\Fuck u\F u\U,whole,any,"Yeah, fuck you"
+Fuck,whole,any,FUCK!
+I am \I'm \Im ,start,any,"Hi {after}, I'm Fbot"
+I am Fbot\I'm Fbot\Im Fbot\I am F bot\I'm F bot\Im F bot\I am <@711934102906994699>\I'm <@711934102906994699>\Im <@711934102906994699>,whole,any,"No, I'm FBot"
+I have \I've \Ive ,start,any,Yeah {username} has {after}
+I will \I'll \Ill ,start,any,Yeah {username} will {after}
+I would \I'd \Id ,start,any,Yeah {username} would {after}
+I should ,start,any,Yeah {username} should {after}
+I could ,start,any,Yeah {username} could {after}
+I might ,start,any,Yeah {username} might {after}
+You \U ,start,any,Yeah you {after}
+Ur ,start,any,yeah ur {after}
+Your ,start,any,Yeah your {after}
+You are \You're \Youre ,start,any,Yeah you're {after}
+Its ,start,any,Yeah its {after}
+It is \It's,start,any,Yeah it's {after}
+It will \It'll \Itll ,start,any,Yeah it will {after}
+This ,start,any,Yeah this {after}
+There ,start,any,Yeah there {after}
+That ,start,any,yeah that {after}
+That is \That's \Thats ,start,any,Yeah that's {after}
+There is \There's \Theres ,start,any,Yeah there's {after}
+Let us \Let's \Lets  ,start,any,Yeah let's {after}
+Who\What\When\Where\Why\How\Which,start,any,{answer}
+Whos \Whats \Whens \Wheres \Whys \Hows ,start,any,{answer}
+Who's \What's \When's \Where's \Why's \How's ,start,any,{answer}
+Can \Will \Should \Could \Would ,start,any,No
+YES,start,exact,NO
+Yes,start,any,No
+NOO,start,exact,YES
+noo,start,any,Yes
+NO,whole,exact,YES
+No,whole,any,Yes
+Yeah,whole,any,Yeah! Sounds good {username}
+Nice,whole,any,Not nice
+Not nice,whole,any,Nice
+Cool,whole,any,Not cool
+Cooo~oool,repeat,any,Not {message}
+No you/No u,whole,any,No you
+Die ,start,any,Yes die {after}
+Die,whole,any,Die.
+F,whole,any,F
+lol\lmao\lmfao,whole,any,"No actually, not funny"
+shut up\shutup,start,any,"No, *you* shut up"
+stfu/shut the fuck up,start,any,"No, *you* shut the fuck up"
+Oof,whole,any,Oof
+Ooo~f,repeat,any,{message}
+O,letters,any,"No, not {message}"
+Bruh,whole,any,Yeah bruh?
+Bruu~h,repeat,any,Yeah {message}?
+Hm,whole,any,Hm fuck you {username}
+Hmm~mm,repeat,any,"{message}, fuck you {username}"
+Ree,whole,any,{message}
+Reee~eee,repeat,any,{message}
+He ,letters,any,"{message}, you sound pathetic, fuck you"
+Ha ,letters,any,"{message}, you sound pathetic, fuck you"
+Thanks\Thank you\ty,whole,any,Actually no thank you
+Thanks \Thank you \Ty ,start,any,"No, just no, they didn't do anything"
+tysm,start,any,That's a stupid thing to be *so* thankful for
+Hello\Hi\Hey,whole,any,{answer}
+Hello FBot\Hi Fbot\Hey FBot\Hello F Bot\Hi F Bot\Hey F Bot\Hello <@711934102906994699>\Hey <@711934102906994699>\Hi <@711934102906994699>,whole,any,"Hello, {username}"
+Hello \Hi \Hey ,start,any,WHY DON'T I GET A HELLO?!
+Welcome ,start,any,Welcome {after}
+Welcome,whole,any,WELCOME!
+:)\:D\(:,whole,exact,"Wish I could be happy, but I'm just a bot"
+:(\D:):,whole,exact,Be happy bitch
+<3\:3,whole,exact,Cute...
+:O\:0\:o,whole,exact,What the... bad time?
+:|\:/,whole,exact,Seriously?
+Country roads,whole,any,Take me home
+To the place,whole,any,I BELONG
+West Virginia,whole,any,Mountain mama
+Take me home,whole,any,Country roads
+?,end,any,{answer}
+FBot is \FBot's \FBots \F Bot is \F Bot's \F Bots\<@711934102906994699> is\<@711934102906994699>'s\<@711934102906994699>s,start,any,"No, {username}'s {after}"
+fbot \f bot \<@711934102906994699>,start,any,"No, {username} {after}"
+FBot\F Bot\<@711934102906994699>,whole,any,"...Yes, {username}?"
