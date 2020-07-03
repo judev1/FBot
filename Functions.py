@@ -28,7 +28,7 @@ class functions():
             file = open(".servers\Server_Names.txt", "w+")
             file.close()
             #print(" > Created a file to store server names\n")
-            functions.log("Created a file to store server data")
+            functions.log("Created a file to store server data\n")
             
         for server in serverlist:
             serverid = str(server.id)
@@ -109,10 +109,10 @@ class functions():
             file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "r+")
             file.close()
             file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "w+")
-            functions.log("FBot's status has been set to {}, for {}'s {}\n".format(status, server, channel))
+            functions.log("\nFBot's status has been set to {}, for {}'s {}\n".format(status, server, channel))
         except:
             file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "w+")
-            functions.log("Created an FBot Status file for {}'s {}\n".format(server, channel))
+            functions.log("\nCreated an FBot Status file for {}'s {}".format(server, channel))
         file.writelines(status)
         file.close()
 
