@@ -1,3 +1,5 @@
+# Note to self: Remember to delete the token before uploading to GitHub :^)
+
 # Folder: DiscordBots\FBot
 #   File: FBot.py
 
@@ -13,8 +15,6 @@ try:
 except:
     input(" > Unable to install some of the dependencies, shutting down.")
     sys.exit()
-
-
 
 client = discord.Client()
 remove = fn.remove
@@ -40,13 +40,7 @@ except:
     file = open("Logs.txt", "w+")
 file.close()
 
-#webhookurl = "https://discordapp.com/api/webhooks/724032635453833307/f9cfS4fzfz7py7U-QBIo_ujPc_5CsL2UTEu9nwDV0MtCsdDh6bhRHgq5whLZ0RX7FNZq"
-
-
-
 # |---------------------------| FBOT VARIABLES |---------------------------|
-
-
 
 #Variables you can change
 twss = ["That's big", "that's big", "Thats big", "thats big"]
@@ -463,4 +457,4 @@ async def on_message(message):
             await send(response)
 
 #Client key - this is required to run
-client.run("NzIyOTUzMjAyOTY1Njc2MDYz.XvzElA.7pkKsoikHpUhkPfcRxTAnrZYWEc")
+client.run("")
