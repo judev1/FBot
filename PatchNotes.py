@@ -99,7 +99,7 @@ def v6():
           "- Made the code easier to read\n"
           "Main:  786 lines (+149)\n"
           "Func:  319 lines (+002)\n"
-          "PatN:  125 lines (+125\n"
+          "PatN:  125 lines (+125)\n"
           "BkPg:   82 lines (+082)\n"
           "Totl: 1314 lines (+358)")
     return pn
@@ -126,16 +126,35 @@ def v6_7():
           "- Added hello FBot\n"
           "Main:  871 lines (+085)\n"
           "Func:  321 lines (+002)\n"
-          "PatN:  153 lines (+029\n"
+          "PatN:  154 lines (+029)\n"
           "BkPg:   82 lines (+000)\n"
           "Totl: 1430 lines (+116)")
+    return pn
+
+def v7():
+    pn = ("What's new in v1.7?\n"
+          "'Efficiency Update'\n"
+          "- Teamed up with @LinesGuy to make FBot even better!\n"
+          "- Removed all triggers from the file with the exception of Commands and Features\n"
+          "- Added two new files (Triggers.py and Triggers.csv) to check, respond and store triggers\n"
+          "- Added a command (FBotdev treload) to reload the csv without disrupting FBot's status\n"
+          "- Added Trigger.py (made entirely by @LinesGuy) with two functions\n"
+          "- Trigger Load Function works to check and load the csv file storing all the triggers and responses\n"
+          "- Trigger Respond Function which checks if the message is in any of the triggers\n"
+          "Main:  493 lines (-378)\n"
+          "Func:  321 lines (+000)\n"
+          "PatN:  154 lines (+000)\n"
+          "BkPg:   82 lines (+000)\n"
+          "Trig:   95 lines (+095)\n"
+          "Totl: 1168 lines (-262)")
+    return pn
 
 class patchnotes():
 
     def get(content):
         
         if content == "recent":
-            return v6_7()
+            return v7()
         elif content == "1.1":
             return v1()
         elif content == "1.2":
@@ -150,5 +169,7 @@ class patchnotes():
             return v6()
         elif content == "1.6.7":
             return v6_7()
+        elif content == "1.7":
+            return v7()
         else:
             return "invalid"
