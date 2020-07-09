@@ -1,14 +1,15 @@
 # Folder: DiscordBots\FBot
 #   File: FBot.py
 
-import discord, random, time, os, sys, datetime
+import discord, random, time, os, sys
 try:
-    from TriggerResponse import trigger_response as tr
+    from Triggers import trigger_response as tr
     from PatchNotes import patchnotes as pn
     from Functions import functions as fn
+    from Functions import time as ftime
     from BookProgram import book
 except:
-    input(" > Unable to install some of the dependencies, shutting down")
+    input(" > Unable to install some of the dependencies, shutting down ")
     sys.exit()
 
 
@@ -16,13 +17,15 @@ except:
 client = discord.Client()
 remove = fn.remove
 
-create = fn.create
-setup = fn.setup
+now = ftime.now
 
-gettime = fn.gettime
+setstatus = fn.setstatus
+getstatus = fn.getstatus
+changestatus = fn.changestatus
 
-setfbot = fn.setfbot
-getfbot = fn.getfbot
+setmodtoggle = fn.setmodtoggle
+getmodtoggle = fn.getmodtoggle
+changemodtoggle = fn.changemodtoggle
 
 cmd = fn.fbotcmd
 
@@ -40,12 +43,14 @@ file.close()
 
 
 
-#Variables you can change
+# Variables you can change
 twss = ["That's big", "that's big", "Thats big", "thats big"]
 banned = []
+nonadmin = "NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO"
 answer = "NO ONE CARES"
 
-#Variables you should not change
+
+# Variables for infomation
 tf = ["will", "will not"]
 
 fboturl = "https://images.discordapp.net/avatars/711934102906994699/6ab406f40bc3517802fd4402955da1b0.png?size=512"
@@ -59,31 +64,32 @@ serverurl = "https://discord.gg/BDpXRq9"
 prplhzurl = "https://discord.gg/zW2k2yK"
 rhurl = "https://discord.gg/6SBBM3J"
 
-#Variables for infomation
+
 ready = False
-creator = "justjude#2296"
-ver = "1.7"
-lastupdated = "03.07.20"
+serverlogs = "Server Log Channel"
+lastupdated = "09.07.20"
+ver = "1.7.2"
+vers = "`recent`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, `1.6.7`, `1.7`, `1.7.2`"
+
 
 notices = '''**We are currently holding an event!**
 *Use* `FBot events` *or* [visit FBot's Server for more info](https://discord.gg/BDpXRq9)
 
-**FBot v{} has been released! as of {}**
-#LinesGuys#9260 has contributed massivley to the newest release of FBot, however, **major** changes have been made to the code, so please let us know immediately if anything isn't working properly'''.format(ver, lastupdated)
+**Slide into FBot's DMs with** `FBot dms`
 
-serverlogs = "Server Log Channel"
+**FBot v{} has been released as of {}**'''.format(ver, lastupdated)
 
-#Final Setup
-timenow = datetime.datetime.now()
-m = timenow.strftime("%M")
-h = timenow.strftime("%H")
-d = timenow.strftime("%d")
 
-sessionstart = gettime()
+ftime.start()
+ftime.now()
+
+
+sessionstart = now()
 print(" > Session started at {}".format(sessionstart))
 log("Session started at {}".format(sessionstart))
 
 tr.trigger_load()
+fn.setup()
 
 
 
@@ -91,24 +97,21 @@ tr.trigger_load()
 
 
 
-#When the Client connects to the server
+# When the Client connects to the server
 @client.event
 async def on_connect():
     
     name = client.user
     print("\n > Began signing into Discord as {}".format(name))
-    log("\nAt {}, began signing into Discord as {}".format(gettime(), name))
+    log("\nAt {}, began signing into Discord as {}".format(now(), name))
 
-#When the Server connection is ready  
+# When the Server connection is ready  
 @client.event
 async def on_ready():
     
     name = client.user
     print(" > Finished signing into Discord as {}\n".format(name))
-    log("At {}, finished signing into Discord\n".format(gettime()))
-        
-    create(client)
-    create(client)
+    log("At {}, finished signing into Discord\n".format(now()))
 
     global ready
     ready = True
@@ -121,29 +124,55 @@ async def on_ready():
 
 
 
-#When the Client joins a Guild
+# When the Client joins a Guild
 @client.event
 async def on_guild_join(newguild):
 
-    if ready == False:
-        return
+    while not ready:
+        time.sleep(5)
+
+    memcount = 0
+    botcount = 0
     
+    for mems in newguild.members:
+        if not mems.bot:
+            memcount += 1
+        else:
+            botcount += 1
+    
+    try:
+        invite = await newguild.system_channel.create_invite(max_age=120 * 60, temporary=True)
+    except:
+        invite = "Error resolving invite"
+
     channel = get(client, serverlogs)
-    await channel.send("I have just been `added` to `{}`".format(newguild))
+    await channel.send("I have been `added` to `{}` (`{}`)\n"
+                       "{} has `{}` members and `{}` bots\n"
+                       "A temporary invite `{}`, will expire after 2 hours\n"
+                       "The server count is now `{}`".format(newguild, newguild.id, newguild, memcount, botcount - 1, invite, len(client.guilds) - 1))
     log("{} has just been added to a guild ({})".format(client.user, newguild.id))
 
-    create(client)
-    create(client)
 
-#When the Client leaves a Guild
+# When the Client leaves a Guild
 @client.event
 async def on_guild_remove(newguild):
 
-    if ready == False:
-        return
+    while not ready:
+        time.sleep(5)
 
+    memcount = 0
+    botcount = 0
+    
+    for mems in newguild.members:
+        if not mems.bot:
+            memcount += 1
+        else:
+            botcount += 1
+    
     channel = get(client, serverlogs)
-    await channel.send("I have just been `removed` from `{}`".format(newguild))
+    await channel.send("I have been `removed` from `{}` (`{}`)\n"
+                       "{} has `{}` members and `{}` bots\n"
+                       "The server count is now `{}`".format(newguild, newguild.id, newguild, memcount, botcount - 1, len(client.guilds) - 1))
     log("{} has just been removed from a guild ({})".format(client.user, newguild.id))
 
 
@@ -164,46 +193,45 @@ async def on_message(message):
 # |----------------------------| FBOT SETUP |----------------------------|
 
 
-
-    #Variable setups for ease of use
+    
+    # Variable setups for ease of use
     name = message.author
     name = str(name)
     name = remove(name, 0, 5)
+    admin = message.author.guild_permissions.administrator
 
     original_message = message.content
     content = message.content.lower()
     startswith = content.startswith
     endswith = content.endswith
-    send = message.channel.send
-    
 
-    server = message.guild
     channel = message.channel
-
-    fn.setup(server, channel)
-    data = fn.setup(server, channel)
-    
-    server = data[0]
-    channel = data[1]
+    server = message.guild
+    send = channel.send
 
     done = True
-    
-    #Check for a FBot's Status file
-    try:
-        getfbot(server, channel)
-    except:
-        setfbot("off", server, channel)
 
-    #Get FBot's Status
-    status = getfbot(server, channel)
-    status = remove(str(status), 2, 2)
+    # Checks and gets FBot's Status
+    if str(message.channel.type) == "private":
+        status = "on"
+    else:        
+        statusfound, status =  getstatus(server, channel)
+        if not statusfound:
+            setstatus(server, channel)
+            statusfound, status =  getstatus(server, channel)
+
+        modtogglefound, modtoggle =  getmodtoggle(server)
+        if not statusfound:
+            setmodtoggle(server, channel)
+            modtogglefound, modtoggle =  getmodtoggle(server)
+    
 
 
 
 # |---------------------------| FBOT COMMANDS |---------------------------|
 
 
-    #FBot Patch Notes
+    # FBot Patch Notes
     if startswith("fbot p") or startswith("f bot p"):
         if startswith("f "):
             content = remove(content, 6, 0)
@@ -226,7 +254,7 @@ async def on_message(message):
             pns = pn.get(content)
 
             if content == "list":
-                embed = discord.Embed(title="**Patch Note Arguments**", description="`recent`, `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `1.6`, `1.6.7`, `1.7`", colour=0xF42F42)
+                embed = discord.Embed(title="**Patch Note Arguments**", description=vers, colour=0xF42F42)
                 embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
                 await send(embed=embed)
 
@@ -244,16 +272,17 @@ async def on_message(message):
                 embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
                 await send(embed=embed)
 
-    #Don't let FBot reply to its self or to other bots
+    # Don't let FBot reply to its self or to other bots
     if message.author == client.user or message.author.bot == True:
         return
 
-    #FBot Commands
+    # FBot Commands
     elif cmd(content, "commands") or cmd(content, "command") or cmd(content, "cmd") or cmd(content, "cmds"):
         embed = discord.Embed(title="FBot Commands", description="**Write `FBot ` (the prefix) however you want, I don't care**\n"
                                                                  "*Shorthands for this command are:* `commands`/`command`/`cmds`/`cmd`\n"
                                                                  "\n**General Commands**\n"
                                                                  "`on`/`off`: *Toggles FBot*\n"
+                                                                 "`modtoggle` `on`/`off`: *Allows only admin to toggle FBot* **ADMIN ONLY**\n"
                                                                  "`help`/`?`: *Gives some helpful links and commands*\n"
                                                                  "\n**Infomation Commands**\n"
                                                                  "`info`: *Displays some insight into the bot*\n"
@@ -274,11 +303,12 @@ async def on_message(message):
                                                                  "`Minecraft`/`MC`: *Gives infomation to join our MC server*\n"
                                                                  "\n**Fun Commands**\n"
                                                                  "`say` `<message>`: *Makes FBot say whatever you want*\n"
-                                                                 "`quote`: *Quotes a random part from Mein Kampf*\n".format(status), colour=0xF42F42)
+                                                                 "`quote`: *Quotes a random part from Mein Kampf*\n"
+                                                                 "`dm`/`dms`: **New** *Bring FBot into your DMs, why? Who knows!*".format(status), colour=0xF42F42)
         embed.set_footer(text="Commands requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Help
+    # FBot Help
     elif cmd(content, "help") or cmd(content, "?"):
         embed = discord.Embed(title="FBot Help", description="**Useful Commands**\n"
                                                              "Use `FBot on/off` to toggle fbot\n"
@@ -291,7 +321,7 @@ async def on_message(message):
         embed.set_footer(text="Help requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Info
+    # FBot Info
     elif cmd(content, "info") or cmd(content, "infomation"):
         totalmembers = 0
         for servers in client.guilds:
@@ -301,41 +331,46 @@ async def on_message(message):
         embed.add_field(name="Session start", value=sessionstart)
         embed.add_field(name="Servers", value=len(client.guilds) - 1)
         embed.add_field(name="Last Updated", value=lastupdated)
-        embed.add_field(name="Uptime", value=fn.uptime(m, h, d))
+        embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Members", value=totalmembers)
         embed.add_field(name="Version", value=ver)
         embed.set_footer(text="Created by justjude#2296 & LinesGuy#9260 | Version v{}".format(ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Status
+    # FBot Status
     elif cmd(content, "status"):
-        embed = discord.Embed(title="FBot is currently set to `{}` in this channel".format(status), colour=0xF42F42)
-        embed.set_footer(text="Status requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
-        await send(embed=embed)
+        if str(message.channel.type) == "private":
+            embed = discord.Embed(title="FBot is always on in DMs", colour=0xF42F42)
+            embed.set_footer(text="Status requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
+            await send(embed=embed)
+        else:
+            embed = discord.Embed(title="FBot is currently set to `{}` in this channel".format(status), colour=0xF42F42)
+            embed.set_footer(text="Status requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
+            await send(embed=embed)
 
-    #FBot Uptime
+    # FBot Uptime
     elif cmd(content, "uptime") or cmd(content, "session"):
         embed = discord.Embed(title="FBots session", colour=0xF42F42)
         embed.add_field(name="Session start", value=sessionstart)
-        embed.add_field(name="Uptime", value=fn.uptime(m, h, d))
+        embed.add_field(name="Uptime", value=ftime.uptime())
         embed.set_footer(text="Session requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Version
+    # FBot Version
     elif cmd(content, "version") or cmd(content, "ver"):
         embed = discord.Embed(title="FBots Version as of {}".format(lastupdated), colour=0xF42F42)
         embed.add_field(name="Version", value=ver)
         embed.set_footer(text="Version requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Ping
+    # FBot Ping
     elif cmd(content, "ping"):
         embed = discord.Embed(title="FBots Ping", colour=0xF42F42)
         embed.add_field(name="Ping", value="{}ms".format(int(client.latency * 1000)))
         embed.set_footer(text="Ping requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Events
+    # FBot Events
     elif cmd(content, "events") or cmd(content, "event"):
         embed = discord.Embed(title="FBot Events", description="**We are currently holding an event!**\n"
                                                                "We are creating an about page for FBot and we would like your help!\n\n"
@@ -343,31 +378,31 @@ async def on_message(message):
         embed.set_footer(text="Events requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
         
-    #FBot Notice Board
+    # FBot Notice Board
     elif cmd(content, "nb") or cmd(content, "noticeboard") or cmd(content, "notice board"):
         embed = discord.Embed(title="FBot Notice Board", description=notices, colour=0xF42F42)
         embed.set_footer(text="NB requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
             
-    #FBot Patch Notes
+    # FBot Patch Notes
     elif cmd(content, "pn") or cmd(content, "patchnotes") or cmd(content, "patch notes"):
         embed = discord.Embed(title="**Error**", description="You didn't add an argument, for all arguments use `FBot pn list`".format(content), colour=0xF42F42)
         embed.set_footer(text="PN requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Vote
+    # FBot Vote
     elif cmd(content, "vote"):
         embed = discord.Embed(title="FBot Vote", description="[Vote for FBot on Top.gg!]({})".format(voteurl), colour=0xF42F42)
         embed.set_footer(text="Vote requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Invite
+    # FBot Invite
     elif cmd(content, "invite"):
         embed = discord.Embed(title="FBot Invite", description="[Invite FBot to your server!]({})".format(inviteurl), colour=0xF42F42)
         embed.set_footer(text="Invite requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Github
+    # FBot Github
     elif cmd(content, "github"):
         embed = discord.Embed(title="FBot Github", description="[View FBots code on Github!]({})".format(githuburl), colour=0xF42F42)
         embed.set_footer(text="Github requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
@@ -379,13 +414,13 @@ async def on_message(message):
         embed.set_footer(text="Top.gg requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
         
-    #FBot Server
+    # FBot Server
     elif cmd(content, "server"):
         embed = discord.Embed(title="FBot Server", description="[Join FBots server!]({})".format(serverurl), colour=0xF42F42)
         embed.set_footer(text="Server requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
         
-    #FBot Minecraft Server
+    # FBot Minecraft Server
     elif cmd(content, "mc") or cmd(content, "minecraft"):
         embed = discord.Embed(title="Join PURPLE HAZE x RIAS HUB x FBOTs Minecraft Server!",
                               description="We are a whitelist server so dm `@LinesGuy#9260` with your username to gain access\n\n"
@@ -393,7 +428,7 @@ async def on_message(message):
         embed.set_footer(text="Minecraft requested by {} | Version v{}".format(name, ver), icon_url=fboturl)
         await send(embed=embed)
 
-    #FBot Links
+    # FBot Links
     elif cmd(content, "links"):
         embed = discord.Embed(title="FBot Links", description="[Vote for FBot on Top.gg!]({})\n"
                                                               "[Invite FBot to your server!]({})\n"
@@ -409,16 +444,16 @@ async def on_message(message):
 
 
 
-    #FBot Say - Makes FBot say anything you input
+    # FBot Say - Makes FBot say anything you input
     elif (startswith("fbot say ") or startswith("f bot say ")) and ("@" not in content):
         if startswith("f "):
-            content = remove(message.content, 10, 0) # f bot say
+            content = remove(message.content, 10, 0)
         else:
-            content = remove(message.content, 9, 0) # fbot say
+            content = remove(message.content, 9, 0)
         await message.delete()
         await send(content)
 
-    #FBot quote
+    # FBot quote
     elif cmd(content, "quote"):
         #Check for Mein_Kampf.txt
         if os.path.exists('./Mein_Kampf.txt'):
@@ -428,30 +463,27 @@ async def on_message(message):
             await send(embed=embed)
         else:
             await send("This feature is currently disabled, we hope to re-add it soon")
-    
-    #Instant link reply
-    elif startswith("https://"):
-        await send("That's pretty gay ngl")
 
-    #Built-in gifs
+    # FBot DMs
+    elif cmd(content, "dm") or cmd(content, "dms"):
+        channel = await message.author.create_dm()
+        await channel.send("What do you want from me?!?")
+    
+    # Built-in gifs
     elif content == "smol pp" or content == "Smol pp":
         await send("https://tenor.com/view/tiny-small-little-just-alittle-guy-inch-gif-5676598")
     elif content == "micropenis" or content == "Micropenis":
         await send("https://tenor.com/view/girl-talks-naughty-small-dick-micropenis-gif-11854548")
 
-    #Coin flipper - feet style
+    # Coin flipper - feet style
     elif content == "feet pics":
         num = random.randint(0, 1)
         choice = tf[num]
-        await message.channel.send("FBot says:")
+        await send("FBot says:")
         time.sleep(0.5)
-        await message.channel.send("(Drum roll please)")
+        await send("(Drum roll please)")
         time.sleep(2)
-        await message.channel.send("Feet pics {} be granted!".format(choice))
-
-    #That's what she said
-    elif content in twss:
-        await send("That's what she said")
+        await send("Feet pics {} be granted!".format(choice))
 
     # [dev] Reload triggers.
     elif content == "fbotdev treload" and (str(name.id) == "671791003065384987" or str(name.id) == "216260005827969024"):
@@ -459,21 +491,47 @@ async def on_message(message):
         tr.trigger_load()
         print(" > [dev] treload command by " + name)
         await send("`[dev] Reloaded triggers.csv in " + str(round(time.time() - start, 4)*1000) + "ms`")
+
+    # Toggle modtoggle
+    elif cmd(content, "modtoggle off") and str(message.channel.type) != "private":
+        if admin:
+            changemodtoggle("off", server)
+        else:
+            await send(nonadmin)
+    elif cmd(content, "modtoggle on") and str(message.channel.type) != "private":
+        if admin:
+            changemodtoggle("on", server)
+        else:
+            await send(nonadmin)
     
-    #Toggle FBot Triggers
-    elif cmd(content, "off"):
-        setfbot("off", server, channel)
-    elif cmd(content, "on"):
-        setfbot("on", server, channel)
+    # Toggle FBot Triggers
+    elif cmd(content, "off") and str(message.channel.type) != "private":
+        if admin or modtoggle == "off":
+            changestatus("off", server, channel)
+        else:
+            await send(nonadmin)
+    elif cmd(content, "on") and str(message.channel.type) != "private":
+        if admin or modtoggle == "off":
+            changestatus("on", server, channel)
+        else:
+            await send(nonadmin)
     elif status == "off":
         return
+
+    # That's what she said
+    elif content in twss:
+        await send("That's what she said")
+
+    # Attachments
+    elif message.attachments:
+        await send("That's pretty gay ngl")
 
 
 
 # |---------------------------| FBOT TRIGGERS |---------------------------|
 
 
-
+    # All triggers
     else:
         trigger_detected, response = tr.trigger_respond(message.content)
         if trigger_detected:
@@ -483,11 +541,12 @@ async def on_message(message):
             await send(response)
 
 
+            
+# FBot's client key
+client.run()
 
+# Jude's testing client key
+client.run()
 
-#Client key - this is required to run
-client.run("")
-#Client key - Jude's testing one
-client.run("")
-#Client key - LinesGuy's testing one
-client.run("")
+# LinesGuy's testing client key
+client.run()
