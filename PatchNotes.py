@@ -143,18 +143,37 @@ def v7():
           "- Trigger Respond Function which checks if the message is in any of the triggers\n"
           "Main:  493 lines (-378)\n"
           "Func:  321 lines (+000)\n"
-          "PatN:  154 lines (+000)\n"
+          "PatN:  175 lines (+021)\n"
           "BkPg:   82 lines (+000)\n"
           "Trig:   95 lines (+095)\n"
-          "Totl: 1168 lines (-262)")
+          "Totl: 1189 lines (-241)")
     return pn
+
+def v7_2():
+    pn = ("What's new in v1.7?\n"
+          "FBot DMs, you can now comunicate with FBot in DMs\n"
+          "Added a modtoggle feature so only admin can toggle if they want\n"
+          "Completely redesigned the way FBot status is stored, saving an incredible amount of space storing the data and saving a huge amount of lines in the code\n"
+          "Added a functions to store FBot modtoggle status\n"
+          "Improved the Join/Remove logging\n"
+          "Added a replace feature to easily replace trigger words found in phrases\n"
+          "Created a new class for time and shifted time related features there\n"
+          "Fixed Uptime\n"
+          "Fixed some minor errors\n"
+          "Made it look nicer\n"
+          "Main:  552 lines (+059)\n"
+          "Func:  315 lines (-006)\n"
+          "PatN:  196 lines (+042)\n"
+          "BkPg:   82 lines (+000)\n"
+          "Trig:  101 lines (+006)\n"
+          "Totl: 1290 lines (+101)")
 
 class patchnotes():
 
     def get(content):
         
         if content == "recent":
-            return v7()
+            return v7_2()
         elif content == "1.1":
             return v1()
         elif content == "1.2":
@@ -171,5 +190,7 @@ class patchnotes():
             return v6_7()
         elif content == "1.7":
             return v7()
+        elif content == "1.7.2":
+            return v7_2()
         else:
             return "invalid"
