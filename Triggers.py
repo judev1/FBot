@@ -9,7 +9,7 @@ class trigger_response:
     def trigger_load():
         
         T_MESSAGE = 0
-        T_TYPE = 1 # whole / start / end / any
+        T_TYPE = 1 # whole / start / end / any / repeat / letters / replace
         T_CASE = 2 # any / exact
         T_RESPONSE = 3
 
@@ -37,11 +37,10 @@ class trigger_response:
         # print("\n")
         
 
-
     # Check if a message contains a trigger and return True/False + response
     def trigger_respond(message):
         T_MESSAGE = 0
-        T_TYPE = 1 # whole / start / end / any
+        T_TYPE = 1 # whole / start / end / any / repeat / letters / replace
         T_CASE = 2 # any / exact
         T_RESPONSE = 3
 
@@ -68,27 +67,34 @@ class trigger_response:
                 elif trigger[T_TYPE] == "end" and message_check.endswith(alias):
                     type_check = True
                     break
-                elif trigger[T_TYPE] == "any" and alias in message_check:
-                    type_check = True
-                    break
+                #elif trigger[T_TYPE] == "any" and alias in message_check:
+                    #type_check = True
+                    #break
                 elif trigger[T_TYPE] == "repeat":
                     alias_split = alias.split("~")
                     if message_check.startswith(alias_split[0]) and message_check.endswith(alias_split[1]):
                         type_check = True
                         break
                 elif trigger[T_TYPE] == "letters":
+                    if message_check == "":
+                        break
                     for letter in alias:
                         message_check = message_check.replace(letter, "")
                     if message_check == "":
                         type_check = True
                         break
+                elif trigger[T_TYPE] == "replace" and alias in message_check:
+                    trigger[T_RESPONSE] = message_check.replace(alias, trigger[T_RESPONSE])
+                    type_check = True
+                    break
+                    
 
             if type_check:
                 alias_used = alias
                 print("type_check is: " + str(type_check)) if debug_mode else False
                 print("alias_used is: " + alias_used) if debug_mode else False
                 response = trigger[T_RESPONSE]
-                # {username} and {ping} are replaced in fbot.py
+                # {username}, {ping} and {answer} are replaced in fbot.py
                 response = response.replace("{after}", message[len(alias_used):])
                 response = response.replace("{message}", message)
                 return True, response
