@@ -1,228 +1,200 @@
 # Folder: DiscordBots\FBot
 #   File: Functions.py
 
-import time, random, datetime, os, ctypes
+import os, ctypes, time, datetime
+
+m = 0
+h = 0
+d = 0
 
 class functions():
 
-    #Removes known prefix's and suffix's from a string
+    # Removes known prefix's and suffix's from a string
     def remove(text, left_chars, right_chars):
         return text[left_chars:len(text) - right_chars]
 
 
-    #Sets up and checks files for severs
-    def create(client):
-        serverlist = client.guilds
-        
+    # Sets up and checks files for severs
+    def setup():
         newpath = r".servers"
         if not os.path.exists(newpath):
             os.makedirs(newpath)
             os.popen('attrib +h ' + newpath)
-            #print(" > Created a folder to store server data")
+            print(" > Created a folder to store server data")
             functions.log("Created a folder to store server data")
 
         try:
-            file = open(".servers\Server_Names.txt", "r")
+            file = open(".servers\Status.txt", "r")
             file.close()
         except:
-            file = open(".servers\Server_Names.txt", "w+")
+            file = open(".servers\Status.txt", "w+")
+            data = ("Server: ''\n"
+                    "Channel: ''\n"
+                    "Status: ''\n")
+            file.writelines(data)
             file.close()
-            #print(" > Created a file to store server names\n")
-            functions.log("Created a file to store server data\n")
-            
-        for server in serverlist:
-            serverid = str(server.id)
-            info = functions.checkserverid(serverid)
-            
-            if info[0] == serverid:
-                serverid = functions.getserverid(info[0], info[1])
-            else:
-                functions.createserverid(serverid, info[1])
-                serverid = functions.getserverid(info[0], info[1])
-                #print(" > {} has been added to the database".format(server))
-                functions.log("Added {} to the database".format(serverid))
-            
-            newpath = r".servers\.{}".format(serverid)
-            if not os.path.exists(newpath):
-                os.makedirs(newpath)
-                os.popen('attrib +h ' + newpath)
-                #print(" > Created a folder to store {}'s data".format(server))
-                functions.log("Created a folder to store {}'s data".format(serverid))
 
+            print(" > Created a file to store FBot's channel status")
+            functions.log("Created a file to store FBot's channel status\n")
 
-    #Channel setup
-    def setup(server, channel):
-        fn = functions
-        checkserver = fn.checkserverid
-        getserver = fn.getserverid
-        createserver = fn.createserverid
-        checkchannel = fn.checkchannelid
-        getchannel = fn.getchannelid
-        createchannel = fn.createchannelid
+        try:
+            file = open(".servers\Data.txt", "r")
+            file.close()
+        except:
+            file = open(".servers\Data.txt", "w+")
+            data = ("Server: ''\n"
+                    "Modtoggle: ''\n")
+            file.writelines(data)
+            file.close()
+
+            print(" > Created a file to store FBot's server data")
+            functions.log("Created a file to store FBot's server data\n")
+
+    # Sets FBot's status
+    def setstatus(server, channel):
+        server = str(server.id)
+        channel = str(channel.id)
         
-        #Check for the Server's data
-        serverid = str(server.id)
-        info = checkserver(serverid)
-                
-        if info[0] == serverid:
-            server = getserver(info[0], info[1])
-        else:
-            createserver(serverid, info[1])
-            server = getserver(info[0], info[1])
+        file = open(".servers\Status.txt", "r")
+        data = file.readlines()
+        file.close
 
-        #Create a file for the Channel
-        try:
-            file = open(".servers\.{}\Channel_Names.txt".format(server), "r")
-            file.close()
-        except:
-            file = open(".servers\.{}\Channel_Names.txt".format(server), "w+")
-            #print(" > Created a file to store {}'s channel data".format(server))
-            functions.log("\nCreated a file to store {}'s channel data".format(server))
-            file.close()  
+        last = len(data) - 1
+        data[last] = ("{}\n"
+                      "Server: '{}'\n"
+                      "Channel: '{}'\n"
+                      "Status: 'off'\n".format(data[last], server, channel))
+
+        file = open(".servers\Status.txt", "w+")
+        file.writelines(data)
+        file.close()
+        functions.log("\nFBot's status has been set to {}, for {}'s {}\n".format(status, server, channel))
+
+    # Checks and gets FBot's status
+    def getstatus(server, channel):
+        server = str(server.id)
+        channel = str(channel.id)
+        
+        file = open(".servers\Status.txt", "r")
+        data = file.readlines()
+        file.close
+        
+        num = 0
+        lines = len(data) + 1
+        repeat = int(lines / 4)
+        
+        while repeat != 0:
+            if server == functions.remove(data[num], 9, 2):
+                num = 1
+                repeat = int(lines / 4)
                 
-        #Check for the Channel's data
-        channelid = str(channel.id)
-        info = checkchannel(channelid, server)
+                while repeat != 0:
+                    if channel == functions.remove(data[num], 10, 2):
+                        return True, str(functions.remove(data[num + 1], 9, 2))
+                    num += 4
+                    repeat -= 1
+            num += 4
+            repeat -= 1
+
+        return False, ""
+
+    # Changes FBot's status
+    def changestatus(status, server, channel):
+        server = str(server.id)
+        channel = str(channel.id)
+        
+        file = open(".servers\Status.txt", "r")
+        data = file.readlines()
+        file.close
+        
+        num = 0
+        lines = len(data) + 1
+        repeat = int(lines / 4)
+        
+        while repeat != 0:
+            if server == functions.remove(data[num], 9, 2):
+                num = 1
+                repeat = int(lines / 4)
                 
-        if info[0] == channelid:
-            channel = getchannel(info[0], info[1], server)
-        else:
-            createchannel(channelid, info[1], server)
-            channel = getchannel(info[0], info[1], server)
-            #print(" > Added {}'s {} to the database".format(server, channel))
-            functions.log("Added {}'s {} to the database".format(server, channel))
+                while repeat != 0:
+                    if channel == functions.remove(data[num], 10, 2):
+                        data[num + 1] = "Status: '{}'\n".format(status)
+
+                        file = open(".servers\Status.txt", "w+")
+                        file.writelines(data)
+                        file.close
+
+                        return
+                    num += 4
+                    repeat -= 1
+            num += 4
+            repeat -= 1
+
+    # Sets the modtoggle status
+    def setmodtoggle(server):
+        server = str(server.id)
+        channel = str(channel.id)
+        
+        file = open(".servers\Data.txt", "r")
+        data = file.readlines()
+        file.close
+
+        last = len(data) - 1
+        data[last] = ("{}\n"
+                      "Server: '{}'\n"
+                      "Modtoggle: 'off'\n".format(data[last], server))
+
+        file = open(".servers\Data.txt", "w+")
+        file.writelines(data)
+        file.close()
+        functions.log("\nFBot's status has been set to {}, for {}'s {}\n".format(status, server, channel))
+
+    # Checks and gets the modtoggle status
+    def getmodtoggle(server):
+        server = str(server.id)
+        
+        file = open(".servers\Data.txt", "r")
+        data = file.readlines()
+        file.close
+        
+        num = 0
+        lines = len(data) + 1
+        repeat = int(lines / 3)
+        
+        while repeat != 0:
+            if server == functions.remove(data[num], 9, 2):
+                return True, str(functions.remove(data[num + 2], 12, 2))
+            num += 3
+            repeat -= 1
+
+        return False, ""
+
+    # Changes the modtoggle status
+    def changemodtoggle(status, server):
+        server = str(server.id)
+        
+        file = open(".servers\Data.txt", "r")
+        data = file.readlines()
+        file.close
+        
+        num = 0
+        lines = len(data) + 1
+        repeat = int(lines / 3)
+        
+        while repeat != 0:
+            if server == functions.remove(data[num], 9, 2):
+                data[num + 2] = "Modtoggle: '{}'\n".format(status)
+
+                file = open(".servers\Data.txt", "w+")
+                file.writelines(data)
+                file.close
+
+                return
             
-        #Create a folder for the Channel
-        newpath = r".servers\.{}\.{}".format(server, channel)
-        if not os.path.exists(newpath):
-            os.makedirs(newpath)
-            os.popen('attrib +h ' + newpath)
-            #print(" > Created a folder to store {}'s channel: {}'s data".format(server, channel))
-            functions.log("Created a folder to store {}'s {}'s data".format(server, channel))
-        data = [server, channel]
-        return data
+            num += 3
+            repeat -= 1
 
-
-    #Creates a file for FBot's status
-    def setfbot(status, server, channel):
-        try:
-            file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "r+")
-            file.close()
-            file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "w+")
-            functions.log("\nFBot's status has been set to {}, for {}'s {}\n".format(status, server, channel))
-        except:
-            file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "w+")
-            functions.log("\nCreated an FBot Status file for {}'s {}".format(server, channel))
-        file.writelines(status)
-        file.close()
-
-    #Gets FBot's status
-    def getfbot(server, channel):
-        file = open(".servers\.{}\.{}\Status.txt".format(server, channel), "r")
-        info = file.readlines()
-        return info
-
-
-    #Checks for the Server ID
-    def checkserverid(name):
-        name = str(name)
-        file = open(".servers\Server_Names.txt", "r")
-        data = file.readlines()
-        file.close()
-        getname = ""
-        length = len(data)
-        length -= 1
-        repeat = -1
-        while repeat != length:
-            repeat += 2
-            getname = functions.remove(data[repeat], 14, 2)
-            getname = str(getname)
-            if name == getname:
-                break
-        info = [getname, repeat]
-        return info
-
-    #Gets the Server ID
-    def getserverid(name, repeat):
-        file = open(".servers\Server_Names.txt", "r")
-        data = file.readlines()
-        repeat -= 1
-        getid = functions.remove(data[repeat], 12, 2)
-        getid = "server_{}".format(getid)
-        return getid
-
-    #Creates a Server ID
-    def createserverid(name, serverid):
-        file = open(".servers\Server_Names.txt", "r+")
-        data = file.readlines()
-        file.close()
-        length = len(data)
-        serverid += 1
-        serverid /= 2
-        serverid += 1
-        serverid = int(serverid)
-        if length != 0:
-            length -= 1
-            lastrow = data[length]
-        else:
-            lastrow = ""
-            data = [""]
-        data[length] = "{}Server ID: '{}'\nServer Name: '{}'\n".format(lastrow, serverid, name)
-        file = open(".servers\Server_Names.txt", "w+")
-        file.writelines(data)
-        file.close()
-
-
-    #Checks for the Channel ID
-    def checkchannelid(name, serverid):
-        name = str(name)
-        file = open(".servers\.{}\Channel_Names.txt".format(serverid), "r")
-        data = file.readlines()
-        file.close()
-        getname = ""
-        length = len(data)
-        length -= 1
-        repeat = -1
-        while repeat != length:
-            repeat += 2
-            getname = functions.remove(data[repeat], 15, 2)
-            getname = str(getname)
-            if name == getname:
-                break
-        info = [getname, repeat]
-        return info
-
-    #Gets the Channel ID
-    def getchannelid(name, repeat, serverid):
-        file = open(".servers\.{}\Channel_Names.txt".format(serverid), "r")
-        data = file.readlines()
-        repeat -= 1
-        getid = functions.remove(data[repeat], 13, 2)
-        getid = "channel_{}".format(getid)
-        return getid
-
-    #Creates a Channel ID
-    def createchannelid(name, channelid, serverid):
-        file = open(".servers\.{}\Channel_Names.txt".format(serverid), "r+")
-        data = file.readlines()
-        file.close()
-        length = len(data)
-        channelid += 1
-        channelid /= 2
-        channelid += 1
-        channelid = int(channelid)
-        if length != 0:
-            length -= 1
-            lastrow = data[length]
-        else:
-            lastrow = ""
-            data = [""]
-        data[length] = "{}Channel ID: '{}'\nChannel Name: '{}'\n".format(lastrow, channelid, name)
-        file = open(".servers\.{}\Channel_Names.txt".format(serverid), "w+")
-        file.writelines(data)
-        file.close()
-
-    #Gets the channels data
+    # Gets a logging channels data
     def get(client, channelid):
         guilds = client.guilds
         num = -1
@@ -241,81 +213,103 @@ class functions():
         channel = channels[num]
         return channel
 
-    #Checks fo a command
+    # Checks fo a command
     def fbotcmd(content, cmdname):
         if content.startswith("f "):
             return content.startswith("f bot {}".format(cmdname))
-        if content.startswith("<@!"):
-            return content.startswith("<@!711934102906994699> {}".format(cmdname))
+        if content.startswith("<@711934102906994699>"):
+            return content.startswith("<@711934102906994699> {}".format(cmdname))
         else:
             return content.startswith("fbot {}".format(cmdname))
 
-    #Logs a message
+    # Logs a message
     def log(message):
         file = open("Logs.txt", "r+")
         data = file.readlines()
         file.writelines(message + "\n")
         file.close()
 
-    #Gets the current time
-    def gettime():
+class time():
+
+    # Gets the start time
+    def start():
         timenow = datetime.datetime.now()
-        m = timenow.strftime("%M")
-        h = timenow.strftime("%H")
-        d = timenow.strftime("%d")
-        mo = timenow.strftime("%m")
-        return "{}:{}, {}.{} UTC".format(h, m, d, mo)
-
-    #Gets the uptime
-    def uptime(m, h, d):
         
+        global m, h, d, mo
+        m = int(timenow.strftime("%M"))
+        h = int(timenow.strftime("%H"))
+        d = int(timenow.strftime("%d"))
+        mo = int(timenow.strftime("%m"))
+
+    # Gets the current time
+    def now():
+        timenow = datetime.datetime.now()
+        m_now = timenow.strftime("%M")
+        h_now = timenow.strftime("%H")
+        d_now = timenow.strftime("%d")
+        mo_now = timenow.strftime("%m")
+        return "{}:{}, {}.{} UTC".format(h_now, m_now, d_now, mo_now)
+
+    # Gets the uptime
+    def uptime():
+
         now = datetime.datetime.now()
-        now_m = int(now.strftime("%M"))
-        now_h = int(now.strftime("%H"))
-        now_d = int(now.strftime("%d"))
-        m = int(m)
-        h = int(h)
-        d = int(d)
+        m_now = int(now.strftime("%M"))
+        h_now = int(now.strftime("%H"))
+        d_now = int(now.strftime("%d"))
+        mo_now = int(now.strftime("%m"))          
 
-        if d > now_d:
-            d = 30 - d
-            d += now_d         
+        if mo > mo_now:
+            mo_uptime = 60 - mo
+            mo_uptime += mo_now
         else:
-            d = now_d - d
+            mo_uptime = mo_now - mo
+        
+        if d > d_now:
+            if mo == 2:
+                d_uptime = 28 - d
+            elif mo == 4 or mo == 6 or mo == 9 or mo == 10:
+                d_uptime = 31 - d
+            else:
+                d_uptime = 31 - d
+            d_uptime += d_now
+            mo_uptime -= 1
+        else:
+            d_uptime = d_now - d
 
-        if h > now_h:
-            h = 60 - h
-            h += now_h
-            d -= 1
+        if h > h_now:
+            h_uptime = 60 - h
+            h_uptime += h_now
+            d_uptime -= 1
         else:
-            h = now_h - h
+            h_uptime = h_now - h
 
-        if m > now_m:
-            m = 60 - m
-            m += now_m
-            h -= 1
+        if m > m_now:
+            m_uptime = 60 - m
+            m_uptime += m_now
+            h_uptime -= 1
         else:
-            m = now_m - m
+            m_uptime = m_now - m
 
         ds = ""
         hs = ""
         ms = ""
         uptime = ""
         
-        if d != 1:
+        if d_uptime != 1:
             ds = "s"
-        if h != 1:
+        if h_uptime != 1:
             hs = "s"
-        if  m != 1:
+        if m_uptime != 1:
             ms = "s"
         
-        if d > 0:
-            uptime = "{} day{}, {} hour{}".format(d, ds, h, hs)
+        if d_uptime > 0:
+            uptime = "{} day{}, {} hour{}".format(d_uptime, ds, h_uptime, hs)
 
-        elif h > 0:
-            uptime = "{} hour{}, {} minute{}".format(h, hs, m, ms)
+        elif h_uptime > 0:
+            uptime = "{} hour{}, {} minute{}".format(h_uptime, hs, m_uptime, ms)
 
         else:
-            uptime = "{} minute{}".format(m, ms)
+            uptime = "{} minute{}".format(m_uptime, ms)
 
         return uptime
