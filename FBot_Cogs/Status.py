@@ -41,13 +41,13 @@ class FBot_Cogs(commands.Cog):
                 empty2 = "`There are no channels`\n`in the Database set to off`"
 
                 if mod:
-                    pages = book.Create_Pages(channels, "<#%0>", subheader="**ON:**", empty=empty1, ctx=ctx, bot=self.bot,
+                    pages = Book.Create_Pages(channels, "<#%0>", subheader="**ON:**", empty=empty1, ctx=ctx, bot=self.bot,
                                             check_one=(1, "on"), subcheck_one=(view_channel, True), subcheck_two=(view_channel, None))
-                    pages = book.Create_Pages(channels, "<#%0>", subheader="**OFF:**", empty=empty2, ctx=ctx, bot=self.bot, pages=pages,
+                    pages = Book.Create_Pages(channels, "<#%0>", subheader="**OFF:**", empty=empty2, ctx=ctx, bot=self.bot, pages=pages,
                                             check_one=(1, "off"), subcheck_one=(view_channel, True), subcheck_two=(view_channel, None))
                 else:
-                    pages = book.Create_Pages(channels, "<#%0>", empty1, subheader="**ON:**", ctx=ctx, bot=self.bot, check_one=(1, "on"))
-                    pages = book.Create_Pages(channels, "<#%0>", empty2, subheader="**OFF:**", ctx=ctx, bot=self.bot, check_one=(1, "off"), pages=pages)
+                    pages = Book.Create_Pages(channels, "<#%0>", empty1, subheader="**ON:**", ctx=ctx, bot=self.bot, check_one=(1, "on"))
+                    pages = Book.Create_Pages(channels, "<#%0>", empty2, subheader="**OFF:**", ctx=ctx, bot=self.bot, check_one=(1, "off"), pages=pages)
 
                 await book.Create_Book(self.bot, ctx, "FBot Server Status", pages, header=header)
 
