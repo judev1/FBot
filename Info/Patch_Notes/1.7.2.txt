@@ -1,0 +1,17 @@
+"""What's new in v1.7.2?
+FBot DMs, you can now comunicate with FBot in DMs
+Added a modtoggle feature so only admin can toggle if they want
+Completely redesigned the way FBot status is stored, saving an incredible amount of space storing the data and saving a huge amount of lines in the code
+Added a functions to store FBot modtoggle status
+Improved the Join/Remove logging
+Added a replace feature to easily replace trigger words found in phrases
+Created a new class for time and shifted time related features there
+Fixed Uptime
+Fixed some minor errors
+Made it look nicer
+Main:  552 lines (+059)
+Func:  315 lines (-006)
+PatN:  196 lines (+042)
+BkPg:   82 lines (+000)
+Trig:  101 lines (+006)
+Totl: 1290 lines (+101)"""

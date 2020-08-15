@@ -1,0 +1,4 @@
+"""**We are currently holding an event!**
+We are creating an about page for FBot and we would like your help!
+
+[Visit FBot's Server for more info](https://discord.gg/BDpXRq9)"""

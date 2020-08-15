@@ -1,0 +1,9 @@
+"""Created FBot
+'Creation Update'
+- A variety of snappy replies to commonly used phrases
+- FBot can be turned on/off in a server with some exceptions for unusual names which have to be manually added
+- Features including Gayscale, Feet pics and Link disaproval have been added
+- And more!
+Main: 368 lines (+368)
+Func: 125 lines (+125)
+Totl: 493 lines (+493)"""
