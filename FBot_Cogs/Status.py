@@ -49,7 +49,7 @@ class FBot_Cogs(commands.Cog):
                     pages = Book.Create_Pages(channels, "<#%0>", empty1, subheader="**ON:**", ctx=ctx, bot=self.bot, check_one=(1, "on"))
                     pages = Book.Create_Pages(channels, "<#%0>", empty2, subheader="**OFF:**", ctx=ctx, bot=self.bot, check_one=(1, "off"), pages=pages)
 
-                await book.Create_Book(self.bot, ctx, "FBot Server Status", pages, header=header)
+                await Book.Create_Book(self.bot, ctx, "FBot Server Status", pages, header=header)
 
         except:
             if str(ctx.channel.type) == "private":
