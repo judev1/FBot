@@ -149,8 +149,8 @@ class FBot_Cogs(commands.Cog):
                 guild_list.append(to_append)
 
         empty = "No matches found for `{query}`"
-        pages, results = fn.Create_Pages(guild_list, "`%0` (`%1`)", empty=empty, getlines=True)
-        await fn.Create_Book(self.bot, ctx, "FBot Search", pages, results=results)
+        pages, results = Book.Create_Pages(guild_list, "`%0` (`%1`)", empty=empty, getlines=True)
+        await Book.Create_Book(self.bot, ctx, "FBot Search", pages, results=results)
 
     @commands.command(name="servers", aliases=["members"])
     @commands.is_owner()
@@ -166,7 +166,7 @@ class FBot_Cogs(commands.Cog):
         header = (f"Servers: `{len(self.bot.guilds) - 1}`\n"
                   f"Members: `{sum(len(guild.members) for guild in self.bot.guilds) - len(self.bot.get_guild(264445053596991498).members)}`")
         pages = Book.Create_Pages(guild_list, line, check_one=(2, 264445053596991498, False))
-        await fn.Create_Book(self.bot, ctx, "FBot Servers", pages, header=header)
+        await Book.Create_Book(self.bot, ctx, "FBot Servers", pages, header=header)
         
 
 def setup(bot):
