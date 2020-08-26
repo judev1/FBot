@@ -35,7 +35,7 @@ async def on_ready():
 
     db.Check_Guilds(bot.guilds)
     bot.remove_command("help")
-    initial_extensions = ["Commands", "DBL", "DMs", "Error_Handler", "Events", "FBotdev", "Infomation", "Join_Leave", "Links", "Modtoggle", "Notices", "PatchNotes", "Ping", "Prefix", "Priority", "Quote", "Say", "Session", "Status", "Trigger_Responses", "Version"]
+    initial_extensions = ["Commands", "DBL", "DMs", "Error_Handler", "Events", "FBotdev", "Infomation", "Join_Leave", "Links", "Modtoggle", "Notices", "PatchNotes", "Ping", "Prefix", "Priority", "Quote", "Say", "Session", "Status", "Trigger_Responses", "Version". "Snipe"]
     dev = ["FBotdev"]
 
     for extension in initial_extensions:
