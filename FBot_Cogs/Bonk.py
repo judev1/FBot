@@ -9,7 +9,7 @@ import requests
 
 
 bonk_img = Image(filename="./FBot_Libs/bonk.png")
-is_mention = re.compile("<@![0-9]{18}>")
+#is_mention = re.compile("<@![0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bonk_help = (
     "Command usage:\n"
@@ -40,7 +40,8 @@ class BonkCog(commands.Cog):
             r = requests.get(to_bonk, allow_redirects=True)
             with open('to_bonk', 'wb') as file:
                 file.write(r.content)
-        elif (is_mention.match(to_bonk)):
+        #elif (is_mention.match(to_bonk.strip())):
+        elif (ctx.message.mentions):
             # Image is user avatar
             converter = MemberConverter()
             member = await converter.convert(ctx, to_bonk)
