@@ -1,7 +1,8 @@
 import sqlite3, os, getpass
 
 user = getpass.getuser()
-path = f"C://Users/{user}/Desktop/FBot v1.8.1/Info/FBot.db"
+
+path = f"C://Users/{user}/Desktop/FBot v1.8.2/Info/FBot.db"
 
 # Formats modtoggle and FBot status
 def Val(value):

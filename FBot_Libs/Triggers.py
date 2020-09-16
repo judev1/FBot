@@ -49,11 +49,11 @@ class trigger_response:
         else:
             priority = db.Get_Priority(message.guild.id)#
         
-        if priority == "all":
+        if priority == "all" or priority == "3":
             priority = 3
-        elif priority == "some":
+        elif priority == "some" or priority == "2":
             priority = 2
-        elif priority == "few":
+        elif priority == "few" or priority == "1":
             priority = 1
 
         debug_mode = False
@@ -100,11 +100,11 @@ class trigger_response:
                     break
 
             if type_check:
-                if int(trigger[T_PRIORITY]) > priority:
-                    return False, ""
+                alias_used = alias
                 with open("./Info/Triggerlogs.txt", "a+") as file:
                     file.write(alias_used + "\n")
-                alias_used = alias
+                if int(trigger[T_PRIORITY]) > priority:
+                    return False, ""
                 print("type_check is: " + str(type_check)) if debug_mode else False
                 print("alias_used is: " + alias_used) if debug_mode else False
                 response = trigger[T_RESPONSE]

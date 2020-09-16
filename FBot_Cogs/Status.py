@@ -50,7 +50,7 @@ class FBot_Cogs(commands.Cog):
                                             check_one=(1, "off"), subcheck_one=(view_channel, True), subcheck_two=(view_channel, None))
                     
                 await Book.Create_Book(self.bot, ctx, "FBot Server Status", pages, header=header)
-
+        
         except:
             if str(ctx.channel.type) == "private":
                 embed = discord.Embed(title="FBot is always on in DMs", colour=0xF42F42)

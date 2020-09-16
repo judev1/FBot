@@ -33,14 +33,6 @@ class Functions():
     def Remove(text, left_chars, right_chars):
         return text[left_chars:len(text) - right_chars]
 
-    # Sets up and checks files for severs
-    def Setup():
-        newpath = r".servers"
-        if not os.path.exists(newpath):
-            os.makedirs(newpath)
-            os.popen('attrib +h ' + newpath)
-            print(" > Created a folder to store server data")
-
     # Gets the bot token
     def Get_Token(num):
         file = open("./Info/Tokens.txt", "r")
@@ -56,7 +48,7 @@ class Functions():
         notices = ""
         for lines in data:
             notices += str(lines)
-        notices = eval(notice)
+        notices = eval(notices)
         return notices
 
     # Gets the Events
@@ -64,7 +56,7 @@ class Functions():
         file = open("./Info/Events.txt", "r")
         data = file.readlines()
         file.close()
-        event = ""
+        events = ""
         for lines in data:
             events += str(lines)
         events = eval(events)
@@ -145,6 +137,8 @@ class Functions():
                 variables.append(creators)
             elif arg == "lastupdated":
                 variables.append(Functions.Get_Info("lastupdated"))
+            elif arg == "ver":
+                variables.append(Functions.Get_Info("ver"))
             elif arg == "vers":
                 variables.append(Functions.Get_Info("vers"))
             else:

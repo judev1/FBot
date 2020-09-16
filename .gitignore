@@ -1,0 +1,5 @@
+*.pyc
+*.db
+Mein_Kampf.txt
+*token*
+Triggerlogs*

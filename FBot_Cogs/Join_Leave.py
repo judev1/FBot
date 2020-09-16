@@ -44,7 +44,7 @@ class FBot_Cogs(commands.Cog):
                 botcount += 1
         
         channel = self.bot.get_channel(serverlogs)
-        await channel.send(f"I have been `added` to `{newguild}` (`{newguild.id}`)\n"
+        await channel.send(f"I have been `removed` from `{newguild}` (`{newguild.id}`)\n"
                            f"{newguild} has `{memcount}` members and `{botcount}` bots\n"
                            f"The server count is now `{len(self.bot.guilds) - 1}`")
 

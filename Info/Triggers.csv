@@ -71,8 +71,8 @@ Not calm,whole,anycase,NOT CALM,2
 Stop,whole,anycase,No. *Carry on*,1
 Oof,whole,anycase,Oof,2
 Ooo~f,repeat,anycase,{message},3
-Oh,whole,anycase,"Yeah, no shit",2
-Oo~h,repeat,anycase,"Yeah, no shit",2
+Oh,whole,anycase,"Yeah, obviously",2
+Oo~h,repeat,anycase,"Yeah, obviously",2
 O,letters,anycase,"No, not {message}",3
 E,letters,anycase,Shush,2
 Bruh,whole,anycase,Yeah bruh?,2
@@ -81,8 +81,8 @@ Bruu~h,repeat,anycase,Yeah {message}?,2
 Bro,whole,anycase,Yeah bro?,2
 Bro ,start,anycase,Bro…,2
 Broo~oo,repeat,anycase,Yeah {message}?,2
-Hm,whole,anycase,Hm fuck you {username},3
-Hmm~mm,repeat,anycase,"{message}, fuck you {username}",3
+Hm,whole,anycase,Hm shut up {username},3
+Hmm~mm,repeat,anycase,"{message}, shut up {username}",3
 Um,letters,anycase,I'll give u a minute,2
 Ree,whole,anycase,{message},3
 Reee~eee,repeat,anycase,{message},3
@@ -90,8 +90,8 @@ Ye,whole,anycase,Ye,3
 Yee~ee,repeat,anycase,{message},3
 Yeet,whole,anycase,Yeet,3
 Yeee~t,repeat,anycase,{message},3
-He ,letters,anycase,"{message}, you sound pathetic, fuck you",3
-Ha ,letters,anycase,"{message}, you sound pathetic, fuck you",3
+He ,letters,anycase,"{message}, you sound pathetic",3
+Ha ,letters,anycase,"{message}, you sound pathetic",3
 Ke,letters,anycase,You should probally stop that anime weeb,2
 Dumbass,whole,anycase,Yeah dumbass,1
 Dang it,whole,anycase,Hot diggity darn,1
@@ -130,12 +130,12 @@ FBot is \FBot's \FBots \F Bot is \F Bot's \F Bots\<@!711934102906994699> is\<@!7
 FBot \F Bot \<@!711934102906994699> ,start,anycase,"No, {username} {after}",1
 FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
 FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
-F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, f *you*",1
-F ,start,anycase,"Yeah, fuck {after}",1
-F me,whole,anycase,"Yeah, fuck {username}",1
-F u\U,whole,anycase,"Yeah, fuck you",1
+F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, F *you*",1
+F ,start,anycase,"Yeah, F {after}",1
+F me,whole,anycase,"Yeah, F {username}",1
+F u\U,whole,anycase,"Yeah, F you",1
 :)\:D\(:\C:\c:,anywhere,exact,"Wish I could be happy, but I'm just a bot",2
-:(\D:\):,anywhere,exact,Be happy bitch,2
+:(\D:\):,anywhere,exact,Be happy.,2
 <3\:3,anywhere,exact,Cute...,2
 :O\:0\:o,anywhere,exact,What the... bad time?,2
 :|\:/,anywhere,exact,Seriously?,2

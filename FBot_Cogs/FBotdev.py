@@ -4,6 +4,8 @@ from discord.ext import commands
 from Database import Database as db
 from Functions import Functions as fn
 from Triggers import trigger_response as tr
+import random
+import math
 
 ver, fboturl, variables = fn.Get_Vars()
 

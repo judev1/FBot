@@ -9,13 +9,14 @@ import requests
 
 
 bonk_img = Image(filename="./FBot_Libs/bonk.png")
-#is_mention = re.compile("<@![0-9]{18}>")
+is_mention = re.compile("<@![0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bonk_help = (
     "Command usage:\n"
     "Bonk a user: `fbot bonk <@user>`\n"
-    "Bonk a picture: `fbot bonk <image url>` or attach an image and use `fbot bonk`\n"
-    "Image url's must end in .jpg or .png, more formats will be supported soon(tm)")
+    "Bonk a picture: upload an image with the comment `fbot bonk`")
+#    "Bonk a picture: `fbot bonk <image url>` or attach an image and use `fbot bonk`\n"
+#    "Image url's must end in .jpg or .png, more formats will be supported soon(tm)")
 
 class BonkCog(commands.Cog):
 
@@ -36,12 +37,16 @@ class BonkCog(commands.Cog):
             await ctx.message.attachments[0].save("to_bonk")
         
         elif (is_img_url.match(to_bonk)):
-            # Image is linked
+            # Image is URL
+            # This is disabled because bonking a 100mb image halts FBot and makes my server cry for about 2 minutes
+            await ctx.send("URL bonking is temporarily disabled, upload an image with the comment `fbot bonk` instead")
+            return
+        
             r = requests.get(to_bonk, allow_redirects=True)
             with open('to_bonk', 'wb') as file:
                 file.write(r.content)
-        #elif (is_mention.match(to_bonk.strip())):
-        elif (ctx.message.mentions):
+                
+        elif (is_mention.match(to_bonk)):
             # Image is user avatar
             converter = MemberConverter()
             member = await converter.convert(ctx, to_bonk)

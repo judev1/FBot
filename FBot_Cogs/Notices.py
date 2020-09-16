@@ -11,6 +11,7 @@ class FBot_Cogs(commands.Cog):
         
     @commands.command(name="notices", aliases=["notice"])
     async def _Notices(self, ctx):
+        
         name = ctx.author.display_name
         notices = fn.Get_Notices()
         
