@@ -13,13 +13,13 @@ except:
     sys.exit()
 
 # 1 for FBot, 2 for Jude, 3 for Chris
-token = fn.Get_Token(3)
+token = fn.Get_Token(1)
 
 # Setup
 ftime.Set_Start()
 sessionstart = ftime.Get_Start()
 print(f" > Session started at {sessionstart}")
-#tr.trigger_load()
+tr.trigger_load()
 db.Setup()
 bot = commands.Bot(command_prefix=fn.Get_Prefix, owner_ids=[671791003065384987, 216260005827969024, 634454757645221908])
 
@@ -38,8 +38,8 @@ async def on_ready():
     initial_extensions = ["Commands", "DBL", "DMs", "Error_Handler", "Help",
         "Events", "FBotdev", "Infomation", "Join_Leave", "Links", "Modtoggle",
         "Notices", "PatchNotes", "Ping", "Prefix", "Priority", "Quote", "Say",
-        "Session", "Status", "Version", "Snipe", "Bonk", "Joke",
-        "Bigpp"]
+        "Session", "Status", "Trigger_Responses", "Version", "Snipe", "Bonk",
+        "Bigpp", "Joke"]
     dev = ["FBotdev"]
 
     for extension in initial_extensions:
