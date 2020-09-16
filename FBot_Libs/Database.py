@@ -2,7 +2,7 @@ import sqlite3, os, getpass
 
 user = getpass.getuser()
 
-path = f"C://Users/{user}/Desktop/FBot v1.8.2/Info/FBot.db"
+path = "./Info/FBot.db"
 
 # Formats modtoggle and FBot status
 def Val(value):
@@ -22,42 +22,29 @@ class Database():
 
         global conn, c
         
-        try:
-            file = open(path, "r")
-            file.close()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        
+        c.execute("""CREATE TABLE IF NOT EXISTS guilds (
+                    guild_id integer NOT NULL,
+                    modtoggle integer NOT NULL,
+                    prefix string NOT NULL,
+                    priority string NOT NULL
+                    )""")
 
-            conn = sqlite3.connect(path)
-            c = conn.cursor()
-            
-            print(" > Connected to FBot.db")
-            
-        except:
-            file = open(path, "w+")
-            file.close()
+        c.execute("""CREATE TABLE IF NOT EXISTS channels (
+                    guild_id integer NOT NULL,
+                    channel_id integer NOT NULL,
+                    status integer NOT NULL
+                    )""")
 
-            conn = sqlite3.connect(path)
-            c = conn.cursor()
-            
-            c.execute("""CREATE TABLE guilds (
-                        guild_id integer NOT NULL,
-                        modtoggle integer NOT NULL,
-                        prefix string NOT NULL,
-                        priority string NOT NULL
-                        )""")
-
-            c.execute("""CREATE TABLE channels (
-                        guild_id integer NOT NULL,
-                        channel_id integer NOT NULL,
-                        status integer NOT NULL
-                        )""")
-
-            c.execute("""CREATE TABLE users (
-                        user_id integer NOT NULL,
-                        credits integer NOT NULL
-                        )""")
-            
-            conn.commit()
-            print(" > Connected to FBot.db")
+        c.execute("""CREATE TABLE IF NOT EXISTS users (
+                    user_id integer NOT NULL,
+                    credits integer NOT NULL
+                    )""")
+        
+        conn.commit()
+        print(" > Connected to FBot.db")
 
     def Check_Guilds(guilds):
         for guild in guilds:
