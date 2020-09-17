@@ -39,7 +39,7 @@ async def on_ready():
         "Events", "FBotdev", "Infomation", "Join_Leave", "Links", "Modtoggle",
         "Notices", "PatchNotes", "Ping", "Prefix", "Priority", "Quote", "Say",
         "Session", "Status", "Trigger_Responses", "Version", "Snipe", "Bonk",
-        "Bigpp", "Joke", "Counter"]
+        "Bigpp", "Joke", "Counter", "Purge"]
     dev = ["FBotdev"]
 
     for extension in initial_extensions:
