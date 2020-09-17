@@ -79,7 +79,7 @@ Bruh,whole,anycase,Yeah bruh?,2
 Bruh ,start,anycase,Bruh...,2
 Bruu~h,repeat,anycase,Yeah {message}?,2
 Bro,whole,anycase,Yeah bro?,2
-Bro ,start,anycase,Bro…,2
+Bro ,start,anycase,Bro,
 Broo~oo,repeat,anycase,Yeah {message}?,2
 Hm,whole,anycase,Hm shut up {username},3
 Hmm~mm,repeat,anycase,"{message}, shut up {username}",3
