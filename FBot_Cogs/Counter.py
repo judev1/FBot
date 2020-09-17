@@ -60,7 +60,12 @@ class CounterCog(commands.Cog):
             if not message.content[0].isdigit():
                 return
 
-            # Ignore self:
+            # Delete any numbers from bots:
+            if message.author.bot:
+                await message.delete()
+                await message.channel.send("Numbers from bot accounts are not counted.")
+
+            # Ignore bots otherwise:
             if message.author == self.bot.user:
                 return
 
