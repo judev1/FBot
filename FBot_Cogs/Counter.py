@@ -188,7 +188,6 @@ class CounterCog(commands.Cog):
     @commands.command("highscores", aliases=["countinghighscores", "records"])
     async def say_countinghighscores(self, ctx):
         msg = "Counting highscores:"
-        await ctx.send("Counting highscores:")
         await ctx.trigger_typing()
         c = conn.cursor()
         c.execute("SELECT guild_id, number, record FROM guilds ORDER BY number DESC LIMIT 5")
