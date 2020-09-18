@@ -13,12 +13,6 @@ import sqlite3
 import random
 
 conn = sqlite3.connect("counter.db")
-"""
-# Makes the counter bot randomly join in:
-is_annoying = True
-# Chance of counter bot joining in:
-join_chance = 0.1 
-"""
 
 class CounterCog(commands.Cog):
 
@@ -126,18 +120,6 @@ class CounterCog(commands.Cog):
 
                 await message.add_reaction("✅")
 
-##                if is_annoying:
-##                    if join_chance >= random.random():
-##                        bots_number = int(users_number) + 1
-##                        t = (bots_number, self.bot.user.id, message.guild.id,)
-##                        c.execute("""
-##                            UPDATE guilds SET number=?, user_id=?
-##                            WHERE guild_id=?""", t)
-##                        conn.commit()
-##                        msg = await message.channel.send(bots_number)
-##                        await msg.add_reaction("✅")
-
-
                 # If current number is greater than highscore, update highscore
                 t = (message.guild.id,)
                 c.execute("SELECT record FROM guilds WHERE guild_id=?", t)
@@ -202,6 +184,20 @@ class CounterCog(commands.Cog):
             c.execute("UPDATE guilds SET number=? WHERE guild_id=? ", t)
             conn.commit()
             await ctx.send("Done")
+
+    @commands.command("countinghighscores")
+    async def say_countinghighscores(self, ctx):
+        await ctx.send("Counting highscores: ")
+        c = conn.cursor()
+        c.execute("SELECT guild_id, number, record FROM guilds ORDER BY number DESC LIMIT 5")
+        await ctx.send("test")
+        guild_rank = 0
+        for row in c:
+            guild_rank += 1
+            guild_id, number, record = row
+            guild_name = self.bot.get_guild(guild_id).name
+            await ctx.send(f"{guild_rank}. {guild_name}, Guild highscore: {record}, Current number: {number}")
+            
 
 
 def setup(bot):
