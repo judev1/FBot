@@ -14,6 +14,7 @@ import random
 
 conn = sqlite3.connect("counter.db")
 
+
 class CounterCog(commands.Cog):
 
     def __init__(self, bot):
@@ -57,7 +58,8 @@ class CounterCog(commands.Cog):
             # Delete any numbers from bots:
             if message.author.bot:
                 await message.delete()
-                await message.channel.send("Numbers from bot accounts are not counted.")
+                await message.channel.send(
+                    "Numbers from bot accounts are not counted.")
 
             # Ignore bots otherwise:
             if message.author == self.bot.user:
@@ -190,19 +192,21 @@ class CounterCog(commands.Cog):
         msg = "Counting highscores:"
         await ctx.trigger_typing()
         c = conn.cursor()
-        c.execute("SELECT guild_id, number, record FROM guilds ORDER BY number DESC LIMIT 5")
+        c.execute("SELECT guild_id, number, record"
+                  "FROM guilds ORDER BY number DESC LIMIT 5")
         guild_rank = 0
         for row in c:
             guild_rank += 1
             guild_id, number, record = row
             guild_name = self.bot.get_guild(guild_id).name
-            msg += f"\n{guild_rank}. {guild_name}, Guild highscore: {record}, Current number: {number}"
+            msg += (f"\n{guild_rank}. {guild_name},"
+                    "Guild highscore: {record}, Current number: {number}")
         await ctx.send(msg)
-            
 
 
 def setup(bot):
     bot.add_cog(CounterCog(bot))
+
 
 def teardown(bot):
     self.bot.remove_listener(counter, "on_message")
