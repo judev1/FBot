@@ -193,7 +193,7 @@ class CounterCog(commands.Cog):
         await ctx.trigger_typing()
         c = conn.cursor()
         c.execute("SELECT guild_id, number, record"
-                  "FROM guilds ORDER BY number DESC LIMIT 5")
+                  "FROM guilds ORDER BY record DESC LIMIT 5")
         guild_rank = 0
         for row in c:
             guild_rank += 1
