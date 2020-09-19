@@ -9,7 +9,7 @@ import requests
 
 
 bonk_img = Image(filename="./FBot_Libs/bonk.png")
-is_mention = re.compile("<@![0-9]{18}>")
+is_mention = re.compile("<@!?[0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bonk_help = (
     "Command usage:\n"
