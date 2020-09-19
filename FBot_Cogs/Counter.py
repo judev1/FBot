@@ -192,7 +192,7 @@ class CounterCog(commands.Cog):
         msg = "Counting highscores:"
         await ctx.trigger_typing()
         c = conn.cursor()
-        c.execute("SELECT guild_id, number, record"
+        c.execute("SELECT guild_id, number, record "
                   "FROM guilds ORDER BY record DESC LIMIT 5")
         guild_rank = 0
         for row in c:
@@ -200,7 +200,7 @@ class CounterCog(commands.Cog):
             guild_id, number, record = row
             guild_name = self.bot.get_guild(guild_id).name
             msg += (f"\n{guild_rank}. {guild_name},"
-                    "Guild highscore: {record}, Current number: {number}")
+                    f"Guild highscore: {record}, Current number: {number}")
         await ctx.send(msg)
 
 
