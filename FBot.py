@@ -43,7 +43,13 @@ async def on_ready():
     dev = ["FBotdev"]
 
     for extension in initial_extensions:
-        bot.load_extension("FBot_Cogs." + extension)
+        print(f"Loading {extension}... ", end="")
+        try:
+            bot.load_extension("FBot_Cogs." + extension)
+            print("Done")
+        except:
+            print("Error")
+            
     print(" > Loaded all cogs\n")
         
     await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="'FBot help'"))
