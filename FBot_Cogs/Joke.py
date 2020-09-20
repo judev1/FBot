@@ -1,9 +1,13 @@
 import discord
 from discord.ext import commands
 import asyncio
+import random
 
 with open("FBot_Libs/joke.txt", "r") as file:
-    the_joke = file.read().split("\n")
+    pingpong_joke = file.read().split("\n")
+with open("FBot_Libs/snakejoke.txt", "r") as file:
+    snake_joke = file.read().split("\n")
+    
 
 active_channels = set()
 
@@ -23,6 +27,11 @@ class JokeCog(commands.Cog):
         
         active_channels.add(ctx.channel.id)
 
+        if (random.choice([True, False])):
+            the_joke = snake_joke
+        else:
+            the_joke = pingpong_joke
+        
         for line in the_joke:
             await ctx.trigger_typing()
             sleep_seconds = len(line) / 15 # Typing at 15 chars per second
