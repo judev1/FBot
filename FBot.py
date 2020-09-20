@@ -13,7 +13,7 @@ except:
     sys.exit()
 
 # 1 for FBot, 2 for Jude, 3 for Chris
-token = fn.Get_Token(1)
+token = fn.Get_Token(3)
 
 # Setup
 ftime.Set_Start()
