@@ -25,14 +25,18 @@ class PpsizeCog(commands.Cog):
     async def ppsize(self, ctx, user_mention=None):
         await ctx.trigger_typing()
 
+        member_display_name = None
+
         if (user_mention is None):
             # `fbot ppsize`
             user_id = ctx.author.id
+            member_display_name = ctx.author.display_name
         elif (is_mention.match(user_mention)):
             # `fbot ppsize <@mention>`
             converter = MemberConverter()
             member = await converter.convert(ctx, user_mention)
             user_id = member.id
+            member_display_name = member.display_name
         else:
             # `fbot ppsize <something else>`
             await ctx.send(ppsize_help)
@@ -55,7 +59,7 @@ class PpsizeCog(commands.Cog):
             ppsize = ppsize[0]
             
         pp = "8" + "=" * ppsize + "D"
-        await ctx.send(f"{member.display_name}'s ppsize: ```{pp}```")
+        await ctx.send(f"{member_display_name}'s ppsize: ```{pp}```")
 
     @commands.command(name="setppsize")
     
