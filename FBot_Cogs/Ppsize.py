@@ -55,7 +55,7 @@ class PpsizeCog(commands.Cog):
             ppsize = ppsize[0]
             
         pp = "8" + "=" * ppsize + "D"
-        await ctx.send(f"{ctx.author.display_name}'s ppsize: ```{pp}```")
+        await ctx.send(f"{member.display_name}'s ppsize: ```{pp}```")
 
     @commands.command(name="setppsize")
     
