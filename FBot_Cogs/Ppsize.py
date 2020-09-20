@@ -62,7 +62,7 @@ class PpsizeCog(commands.Cog):
         await ctx.send(f"{member_display_name}'s ppsize: ```{pp}```")
 
     @commands.command(name="setppsize")
-    
+    @commands.is_owner()
     async def setppsize(self, ctx, user_mention, ppsize: int):
         if (user_mention is None):
             await ctx.send("baka")
