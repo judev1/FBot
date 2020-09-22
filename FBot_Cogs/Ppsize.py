@@ -64,6 +64,9 @@ class PpsizeCog(commands.Cog):
     @commands.command(name="setppsize")
     @commands.is_owner()
     async def setppsize(self, ctx, user_mention, ppsize: int):
+        if (ppsize > 1950):
+            await ctx.send("Too big; ppsize exceeds max message length")
+            return
         if (user_mention is None):
             await ctx.send("baka")
             return
