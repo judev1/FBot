@@ -61,7 +61,7 @@ class PpsizeCog(commands.Cog):
         pp = "8" + "=" * ppsize + "D"
         await ctx.send(f"{member_display_name}'s ppsize: ```{pp}```")
 
-    @commands.command(name="setppsize")
+    @commands.command(name="devsetppsize")
     @commands.is_owner()
     async def setppsize(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
