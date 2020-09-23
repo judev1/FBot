@@ -4,7 +4,7 @@ import random as random
 
 responses = ["yeah", "nah", "maybe", "idk"]
 
-class FballCog(commands.Cog):
+class fball(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -15,4 +15,4 @@ class FballCog(commands.Cog):
         await ctx.send(response)
 
 def setup(bot):
-    bot.add_cog(FballCog(bot))
+    bot.add_cog(fball(bot))

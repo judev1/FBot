@@ -1,11 +1,7 @@
-import discord
 from discord.ext import commands
-from Functions import Functions as fn
+from functions import fn
 
-ver, fboturl, variables = fn.Get_Vars(var1="lastupdated")
-lastupdated = variables[0]
-
-class FBot_Cogs(commands.Cog):
+class version(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
@@ -14,11 +10,11 @@ class FBot_Cogs(commands.Cog):
     async def _Version(self, ctx):
         name = ctx.author.display_name
         
-        embed = discord.Embed(title=f"FBots Version", colour=0xF42F42)
-        embed.add_field(name="Version", value=ver)
-        embed.add_field(name="Released", value=lastupdated)
-        embed.set_footer(text=f"Version requested by {name}", icon_url=fboturl)
+        embed = fn.embed("FBots Version", "")
+        embed.add_field(name="Version", value=fn.getinfo("ver"))
+        embed.add_field(name="Released", value=fn.getinfo("lastupdated"))
+        embed = fn.footer(embed, name, "Version")
         await ctx.send(embed=embed)
 
 def setup(bot):
-    bot.add_cog(FBot_Cogs(bot))
+    bot.add_cog(version(bot))

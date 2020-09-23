@@ -5,9 +5,9 @@ import sqlite3
 import random
 
 conn = sqlite3.connect("economy.db")
+f = "~~f~~ "
 
-
-class EconomyCog(commands.Cog):
+class economy(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -42,7 +42,7 @@ class EconomyCog(commands.Cog):
         t = (user_id,)
         c.execute("SELECT balance FROM users WHERE user_id=?", t)
         balance = c.fetchone()[0]
-        await ctx.send(f"Balance: ~~f~~ {balance}")
+        await ctx.send(f"Balance: {f}{balance}")
 
     @commands.command(name="devsetbalance", aliases=["devsetbal"])
     @commands.is_owner()
@@ -69,7 +69,7 @@ class EconomyCog(commands.Cog):
         for rank, row in enumerate(c):
             user_id, balance = row
             user_name = str(self.bot.get_user(user_id))
-            msg += f"\n{rank+1}. {user_name}: ~~f~~ {balance}"
+            msg += f"\n{rank+1}. {user_name}: {f}{balance}"
         await ctx.send(msg)
 
     # networthtop
@@ -91,9 +91,9 @@ class EconomyCog(commands.Cog):
         t = (ctx.author.id,)
         c.execute("SELECT balance FROM users WHERE user_id=?", t)
         new_balance = c.fetchone()[0]
-        await ctx.send(f"You worked and got paid ~~f~~ {income}.\n"
-            f"After calculating tax, you keep ~~f~~ {taxed_income}.\n"
-            f"New balance: ~~f~~ {new_balance}")
+        await ctx.send(f"You worked and got paid {f}{income}.\n"
+            f"After calculating tax, you keep {f}{taxed_income}.\n"
+            f"New balance: {f}{new_balance}")
     
 def setup(bot):
-    bot.add_cog(EconomyCog(bot))
+    bot.add_cog(economy(bot))

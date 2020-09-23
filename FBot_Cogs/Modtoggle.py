@@ -1,8 +1,8 @@
-import discord
 from discord.ext import commands
-from Database import Database as db
+from database import db
+from functions import fn
 
-class FBot_Cogs(commands.Cog):
+class modtoggle(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
@@ -20,10 +20,9 @@ class FBot_Cogs(commands.Cog):
                 db.Change_Modtoggle(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
-                embed = discord.Embed(title="**Error:** Invalid Argument", description=f"Modtoggle only accepts `'on'` and `'off'`", colour=0xF42F42)
+                embed = fn.errorembed("Invalid Argument", f"Modtoggle only accepts `'on'` and `'off'`")
                 await ctx.send(embed=embed)
-        else:
-            await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+        else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 
 def setup(bot):
-    bot.add_cog(FBot_Cogs(bot))
+    bot.add_cog(modtoggle(bot))

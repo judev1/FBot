@@ -1,5 +1,5 @@
 *.pyc
 *.db
-Mein_Kampf.txt
-*token*
-Triggerlogs*
+Tokens.txt
+Triggerlogs.txt
+__pycache__/

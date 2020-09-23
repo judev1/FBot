@@ -1,27 +1,24 @@
-import sqlite3, os, getpass
+import os
+import sqlite3
 
-user = getpass.getuser()
-
-path = "./Info/FBot.db"
+path = f"./Info/FBot.db"
 
 # Formats modtoggle and FBot status
 def Val(value):
-    if value == 0:
-        return "off"
-    elif value == 1:
-        return "on"
-    elif value == "off":
-        return 0
-    elif value == "on":
-        return 1
+    if value == 0: return "off"
+    elif value == 1: return "on"
+    elif value == "off": return 0
+    elif value == "on": return 1
 
+class db():
 
-class Database():
-
-    def Setup():
+    def Setup():        
+        try:
+            with open(path, "r") as file: pass
+        except:
+            with open(path, "w+") as file: pass
 
         global conn, c
-        
         conn = sqlite3.connect(path)
         c = conn.cursor()
         
@@ -42,6 +39,14 @@ class Database():
                     user_id integer NOT NULL,
                     credits integer NOT NULL
                     )""")
+
+        c.execute("""CREATE TABLE IF NOT EXISTS counter (
+            guild_id integer NOT NULL,
+            channel_id integer NOT NULL,
+            number integer NOT NULL,
+            user_id integer NOT NULL,
+            record integer NOT NULL
+            )""")
         
         conn.commit()
         print(" > Connected to FBot.db")
@@ -49,11 +54,18 @@ class Database():
     def Check_Guilds(guilds):
         for guild in guilds:
             guild_id = guild.id
+            t = (guild_id, )
             try:
                 c.execute(f"SELECT * FROM guilds where guild_id == {guild_id};")
                 c.fetchone()[0]
             except:
                 c.execute(f"INSERT INTO guilds VALUES ({guild_id}, 0, 'fbot', 'all')")
+                conn.commit()
+            try:
+                c.execute(f"SELECT * FROM counter where guild_id == {guild_id};")
+                c.fetchone()[0]
+            except:
+                c.execute("INSERT INTO counter VALUES(?, 0, 0, 0, 0)", t)
                 conn.commit()
 
     def Add_Guild(guild_id):
@@ -113,10 +125,70 @@ class Database():
     def Get_All_Status(guild_id):
         c.execute(f"SELECT channel_id, status FROM channels WHERE guild_id == {guild_id};")
         data = c.fetchall()
-
         num = 0
         for channel in data:
             data[num] = (channel[0], Val(channel[1]))
             num += 1
-        
         return data
+
+    def ignorechannel(guild_id, channel_id):
+        t = (guild_id,)
+        c.execute("SELECT channel_id FROM counter WHERE guild_id=?", t)
+        counter_channel_id = c.fetchone()[0]
+        if channel_id != counter_channel_id: return True
+        return False
+
+    def checkdouble(guild_id, user_id):
+        t = (guild_id,)
+        c.execute("SELECT user_id FROM counter WHERE guild_id=?", t)
+        last_user_id = c.fetchone()[0]
+        if user_id == last_user_id:
+            t = (guild_id,)
+            c.execute("UPDATE counter SET number=0, user_id=0 WHERE guild_id=?", t)
+            conn.commit()
+            return True
+        return False
+
+    def getnumber(guild_id):
+        t = (guild_id,)
+        c.execute("SELECT number FROM counter WHERE guild_id=?", t)
+        return int(c.fetchone()[0])
+
+    def getuser(guild_id):
+        t = (guild_id,)
+        c.execute("SELECT user_id FROM counter WHERE guild_id=?", t)
+        return int(c.fetchone()[0])
+
+    def gethighscore(guild_id):
+        t = (guild_id,)
+        c.execute("SELECT record FROM counter WHERE guild_id=?", t)
+        return c.fetchone()[0]
+
+    def gethighscores():
+        c.execute("SELECT guild_id, record FROM counter ORDER BY record DESC LIMIT 5")
+        return [c.fetchone()]
+
+    def resetnumber(guild_id):
+        t = (guild_id,)
+        c.execute("UPDATE counter SET number=0, user_id=0 WHERE guild_id=?", t)
+        conn.commit()
+
+    def updatenumber(number, author_id, guild_id):
+        t = (number, author_id, guild_id,)
+        c.execute("UPDATE counter SET number=?, user_id=? WHERE guild_id=?", t)
+        conn.commit()
+
+    def highscore(number, guild_id):
+        t = (guild_id,)
+        c.execute("SELECT record FROM counter WHERE guild_id=?", t)
+        record = c.fetchone()[0]
+        if number > record:
+            record = number
+            t = (record, guild_id,)
+            c.execute("UPDATE counter SET record=? WHERE guild_id=?", t)
+            conn.commit()
+
+    def setcountingchannel(channel_id, guild_id):
+        t = (channel_id, guild_id,)
+        c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
+        conn.commit()

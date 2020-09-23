@@ -1,14 +1,14 @@
 import discord
+import os
+import re
+import time
+import requests
 from discord.ext import commands
 from discord.ext.commands import MemberConverter
 from wand.image import Image
-import time
-import re
-import os
-import requests
 
 
-big_pp = Image(filename="./FBot_Libs/bigpp.png")
+big_pp = Image(filename="./Info/bigpp.png")
 #is_mention = re.compile("<@![0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bigpp_help = (
@@ -17,7 +17,7 @@ bigpp_help = (
     "Bigpp a picture: `fbot bigpp <image url>` or attach an image and use `fbot bigpp`\n"
     "Image url's must end in .jpg or .png, more formats will be supported soon(tm)")
 
-class BigppCog(commands.Cog):
+class bigpp(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -83,7 +83,7 @@ class BigppCog(commands.Cog):
     
 
 def setup(bot):
-    bot.add_cog(BigppCog(bot))
+    bot.add_cog(bigpp(bot))
 
 """
 import urllib2

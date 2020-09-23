@@ -1,6 +1,6 @@
 from discord.ext import commands
 
-class FBot_Cogs(commands.Cog):
+class dms(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
@@ -12,4 +12,4 @@ class FBot_Cogs(commands.Cog):
         await ctx.message.add_reaction("✅")
 
 def setup(bot):
-    bot.add_cog(FBot_Cogs(bot))
+    bot.add_cog(dms(bot))

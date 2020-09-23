@@ -9,7 +9,7 @@ conn = sqlite3.connect("ppsize.db")
 is_mention = re.compile("<@!?[0-9]{18}>")
 ppsize_help = "Command usage: `fbot ppsize` or `fbot ppsize <@mention>`"
 
-class PpsizeCog(commands.Cog):
+class ppsize(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -83,4 +83,4 @@ class PpsizeCog(commands.Cog):
         conn.commit()
 
 def setup(bot):
-    bot.add_cog(PpsizeCog(bot))
+    bot.add_cog(ppsize(bot))

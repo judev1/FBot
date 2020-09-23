@@ -1,7 +1,7 @@
 import csv
-from Database import Database as db
+from database import db
 
-class trigger_response:
+class tr:
     
     # Load triggers from triggers.csv file
     def trigger_load():
@@ -15,7 +15,7 @@ class trigger_response:
         global all_aliases
         triggers = []
         all_aliases = []
-        with open("./Info/Triggers.csv") as csv_file:
+        with open("./Info/triggers.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
                 if row[0] == "":

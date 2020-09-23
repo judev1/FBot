@@ -3,15 +3,15 @@ from discord.ext import commands
 import asyncio
 import random
 
-with open("FBot_Libs/joke.txt", "r") as file:
+with open("Info/Jokes/joke.txt", "r") as file:
     pingpong_joke = file.read().split("\n")
-with open("FBot_Libs/snakejoke.txt", "r") as file:
+with open("Info/Jokes/snakejoke.txt", "r") as file:
     snake_joke = file.read().split("\n")
     
 
 active_channels = set()
 
-class JokeCog(commands.Cog):
+class joke(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -33,12 +33,12 @@ class JokeCog(commands.Cog):
             the_joke = pingpong_joke
         
         for line in the_joke:
-            await ctx.trigger_typing()
-            sleep_seconds = len(line) / 15 # Typing at 15 chars per second
-            await asyncio.sleep(sleep_seconds)
-            if (not ctx.channel.id in active_channels):
-                return
-            await ctx.send(line)
+            async with ctx.channel.typing():
+                sleep_seconds = len(line) / 15 # Typing at 15 chars per second
+                await asyncio.sleep(sleep_seconds)
+                if (not ctx.channel.id in active_channels):
+                    return
+                await ctx.send(line)
 
         # Joke is finished, so we remove it from active channels
         active_channels.remove(ctx.channel.id)
@@ -56,4 +56,4 @@ class JokeCog(commands.Cog):
         
     
 def setup(bot):
-    bot.add_cog(JokeCog(bot))
+    bot.add_cog(joke(bot))

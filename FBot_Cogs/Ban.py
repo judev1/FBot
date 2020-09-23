@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class BanCog(commands.Cog):
+class ban(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
@@ -13,4 +13,4 @@ class BanCog(commands.Cog):
         await ctx.send("Done")
 
 def setup(bot):
-    bot.add_cog(BanCog(bot))
+    bot.add_cog(ban(bot))

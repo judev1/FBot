@@ -1,27 +1,29 @@
-import discord, sys
+import discord
+import sys
+import os
 
-sys.path.insert(0, "FBot_Libs")
 try:
-    from Triggers import trigger_response as tr
-    from Functions import Functions as fn
-    from Database import Database as db
-    from Functions import Time as ftime
+    sys.path.insert(0, "FBot_Libs")
+    from database import db
     from discord.ext import commands
-    from BookProgram import book
+    from functions import fn
+    from functions import ftime
+    from triggers import tr
 except:
-    input(" > Unable to install some of the dependencies, shutting down ")
+    input(f" > Unable to install some of the dependencies:\n\n{e}\n")
     sys.exit()
 
 # 1 for FBot, 2 for Jude, 3 for Chris
-token = fn.Get_Token(3)
+token = fn.gettoken(1)
 
 # Setup
-ftime.Set_Start()
-sessionstart = ftime.Get_Start()
+sessionstart = ftime.setstart()
 print(f" > Session started at {sessionstart}")
 tr.trigger_load()
 db.Setup()
-bot = commands.Bot(command_prefix=fn.Get_Prefix, owner_ids=[671791003065384987, 216260005827969024, 634454757645221908])
+
+owners = [671791003065384987, 216260005827969024, 634454757645221908]
+bot = commands.Bot(command_prefix=fn.getprefix, owner_ids=owners)
 
 # When the Bot connects to the server
 @bot.event
@@ -32,26 +34,17 @@ async def on_connect():
 @bot.event
 async def on_ready():
     print(f" > Finished signing into Discord as {bot.user}\n")
-
     db.Check_Guilds(bot.guilds)
-    bot.remove_command("help")
-    initial_extensions = ["Commands", "DBL", "DMs", "Error_Handler", "Help",
-        "Events", "FBotdev", "Infomation", "Join_Leave", "Links", "Modtoggle",
-        "Notices", "PatchNotes", "Ping", "Prefix", "Priority", "Quote", "Say",
-        "Session", "Status", "Trigger_Responses", "Version", "Snipe", "Bonk",
-        "Bigpp", "Joke", "Counter", "Purge", "Ppsize"]
-    dev = ["FBotdev"]
 
-    for extension in initial_extensions:
-        print(f"Loading {extension}... ", end="")
-        try:
-            bot.load_extension("FBot_Cogs." + extension)
-            print("Done")
-        except:
-            print("Error")
-            
+    bot.remove_command("help")
+    for cog in fn.getcogs():
+        cog = cog[0]
+        if cog not in ["economy.py", "ppsize"]:
+            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
+            except: bot.load_extension("FBot_Cogs." + cog[:-3])
     print(" > Loaded all cogs\n")
         
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game(name="'FBot help'"))
+    await bot.change_presence(status=discord.Status.online,
+                              activity=discord.Game(name="'FBot help'"))
 
 bot.run(token)

@@ -8,8 +8,8 @@ import os
 import requests
 
 
-bonk_img = Image(filename="./FBot_Libs/bonk.png")
-is_mention = re.compile("<@!?[0-9]{18}>")
+bonk_img = Image(filename="./Info/bonk.png")
+is_mention = re.compile("<@![0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bonk_help = (
     "Command usage:\n"
@@ -18,7 +18,7 @@ bonk_help = (
 #    "Bonk a picture: `fbot bonk <image url>` or attach an image and use `fbot bonk`\n"
 #    "Image url's must end in .jpg or .png, more formats will be supported soon(tm)")
 
-class BonkCog(commands.Cog):
+class bonk(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -89,7 +89,7 @@ class BonkCog(commands.Cog):
     
 
 def setup(bot):
-    bot.add_cog(BonkCog(bot))
+    bot.add_cog(bonk(bot))
 
 """
 import urllib2
