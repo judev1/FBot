@@ -76,6 +76,7 @@ class fcounter(commands.Cog):
             highscores = f"Highscore for this guild is `{db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
             for guild_id, record in db.gethighscores():
+                print(guild_id, record)
                 guild_name = self.bot.get_guild(guild_id).name
                 highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
                 guild_rank += 1

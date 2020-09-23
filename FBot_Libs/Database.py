@@ -166,7 +166,7 @@ class db():
 
     def gethighscores():
         c.execute("SELECT guild_id, record FROM counter ORDER BY record DESC LIMIT 5")
-        return [c.fetchone()]
+        return c.fetchall()
 
     def resetnumber(guild_id):
         t = (guild_id,)
