@@ -3,3 +3,4 @@
 Tokens.txt
 Triggerlogs.txt
 __pycache__/
+*.vs
