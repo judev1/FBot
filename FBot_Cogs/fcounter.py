@@ -71,7 +71,7 @@ class fcounter(commands.Cog):
     @commands.command("highscores", aliases=["highscore", "hs"])
     async def _leaderboard(self, ctx):
         name = ctx.author.display_name
-        async with ctx.channel.trigger_typing():
+        async with ctx.channel.typing():
             guild_rank = 0
             highscores = f"Highscore for this guild is `{db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
@@ -81,7 +81,7 @@ class fcounter(commands.Cog):
                 guild_rank += 1
             embed = fn.embed("FBot counting leaderboard", highscores)
             embed = fn.footer(embed, name, "Highscores")
-            await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command("devsetnumber")
     @commands.is_owner()
