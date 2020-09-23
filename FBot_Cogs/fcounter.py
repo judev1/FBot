@@ -71,7 +71,7 @@ class fcounter(commands.Cog):
     @commands.command("highscores", aliases=["highscore", "hs"])
     async def _leaderboard(self, ctx):
         name = ctx.author.display_name
-        async with ctx.trigger_typing():
+        async with ctx.channel.trigger_typing():
             guild_rank = 0
             highscores = f"Highscore for this guild is `{db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
