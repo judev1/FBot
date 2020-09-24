@@ -8,9 +8,9 @@ class fcounter(commands.Cog):
         self.bot = bot
 
         @self.bot.event
-        @commands.guild_only()
         async def counter(message):
-            guild_id = message.guild.id
+            try: guild_id = message.guild.id
+            except: return
 
             if db.ignorechannel(guild_id, message.channel.id): return
             try:
