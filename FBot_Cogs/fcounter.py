@@ -8,6 +8,7 @@ class fcounter(commands.Cog):
         self.bot = bot
 
         @self.bot.event
+        @commands.guild_only()
         async def counter(message):
             guild_id = message.guild.id
 
