@@ -24,6 +24,8 @@ class bigpp(commands.Cog):
 
     @commands.command()
     async def bigpp(self, ctx, to_bigpp=None):
+        await ctx.send("Ooopsie! `bigpp` is temporarily disabled.")
+        return
         start_time = time.time()
         await ctx.trigger_typing()
 
