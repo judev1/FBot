@@ -25,19 +25,26 @@ class bonk(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx, to_bonk=None):
+        debug = True
+        if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")
+        
         start_time = time.time()
         await ctx.trigger_typing()
 
         if (to_bonk is None and not ctx.message.attachments):
             # Nothing to bonk
+            if debug: print("No-one to bonk, returning")
             await ctx.send(bonk_help)
             return
         elif (ctx.message.attachments):
             # Image is attached
+            if debug: print("Attached image to bonk")
             await ctx.message.attachments[0].save("to_bonk")
+            if debug: print("Image saved successfully")
         
         elif (is_img_url.match(to_bonk)):
             # Image is URL
+            if debug: print("img_url to bonk, returning")
             # This is disabled because bonking a 100mb image halts FBot and makes my server cry for about 2 minutes
             await ctx.send("URL bonking is temporarily disabled, upload an image with the comment `fbot bonk` instead")
             return
@@ -48,12 +55,17 @@ class bonk(commands.Cog):
                 
         elif (is_mention.match(to_bonk)):
             # Image is user avatar
+            if debug: print("Avatar to bonk")
             converter = MemberConverter()
             member = await converter.convert(ctx, to_bonk)
             await member.avatar_url_as(format="jpg", static_format="jpg", size=512).save("to_bonk")
+            if debug: print("Avatar image saved successfully")
         else:
+            if debug: print("Nothing to bonk, returning")
             await ctx.send(bonk_help)
             return
+
+        if debug: print("Bonking image")
         
         with Image(filename="to_bonk") as img:
             if len(img.sequence) > 1:
@@ -65,11 +77,14 @@ class bonk(commands.Cog):
             img.composite(bonk_img)
             img.save(filename="bonked.jpg")
 
+        if debug: print("Image bonked, sending image")
+
         file = discord.File(fp="bonked.jpg")
         msg = await ctx.send("bonk: ", file=file)
         os.remove("bonked.jpg")
         os.remove("to_bonk")
         execution_time = time.time() - start_time
+        if debug: print(f"Bonk done in {execution_time} seconds")
         # await msg.edit(content=f"bonk: `[took {execution_time} seconds]`")
 
     @bonk.error
