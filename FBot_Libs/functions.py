@@ -302,12 +302,12 @@ class ftime():
 
     # Gets the start time
     def getstart():
-        return f"{h_start}:{m_start}, {d_start}.{mo_start} UTC"
+        return f"{h_start}:{m_start}, {d_start}-{mo_start} UTC"
 
     # Gets the current time
     def now():
         m, h, d, mo = ftime.get()
-        return f"{h}:{m}, {d}.{mo} UTC"
+        return f"{h}:{m}, {d}-{mo} UTC"
 
     # Gets the uptime
     def uptime():

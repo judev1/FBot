@@ -23,7 +23,7 @@ class joinleave(commands.Cog):
         except: invite = "error resolving invite"
 
         channel = self.bot.get_channel(serverlogs)
-        embed = fn.embed(f"Added to `{newguild}` (`{newguild.id}`)", "")
+        embed = fn.embed(f"Added to `{newguild}`", newguild.id)
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         embed.add_field(name="Bot count", value=f"`{botcount - 1}`")
@@ -31,16 +31,16 @@ class joinleave(commands.Cog):
         await channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_guild_remove(self, newguild):
-        db.Remove_Guild(newguild.id)
+    async def on_guild_remove(self, oldguild):
+        db.Remove_Guild(oldguild.id)
 
         memcount, botcount = 0, 0
-        for member in newguild.members:
+        for member in oldguild.members:
             if not member.bot:memcount += 1
             else: botcount += 1
         
         channel = self.bot.get_channel(serverlogs)
-        embed = fn.embed(f"Added to `{newguild}` (`{newguild.id}`)", "")
+        embed = fn.embed(f"Removed from `{oldguild}`", oldguild.id)
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         embed.add_field(name="Bot count", value=f"`{botcount}`")
