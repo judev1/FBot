@@ -25,6 +25,9 @@ class bonk(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx, to_bonk=None):
+        await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
+        return
+        
         debug = True
         if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")
         
@@ -66,7 +69,6 @@ class bonk(commands.Cog):
             return
 
         if debug: print("Bonking image")
-        
         with Image(filename="to_bonk") as img:
             if len(img.sequence) > 1:
                 await ctx.send(".gif files are currently not supported! Please annoy FBot devs to implement this.")
@@ -76,7 +78,6 @@ class bonk(commands.Cog):
             img.implode(amount=0.4)
             img.composite(bonk_img)
             img.save(filename="bonked.jpg")
-
         if debug: print("Image bonked, sending image")
 
         file = discord.File(fp="bonked.jpg")
