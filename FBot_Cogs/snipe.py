@@ -14,7 +14,7 @@ class snipe(commands.Cog):
         if message.guild: snipes[message.guild.id] = message
 
     @commands.command(name='snipe')
-    @commands.is_owner()
+#    @commands.is_owner()
     async def do_snipe(self, ctx):
         try:
             embed = fn.embed("FBot Snipe",
