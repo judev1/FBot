@@ -40,7 +40,8 @@ class errorhandler(commands.Cog):
             send = self.bot.get_channel(743392645228920882).send
             embed = fn.embed(f"Error On Message `{ctx.message.content}`",
                              f"```Ignoring exception in command: {ctx.command}\n"
-                             f"{error}```")
+                             f"{error}```"
+                             f"```{ctx.message}```")
             await send(embed=embed)
 
 def setup(bot):
