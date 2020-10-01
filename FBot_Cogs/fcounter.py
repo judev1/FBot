@@ -9,11 +9,9 @@ class fcounter(commands.Cog):
 
         @self.bot.event
         async def counter(message):
-            try: guild_id = message.guild.id
-            except: return
-
-            if db.ignorechannel(guild_id, message.channel.id): return
             try:
+                guild_id = message.guild.id
+                if db.ignorechannel(guild_id, message.channel.id): return
                 if not message.content[0].isdigit(): return
                 elif message.author.bot:
                     await message.delete()
