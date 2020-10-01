@@ -346,7 +346,7 @@ class ftime():
         ms = "s" if m_uptime != 1 else ""
         
         if d_uptime > 0:
-            uptime = "{d_uptime} day{ds}, {h_uptime} hour{hs}"
+            uptime = f"{d_uptime} day{ds}, {h_uptime} hour{hs}"
         elif h_uptime > 0:
             uptime = f"{h_uptime} hour{hs}, {m_uptime} minute{ms}"
         else: uptime = f"{m_uptime} minute{ms}"
