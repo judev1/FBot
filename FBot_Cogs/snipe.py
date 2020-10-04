@@ -11,18 +11,23 @@ class snipe(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
-        if message.guild: snipes[message.guild.id] = message
+        if message.guild: snipes[message.channel.id] = message
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        if before.guild: snipes[before.channel.id] = before
+    
 
     @commands.command(name='snipe')
 #    @commands.is_owner()
     async def do_snipe(self, ctx):
         try:
             embed = fn.embed("FBot Snipe",
-                f"```Sender: {snipes[ctx.guild.id].author.display_name}\n"
-                f"Message: {snipes[ctx.guild.id].content}```")
+                f"```Sender: {snipes[ctx.channel.id].author.display_name}\n"
+                f"Message: {snipes[ctx.channel.id].content}```")
             await ctx.send(embed=embed)
         except KeyError:
-            embed = fn.embed("FBot Snipe", "```No recently deleted messages to snipe```")
+            embed = fn.embed("FBot Snipe", "```No recently deleted/edited messages to snipe```")
             await ctx.send(embed=embed)
 
 
