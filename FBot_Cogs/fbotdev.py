@@ -2,6 +2,7 @@ import discord
 import math
 import random
 import time
+import socket
 from discord.ext import commands
 from database import db
 from functions import book
@@ -150,6 +151,11 @@ class fbotdev(commands.Cog):
                   f"Members: `{sum(len(guild.members) for guild in self.bot.guilds) - len(self.bot.get_guild(264445053596991498).members)}`")
         pages = book.createpages(guild_list, line, check_one=(2, 264445053596991498, False))
         await book.createbook(self.bot, ctx, "FBot Servers", pages, header=header)
+
+    @commands.command(name="host")
+    @commands.is_owner()
+    async def _Host(self, ctx):
+        await ctx.send(socket.gethostname())
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))
