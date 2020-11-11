@@ -155,7 +155,8 @@ class fbotdev(commands.Cog):
     @commands.command(name="host")
     @commands.is_owner()
     async def _Host(self, ctx):
-        await ctx.send(socket.gethostname())
+        msg = f"This instance is running on: {socket.gethostname()}"
+        await ctx.send(msg)
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))
