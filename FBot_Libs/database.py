@@ -14,9 +14,8 @@ class db():
 
     def Setup():        
         try:
-            with open(path, "r") as file: pass
-        except:
-            with open(path, "w+") as file: pass
+            with open(path, "x") as file: pass
+        except: pass
 
         global conn, c
         conn = sqlite3.connect(path)

@@ -2,6 +2,10 @@ import discord
 import sys
 import os
 
+intents = discord.Intents.default()
+intents.typing = False
+intents.presences = False
+
 try:
     sys.path.insert(0, "FBot_Libs")
     from database import db
@@ -23,7 +27,7 @@ tr.trigger_load()
 db.Setup()
 
 owners = [671791003065384987, 216260005827969024, 634454757645221908]
-bot = commands.Bot(command_prefix=fn.getprefix, owner_ids=owners)
+bot = commands.Bot(command_prefix=fn.getprefix, owner_ids=owners, intents=intents)
 
 # When the Bot connects to the server
 @bot.event
