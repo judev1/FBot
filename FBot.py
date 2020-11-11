@@ -13,7 +13,7 @@ try:
     from functions import fn
     from functions import ftime
     from triggers import tr
-except:
+except Exception as e:
     input(f" > Unable to install some of the dependencies:\n\n{e}\n")
     sys.exit()
 
