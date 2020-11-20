@@ -76,7 +76,10 @@ class fcounter(commands.Cog):
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
             for guild_id, record in db.gethighscores():
                 print(guild_id, record)
-                guild_name = self.bot.get_guild(guild_id).name
+                try:
+                    guild_name = self.bot.get_guild(guild_id).name
+                except:
+                    guild_name = "(Deleted guild)"
                 highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
                 guild_rank += 1
             embed = fn.embed("FBot counting leaderboard", highscores)
