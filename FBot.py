@@ -37,12 +37,29 @@ async def on_ready():
     db.Check_Guilds(bot.guilds)
 
     bot.remove_command("help")
-    for cog in fn.getcogs():
-        cog = cog[0]
-        if cog not in ["economy.py", "ppsize"]:
-            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
-            except: bot.load_extension("FBot_Cogs." + cog[:-3])
-    print(" > Loaded all cogs\n")
+#    for cog in fn.getcogs():
+#        cog = cog[0]
+#        if cog not in ["economy.py", "ppsize"]:
+#            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
+#            except: bot.load_extension("FBot_Cogs." + cog[:-3])
+    initial_extensions = ["bigpp", "bonk", "cmds", "cogs", "dms",
+                          "economy", "errorhandler", "events", "fball",
+                          "fbotdev", "fcounter", "help", "info", "joinleave",
+                          "joke", "links", "modtoggle", "notices", "ping",
+                          "pns", "ppsize", "prefix", "priority", "purge",
+                          "say", "session", "snipe", "status", "triggerresponses",
+                          "version"
+                          ]
+    # "dbl" not loaded as it is buggy and unused
+    for extension in initial_extensions:
+        print(f"Loading {extension}...", end="")
+        try:
+            bot.load_extension("FBot_Cogs." + extension)
+            print("Done")
+        except Exception as e:
+            print("Error: ", e)
+
+    print(" > Done loading cogs\n")
         
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="'FBot help'"))
