@@ -280,7 +280,11 @@ class book():
                 header = get_results() if results else header
                 embed = discord.Embed(title="FBot Server Status", description=f"{header}\n\n{pages[pagenum - 1]}", colour=0xF42F42)
                 embed.set_footer(text=f"Request timed out", icon_url=fboturl)
-                await msg.edit(embed=embed)
+                try:
+                    await msg.edit(embed=embed)
+                except:
+                    # Try/except because sometimes the user deletes the message and this causes and error
+                    pass
                 break
 
 class ftime():
