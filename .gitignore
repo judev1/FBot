@@ -5,3 +5,5 @@ Triggerlogs.txt
 todo.txt
 __pycache__/
 *.vs
+*.xml
+*.iml
