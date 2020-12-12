@@ -2,5 +2,6 @@
 *.db
 Tokens.txt
 Triggerlogs.txt
+todo.txt
 __pycache__/
 *.vs
