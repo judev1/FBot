@@ -2,10 +2,6 @@ import discord
 import sys
 import os
 
-intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
-
 try:
     sys.path.insert(0, "FBot_Libs")
     from database import db
@@ -25,6 +21,10 @@ sessionstart = ftime.setstart()
 print(f" > Session started at {sessionstart}")
 tr.trigger_load()
 db.Setup()
+
+intents = discord.Intents.default()
+intents.typing = False
+intents.presences = False
 
 owners = [671791003065384987, 216260005827969024, 634454757645221908]
 bot = commands.Bot(command_prefix=fn.getprefix, owner_ids=owners, intents=intents)
@@ -46,7 +46,7 @@ async def on_ready():
 #        if cog not in ["economy.py", "ppsize"]:
 #            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
 #            except: bot.load_extension("FBot_Cogs." + cog[:-3])
-    initial_extensions = ["bigpp", "bonk", "cmds", "cogs", "dms",
+    initial_extensions = ["bigpp", "bonk", "cmds", "cogs", "dms", # "dbl",
                           "economy", "errorhandler", "events", "fball",
                           "fbotdev", "fcounter", "help", "info", "joinleave",
                           "joke", "links", "modtoggle", "notices", "ping",
