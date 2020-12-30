@@ -25,8 +25,8 @@ class bonk(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx, to_bonk=None):
-        #await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
-        #return
+        await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
+        return
         
         debug = True
         if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")
