@@ -1,14 +1,15 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import MemberConverter
-from wand.image import Image
+from wand.image import Image as wand_image
+from PIL import Image as pil_image
 import time
 import re
 import os
 import requests
 
 
-bonk_img = Image(filename="./Info/bonk.png")
+bonk_img = wand_image(filename="./Info/bonk.png")
 is_mention = re.compile("<@!?[0-9]{18}>")
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 bonk_help = (
@@ -25,10 +26,10 @@ class bonk(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx, to_bonk=None):
-        await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
-        return
+        #await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
+        #return
         
-        debug = True
+        debug = False
         if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")
         
         start_time = time.time()
@@ -69,11 +70,16 @@ class bonk(commands.Cog):
             return
 
         if debug: print("Bonking image")
-        with Image(filename="to_bonk") as img:
+
+        with pil_image.open("to_bonk") as img:
+            resized_img = img.resize((511, 511))
+            resized_img.save("resized_to_bonk", "JPEG")
+        
+        with wand_image(filename="resized_to_bonk") as img:
             if len(img.sequence) > 1:
                 await ctx.send(".gif files are currently not supported! Please annoy FBot devs to implement this.")
                 return
-            img.resize(511, 511)
+            # img.resize(511, 511) # i hate it
             img.swirl(degree=-45)
             img.implode(amount=0.4)
             img.composite(bonk_img)
