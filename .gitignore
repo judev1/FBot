@@ -7,5 +7,5 @@ __pycache__/
 *.vs
 *.xml
 *.iml
-resized_to_bigpp
-resized_to_bonk
+resized_to_*
+to_*
