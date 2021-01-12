@@ -69,11 +69,13 @@ class db():
 
     def Add_Guild(guild_id):
         c.execute(f"INSERT INTO guilds VALUES ({guild_id}, 0, 'fbot', 3)")
+        c.execute(f"INSERT INTO counter VALUES ({guild_id}, 0, 0, 0, 0)")
         conn.commit()
 
     def Remove_Guild(guild_id):
         c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
         c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
+        c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
         conn.commit()
 
     def Add_Channel(channel_id, guild_id):
