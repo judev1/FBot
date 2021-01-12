@@ -20,9 +20,9 @@ class prefix(commands.Cog):
                     embed = fn.errorembed("Prefix too long", f"Prefixes cannot be longer than '10' characters, yours is {len(arg)}")
                     await ctx.send(embed=embed)
                     return
-                
-                invalid, char = fn.checkchars(arg)
-                if invalid:
+
+                char = fn.checkchars(arg)
+                if char:
                     embed = dn.errormbed("Invalid Character", f"The character ' {char} ' is not allowed")
                     await ctx.send(embed=embed)
                 else:

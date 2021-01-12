@@ -22,61 +22,64 @@ rhurl = "https://discord.gg/6SBBM3J"
 
 class fn():
 
-    # Turns on debug mode
-    def debug(value):
-        global debug
-        debug = value
-
-    # Removes known prefix's and suffix's from a string
     def remove(text, left_chars, right_chars):
+        """ Removes known prefix's and suffix's from a string """
+
         return text[left_chars:len(text) - right_chars]
 
-    # Gets the bot token
     def gettoken(num):
+        """ Gets the bot token """
+
         with open("./Info/Tokens.txt", "r") as file: data = file.readlines()
         return data[int(num)][:-1]
 
-    # Get last updated, version and versions
     def getinfo(info):
+        """ Recovers last updated, version and versions """
+
         with open("./Info/Info.txt", "r") as file: data = file.readlines()
         if info == "lastupdated": return data[0][:-1]
         elif info == "ver": return data[1][:-1]
         else: raise NameError(f"No variable called '{info}'")
 
-    # Gets the Notices
     def getnotices():
+        """ Recovers the Notices """
+
         with open("./Info/Notices.txt", "r") as file: data = file.readlines()
         notices = ""
         for line in data: notices += str(line)
         notices = eval(notices)
         return notices
 
-    # Gets the Events
     def getevents():
+        """ Recovers the Events """
+
         with open("./Info/Events.txt", "r") as file: data = file.readlines()
         events = ""
         for line in data: events += str(line)
         events = eval(events)
         return events
 
-    # Gets all the files in FBot_Cogs
     def getcogs():
+        """ Recovers all the files in FBot_Cogs """
+
         cogs = []
         for cog in os.listdir("FBot_Cogs"):
             if os.path.isfile(os.path.join("FBot_Cogs", cog)):
                 cogs.append([cog])
         return cogs
 
-    # Gets all the patchnote versions
     def getpatchnotevers():
+        """ Recovers all the patchnote versions """
+
         vers = []
         for ver in os.listdir("Info/Patch_Notes"):
             if os.path.isfile(os.path.join("Info/Patch_Notes", ver)):
                 vers.append([ver[:-4]])
         return vers
 
-    # Gets the Pacth Notes for a version
     def getpatchnotes(ver):
+        """ Gets the Pacth Notes for a version """
+
         with open(f"./Info/Patch_Notes/{ver}.txt", "r") as file: data = file.readlines()
         lines = len(data)
         pn = ""
@@ -84,8 +87,9 @@ class fn():
         pn = eval(pn)
         return pn, lines
 
-    # Checks and gets the prefix
     def getprefix(bot, message):
+        """ Checks and gets the prefix """
+
         prefix = "fbot"
         if str(message.channel.type) != "private":
             prefix = db.Get_Prefix(message.guild.id)
@@ -97,25 +101,29 @@ class fn():
                 prefix = content[:6]
         return prefix
 
-    # Checks the characters in a prefix
     def checkchars(prefix):
-        bannedchars = ["{", "}", "(", ")", "[", "]", "'", '"', "`", "\\", "/",  "_", "-", "=", "*"]
+        """ Checks the characters in a prefix """
+
+        bannedchars = list("{}()[]\"'`")
         for char in prefix:
             for bannedchar in bannedchars:
-                if bannedchar == char: return True, char
-            return False, ""
+                if bannedchar == char: return char
+            return None
 
-    # Creates an embed
     def embed(title, info):
+        """ Creates an FBot embed """
+
         return discord.Embed(title=title, description=info, colour=0xF42F42)
 
-    # Creates an error embed
     def errorembed(error, info):
+        """ Creates an FBot error embed """
+
         return discord.Embed(title=f"**Error:** `{error}`",
                              description=f"```{info}```", colour=0xF42F42)
 
-    # Default footer
     def footer(embed, name, command):
+        """ Default FBot footer """
+
         text = f"{command} requested by {name} | Version v{fn.getinfo('ver')}"
         embed.set_footer(text=text, icon_url=fboturl)
         return embed
