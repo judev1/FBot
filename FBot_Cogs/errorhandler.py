@@ -1,10 +1,11 @@
 from discord.ext import commands
-from functions import fn
+from functions import fn, serverurl
 
 class errorhandler(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.errorlogs = bot.get_channel(743392645228920882)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -18,31 +19,43 @@ class errorhandler(commands.Cog):
 
         error = getattr(error, "original", error)
 
-        if isinstance(error, commands.CommandNotFound): pass
+        if isinstance(error, commands.CommandNotFound): return
 
         elif isinstance(error, commands.DisabledCommand):
             embed = fn.errorembed("Command Not Found",
-                             f"{ctx.command} has been disabled")
-            await ctx.send(embed=embed)
+                    f"{ctx.command} has been disabled")
+        elif isinstance(error, commands.MissingPermissions):
+            embed = fn.errorembed("Missing Permissions",
+                    "The bot is missing permissions to execute the command")
         elif isinstance(error, commands.NotOwner):
             embed = fn.errorembed("Missing Permissions",
-                             f"you do not own this bot")
-            await ctx.send(embed=embed)
+                    f"You do not own this bot")
         elif isinstance(error, commands.BadArgument):
             embed = fn.errorembed("Invalid Argument",
-                             f"the argument you used was not recognised")
-            await ctx.send(embed=embed)
+                    f"The argument you used was not recognised")
         elif isinstance(error, commands.MissingRequiredArgument):
             embed = fn.errorembed("Missing Argument",
-                                  f"this command requires an argument")
-            await ctx.send(embed=embed)
+                    f"This command is missing an argument")
         else:
-            send = self.bot.get_channel(743392645228920882).send
-            embed = fn.embed(f"Error On Message `{ctx.message.content}`",
-                             f"```Ignoring exception in command: {ctx.command}\n"
-                             f"{error}```"
-                             f"```{ctx.message}```")
-            await send(embed=embed)
+            try:
+                embed = fn.embed("An unusual error has occurred",
+                        "The devs have been notified, please contact:\n"
+                        "`@justjude#2296` or `@LinesGuy#9260`\n"
+                        f"OR join our [support server]({serverurl}) "
+                        "and give us a ping")
+                try:
+                    await ctx.channel.send(embed=embed)
+                except:
+                    channel = await ctx.author.create_dm()
+                    await channel.send(embed=embed)
+                    
+                embed = fn.embed(f"Error On Message `{ctx.message.content}`",
+                        f"```Ignoring exception in command: {ctx.command}```"
+                        f"```{error}``````{ctx.message}```")
+                await self.errorlogs.send(embed=embed)
+            except: pass
+            finally: return
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(errorhandler(bot))

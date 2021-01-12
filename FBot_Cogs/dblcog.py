@@ -2,7 +2,7 @@ import dbl as DBL
 from discord.ext import commands, tasks
 from functions import fn
 
-class dbl(commands.Cog):
+class dblcog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -30,4 +30,4 @@ class dbl(commands.Cog):
         await channel.send(embed=embed)
 
 def setup(bot):
-    bot.add_cog(dbl(bot))
+    bot.add_cog(dblcog(bot))
