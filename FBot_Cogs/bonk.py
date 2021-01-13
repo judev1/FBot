@@ -27,7 +27,7 @@ class bonk(commands.Cog):
 
     @commands.command()
     async def bonk(self, ctx, to_bonk=None):
-        #await ctx.send("Ooopsie! The `bonk` command is temporarily disabled.")
+        #await ctx.send("Ooopsie! The `bonk` command is temporarily disabled")
         #return
         
         debug = False

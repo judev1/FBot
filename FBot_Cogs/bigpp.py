@@ -27,8 +27,8 @@ class bigpp(commands.Cog):
 
     @commands.command()
     async def bigpp(self, ctx, to_bigpp=None):
-        #await ctx.send("Ooopsie! The `bigpp command is temporarily disabled.")
-        #return
+        await ctx.send("Ooopsie! The `bigpp` command is temporarily disabled")
+        return
         
         debug = False
         if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")

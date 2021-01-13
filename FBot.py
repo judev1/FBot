@@ -13,7 +13,7 @@ except Exception as e:
     input(f" > Unable to install some of the dependencies:\n\n{e}\n")
     sys.exit()
 
-token = fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
+token = fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
 
 sessionstart = ftime.setstart()
 print(f" > Session started at {sessionstart}")
@@ -41,7 +41,7 @@ async def on_ready():
     bot.remove_command("help")
     for cog in fn.getcogs():
         cog = cog[0]
-        if cog not in ["economy.py", "bigpp.py", "bonk.py", "dbl.py"]: # Cogs not to load
+        if cog not in ["economy.py"]: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])
