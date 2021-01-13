@@ -51,8 +51,14 @@ class db():
         print(" > Connected to FBot.db")
 
     def Check_Guilds(guilds):
-        for guild in guilds:
-            guild_id = guild.id
+        # Iterates through all guilds fbot is a member of,
+        # If fbot is in a guild but not in fbot.db, it will be added
+        # If a guild is in fbot.db but fbot is not a member, it will be removed
+
+        discord_guild_ids = [guild.id for guild in guilds]
+
+        # Add new guilds:
+        for guild_id in discord_guild_ids:
             t = (guild_id, )
             try:
                 c.execute(f"SELECT * FROM guilds where guild_id == {guild_id};")
@@ -66,6 +72,21 @@ class db():
             except:
                 c.execute("INSERT INTO counter VALUES(?, 0, 0, 0, 0)", t)
                 conn.commit()
+
+        # Remove guilds that FBot is not a member of:
+        c.execute(f"SELECT guild_id FROM guilds")
+        database_guild_ids = c.fetchall()
+        database_guild_ids = [i[0] for i in database_guild_ids]
+        # ^ because c.fetchall() returns a list of tuples of ints 
+        # ^ and we want a list of ints
+        for guild_id in database_guild_ids:
+            if not (guild_id in discord_guild_ids):
+                print(f"Deleting guild: {guild_id}")
+##                c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
+##                c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
+##                c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
+                
+        conn.commit()
 
     def Add_Guild(guild_id):
         c.execute(f"INSERT INTO guilds VALUES ({guild_id}, 0, 'fbot', 3)")
