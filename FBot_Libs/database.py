@@ -73,17 +73,31 @@ class db():
                 c.execute("INSERT INTO counter VALUES(?, 0, 0, 0, 0)", t)
                 conn.commit()
 
-        # Remove guilds that FBot is not a member of:
+        # Remove guilds in the 'guilds' table that FBot is not a member of
         c.execute(f"SELECT guild_id FROM guilds")
-        database_guild_ids = c.fetchall()
-        database_guild_ids = [i[0] for i in database_guild_ids]
+        database_guild_ids = [i[0] for i in c.fetchall()]
         # ^ because c.fetchall() returns a list of tuples of ints 
         # ^ and we want a list of ints
         for guild_id in database_guild_ids:
             if not (guild_id in discord_guild_ids):
-                print(f"Deleting guild from FBot.db: {guild_id}")
+                print(f"Deleting guild from 'guilds' table: {guild_id}")
                 c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
+                
+
+        # And repeat for the 'channels' table:
+        c.execute(f"SELECT guild_id FROM channels")
+        database_guild_ids = [i[0] for i in c.fetchall()]
+        for guild_id in database_guild_ids:
+            if not (guild_id in discord_guild_ids):
+                print(f"Deleting guild+channels from 'channels': {guild_id}")
                 c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
+
+        # And for the 'counter' table:
+        c.execute(f"SELECT guild_id FROM counter")
+        database_guild_ids = [i[0] for i in c.fetchall()]
+        for guild_id in database_guild_ids:
+            if not (guild_id in discord_guild_ids):
+                print(f"Deleting guild from 'counter' table: {guild_id}")
                 c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
                 
         conn.commit()
