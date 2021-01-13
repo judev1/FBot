@@ -81,10 +81,10 @@ class db():
         # ^ and we want a list of ints
         for guild_id in database_guild_ids:
             if not (guild_id in discord_guild_ids):
-                print(f"Deleting guild: {guild_id}")
-##                c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
-##                c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
-##                c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
+                print(f"Deleting guild from FBot.db: {guild_id}")
+                c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
+                c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
+                c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
                 
         conn.commit()
 
