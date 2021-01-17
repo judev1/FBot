@@ -10,6 +10,8 @@ def Val(value):
     elif value == "off": return 0
     elif value == "on": return 1
 
+conn = sqlite3.connect(path)
+
 class db():
 
     def Setup():        
@@ -17,8 +19,6 @@ class db():
             with open(path, "x") as file: pass
         except: pass
 
-        global conn, c
-        conn = sqlite3.connect(path)
         c = conn.cursor()
         
         c.execute("""CREATE TABLE IF NOT EXISTS guilds (
@@ -54,6 +54,8 @@ class db():
         # Iterates through all guilds fbot is a member of,
         # If fbot is in a guild but not in fbot.db, it will be added
         # If a guild is in fbot.db but fbot is not a member, it will be removed
+
+        c = conn.cursor()
 
         discord_guild_ids = [guild.id for guild in guilds]
 
@@ -103,17 +105,20 @@ class db():
         conn.commit()
 
     def Add_Guild(guild_id):
+        c = conn.cursor()
         c.execute(f"INSERT INTO guilds VALUES ({guild_id}, 0, 'fbot', 3)")
         c.execute(f"INSERT INTO counter VALUES ({guild_id}, 0, 0, 0, 0)")
         conn.commit()
 
     def Remove_Guild(guild_id):
+        c = conn.cursor()
         c.execute(f"DELETE FROM guilds WHERE guild_id == {guild_id};")
         c.execute(f"DELETE FROM channels WHERE guild_id == {guild_id};")
         c.execute(f"DELETE FROM counter WHERE guild_id == {guild_id};")
         conn.commit()
 
     def Add_Channel(channel_id, guild_id):
+        c = conn.cursor()
         try:
             c.execute(f"SELECT * FROM channels where channel_id == {channel_id};")
             c.fetchone()[1]
@@ -122,43 +127,52 @@ class db():
             conn.commit()
 
     def Change_Modtoggle(guild_id, modtoggle):
+        c = conn.cursor()
         c.execute(f"UPDATE guilds SET modtoggle = {Val(modtoggle)} WHERE guild_id == {guild_id};")
         conn.commit()
 
     def Get_Modtoggle(guild_id):
+        c = conn.cursor()
         c.execute(f"SELECT modtoggle FROM guilds WHERE guild_id == {guild_id};")
         modtoggle = Val(c.fetchone()[0])
         return modtoggle
 
     def Change_Status(channel_id, status):
+        c = conn.cursor()
         c.execute(f"UPDATE channels SET status = {Val(status)} WHERE channel_id = {channel_id};")
         conn.commit()
 
     def Get_Status(channel_id):
+        c = conn.cursor()
         c.execute(f"SELECT status FROM channels WHERE channel_id == {channel_id};")
         status = Val(c.fetchone()[0])
         return status
 
     def Change_Prefix(guild_id, prefix):
+        c = conn.cursor()
         if all(x.isalpha() or x.isspace() or x == "!" for x in prefix):
             c.execute(f"UPDATE guilds SET prefix = '{prefix}' WHERE guild_id == {guild_id}")
             conn.commit()
 
     def Get_Prefix(guild_id):
+        c = conn.cursor()
         c.execute(f"SELECT prefix FROM guilds WHERE guild_id == {guild_id};")
         prefix = c.fetchone()[0]
         return prefix
 
     def Change_Priority(guild_id, priority):
+        c = conn.cursor()
         c.execute(f"UPDATE guilds SET priority = '{priority}' WHERE guild_id == {guild_id}")
         conn.commit()
 
     def Get_Priority(guild_id):
+        c = conn.cursor()
         c.execute(f"SELECT priority FROM guilds WHERE guild_id == {guild_id};")
         priority = c.fetchone()[0]
         return priority
 
     def Get_All_Status(guild_id):
+        c = conn.cursor()
         c.execute(f"SELECT channel_id, status FROM channels WHERE guild_id == {guild_id};")
         data = c.fetchall()
         num = 0
@@ -168,6 +182,7 @@ class db():
         return data
 
     def ignorechannel(guild_id, channel_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT channel_id FROM counter WHERE guild_id=?", t)
         counter_channel_id = c.fetchone()[0]
@@ -175,6 +190,7 @@ class db():
         return False
 
     def checkdouble(guild_id, user_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT user_id FROM counter WHERE guild_id=?", t)
         last_user_id = c.fetchone()[0]
@@ -186,35 +202,42 @@ class db():
         return False
 
     def getnumber(guild_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT number FROM counter WHERE guild_id=?", t)
         return int(c.fetchone()[0])
 
     def getuser(guild_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT user_id FROM counter WHERE guild_id=?", t)
         return int(c.fetchone()[0])
 
     def gethighscore(guild_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT record FROM counter WHERE guild_id=?", t)
         return c.fetchone()[0]
 
     def gethighscores():
+        c = conn.cursor()
         c.execute("SELECT guild_id, record FROM counter ORDER BY record DESC LIMIT 5")
         return c.fetchall()
 
     def resetnumber(guild_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("UPDATE counter SET number=0, user_id=0 WHERE guild_id=?", t)
         conn.commit()
 
     def updatenumber(number, author_id, guild_id):
+        c = conn.cursor()
         t = (number, author_id, guild_id,)
         c.execute("UPDATE counter SET number=?, user_id=? WHERE guild_id=?", t)
         conn.commit()
 
     def highscore(number, guild_id):
+        c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT record FROM counter WHERE guild_id=?", t)
         record = c.fetchone()[0]
@@ -225,6 +248,7 @@ class db():
             conn.commit()
 
     def setcountingchannel(channel_id, guild_id):
+        c = conn.cursor()
         t = (channel_id, guild_id,)
         c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
         conn.commit()
