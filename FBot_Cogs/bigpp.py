@@ -27,8 +27,8 @@ class bigpp(commands.Cog):
 
     @commands.command()
     async def bigpp(self, ctx, to_bigpp=None):
-        await ctx.send("Ooopsie! The `bigpp` command is temporarily disabled")
-        return
+        #await ctx.send("Ooopsie! The `bigpp` command is temporarily disabled")
+        #return
         
         debug = False
         if debug: print(f"\n\n{ctx.message.content}\n{ctx.message}")
@@ -80,7 +80,7 @@ class bigpp(commands.Cog):
             if len(img.sequence) > 1:
                 await ctx.send(".gif files are currently not supported! Please annoy FBot devs to implement this.")
                 return
-            img.resize(511, 511)
+            # img.resize(511, 511)
             img.implode(amount=-7)
             img.composite(bigpp_img)
             img.save(filename="bigpped.jpg")
