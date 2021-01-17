@@ -43,6 +43,26 @@ class fcounter(commands.Cog):
 
         self.bot.add_listener(counter, "on_message")
 
+    @commands.Cog.listener()
+    async def on_raw_message_delete(self, payload):
+        if payload is None: return
+        # Alert if last number was deleted
+        message = payload.cached_message
+        if message.content.isnumeric():
+            last_number = db.getnumber(message.guild.id)
+            if message.content.startswith(str(last_number)):
+                await message.channel.send(f"**The number `{last_number}` in this channel was deleted **\nThe next number is `{last_number+1}`")
+
+    @commands.Cog.listener()
+    async def on_raw_message_edit(self, payload):
+        if payload is None: return
+        # Alert if last number was edited
+        message = payload.cached_message
+        if message.content.isnumeric():
+            last_number = db.getnumber(message.guild.id)
+            if message.content.startswith(str(last_number)):
+                await message.channel.send(f"**The last number `{last_number}` in this channel was edited**\nThe next number is `{last_number+1}`")
+
     @commands.command("setcounter", aliases=["counter", "counting"])
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
