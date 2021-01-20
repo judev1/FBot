@@ -1,7 +1,7 @@
 # **FBot**
 ##### *The most annoying bot on discord*
 
-#### Currently FBot is only being used on 280+ Servers with 20K+ members and almost 2500 lines of code
+#### Currently FBot is only being used on 400+ Servers with 40K+ members and almost 2500 lines of code
 
 ## **Don't just take our word for it:**
 ##### *`Oh... this bot is just spam`*
