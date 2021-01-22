@@ -8,6 +8,7 @@ class purge(commands.Cog):
         self.bot = bot
 
     @commands.command(name="purge", aliases=["zahando", "thanos", "clear"])
+    @commands.guild_only()
     async def do_purge(self, ctx, *args):
 
         if len(args) != 0:
