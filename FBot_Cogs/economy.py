@@ -3,9 +3,17 @@ from discord.ext import commands
 from discord.ext.commands import MemberConverter
 import sqlite3
 import random
+from functions import fn
 
 conn = sqlite3.connect("economy.db")
 f = "~~f~~ "
+
+def dbcheck(user_id):
+    c = conn.cursor()
+    c.execute("SELECT 1 FROM users WHERE user_id=?",(user_id,))
+    if not c.fetchone():
+        c.execute("INSERT INTO users(user_id, balance, networth, netdebts) VALUES(?, 0, 0, 0)", (user_id,))
+        conn.commit()
 
 class economy(commands.Cog):
 
@@ -34,15 +42,17 @@ class economy(commands.Cog):
     async def get_balance(self, ctx, mention: discord.Member=None):
         # Get a users balance
         # fbot bal, or fbot bal @mention
-        if (mention is None):
-            user_id = ctx.author.id
-        else:
+        if mention:
             user_id = mention.id
+        else:
+            user_id = ctx.author.id
+        dbcheck(user_id)
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT balance FROM users WHERE user_id=?", t)
         balance = c.fetchone()[0]
-        await ctx.send(f"Balance: {f}{balance}")
+        emb = fn.embed("Balance",f"{f}{balance}")
+        await ctx.send(embed=emb)
 
     @commands.command(name="devsetbalance", aliases=["devsetbal"])
     @commands.is_owner()
@@ -50,6 +60,7 @@ class economy(commands.Cog):
         # [dev] set any users balance:
         # fbot devsetbalance @mention 1234
         # ONLY use this for testing, misuse may break something.
+        dbcheck(user_id)
         t = (new_balance, mention.id,)
         c = conn.cursor()
         c.execute("""UPDATE users SET balance=?
@@ -82,6 +93,7 @@ class economy(commands.Cog):
         # Get 500 to 1000 credits then lose 80% to 90% of it due to income tax
         # (cooldown 4 hours)
         # `fbot work`
+        dbcheck(user_id)
         income = random.randint(500, 1000)
         taxed_income = int(income * random.uniform(0.1, 0.2)) # lose 80% to 90%
         t = (taxed_income, ctx.author.id,)
