@@ -48,6 +48,7 @@ class fcounter(commands.Cog):
         if payload is None: return
         # Alert if last number was deleted
         message = payload.cached_message
+        if message is None: return
         if message.content.isnumeric():
             last_number = self.bot.db.getnumber(message.guild.id)
             if message.content.startswith(str(last_number)):
@@ -58,6 +59,7 @@ class fcounter(commands.Cog):
         if payload is None: return
         # Alert if last number was edited
         message = payload.cached_message
+        if message is None: return
         if message.content.isnumeric():
             last_number = self.bot.db.getnumber(message.guild.id)
             if message.content.startswith(str(last_number)):
