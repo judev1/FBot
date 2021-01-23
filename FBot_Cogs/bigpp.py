@@ -74,9 +74,9 @@ class bigpp(commands.Cog):
 
         with pil_image.open("to_bigpp") as img:
             resized_img = img.resize((511, 511))
-            resized_img.save("resized_to_bigpp", "JPEG")
+            resized_img.save("./Info/resized_to_bigpp", "JPEG")
         
-        with wand_image(filename="to_bigpp") as img:
+        with wand_image(filename="./Info/resized_to_bigpp") as img:
             if len(img.sequence) > 1:
                 await ctx.send(".gif files are currently not supported! Please annoy FBot devs to implement this.")
                 return
@@ -90,6 +90,7 @@ class bigpp(commands.Cog):
         msg = await ctx.send("bigpp: ", file=file)
         os.remove("bigpped.jpg")
         os.remove("to_bigpp")
+        os.remove("./Info/resized_to_bigpp")
         execution_time = time.time() - start_time
         if debug: print(f"bigpp done in {execution_time} seconds")
 
