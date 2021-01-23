@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from functions import fn
 
 snipes = dict()
 
@@ -18,16 +16,16 @@ class snipe(commands.Cog):
         if before.guild: snipes[before.channel.id] = before
     
 
-    @commands.command(name='snipe')
-#    @commands.is_owner()
+    @commands.command(name="snipe")
     async def do_snipe(self, ctx):
         try:
-            embed = fn.embed("FBot Snipe",
-                f"```Sender: {snipes[ctx.channel.id].author.display_name}\n"
-                f"Message: {snipes[ctx.channel.id].content}```")
+            embed = self.bot.fn.embed("FBot Snipe",
+                    f"```Sender: {snipes[ctx.channel.id].author.mention}\n"
+                    f"Message: {snipes[ctx.channel.id].content}```")
             await ctx.send(embed=embed)
         except KeyError:
-            embed = fn.embed("FBot Snipe", "```No recently deleted/edited messages to snipe```")
+            embed = self.bot.fn.embed("FBot Snipe",
+                    "```No recently deleted/edited messages to snipe```")
             await ctx.send(embed=embed)
 
 

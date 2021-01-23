@@ -1,10 +1,28 @@
 from discord.ext import commands
-from database import db
-from functions import fn
+from random import choice
 from triggers import tr
+import asyncio
 
-answer = "NO ONE CARES"
 tf = ["will", "will not"]
+responses = ["Someone has bad taste in photos",
+             "Your right to live has now been revoked",
+             "I wish I hadn't seen that",
+             "MY EYES! MY EYES! WHY WOULD YOU SEND THAT!?",
+             "Oh my, what have I just witnessed",
+             "That be kinda stanky ngl",
+             "Spare me, please",
+             "I'm not feeling that, delete immediatley",
+             "That is not vibe"]
+funny = ["Hmm, maybe I'll laugh too next time",
+         "HAHAHA, was that the reaction you were looking for?",
+         "It would be easier to laugh if it were funny",
+         "That is **h i l a r i o u s**",
+         "L O L",
+         "Wow my dude that is so funny"]
+answers = ["A building",
+           "idk",
+           "Why are you asking me?",
+           "I don't think we'll ever know"]
 
 class triggerresponses(commands.Cog):
     
@@ -16,25 +34,22 @@ class triggerresponses(commands.Cog):
         name = message.author.display_name
         send = message.channel.send
         content = message.content
+        db = self.bot.db
 
-        if message.author == self.bot.user or message.author.bot:
-            return
+        if message.author.bot: return
 
-        # Checks that a command hasn't been issued
-        commandcheck = content[len(fn.getprefix(self.bot, message)):]
+        commandcheck = content[len(self.bot.fn.getprefix(self.bot, message)):]
         for command in self.bot.walk_commands():
             if commandcheck.startswith(command.name): return
             for alias in command.aliases:
                 if commandcheck.startswith(alias): return
 
-        # Get prefix
         if message.content.lower() == "prefix":
             prefix = db.Get_Prefix(message.guild.id)
             if prefix == "fbot":
                 await send("The prefix for this server is `FBot ` (the default)")
             else: await send(f"The prefix for this server is `{prefix}`")
-        
-        # Built-in gifs
+
         elif message.content.lower() == "smol pp":
             await send("https://tenor.com/view/tiny-small-little-just-alittle-guy-inch-gif-5676598")
             return
@@ -42,30 +57,27 @@ class triggerresponses(commands.Cog):
             await send("https://tenor.com/view/girl-talks-naughty-small-dick-micropenis-gif-11854548")
             return
 
-        # Coin flipper - feet style
         elif message.content.lower() == "feet pics":
-            num = random.randint(0, 1)
-            choice = tf[num]
-            msg = await send("FBot says:")
-            time.sleep(0.5)
-            await msg.edit("FBot says:\n(Drum roll please)")
-            time.sleep(2)
-            await msg.edit(f"FBot says:\n(Drum roll please)\nFeet pics {choice} be granted!")
+            msg = await send("FBot says:\n(Drum roll please)")
+            await asyncio.sleep(2)
+            await msg.edit(f"FBot says:\nFeet pics {choice(tf)} be granted!")
             return
 
-        # Triggers
         if str(message.channel.type) != "private":
             db.Add_Channel(message.channel.id, message.guild.id)
+            priority = "all"
+        else: priority = db.Get_Priority(message.guild.id)
         if str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
 
             if message.attachments:
-                await send("That's pretty gay ngl")
+                await send(choice(responses))
                 return
             
-            trigger_detected, response = tr.trigger_respond(message)
+            trigger_detected, response = tr.trigger_respond(message, priority)
             if trigger_detected:
                 response = response.replace("{username}", name)
-                response = response.replace("{answer}", answer)
+                response = response.replace("{answer}", choice(answers))
+                response = response.replace("{funny}", choice(funny))
                 await send(response)
                 return
 

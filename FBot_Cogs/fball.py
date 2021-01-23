@@ -1,6 +1,5 @@
-import discord
 from discord.ext import commands
-import random as random
+from random import choice
 
 responses = ["Without a doubt... yes.",
              "Without a doubt... no.",
@@ -32,10 +31,16 @@ class fball(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+        @self.bot.event
+        async def _FBall(message):
+            content = message.content.lower()
+            if content.startswith("fball ") or content.startswith("8ball "):
+                await message.channel.send(choice(responses))
+        self.bot.add_listener(_FBall, "on_message")
+
     @commands.command(name="fball", aliases=["8ball"])
-    async def do_fball(self, ctx):
-        response = random.choice(responses)
-        await ctx.send(response)
+    async def _FBot_FBall(self, ctx):
+        await ctx.send(choice(responses))
 
 def setup(bot):
     bot.add_cog(fball(bot))

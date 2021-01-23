@@ -1,0 +1,12 @@
+"""What's new in v1.3?
+'Fix Update'
+- Added support for every server and channel name
+- Changed it so that FBot is toggleable in each channel
+- Changed the prefix from 'FBot1' to 'FBot'
+- Added new trigger words: 'Let us' and a response to Aki bot
+- Fixed up the layout
+- Fixed up some typos
+- Did maintenance things
+Main: 456 lines (+38)
+Func: 265 lines (+36)
+Totl: 721 lines (+74)"""

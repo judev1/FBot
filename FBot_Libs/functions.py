@@ -1,365 +1,149 @@
-import datetime
-import discord
+from datetime import datetime, timezone
+from discord import Embed
 import os
-import random
-from database import db
-from discord.ext import commands
 
-debug = False
-m_start, h_start, d_start, mo_start = 0, 0, 0, 0
+class fn:
 
-fboturl = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
-
-voteurl = "https://top.gg/bot/711934102906994699/vote"
-inviteurl = "https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot"
-
-githuburl = "https://github.com/judev1/FBot"
-topggurl = "https://top.gg/bot/711934102906994699"
-
-serverurl = "https://discord.gg/BDpXRq9"
-prplhzurl = "https://discord.gg/zW2k2yK"
-rhurl = "https://discord.gg/6SBBM3J"
-
-class fn():
-
-    def remove(text, left_chars, right_chars):
-        """ Removes known prefix's and suffix's from a string """
-
-        return text[left_chars:len(text) - right_chars]
-
-    def gettoken(num):
-        """ Gets the bot token """
-
+    def gettoken(self, num):
         with open("./Info/Tokens.txt", "r") as file: data = file.readlines()
         return data[int(num)][:-1]
 
-    def getinfo(info):
-        """ Recovers last updated, version and versions """
-
+    def getinfo(self, info):
         with open("./Info/Info.txt", "r") as file: data = file.readlines()
         if info == "lastupdated": return data[0][:-1]
         elif info == "ver": return data[1][:-1]
         else: raise NameError(f"No variable called '{info}'")
 
-    def getnotices():
-        """ Recovers the Notices """
+    def getnotices(self):
+        with open("./Info/Notices.txt", "r") as file:
+            data = file.readlines()
+            notices = ""
+            for line in data: notices += str(line)
+        return eval(notices)
 
-        with open("./Info/Notices.txt", "r") as file: data = file.readlines()
-        notices = ""
-        for line in data: notices += str(line)
-        notices = eval(notices)
-        return notices
+    def getevents(self):
+        with open("./Info/Events.txt", "r") as file:
+            data = file.readlines()
+            events = ""
+            for line in data: events += str(line)
+        return eval(events)
 
-    def getevents():
-        """ Recovers the Events """
-
-        with open("./Info/Events.txt", "r") as file: data = file.readlines()
-        events = ""
-        for line in data: events += str(line)
-        events = eval(events)
-        return events
-
-    def getcogs():
-        """ Recovers all the files in FBot_Cogs """
-
+    def getcogs(self):
         cogs = []
         for cog in os.listdir("FBot_Cogs"):
             if os.path.isfile(os.path.join("FBot_Cogs", cog)):
-                cogs.append([cog])
+                cogs.append(cog)
         return cogs
 
-    def getpatchnotevers():
-        """ Recovers all the patchnote versions """
-
+    def getvers(self):
         vers = []
-        for ver in os.listdir("Info/Patch_Notes"):
-            if os.path.isfile(os.path.join("Info/Patch_Notes", ver)):
-                vers.append([ver[:-4]])
-        return vers
+        for ver in os.listdir("Info/Change_Logs"):
+            if os.path.isfile(os.path.join("Info/Change_Logs", ver)):
+                vers.append(ver[:-4])
+        return sorted(vers, reverse=True)
 
-    def getpatchnotes(ver):
-        """ Gets the Pacth Notes for a version """
+    def getcls(self, ver):
+        with open(f"./Info/Change_Logs/{ver}.txt", "r") as file:
+            data = file.readlines()
+            cl = ""
+            for line in data: cl += str(line)
+        return eval(cl)
 
-        with open(f"./Info/Patch_Notes/{ver}.txt", "r") as file: data = file.readlines()
-        lines = len(data)
-        pn = ""
-        for line in data: pn += str(line)
-        pn = eval(pn)
-        return pn, lines
-
-    def getprefix(bot, message):
-        """ Checks and gets the prefix """
-
+    def getprefix(self, bot, message):
         prefix = "fbot"
         if str(message.channel.type) != "private":
-            prefix = db.Get_Prefix(message.guild.id)
+            prefix = bot.db.Get_Prefix(message.guild.id)
         if prefix == "fbot":
             content = message.content
             if content[:5].lower() == "fbot ": prefix = content[:5]
             elif content[:6].lower() == "f bot ": prefix = content[:6]
             elif content[:23].lower() == "<@!711934102906994699> ":
                 prefix = content[:6]
+        bot.db.register(message.author.id)
         return prefix
 
-    def checkchars(prefix):
-        """ Checks the characters in a prefix """
-
+    def checkchars(self, prefix):
         bannedchars = list("{}()[]\"'`")
         for char in prefix:
             for bannedchar in bannedchars:
                 if bannedchar == char: return char
             return None
 
-    def embed(title, info):
-        """ Creates an FBot embed """
+    def embed(self, title, info):
+        return Embed(title=title, description=info, colour=self.red)
 
-        return discord.Embed(title=title, description=info, colour=0xF42F42)
+    def errorembed(self, error, info):
+        return Embed(title=f"**Error:** `{error}`",
+               description=f"```{info}```", colour=self.red)
 
-    def errorembed(error, info):
-        """ Creates an FBot error embed """
+    red = 0xF42F42
 
-        return discord.Embed(title=f"**Error:** `{error}`",
-                             description=f"```{info}```", colour=0xF42F42)
+    github = "https://github.com/judev1/FBot"
+    topgg = "https://top.gg/bot/711934102906994699"
 
-    def footer(embed, name, command):
-        """ Default FBot footer """
+    server = "https://discord.gg/BDpXRq9"
+    fbot = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
 
-        text = f"{command} requested by {name} | Version v{fn.getinfo('ver')}"
-        embed.set_footer(text=text, icon_url=fboturl)
-        return embed
+    vote = "https://top.gg/bot/711934102906994699/vote"
+    invite = "https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot"
 
-class book():
+class ftime:
 
-    # Creates pages for a book
-    def createpages(content, line, **kwargs):
+    def __init__(self):
+        self.ms, self.hs, self.ds, self.mos = self.get()
 
-        page = ""
-        lines = 0
-        elements = 0
-        
-        empty = kwargs.get("empty", "ERROR: NO CONTENTS")
-        subheader = kwargs.get("subheader", "")
-        pages = kwargs.get("pages", [])
-        elementsperpage = kwargs.get("lines", 8)
-        getlines = kwargs.get("getlines", False)
-        check_one = kwargs.get("check_one", None)
-        check_two = kwargs.get("check_two", None)
-        subcheck_one = kwargs.get("subcheck_one", None)
-        subcheck_two = kwargs.get("subcheck_two", None)
-        ctx = kwargs.get("ctx", "")
-        bot = kwargs.get("bot", "")
+        self.start = f"{self.hs}:{self.ms}, {self.ds}/{self.mos} UTC"
 
-        def check(items, bot, ctx):
-            
-            one, two = True, True
-            sub_one, sub_two = True, True
-
-            def switch(val):
-                return False if val else True
-
-            def format_check(tempcheck, items):
-                try:
-                    for i in range(4):
-                        tempcheck = tempcheck.replace(f"%{i}", str(items[i]))
-                except: pass
-                return tempcheck
-            
-            if check_one:
-                try:
-                    tempcheck = format_check(check_one[0], items)
-                    try: tempcheck = eval(tempcheck)
-                    except: pass
-                    one = True if tempcheck == check_one[1] else False
-                except: one = False
-                try:
-                    if not check_one[2]: one = switch(one)
-                except: pass
-
-            if check_two:
-                try:
-                    tempcheck = format_check(check_two[0], items)
-                    try: tempcheck = eval(tempcheck)
-                    except: pass
-                    two = True if tempcheck == check_two[1] else False
-                except: two = False
-                try:
-                    if not check_two[2]: two = switch(two)
-                except: pass
-
-            if subcheck_one:
-                try:
-                    tempcheck = format_check(subcheck_one[0], items)
-                    try: tempcheck = eval(tempcheck)
-                    except: pass
-                    sub_one = True if tempcheck == subcheck_one[1] else False
-                except: sub_one = False
-                try:
-                    if not subcheck_one[2]: sub_one = switch(sub_one)
-                except: pass
-
-            if subcheck_two:
-                try:
-                    tempcheck = format_check(subcheck_two[0], items)
-                    try: tempcheck = eval(tempcheck)
-                    except: pass
-                    sub_two = True if tempcheck == subcheck_two[1] else False
-                except: sub_two = False
-                try:
-                    if not subcheck_two[2]: sub_two = switch(sub_two)
-                except: pass
-
-            return one and two and (sub_one or sub_two)
-        
-        for item in content:
-            if check(item, bot, ctx):
-                if lines == 0 and subheader != "": page += subheader + "\n"
-                page += line + "\n"
-
-                elements += 1
-                lines += 1
-                
-                try:
-                    for i in range(4):
-                        page = page.replace(f"%{i}", str(item[i]))
-                except: pass
-                
-                if elements == elementsperpage:
-                    pages.append(page)
-                    page = ""
-                    elements = 0
-
-        if lines == 0:
-            if subheader != "": page = subheader + "\n"
-            page += empty
-            pages.append(page)
-        elif elements != 0: pages.append(page)
-
-        if getlines: return pages, lines
-        return pages
-
-    # Creates and manages a book
-    async def createbook(bot, ctx, title, pages, **kwargs):
-
-        header = kwargs.get("header", "") # String
-        results = kwargs.get("results", 0) # Int
-        
-        pagenum = 1
-
-        def get_results():
-            results_min = (pagenum - 1) * 8 + 1
-            if pagenum == len(pages): results_max = results
-            else: results_max = pagenum * 8
-            return f"Showing {results_min} - {results_max} results out of {results}"
-
-        pagemax = len(pages)
-        if results:
-            header = get_results()
-            if len(pages) == 0: pagemax = 1
-
-        embed = discord.Embed(title=title, description=f"{header}\n\n{pages[pagenum - 1]}", colour=0xF42F42)
-        embed.set_footer(text=f"Page {pagenum}/{pagemax}", icon_url=fboturl)
-        msg = await ctx.send(embed=embed)
-        
-        await msg.add_reaction("⬅️")
-        await msg.add_reaction("➡")
-        
-        def check(reaction, user):
-            return user == ctx.author and str(reaction.emoji) in ["⬅️", "➡"]
-    
-        while True:
-            try:
-                reaction, user = await bot.wait_for("reaction_add", timeout = 60, check=check)
-                await msg.remove_reaction(reaction, user)
-                
-                if str(reaction.emoji) == "⬅️":
-                    pagenum -= 1
-                    if pagenum < 1: pagenum = len(pages)
-                        
-                elif str(reaction.emoji) == "➡":
-                    pagenum += 1
-                    if pagenum > len(pages): pagenum = 1
-
-                header = get_results() if results else header
-                if str(reaction.emoji) == "⬅️" or str(reaction.emoji) == "➡":
-                    embed = discord.Embed(title=title, description=f"{header}\n\n{pages[pagenum - 1]}", colour=0xF42F42)
-                    embed.set_footer(text=f"Page {pagenum}/{len(pages)}", icon_url=fboturl)
-                    await msg.edit(embed=embed)
-            except:
-                header = get_results() if results else header
-                embed = discord.Embed(title="FBot Server Status", description=f"{header}\n\n{pages[pagenum - 1]}", colour=0xF42F42)
-                embed.set_footer(text=f"Request timed out", icon_url=fboturl)
-                try:
-                    await msg.edit(embed=embed)
-                except:
-                    # Try/except because sometimes the user deletes the message and this causes and error
-                    pass
-                break
-
-class ftime():
-
-    # Returns the min, hour, day and month from a datetime object
-    def get():
-        time = datetime.datetime.now(tz=datetime.timezone.utc)
-        m = time.strftime("%M")
-        h = time.strftime("%H")
-        d = time.strftime("%d")
-        mo = time.strftime("%m")
+    def get(self):
+        time = datetime.now(tz=timezone.utc)
+        m = int(time.strftime("%M"))
+        h = int(time.strftime("%H"))
+        d = int(time.strftime("%d"))
+        mo = int(time.strftime("%m"))
         return m, h, d, mo
 
-    # Sets the start time
-    def setstart():        
-        global m_start, h_start, d_start, mo_start
-        m_start, h_start, d_start, mo_start = ftime.get()
-        return ftime.getstart()
-
-    # Gets the start time
-    def getstart():
-        return f"{h_start}:{m_start}, {d_start}-{mo_start} UTC"
-
-    # Gets the current time
-    def now():
-        m, h, d, mo = ftime.get()
+    def now(self):
+        m, h, d, mo = self.get()
         return f"{h}:{m}, {d}-{mo} UTC"
 
-    # Gets the uptime
-    def uptime():
-        m, h, d, mo = ftime.get()
-        m_now, h_now, d_now, mo_now = int(m), int(h), int(d), int(mo)
-        m, h, d, mo = int(m_start), int(h_start), int(d_start), int(mo_start)
+    def uptime(self):
+        ms, hs, ds, mos = self.ms, self.hs, self.ds, self.mos
+        mn, hn, dn, mon = self.get()
 
-        if mo > mo_now:
-            mo_uptime = 60 - mo
-            mo_uptime += mo_now
-        else: mo_uptime = mo_now - mo
+        if mos > mon:
+            mo = 60 - mos + mon
+        else: mo = mon - mos
         
-        if d > d_now:
-            if mo == 2: d_uptime = 28 - d
-            elif mo == 4 or mo == 6 or mo == 9 or mo == 10:
-                d_uptime = 30 - d
-            else: d_uptime = 31 - d
-            d_uptime += d_now
-            mo_uptime -= 1
-        else: d_uptime = d_now - d
+        if ds > dn:
+            if mos == 2:
+                d = 28 - ds
+            elif mos in [4, 6, 9, 10]:
+                d = 30 - ds
+            else:
+                d = 31 - ds
+            d += dn
+            m -= 1
+        else: d = dn - ds
 
-        if h > h_now:
-            h_uptime = 24 - h
-            h_uptime += h_now
-            d_uptime -= 1
-        else: h_uptime = h_now - h
+        if hs > hn:
+            h = 24 - hs + hn
+            d -= 1
+        else: h = hn - hs
 
-        if m > m_now:
-            m_uptime = 60 - m
-            m_uptime += m_now
-            h_uptime -= 1
-        else: m_uptime = m_now - m
+        if ms > mn:
+            m = 60 - ms + mn
+            h -= 1
+        else: m = mn - ms
+
+        dp, hp, mp = "s", "s", "s"
+        if d in [0, 1]: dp = ""
+        if h in [0, 1]: hp = ""
+        if m in [0, 1]: mp = ""
         
-        ds = "s" if d_uptime != 1 else ""
-        hs = "s" if h_uptime != 1 else ""
-        ms = "s" if m_uptime != 1 else ""
-        
-        if d_uptime > 0:
-            uptime = f"{d_uptime} day{ds}, {h_uptime} hour{hs}"
-        elif h_uptime > 0:
-            uptime = f"{h_uptime} hour{hs}, {m_uptime} minute{ms}"
-        else: uptime = f"{m_uptime} minute{ms}"
+        if d > 0:
+            uptime = f"{d} day{dp}, {h} hour{hp}"
+        elif h > 0:
+            uptime = f"{h} hour{hp}, {m} minute{mp}"
+        else: uptime = f"{m} minute{mp}"
+
         return uptime

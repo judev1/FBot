@@ -36,24 +36,19 @@ class tr:
         
 
     # Check if a message contains a trigger and return True/False + response
-    def trigger_respond(message):
+    def trigger_respond(message, priority):
         content = message.content
         T_MESSAGE = 0
         T_TYPE = 1 # whole / start / end / anywhere / repeat / letters / replace
         T_CASE = 2 # anycase / exact
         T_RESPONSE = 3
         T_PRIORITY = 4
-
-        if str(message.channel.type) == "private":
-            priority = 3
-        else:
-            priority = db.Get_Priority(message.guild.id)#
         
-        if priority == "all" or priority == "3":
+        if priority == "all":
             priority = 3
-        elif priority == "some" or priority == "2":
+        elif priority == "some":
             priority = 2
-        elif priority == "few" or priority == "1":
+        elif priority == "few":
             priority = 1
 
         debug_mode = False

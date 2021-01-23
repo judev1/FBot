@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import fn
 
 class ping(commands.Cog):
     
@@ -8,9 +7,8 @@ class ping(commands.Cog):
         
     @commands.command(name="ping")
     async def _Ping(self, ctx):
-        name = ctx.author.display_name
-        embed = fn.embed(f"FBots Ping: `{round((self.bot.latency * 100000) / 100)}ms`", "")
-        embed = fn.footer(embed, name, "Ping")
+        ping = round((self.bot.latency * 100000) / 100)
+        embed = self.bot.fn.embed(f"FBots Ping: `{ping}ms`", "")
         await ctx.send(embed=embed)
           
 def setup(bot):

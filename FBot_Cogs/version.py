@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import fn
 
 class version(commands.Cog):
     
@@ -8,12 +7,11 @@ class version(commands.Cog):
         
     @commands.command(name="version", aliases=["ver"])
     async def _Version(self, ctx):
-        name = ctx.author.display_name
-        
-        embed = fn.embed("FBots Version", "")
-        embed.add_field(name="Version", value=fn.getinfo("ver"))
-        embed.add_field(name="Released", value=fn.getinfo("lastupdated"))
-        embed = fn.footer(embed, name, "Version")
+        fn = self.bot.fn
+        ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
+        embed = fn.embed("FBot's Version", "")
+        embed.add_field(name="Version", value=f"`{ver}`")
+        embed.add_field(name="Released", value=f"`{updated}`")
         await ctx.send(embed=embed)
 
 def setup(bot):

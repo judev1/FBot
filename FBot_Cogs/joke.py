@@ -1,15 +1,12 @@
-import discord
 from discord.ext import commands
+from random import choice
 import asyncio
-import random
 
+active_channels = set()
 with open("Info/Jokes/joke.txt", "r") as file:
     pingpong_joke = file.read().split("\n")
 with open("Info/Jokes/snakejoke.txt", "r") as file:
     snake_joke = file.read().split("\n")
-    
-
-active_channels = set()
 
 class joke(commands.Cog):
 
@@ -26,18 +23,15 @@ class joke(commands.Cog):
         await ctx.send("Ok, I've got a joke.\nDo `fbot shutup` to cancel")
         
         active_channels.add(ctx.channel.id)
-
-        if (random.choice([True, False])):
-            the_joke = snake_joke
-        else:
-            the_joke = pingpong_joke
+        the_joke = choice([snake_joke, pingpong_joke])
         
         for line in the_joke:
             async with ctx.channel.typing():
-                sleep_seconds = len(line) / 15 # Typing at 15 chars per second
-                await asyncio.sleep(sleep_seconds)
-                if (not ctx.channel.id in active_channels):
-                    return
+                for i in range(0, len(line)):
+                    sleep_seconds = 1 / 15 # Typing at 15 chars per second
+                    await asyncio.sleep(sleep_seconds)
+                    if (not ctx.channel.id in active_channels):
+                        return
                 await ctx.send(line)
 
         # Joke is finished, so we remove it from active channels
@@ -53,7 +47,6 @@ class joke(commands.Cog):
     @commands.is_owner()
     async def say_jokeinfo(self, ctx):
         await ctx.send("Active channels: " + str(active_channels))
-        
     
 def setup(bot):
     bot.add_cog(joke(bot))

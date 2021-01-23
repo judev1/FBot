@@ -1,40 +1,43 @@
 Fuck FBot\Fuck F Bot\Fuck <@!711934102906994699>,whole,anycase,"No, fuck *you*",1
 Fuck me FBot\Fuck me F Bot\Fuck me <@!711934102906994699>,start,anycase,Hard pass,1
-Fuck me,start,anycase,"Yeah, fuck {username}{after}",1
+Fuck me,start,anycase,"I'll fuck {username}{after}, if you want…",1
 Fuck you FBot\Fuck you F Bot\Fuck you <@!711934102906994699>,whole,anycase,"No, *fuck you*",1
 Fuck you\Fuck u,whole,anycase,No fuck you,1
 Fuck ,start,anycase,"Yeah, fuck {after}",1
 Fuck,whole,anycase,FUCK!,1
 I am FBot\I'm FBot\Im FBot\I am F Bot\I'm F Bot\Im F Bot\I am <@!711934102906994699>\I'm <@!711934102906994699>\Im <@!711934102906994699>,whole,anycase,"No you're not, I'm FBot",1
-I am \I'm \Im ,start,anycase,"Hi {after}, I'm Fbot",1
+I am \I'm \Im ,start,anycase,"Hi {after}, I'm FBot",1
 I have \I've \Ive ,start,anycase,Yeah {username} has {after},3
-I will \I'll \Ill ,start,anycase,Yeah {username} will {after},3
-I would \I'd \Id ,start,anycase,Yeah {username} would {after},3
-I should ,start,anycase,Yeah {username} should {after},3
-I could ,start,anycase,Yeah {username} could {after},3
-I might ,start,anycase,Yeah {username} might {after},3
-You \U ,start,anycase,Yeah you {after},3
-Ur ,start,anycase,yeah ur {after},3
-Your ,start,anycase,Yeah your {after},3
-You are \You're \Youre ,start,anycase,Yeah you're {after},3
-It is \It's \Its ,start,anycase,Yeah it's {after},3
-It will \It'll \Itll ,start,anycase,Yeah it will {after},3
-he \she ,start,anycase,"Yeah, {message}",3
-he is \he's \hes ,start,anycase,"Yeah, he is {after}",3
-she is \she's \shes ,start,anycase,"Yeah, she is {after}",3
-he will \he'll \hell ,start,anycase,"Yeah, he will {after}",3
-she will \she'll \shell ,start,anycase,"Yeah, she will {after}",3
-This ,start,anycase,Yeah this {after},3
-There ,start,anycase,Yeah there {after},3
-That ,start,anycase,Yeah that {after},3
-That is \That's \Thats ,start,anycase,Yeah that's {after},3
-There is \There's \Theres ,start,anycase,Yeah there's {after},3
-Let me \Lemme ,start,anycase,Yeah let {username} {after},3
-Let us \Let's \Lets ,start,anycase,Yeah let's {after},3
-Gimme,start,anycase,NO THEY ARE MINE,2
+I will \I'll \Ill ,start,anycase,I can do if you want,3
+I would \I'd \Id ,start,anycase,I wouldn't,3
+I should ,start,anycase,But you won't,3
+I could ,start,anycase,No you can't,3
+I might ,start,anycase,We both know you won't,3
+You \U ,start,anycase,Couldn't agree more,3
+Ur ,start,anycase,Couldn't agree more,3
+Your ,start,anycase,Couldn't agree more,3
+You are \You're \Youre ,start,anycase,Couldn't agree more,3
+It is \It's \Its ,start,anycase,"NO IT'S NOT, HOW MANY TIMES DO I HAVE TO TELL YOU!?",3
+It will \It'll \Itll ,start,anycase,No it won't,3
+he \she ,start,anycase,For real?,3
+he is \he's \hes ,start,anycase,For real?,3
+she is \she's \shes ,start,anycase,For real?,3
+he will \he'll \hell ,start,anycase,No he won't,3
+she will \she'll \shell ,start,anycase,No she won't,3
+This ,start,anycase,That's a lie,3
+There ,start,anycase,That's a lie,3
+That ,start,anycase,That's a lie,3
+This is ,start,anycase,No it isn't,3
+There is \There's \Theres ,start,anycase,No it isn't,3
+That is \That's \Thats ,start,anycase,No it isn't,3
+This was There was \That was ,start,anycase,No it wasn't,3
+Let me \Lemme ,start,anycase,I think that's a bad idea,3
+Let us \Let's \Lets ,start,anycase,I think that's a bad idea,3
+Give me\Gimme,start,anycase,NO THEY ARE MINE,2
 Who\What\Wut\Wot\When\Where\Why\How\Which,start,anycase,{answer},3
 Whos \Whats \Wuts \Wots \Whens \Wheres \Whys \Hows ,start,anycase,{answer},3
 Who's \What's \Wut's \Wot's \When's \Where's \Why's \How's ,start,anycase,{answer},3
+Can I\Will I\Should I\Could I\Would ,start,anycase,I wouldn't,3
 Can \Will \Should \Could \Would \Do \Does ,start,anycase,No,3
 YES,start,exact,NO,2
 Yes,start,anycase,No,2
@@ -44,30 +47,32 @@ NO,whole,exact,YES,2
 No,whole,anycase,Yes,2
 Maybe\Maybe so,whole,anycase,Maybe not,1
 Maybe not,whole,anycase,Maybe so,1
-Yeah,whole,anycase,Yeah! Sounds good {username},3
+Yeah,whole,anycase,Yeah {username}!,3
 Nice,whole,anycase,Not nice,2
 Not nice,whole,anycase,Nice,2
 No you\No u,whole,anycase,No you,2
 Die ,start,anycase,Yes die {after},2
-Die,whole,anycase,Die.,2
+Die,whole,anycase,**Die.**,2
 Kys,whole,anycase,"No, you kill *yourself*",2
 Kms,whole,anycase,"Yes, and do it quickly",2
 F,whole,anycase,F,2
 L,whole,anycase,Take it,3
 Wtf \Wtaf ,start,anycase,Good question,2
-Omg\Omfg\Istg\Jesus\Jesus Christ\God,whole,anycase,Blasphemy is a sin,2
-lol\lmao\lmfao,whole,anycase,"No actually, not funny",3
+Omg\Omfg\Istg\Jesus\Christ\God,anywhere,anycase,b l a s p h e m y,2
+Heck\Hell\Damn,anywhere,anycase,That is not bible,2
+lol\lmao\lmfao,whole,anycase,"{funny}",3
 Shut up\Shutup,start,anycase,"No, *you* shut up",2
 Stfu\Shut the fuck up,start,anycase,"No, *you* shut the fuck up",2
 Ikr,whole,anycase,No you don't know,2
-Smh,whole,anycase,"You're telling me, I've had to read every message",1
+Smh,whole,anycase,"You're telling me, I don't have a choice in listening",1
 Np\No problem,whole,anycase,YES PROBLEM,2
 Cool,whole,anycase,Not cool,2
 Cooo~oool,repeat,anycase,Not {message},2
 Cringe,whole,anycase,Based,2
 Based,whole,anycase,Cringe,2
-Calm,whole,anycase,Not Calm,2
-Not calm,whole,anycase,NOT CALM,2
+Bringe,whole,anycase,Cringe,2
+Calm,whole,anycase,ARGHHHH,2
+Not calm,whole,anycase,ARGHHHH,2
 Stop,whole,anycase,No. *Carry on*,1
 Oof,whole,anycase,Oof,2
 Ooo~f,repeat,anycase,{message},3
@@ -79,9 +84,9 @@ Bruh,whole,anycase,Yeah bruh?,2
 Bruh ,start,anycase,Bruh...,2
 Bruu~h,repeat,anycase,Yeah {message}?,2
 Bro,whole,anycase,Yeah bro?,2
-Bro ,start,anycase,Bro,
+Bro ,start,anycase,Bro,1
 Broo~oo,repeat,anycase,Yeah {message}?,2
-Hm,whole,anycase,Hm shut up {username},3
+Hm,whole,anycase,"Hm, shut up {username}",3
 Hmm~mm,repeat,anycase,"{message}, shut up {username}",3
 Um,letters,anycase,I'll give u a minute,2
 Ree,whole,anycase,{message},3
@@ -90,19 +95,23 @@ Ye,whole,anycase,Ye,3
 Yee~ee,repeat,anycase,{message},3
 Yeet,whole,anycase,Yeet,3
 Yeee~t,repeat,anycase,{message},3
-He ,letters,anycase,"{message}, you sound pathetic",3
-Ha ,letters,anycase,"{message}, you sound pathetic",3
+He,letters,anycase,"{message}, now shush",3
+Ha,letters,anycase,"{message}, now shush",3
 Ke,letters,anycase,You should probally stop that anime weeb,2
 Dumbass,whole,anycase,Yeah dumbass,1
 Dang it,whole,anycase,Hot diggity darn,1
 Hot diggity darn,whole,anycase,"That's pretty gay, just saying",1
 Pog\Poggers,whole,anycase,Get away from me anime weeb,1
 Danganronpa,whole,anycase,"No, you spelt that wrong",1
-Suck ,start,anycase,"Yeah, suck {after}",1
+Suck ,start,anycase,"I'll suck {after}, if you want…",1
 Shit\Crap\Poop\Poo\Poopy\Stinky\Penis\Cock\Dick,whole,anycase,"Hehehe, {message} funny",1
 TRUE,start,anycase,FALSE,1
 FALSE,start,anycase,TRUE,1
-Thanks\Thank you\ty,whole,anycase,Actually no thank you,2
+Thanks FBot\Thanks F Bot\Thanks <@711934102906994699>,whole,anycase,No problem {username},1
+Thank you FBot\Thank you F Bot\Thank you <@711934102906994699>,start,anycase,No problem {username},1
+Ty FBot\Ty F Bot\Ty <@711934102906994699>,start,anycase,No problem {username},1
+Tysm FBot\Tysm F Bot\Tysm <@711934102906994699>,start,anycase,No problem {username},1
+Thanks\Thank you\Ty,whole,anycase,Actually no thank you,2
 Thanks \Thank you \Ty ,start,anycase,"No, just no, they didn't do anything",2
 Tysm,start,anycase,That's a stupid thing to be *so* thankful for,2
 Hello\Hi\Hey\Hola,whole,anycase,{answer},1
@@ -119,8 +128,8 @@ Adios FBot\Adios F Bot\Adios <@!711934102906994699>,start,anycase,Adios amigo,1
 Farewell FBot\Farewell F Bot\Farewell <@!711934102906994699>,start,anycase,Farewell dearest {username},1
 Ttyl FBot\Ttyl F Bot\Ttyl <@!711934102906994699>,start,anycase,Wasn't talking to you {username},1
 Goodbye \Bye \Cya \Adios \Farewel \Ttyl ,start,anycase,WHY DON'T I GET A GOODBYE?!,1
-Welcome ,start,anycase,Welcome {after},1
-Welcome,whole,anycase,WELCOME!,1
+Welcome ,start,anycase,Welcome {after},2
+Welcome,whole,anycase,WELCOME!,2
 Country roads,whole,anycase,Take me home,1
 To the place,whole,anycase,I BELONG,1
 West Virginia,whole,anycase,Mountain mama,1
@@ -134,8 +143,8 @@ F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, F *you*",1
 F ,start,anycase,"Yeah, F {after}",1
 F me,whole,anycase,"Yeah, F {username}",1
 F u\U,whole,anycase,"Yeah, F you",1
-:)\:D\(:\C:\c:,anywhere,exact,"Wish I could be happy, but I'm just a bot",2
-:(\D:\):,anywhere,exact,Be happy.,2
+:)\:D\(:\C:\c:,anywhere,exact,"Their guard is down, now strike",2
+:(\D:\):,anywhere,exact,"Ignore me, I'm definitely not enjoying your suffering",2
 <3\:3,anywhere,exact,Cute...,2
-:O\:0\:o,anywhere,exact,What the... bad time?,2
-:|\:/,anywhere,exact,Seriously?,2
+:O\:0\:o\o:\0:\O:,anywhere,exact,What the... bad time?,2
+:|\:/\"\:"\|:,anywhere,exact,Seriously?,2

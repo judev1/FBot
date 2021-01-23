@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import fn
 
 class notices(commands.Cog):
     
@@ -8,10 +7,8 @@ class notices(commands.Cog):
         
     @commands.command(name="notices", aliases=["notice"])
     async def _Notices(self, ctx):
-        name = ctx.author.display_name
-        notices = fn.getnotices()
-        embed = fn.embed("FBot Notices", notices)
-        embed= fn.footer(embed, name, "Notices")
+        notices = self.bot.fn.getnotices()
+        embed = self.bot.fn.embed("FBot Notices", notices)
         await ctx.send(embed=embed)
 
 def setup(bot):

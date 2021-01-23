@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from functions import fn
 
 class events(commands.Cog):
     
@@ -9,9 +7,7 @@ class events(commands.Cog):
         
     @commands.command(name="events", aliases=["event"])
     async def _Events(self, ctx):
-        name = ctx.message.author.display_name
-        embed = fn.embed("FBot Events", fn.getevents())
-        embed = fn.footer(embed, name, "Events")
+        embed = self.bot.fn.embed("FBot Events", self.bot.fn.getevents())
         await ctx.send(embed=embed)
 
 def setup(bot):

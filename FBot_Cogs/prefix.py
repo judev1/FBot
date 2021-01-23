@@ -1,6 +1,4 @@
 from discord.ext import commands
-from database import db
-from functions import fn
 
 class prefix(commands.Cog):
     
@@ -11,19 +9,22 @@ class prefix(commands.Cog):
     @commands.guild_only()
     async def _ChangePrefix(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
+            fn, db = self.bot.fn, self.bot.db
             if arg == "reset":
                 db.Change_Prefix(ctx.guild.id, "fbot")
                 await ctx.message.add_reaction("✅")
             else:
                 name = ctx.author.display_name
                 if len(arg) > 10:
-                    embed = fn.errorembed("Prefix too long", f"Prefixes cannot be longer than '10' characters, yours is {len(arg)}")
+                    embed = fn.errorembed("Prefix too long",
+                            f"Prefixes cannot be longer than 10 characters")
                     await ctx.send(embed=embed)
                     return
 
                 char = fn.checkchars(arg)
                 if char:
-                    embed = dn.errormbed("Invalid Character", f"The character ' {char} ' is not allowed")
+                    embed = fn.errorembed("Invalid Character",
+                            f"The character ' {char} ' is not allowed")
                     await ctx.send(embed=embed)
                 else:
                     db.Change_Prefix(ctx.guild.id, arg)

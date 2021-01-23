@@ -1,6 +1,3 @@
-f"""**We are currently holding an event!**
-*Use `FBot events` or [visit FBot's Server for more info](https://discord.gg/BDpXRq9)*
+f"""**Releasing FBot's own currency soon!**
 
-**Slide into FBot's DMs with** `FBot dms`
-
-**FBot v{fn.getinfo('ver')} has been released as of {fn.getinfo('lastupdated')}**"""
+**Slide into FBot's DMs with** `FBot dms`"""

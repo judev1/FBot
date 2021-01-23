@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import fn, serverurl
 
 class errorhandler(commands.Cog):
 
@@ -18,6 +17,7 @@ class errorhandler(commands.Cog):
                 return
 
         error = getattr(error, "original", error)
+        fn = self.bot.fn
 
         if isinstance(error, commands.CommandNotFound): return
 
@@ -41,7 +41,7 @@ class errorhandler(commands.Cog):
                 embed = fn.embed("An unusual error has occurred",
                         "The devs have been notified, please contact:\n"
                         "`@justjude#2296` or `@LinesGuy#9260`\n"
-                        f"OR join our [support server]({serverurl}) "
+                        f"OR join our [support server]({fn.server}) "
                         "and give us a ping")
                 try:
                     await ctx.channel.send(embed=embed)

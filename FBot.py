@@ -1,33 +1,31 @@
+from discord.ext import commands
 import discord
 import sys
 import os
 
-try:
-    sys.path.insert(0, "FBot_Libs")
-    from database import db
-    from discord.ext import commands
-    from functions import fn
-    from functions import ftime
-    from triggers import tr
-except Exception as e:
-    input(f" > Unable to install some of the dependencies:\n\n{e}\n")
-    sys.exit()
-
-token = fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
-
-sessionstart = ftime.setstart()
-print(f" > Session started at {sessionstart}")
-
-tr.trigger_load()
-db.Setup()
+sys.path.insert(0, "FBot_Libs")
+from functions import fn, ftime
+from database import db
+from triggers import tr
 
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
 
-owners = [671791003065384987, 216260005827969024, 634454757645221908, 311178459919417344]
+fn = fn()
+
+owners = [671791003065384987, 216260005827969024, 634454757645221908]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
+
+bot.fn = fn
+bot.db = db()
+tr.trigger_load()
+bot.ftime = ftime()
+
+token = bot.fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
+
+print(f" > Session started at {bot.ftime.start}")
 
 @bot.event
 async def on_connect():
@@ -36,17 +34,16 @@ async def on_connect():
 @bot.event
 async def on_ready():
     print(f" > Finished signing into Discord as {bot.user}\n")
-    db.Check_Guilds(bot.guilds)
+    bot.db.Check_Guilds(bot.guilds)
 
     bot.remove_command("help")
-    for cog in fn.getcogs():
-        cog = cog[0]
-        if cog not in ["economy.py"]: # Cogs not to load
+    for cog in bot.fn.getcogs():
+        if cog not in ["bigpp.py", "bonk.py", "economy.py", "errorhandler.py"]: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])
             finally: print("Done")
-    print(" > Finished loading cogs\n")
+    print("\n > Finished loading cogs\n")
         
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="'FBot help'"))

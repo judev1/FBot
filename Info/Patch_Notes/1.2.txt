@@ -1,9 +1,0 @@
-"""What's new in v1.2?
-'Control Update'
-- Added a 'Call on FBot' feature
-- Added new trigger words: I would, U, Ur, No you, Cool, Lol, Lmao, Lmfao, F and Ree
-- Fixed up the layout
-- Fixed up some typos
-Main: 418 lines (+050)
-Func: 229 lines (+104)
-Totl: 647 lines (+154)"""

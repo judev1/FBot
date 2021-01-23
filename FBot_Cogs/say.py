@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from functions import fn
 
 class say(commands.Cog):
     
@@ -8,16 +6,16 @@ class say(commands.Cog):
         self.bot = bot
         
     @commands.command(name="say")
-    async def do_repeat(self, ctx, *, inp: str):
+    async def _Say(self, ctx, *, inp: str):
         await ctx.message.delete()
-        await ctx.send(inp)
+        await ctx.send(inp + "ㅤ")
 
-    @do_repeat.error
-    async def do_repeat_handler(self, ctx, error):
+    @_Say.error
+    async def _SayHandler(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             if error.param.name == "inp":
-                embed = fn.errorembed("No Message",
-                                      "Usage: 'FBot say <message>'")
+                embed = self.bot.fn.errorembed("No Message",
+                        "Command usage: 'FBot say <message>'")
             await ctx.send(embed=embed)
 
 def setup(bot):

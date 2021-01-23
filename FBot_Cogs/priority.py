@@ -1,6 +1,4 @@
 from discord.ext import commands
-from database import db
-from functions import fn
 
 class priority(commands.Cog):
     
@@ -10,8 +8,8 @@ class priority(commands.Cog):
     @commands.command(name="respond")
     @commands.guild_only()
     async def _Priority(self, ctx, *, arg):
-        name = ctx.author.display_name
         if ctx.author.guild_permissions.administrator:
+            db = self.bot.db
             if arg == "few":
                 db.Change_Priority(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
@@ -22,7 +20,8 @@ class priority(commands.Cog):
                 db.Change_Priority(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
-                embed = fn.errorembed("Invalid Argument", "Respond only takes `few`, `some` and `all`")
+                embed = self.bot.fn.errorembed("Invalid Argument",
+                        "Respond only takes `few`, `some` and `all`")
                 await ctx.send(embed=embed)
         else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 

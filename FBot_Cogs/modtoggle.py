@@ -1,6 +1,4 @@
 from discord.ext import commands
-from database import db
-from functions import fn
 
 class modtoggle(commands.Cog):
     
@@ -10,7 +8,7 @@ class modtoggle(commands.Cog):
     @commands.command(name="modtoggle")
     @commands.guild_only()
     async def _Modtoggle(self, ctx, arg):
-        name = ctx.author.display_name
+        db = self.bot.db
         
         if ctx.author.guild_permissions.administrator:
             if arg == "on":
@@ -20,9 +18,11 @@ class modtoggle(commands.Cog):
                 db.Change_Modtoggle(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
-                embed = fn.errorembed("Invalid Argument", f"Modtoggle only accepts `'on'` and `'off'`")
+                embed = fn.errorembed("Invalid Argument",
+                        f"Modtoggle only accepts `'on'` and `'off'`")
                 await ctx.send(embed=embed)
-        else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+        else:
+            await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 
 def setup(bot):
     bot.add_cog(modtoggle(bot))

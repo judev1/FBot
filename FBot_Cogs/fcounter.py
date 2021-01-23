@@ -1,11 +1,11 @@
-from database import db
 from discord.ext import commands
-from functions import fn
+from discord import AllowedMentions
 
 class fcounter(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        fn, db = bot.fn, bot.db
 
         @self.bot.event
         async def counter(message):
@@ -49,9 +49,9 @@ class fcounter(commands.Cog):
         # Alert if last number was deleted
         message = payload.cached_message
         if message.content.isnumeric():
-            last_number = db.getnumber(message.guild.id)
+            last_number = self.bot.db.getnumber(message.guild.id)
             if message.content.startswith(str(last_number)):
-                await message.channel.send(f"**The number `{last_number}` in this channel was deleted **\nThe next number is `{last_number+1}`")
+                await message.channel.send(f"**The last number in this channel was deleted **\nThe next number is `{last_number+1}`")
 
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
@@ -59,32 +59,35 @@ class fcounter(commands.Cog):
         # Alert if last number was edited
         message = payload.cached_message
         if message.content.isnumeric():
-            last_number = db.getnumber(message.guild.id)
+            last_number = self.bot.db.getnumber(message.guild.id)
             if message.content.startswith(str(last_number)):
-                await message.channel.send(f"**The last number `{last_number}` in this channel was edited**\nThe next number is `{last_number+1}`")
+                await message.channel.send(f"**The last number in this channel was edited**\nThe next number is `{last_number+1}`")
 
     @commands.command("setcounter", aliases=["counter", "counting"])
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
-            db.setcountingchannel(ctx.channel.id, ctx.guild.id)
+            self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
             await ctx.send("Set the current channel to counting channel")
         else: await ctx.send("Only administrators can set the counting channel")
 
     @commands.command("devcounter")
     @commands.is_owner()
     async def dev_set_counter_channel(self, ctx):
-        db.setcountingchannel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
     @commands.command("number",  aliases=["last"])
     async def get_guild_number(self, ctx):
         name = ctx.author.display_name
-        last_number = db.getnumber(ctx.guild.id)
-        try: last_sender = self.bot.get_user(db.getuser(ctx.guild.id)).name
+        last_number = self.bot.db.getnumber(ctx.guild.id)
+        try:
+            user_id = self.bot.db.getuser(ctx.guild.id)
+            #last_sender = ctx.guild.get_member(user_id).display_name
+            last_sender = self.bot.get_user(user_id).name
         except: last_sender = "Nobody"
-        embed = fn.embed("FBot counter", f"The current number is `{last_number}`, the next is `{last_number + 1}`"
-                           f"\nLast sender is `{last_sender}`")
-        embed = fn.footer(embed, name, "Number")
+        embed = self.bot.fn.embed("FBot counter",
+                f"The current number is `{last_number}`, the next is `{last_number + 1}`"
+                f"\nLast sender is `{last_sender}`")
         await ctx.send(embed=embed)
 
     @commands.command("highscores", aliases=["highscore", "hs"])
@@ -94,7 +97,7 @@ class fcounter(commands.Cog):
             guild_rank = 0
             highscores = f"Highscore for this guild is `{db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
-            for guild_id, record in db.gethighscores():
+            for guild_id, record in self.bot.db.gethighscores():
                 print(guild_id, record)
                 try:
                     guild_name = self.bot.get_guild(guild_id).name
@@ -102,8 +105,8 @@ class fcounter(commands.Cog):
                     guild_name = "(Deleted guild)"
                 highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
                 guild_rank += 1
-            embed = fn.embed("FBot counting leaderboard", highscores)
-            embed = fn.footer(embed, name, "Highscores")
+            embed = self.bot.fn.embed("FBot counting leaderboard", highscores)
+            embed = self.bot.fn.footer(embed, name, "Highscores")
         await ctx.send(embed=embed)
 
     @commands.command("devsetnumber")
@@ -111,7 +114,7 @@ class fcounter(commands.Cog):
     async def _setnumber(self, ctx, *, number):
         if not number.isdigit(): await ctx.send("Not a number")
         else:
-            db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
+            self.bot.db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
             await ctx.message.add_reaction("✅")
 
 
