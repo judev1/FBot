@@ -74,9 +74,9 @@ class bonk(commands.Cog):
 
         with pil_image.open("to_bonk") as img:
             resized_img = img.resize((511, 511))
-            resized_img.save("resized_to_bonk", "JPEG")
+            resized_img.save("./info/resized_to_bonk", "JPEG")
         
-        with wand_image(filename="resized_to_bonk") as img:
+        with wand_image(filename="./info/resized_to_bonk") as img:
             if len(img.sequence) > 1:
                 await ctx.send(".gif files are currently not supported! Please annoy FBot devs to implement this.")
                 return
@@ -91,6 +91,7 @@ class bonk(commands.Cog):
         msg = await ctx.send("bonk: ", file=file)
         os.remove("bonked.jpg")
         os.remove("to_bonk")
+        os.remove("./Info/resized_to_bonk")
         execution_time = time.time() - start_time
         if debug: print(f"Bonk done in {execution_time} seconds")
         # await msg.edit(content=f"bonk: `[took {execution_time} seconds]`")
