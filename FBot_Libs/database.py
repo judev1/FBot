@@ -141,31 +141,31 @@ class db:
     # Status
 
     def Change_Modtoggle(self, guild_id, modtoggle):
-        t = (Val(modtoggle), guild_id)
+        t = (modtoggle, guild_id)
         self.c.execute("UPDATE guilds SET modtoggle=? WHERE guild_id=?", t)
         self.conn.commit()
 
     def Get_Modtoggle(self, guild_id):
         t = (guild_id,)
         self.c.execute("SELECT modtoggle FROM guilds WHERE guild_id=?", t)
-        return Val(self.c.fetchone()[0])
+        return self.c.fetchone()[0]
 
     def Change_Status(self, channel_id, status):
-        t = (Val(status), channel_id)
+        t = (status, channel_id)
         self.c.execute("UPDATE channels SET status=? WHERE channel_id=?", t)
         self.conn.commit()
 
     def Get_Status(self, channel_id):
         t = (channel_id,)
         self.c.execute("SELECT status FROM channels WHERE channel_id=?", t)
-        return Val(self.c.fetchone()[0])
+        return self.c.fetchone()[0]
 
     def Get_All_Status(self, guild_id):
         t = (guild_id,)
         self.c.execute("SELECT channel_id, status FROM channels WHERE guild_id=?", t)
         newdata = []
         for channel in self.c.fetchall():
-            newdata.append((channel[0], Val(channel[1])))
+            newdata.append((channel[0], channel[1]))
         return newdata
 
 
