@@ -24,8 +24,6 @@ tr.trigger_load()
 bot.ftime = ftime()
 
 token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
-bot.db.transfer()
-exit(1)
 
 print(f" > Session started at {bot.ftime.start}")
 
@@ -36,18 +34,18 @@ async def on_connect():
 @bot.event
 async def on_ready():
     print(f" > Finished signing into Discord as {bot.user}\n")
-    #bot.db.Check_Guilds(bot.guilds)
+    bot.db.Check_Guilds(bot.guilds)
 
     bot.remove_command("help")
-    #for cog in bot.fn.getcogs():
-    #    if cog not in ["economy.py"]: # Cogs not to load
-    #        print(f"Loading {cog}...", end="")
-    #        try: bot.reload_extension("FBot_Cogs." + cog[:-3])
-    #        except: bot.load_extension("FBot_Cogs." + cog[:-3])
-    #        finally: print("Done")
-    #print("\n > Finished loading cogs\n")
-        
-    #await bot.change_presence(status=discord.Status.online,
-    #                          activity=discord.Game(name="'FBot help'"))
+    for cog in bot.fn.getcogs():
+        if cog not in ["economy.py"]: # Cogs not to load
+            print(f"Loading {cog}...", end="")
+            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
+            except: bot.load_extension("FBot_Cogs." + cog[:-3])
+            finally: print("Done")
+    print("\n > Finished loading cogs\n")
+       
+    await bot.change_presence(status=discord.Status.online,
+                              activity=discord.Game(name="'FBot help'"))
 
 bot.run(token)
