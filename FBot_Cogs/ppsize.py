@@ -15,37 +15,39 @@ class ppsize(commands.Cog):
 
     @commands.command(name="ppsize")
     async def ppsize(self, ctx, user_mention=None):
-        while True:
-            async with ctx.channel.typing():
-                
-                if (user_mention is None):
-                    member = ctx.author
-                    member_mention = member.mention
-                elif (is_mention.match(user_mention)):
-                    converter = MemberConverter()
-                    member = await converter.convert(ctx, user_mention)
-                    member_mention = member.mention
-                else:
-                    message = ppsize_help
-                    break
+        async with ctx.channel.typing():
+            if (user_mention is None):
+                # No user mention defaults to sender
+                member = ctx.author
+            elif (is_mention.match(user_mention)):
+                converter = MemberConverter()
+                member = await converter.convert(ctx, user_mention)
+            else:
+                # `user_mention` is not member, send command help
+                member = None
+                message = ppsize_help
+
+            if (member is not None):
+                ppsize = None
                 
                 try:
-                    ppsize = self.bot.db.getppsize(member.id)
+                    ppsize = self.bot.db_getppsize(member.id)
                 except:
+                    # Member is not in db (or is a bot)
                     if member.bot:
-                        message = "Bot don't have pps, you know that"
-                        break
+                        message = "Bots don't have pps, you know that?"
                     else:
+                        # Register user and give them a ppsize
                         self.bot.db.register(member.id)
-                        ppsize = self.bot.db.getppsize(member.id)
-
-                if ppsize == -1:
-                    ppsize = random.randint(0, 16)
-                    self.bot.db.updateppsize(member.id, ppsize)
-                pp = "8" + "=" * ppsize + "D"
-                message = f"{member_mention}'s ppsize: `{pp}`"
-                break
+                        ppsize = random.randint(0, 16)
+                        self.bot.db.updateppsize(member.id, ppsize)
+                        
+                if (ppsize is not None):
+                    pp = "8" + "=" * ppsize + "D"
+                    message = f"{member.mention}'s ppsize: `{pp}`"
         await ctx.send(message, allowed_mentions=AllowedMentions.all())
+
+             
 
     @commands.command(name="devsetppsize")
     @commands.is_owner()
