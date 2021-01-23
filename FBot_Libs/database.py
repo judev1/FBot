@@ -1,11 +1,5 @@
 import sqlite3
 
-def Val(value):
-    if value == 0: return "off"
-    elif value == 1: return "on"
-    elif value == "off": return 0
-    elif value == "on": return 1
-
 class db:
 
     def __init__(self):
@@ -16,7 +10,7 @@ class db:
         
         self.c.execute("""CREATE TABLE IF NOT EXISTS guilds (
                           guild_id integer NOT NULL,
-                          modtoggle integer NOT NULL,
+                          modtoggle string NOT NULL,
                           prefix string NOT NULL,
                           priority string NOT NULL,
                           multiplier integer NOT NULL
@@ -25,7 +19,7 @@ class db:
         self.c.execute("""CREATE TABLE IF NOT EXISTS channels (
                           guild_id integer NOT NULL,
                           channel_id integer NOT NULL,
-                          status integer NOT NULL
+                          status string NOT NULL
                           )""")
 
         self.c.execute("""CREATE TABLE IF NOT EXISTS users (
@@ -54,6 +48,32 @@ class db:
         
         self.conn.commit()
         print(" > Connected to FBot.db")
+
+    def transfer(self):
+        conn = sqlite3.connect(f"./Info/OldFBot.db")
+        c = conn.cursor()
+
+        c.execute(f"SELECT * FROM guilds")
+        for t in c.fetchall():
+            t = list(t)
+            if t[3] == "3": t[3] = "all"
+            if t[2] == 0: t[2] = "off"
+            else: t[2] = "on"
+            self.c.execute("INSERT INTO guilds VALUES(?, ?, ?, ?, 1000000)", t)
+            self.conn.commit()
+
+        c.execute(f"SELECT * FROM counter")
+        for t in c.fetchall():
+            self.c.execute("INSERT INTO counter VALUES(?, ?, ?, ?, ?)", t)
+            self.conn.commit()
+
+        c.execute(f"SELECT * FROM channels")
+        for t in c.fetchall():
+            t = list(t)
+            if t[2] == 0: t[2] = "off"
+            else: t[2] = "on"
+            self.c.execute("INSERT INTO channels VALUES(?, ?, ?)", t)
+            self.conn.commit()
 
     def Check_Guilds(self, guilds):
 
