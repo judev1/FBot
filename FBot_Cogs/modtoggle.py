@@ -11,15 +11,12 @@ class modtoggle(commands.Cog):
         db = self.bot.db
         
         if ctx.author.guild_permissions.administrator:
-            if arg == "on":
-                db.Change_Modtoggle(ctx.guild.id, arg)
-                await ctx.message.add_reaction("✅")
-            elif arg == "off":
+            if arg in {"on", "off"}:
                 db.Change_Modtoggle(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
-                embed = fn.errorembed("Invalid Argument",
-                        f"Modtoggle only accepts `'on'` and `'off'`")
+                embed = self.bot.fn.errorembed("Invalid Argument",
+                        f"Modtoggle only accepts 'on' and 'off'")
                 await ctx.send(embed=embed)
         else:
             await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
