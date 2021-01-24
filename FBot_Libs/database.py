@@ -49,32 +49,6 @@ class db:
         self.conn.commit()
         print(" > Connected to FBot.db")
 
-    def transfer(self):
-        conn = sqlite3.connect(f"./Info/OldFBot.db")
-        c = conn.cursor()
-
-        c.execute(f"SELECT * FROM guilds")
-        for t in c.fetchall():
-            t = list(t)
-            if t[3] == "3": t[3] = "all"
-            if t[2] == 0: t[2] = "off"
-            else: t[2] = "on"
-            self.c.execute("INSERT INTO guilds VALUES(?, ?, ?, ?, 1000000)", t)
-            self.conn.commit()
-
-        c.execute(f"SELECT * FROM counter")
-        for t in c.fetchall():
-            self.c.execute("INSERT INTO counter VALUES(?, ?, ?, ?, ?)", t)
-            self.conn.commit()
-
-        c.execute(f"SELECT * FROM channels")
-        for t in c.fetchall():
-            t = list(t)
-            if t[2] == 0: t[2] = "off"
-            else: t[2] = "on"
-            self.c.execute("INSERT INTO channels VALUES(?, ?, ?)", t)
-            self.conn.commit()
-
     def Check_Guilds(self, guilds):
 
         conn, c = self.conn, self.c
@@ -274,9 +248,4 @@ class db:
             t = (number, guild_id,)
             self.c.execute("UPDATE counter SET record=? WHERE guild_id=?", t)
             self.conn.commit()
-
-    def setcountingchannel(self, channel_id, guild_id):
-        t = (channel_id, guild_id)
-        self.c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
-        self.conn.commit()
         

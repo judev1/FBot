@@ -1,12 +1,8 @@
 from discord.ext import commands
-<<<<<<< Updated upstream
 from discord.ext.commands import MemberConverter
 import sqlite3
 import random
-from functions import fn
-=======
 import discord
->>>>>>> Stashed changes
 
 f = "~~f~~ "
 jobs = {# TIER ONE
@@ -85,13 +81,6 @@ degrees = {# TIER ONE
            "clicky-clacky keyboard pressing": (200, multi, "FBot Dev")
            }
 
-def dbcheck(user_id):
-    c = conn.cursor()
-    c.execute("SELECT 1 FROM users WHERE user_id=?",(user_id,))
-    if not c.fetchone():
-        c.execute("INSERT INTO users(user_id, balance, networth, netdebts) VALUES(?, 0, 0, 0)", (user_id,))
-        conn.commit()
-
 class economy(commands.Cog):
 
     def __init__(self, bot):
@@ -119,7 +108,6 @@ class economy(commands.Cog):
                 db.increaseusermultiplier(message.author.id, 1)
 
     @commands.command(name="balance", aliases=["bal"])
-<<<<<<< Updated upstream
     async def get_balance(self, ctx, mention: discord.Member=None):
         # Get a users balance
         # fbot bal, or fbot bal @mention
@@ -148,7 +136,7 @@ class economy(commands.Cog):
             WHERE user_id=?""", t)
         conn.commit()
         await ctx.message.add_reaction("✅")
-=======
+
     async def _Profile(self, ctx, mention: discord.Member=None):
         if mention is None:
             user_id = ctx.author.id
@@ -179,7 +167,6 @@ class economy(commands.Cog):
         # GET BALANCE
         # GET DEBT
         await ctx.send(f"Balance: {f}{balance}")
->>>>>>> Stashed changes
 
     @commands.command(name="baltop")
     async def _BalTop(self, ctx):
@@ -220,11 +207,8 @@ class economy(commands.Cog):
         # Get 500 to 1000 credits then lose 80% to 90% of it due to income tax
         # (cooldown 2 hours)
         # `fbot work`
-<<<<<<< Updated upstream
         dbcheck(user_id)
         income = random.randint(500, 1000)
-=======
->>>>>>> Stashed changes
         taxed_income = int(income * random.uniform(0.1, 0.2)) # lose 80% to 90%
         # UPDATE BALANCE
         t = (ctx.author.id,)

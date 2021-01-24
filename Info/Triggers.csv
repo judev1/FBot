@@ -53,13 +53,12 @@ Not nice,whole,anycase,Nice,2
 No you\No u,whole,anycase,No you,2
 Die ,start,anycase,Yes die {after},2
 Die,whole,anycase,**Die.**,2
-Kys,whole,anycase,"No, you kill *yourself*",2
-Kms,whole,anycase,"Yes, and do it quickly",2
+Kill yourself\Kill urself\Kys,whole,anycase,"No, you kill *yourself*",2
+Kill me\Km\Kms,whole,anycase,"Yes, and do it quickly",2
 F,whole,anycase,F,2
 L,whole,anycase,Take it,3
 Wtf \Wtaf ,start,anycase,Good question,2
-Omg\Omfg\Istg\Jesus\Christ\God,anywhere,anycase,b l a s p h e m y,2
-Heck\Hell\Damn,anywhere,anycase,That is not bible,2
+Omg\Omfg\Istg\Jesus\Christ\God\Heck\Hell\Damn,whole,anycase,That is not bible,2
 lol\lmao\lmfao,whole,anycase,"{funny}",3
 Shut up\Shutup,start,anycase,"No, *you* shut up",2
 Stfu\Shut the fuck up,start,anycase,"No, *you* shut the fuck up",2
@@ -140,7 +139,7 @@ FBot \F Bot \<@!711934102906994699> ,start,anycase,"No, {username} {after}",1
 FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
 FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
 F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, F *you*",1
-F ,start,anycase,"Yeah, F {after}",1
+F ,start,anycase,"Press F to pay respects",1
 F me,whole,anycase,"Yeah, F {username}",1
 F u\U,whole,anycase,"Yeah, F you",1
 :)\:D\(:\C:\c:,anywhere,exact,"Their guard is down, now strike",2

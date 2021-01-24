@@ -15,11 +15,11 @@ class dblcog(commands.Cog):
     async def _DBL(self, ctx):
         try:
             await self.dblpy.post_guild_count()
-            embed = fn.embed("DBL",
+            embed = self.bot.fn.embed("DBL",
                     f"Updated server count: `{self.dblpy.guild_count()}`")
             await ctx.send(embed=embed)
         except Exception as e:
-            embed = fn.errorembed("Failed To Update Server Count",
+            embed = self.bot.fn.errorembed("Failed To Update Server Count",
                     f"{type(e).__name__}: {e}")
             await ctx.send(embed=embed)
 

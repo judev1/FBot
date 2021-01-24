@@ -14,7 +14,7 @@ intents.presences = False
 
 fn = fn()
 
-owners = [671791003065384987, 216260005827969024, 634454757645221908]
+owners = [671791003065384987, 216260005827969024, 311178459919417344]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
 

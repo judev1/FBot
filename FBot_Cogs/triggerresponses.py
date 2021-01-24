@@ -65,8 +65,8 @@ class triggerresponses(commands.Cog):
 
         if str(message.channel.type) != "private":
             db.Add_Channel(message.channel.id, message.guild.id)
-            priority = "all"
-        else: priority = db.Get_Priority(message.guild.id)
+            priority = db.Get_Priority(message.guild.id)
+        else: priority = "all"
         if str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
 
             if message.attachments:

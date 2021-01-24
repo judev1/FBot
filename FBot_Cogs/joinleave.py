@@ -37,8 +37,7 @@ class joinleave(commands.Cog):
         #    if not member.bot:memcount += 1
         #    else: botcount += 1
         
-        channel = self.bot.get_channel(serverlogs)
-        embed = fn.embed(f"**Removed** from `{oldguild}`", oldguild.id)
+        embed = self.bot.fn.embed(f"**Removed** from `{oldguild}`", oldguild.id)
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         #embed.add_field(name="Bot count", value=f"`{botcount}`")
