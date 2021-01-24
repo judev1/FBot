@@ -41,7 +41,7 @@ class links(commands.Cog):
         #embed = fn.embed("Minecraft server down", "Currently our minecraft server is down,\n"
         #    "if you would like to see it come back contact a dev")
         embed = fn.embed(title="Join FBOT's Modded Minecraft Server!",
-                description="Come to [our server]({fn.server}) to find out more")
+                info=f"Come to our server ({fn.server}) to find out more")
         await ctx.send(embed=embed)
 
     @commands.command(name="links")
