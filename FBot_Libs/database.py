@@ -106,7 +106,7 @@ class db:
     def Add_Channel(self, channel_id, guild_id):
         t = (guild_id, channel_id)
         try:
-            self.c.execute("SELECT * FROM channels where channel_id=?", [t[1]])
+            self.c.execute("SELECT COUNT(1) FROM channels where channel_id=?", [t[1]])
             self.c.fetchone()[1]
         except:
             self.c.execute("INSERT INTO channels VALUES (?, ?, 0)", t)
