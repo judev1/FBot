@@ -50,6 +50,16 @@ class fbotdev(commands.Cog):
         db.Change_Status(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
+    @commands.command(name="devrespond")
+    @commands.is_owner()
+    @commands.guild_only()
+    async def _Dev_Priority(self, ctx, *, arg):
+        if arg in {"few", "some", "all"}:
+            self.bot.db.Change_Priority(ctx.guild.id, arg)
+            await ctx.message.add_reaction("✅")
+        else:
+            await ctx.send("`Must be 'few', 'some', or 'all'`")
+
     @commands.command(name="devmodtoggle")
     @commands.is_owner()
     @commands.guild_only()
