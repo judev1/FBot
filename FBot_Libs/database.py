@@ -92,7 +92,7 @@ class db:
 
     def Add_Guild(self, guild_id):
         t = (guild_id,)
-        self.c.execute("INSERT INTO guilds VALUES(?, 0, 'fbot', 'all', 1000000);", t)
+        self.c.execute("INSERT INTO guilds VALUES(?, 'off', 'fbot', 'all', 1000000);", t)
         self.c.execute("INSERT INTO counter VALUES(?, 0, 0, 0, 0)", t)
         self.conn.commit()
 
@@ -109,7 +109,7 @@ class db:
             self.c.execute("SELECT * FROM channels where channel_id=?", [t[1]])
             self.c.fetchone()[1]
         except:
-            self.c.execute("INSERT INTO channels VALUES (?, ?, 0)", t)
+            self.c.execute("INSERT INTO channels VALUES (?, ?, 'off')", t)
             self.conn.commit()
 
     # Status
