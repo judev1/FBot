@@ -65,7 +65,7 @@ class fcounter(commands.Cog):
             if message.content.startswith(str(last_number)):
                 await message.channel.send(f"**The last number in this channel was edited**\nThe next number is `{last_number+1}`")
 
-    @commands.command("setcounter", aliases=["counter", "counting"])
+    @commands.command("setcounter", aliases=["setcounting", "counter", "counting"])
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
             self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
