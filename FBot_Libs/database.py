@@ -249,3 +249,7 @@ class db:
             self.c.execute("UPDATE counter SET record=? WHERE guild_id=?", t)
             self.conn.commit()
         
+    def setcountingchannel(self, channel_id, guild_id):	
+        t = (channel_id, guild_id)	
+        self.c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)	
+        self.conn.commit()
