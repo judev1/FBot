@@ -97,7 +97,7 @@ class fcounter(commands.Cog):
         name = ctx.author.display_name
         async with ctx.channel.typing():
             guild_rank = 0
-            highscores = f"Highscore for this guild is `{db.gethighscore(ctx.guild.id)}`\n\n"
+            highscores = f"Highscore for this guild is `{self.bot.db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
             for guild_id, record in self.bot.db.gethighscores():
                 print(guild_id, record)
@@ -108,7 +108,6 @@ class fcounter(commands.Cog):
                 highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
                 guild_rank += 1
             embed = self.bot.fn.embed("FBot counting leaderboard", highscores)
-            embed = self.bot.fn.footer(embed, name, "Highscores")
         await ctx.send(embed=embed)
 
     @commands.command("devsetnumber")
