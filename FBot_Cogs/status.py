@@ -11,7 +11,7 @@ class status(commands.Cog):
         db = self.bot.db
         if str(ctx.channel.type) != "private":
             db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        if len(args) == 2:
+        if len(args) in [1, 2]:
             if args[0] == "server":
                 if str(ctx.channel.type) == "private": return
                 try:

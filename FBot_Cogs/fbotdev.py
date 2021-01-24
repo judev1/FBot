@@ -71,13 +71,15 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="send")
     @commands.is_owner()
-    async def _Send(self, ctx, channel_id: int, *, message):
-        fn = self.bot.fn
-        channel = self.bot.get_channel(channel_id)
-        if channel == None: 
-            embed = self.bot.fn.errorembed(f"failed to send", "channel not found")
-            await ctx.send(embed=embed)
-        else: await channel.send(message)
+    async def _Send(self, ctx, channel: discord.TextChannel, *, message):
+        await channel.send(message)
+        await ctx.message.add_reaction("✅")
+
+    @commands.command(name="userdm")
+    @commands.is_owner()
+    async def _UserDM(self, ctx, user: discord.User, *, message):
+        dm = await user.create_dm()
+        await dm.send(message)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="newinvite")
