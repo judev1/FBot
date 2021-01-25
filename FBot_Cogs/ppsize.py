@@ -31,7 +31,10 @@ class ppsize(commands.Cog):
                 ppsize = None
                 
                 try:
-                    ppsize = self.bot.db_getppsize(member.id)
+                    ppsize = self.bot.db.getppsize(member.id)
+                    if ppsize < 0:
+                        ppsize = random.randint(0, 16)
+                        self.bot.db.updateppsize(member.id, ppsize)
                 except:
                     # Member is not in db (or is a bot)
                     if member.bot:
