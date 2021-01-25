@@ -59,7 +59,8 @@ class fn:
             elif content[:6].lower() == "f bot ": prefix = content[:6]
             elif content[:23].lower() == "<@!711934102906994699> ":
                 prefix = content[:6]
-        bot.db.register(message.author.id)
+        if not message.author.bot:
+            bot.db.register(message.author.id)
         return prefix
 
     def checkchars(self, prefix):
