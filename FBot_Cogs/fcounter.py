@@ -100,7 +100,6 @@ class fcounter(commands.Cog):
             highscores = f"Highscore for this guild is `{self.bot.db.gethighscore(ctx.guild.id)}`\n\n"
             ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
             for guild_id, record in self.bot.db.gethighscores():
-                print(guild_id, record)
                 try:
                     guild_name = self.bot.get_guild(guild_id).name
                 except:
