@@ -19,8 +19,9 @@ class snipe(commands.Cog):
     @commands.command(name="snipe")
     async def do_snipe(self, ctx):
         try:
+            member = snipes[ctx.channel.id].author
             embed = self.bot.fn.embed("FBot Snipe",
-                    f"```Sender: {snipes[ctx.channel.id].author.mention}\n"
+                    f"```Sender: {member.display_name} ({member})\n"
                     f"Message: {snipes[ctx.channel.id].content}```")
             await ctx.send(embed=embed)
         except KeyError:
