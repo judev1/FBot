@@ -8,12 +8,14 @@ class dailystats(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.stats_channel = self.bot.get_channel(803050054095994900)
+        self.stats_channel = self.bot.get_channel(803050054095994900) # fbot 1
+        #self.stats_channel = self.bot.get_channel(727320090483359844) # fbot 3
         self.time_start = datetime.now().timestamp()
         self.commands_processed = 0
         self.triggers_processed = 0
         self.other_messages_processed = 0
-        self.printer.start()
+        self.auto_stats.start()
+        self.is_first_message = True
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -41,7 +43,7 @@ class dailystats(commands.Cog):
             self.other_messages_processed += 1
 
     def cog_unload(self):
-        self.printer.cancel()
+        self.auto_stats.cancel()
 
     def get_stats_embed(self):
         fn = self.bot.fn
@@ -56,8 +58,11 @@ Total count: `{total}`"""
         return embed
     
 
-    @tasks.loop(seconds=28800.0) # 28800 seconds = 8 hours
-    async def printer(self): 
+    @tasks.loop(hours = 8.0) # 28800 seconds = 8 hours
+    async def auto_stats(self):
+        if self.is_first_message:
+            self.is_first_message = False
+            return
         embed = self.get_stats_embed()
         await self.stats_channel.send(embed=embed)
         self.commands_processed = 0
@@ -66,9 +71,9 @@ Total count: `{total}`"""
         self.time_start = datetime.now().timestamp()
 
     @commands.command(name="stats", aliases=["dailystats"])
-    async def _ManualStats(self, ctx):
+    async def manual_stats(self, ctx):        
         embed = self.get_stats_embed()
-        await self.stats_channel.send(embed=embed)
+        await ctx.send(embed=embed)
         
         
 

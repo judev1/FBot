@@ -23,7 +23,7 @@ bot.db = db()
 tr.trigger_load()
 bot.ftime = ftime()
 
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
+token = bot.fn.gettoken(3) # 1 for FBot, 2 for Jude, 3 for Chris
 
 print(f" > Session started at {bot.ftime.start}")
 
@@ -38,7 +38,7 @@ async def on_ready():
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
-        if cog not in ["economy.py"]: # Cogs not to load
+        if cog not in ["economy.py", "dblcog.py"]: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])
