@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 
 class db:
@@ -154,9 +155,132 @@ class db:
             self.c.execute(f"INSERT INTO users VALUES({marks})", t)
             self.conn.commit()
 
-    def increaseusermultiplier(self, user_id):
+    def increasemultiplier(self, user_id, guild_id, number):
+        t = (number, user_id)
+        self.c.execute("UPDATE users SET multiplier=multiplier+? WHERE user_id=?;", t)
+        t = (number, guild_id)
+        self.c.execute("UPDATE guilds SET multiplier=multiplier+? WHERE guild_id=?", t)
+        self.conn.commit()
+
+    def getprofile(self, user_id):
         t = (user_id,)
-        self.c.execute("UPDATE users SET multplier+=1 WHERE user_id=?", t)
+        self.c.execute("SELECT fbux, netfbux, debt, netdebt, job, degree, degreeprogress FROM users WHERE user_id=?", t)
+        return self.c.fetchone()
+
+    def getbal(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT fbux FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def getmultis(self, user_id, guild_id):
+        t = (user_id,)
+        self.c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
+        usermulti = round(self.c.fetchone()[0]/(10**4), 2)
+        t = (guild_id,)
+        self.c.execute("SELECT multiplier FROM guilds WHERE guild_id=?", t)
+        guildmulti = round(self.c.fetchone()[0]/(10**6), 2)
+        return (usermulti, guildmulti)
+
+    def getusermulti(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def getjobs(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT jobs FROM users WHERE user_id=?", t)
+        return eval(self.c.fetchone()[0])
+
+    def getjob(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT job FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def changejob(self, user_id, job):
+        t = (user_id,)
+        self.c.execute("SELECT degree FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def getdegree(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT degree FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def changedegree(self, user_id, degree):
+        t = (degree, user_id)
+        self.c.execute("UPDATE users SET degree=? WHERE user_id=?", t)
+        self.conn.commit()
+
+    def work(self, user_id, job, income):
+        balance = self.updatebal(user_id, income)
+        t = (user_id,)
+        self.c.execute("SELECT jobs FROM users WHERE user_id=?", t)
+        jobs = eval(self.c.fetchone()[0])
+        if job != "Unemployed": jobs[job] += 1
+        t = (str(jobs), user_id)
+        self.c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
+        self.conn.commit()
+        self.worked(user_id)
+        return balance
+
+    def study(self, user_id):
+        t = (user_id,)
+        self.c.execute("UPDATE users SET degreeprogress=degreeprogress+1 WHERE user_id=?", t)
+        self.conn.commit()
+        t = (user_id,)
+        self.c.execute("SELECT degreeprogress FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def canwork(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0] <= datetime.now().timestamp() / 60
+
+    def canstudy(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0] <= datetime.now().timestamp() / 60
+
+    def lastwork(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
+        return round(self.c.fetchone()[0] - datetime.now().timestamp() / 60)
+
+    def laststudy(self, user_id):
+        t = (user_id,)
+        self.c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
+        return round(self.c.fetchone()[0] - datetime.now().timestamp() / 60)
+
+    def worked(self, user_id):
+        t = (datetime.now().timestamp() / 60 + 60, user_id)
+        self.c.execute("UPDATE users SET lastwork=? WHERE user_id=?", t)
+        self.conn.commit()
+
+    def studied(self, user_id):
+        t = (datetime.now().timestamp() / 60 + 60, user_id)
+        self.c.execute("UPDATE users SET laststudy=? WHERE user_id=?", t)
+        self.conn.commit()
+
+    def updatebal(self, user_id, income):
+        t = (income, income, user_id)
+        self.c.execute("UPDATE users SET fbux=fbux+?, netfbux=netfbux+? WHERE user_id=?", t)
+        self.conn.commit()
+        t = (user_id,)
+        self.c.execute("SELECT fbux FROM users WHERE user_id=?", t)
+        return self.c.fetchone()[0]
+
+    def finishdegree(self, user_id):
+        t = (user_id,)
+        self.c.execute("UPDATE users SET degree='None', degreeprogress=0 WHERE user_id=?", t)
+        self.conn.commit()
+
+    def startjob(self, user_id, job):
+        t = (user_id,)
+        self.c.execute("SELECT jobs FROM users WHERE user_id=?", t)
+        jobs = eval(self.c.fetchone()[0])
+        jobs[job] = 100
+        t = (str(jobs), user_id)
+        self.c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
         self.conn.commit()
         
 

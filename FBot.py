@@ -8,6 +8,12 @@ from functions import fn, ftime
 from database import db
 from triggers import tr
 
+# TODO
+# REPLACE DEFAULT VALUE FOR JOBS FROM 'None' TO 'Unemployed'
+# MULTIPLIER FOR DMs
+# LEADERBOARDS
+# REMOVE CASE SENSITIVITY
+
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
