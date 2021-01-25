@@ -309,21 +309,37 @@ class economy(commands.Cog):
                 f"**{job}** Multiplier: `x{jobmulti}`")
         await ctx.send(embed=embed)
 
-    """
+    
     @commands.command(name="baltop")
     async def _BalTop(self, ctx):
+        c = self.bot.db.conn.cursor()
+        msg = ""
         async with ctx.channel.typing():
-            #c.execute("SELECT user_id, balance FROM users
-            #    ORDER BY balance DESC LIMIT 5")
+            c.execute("SELECT user_id, fbux FROM users ORDER BY fbux DESC LIMIT 5")
+            for rank, row in enumerate(c):
+                user_id, balance = row
+                user_name = str(self.bot.get_user(user_id))
+                msg += f"\n{rank+1}. {user_name}: {f}{balance}"
+        await ctx.send(msg)
+    
+    @commands.command(name="debttop")
+    async def _DebtTop(self, ctx):
+        c = self.bot.db.conn.cursor()
+        msg = ""
+        async with ctx.channel.typing():
+            c.execute("SELECT user_id, debt FROM users ORDER BY debt DESC LIMIT 5")
             for rank, row in enumerate(c):
                 user_id, balance = row
                 user_name = str(self.bot.get_user(user_id))
                 msg += f"\n{rank+1}. {user_name}: {f}{balance}"
         await ctx.send(msg)
 
-    @commands.command(name="debttop")
+    @commands.command(name="netdebttop")
     async def _DebtTop(self, ctx):
+        c = self.bot.db.conn.cursor()
+        msg = ""
         async with ctx.channel.typing():
+            c.execute("SELECT user_id, netdebt FROM users ORDER BY netdebt DESC LIMIT 5")
             for rank, row in enumerate(c):
                 user_id, balance = row
                 user_name = str(self.bot.get_user(user_id))
@@ -332,13 +348,16 @@ class economy(commands.Cog):
 
     @commands.command(name="nettop")
     async def _NetTop(self, ctx):
+        c = self.bot.db.conn.cursor()
+        msg = ""
         async with ctx.channel.typing():
+            c.execute("SELECT user_id, netfbux FROM users ORDER BY netfbux DESC LIMIT 5")
             for rank, row in enumerate(c):
                 user_id, balance = row
                 user_name = str(self.bot.get_user(user_id))
                 msg += f"\n{rank+1}. {user_name}: {f}{balance}"
         await ctx.send(msg)
-    """
+    
     
 def setup(bot):
     bot.add_cog(economy(bot))
