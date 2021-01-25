@@ -37,17 +37,17 @@ class fbotdev(commands.Cog):
     @commands.command(name="devon")
     @commands.is_owner()
     @commands.guild_only()
-    async def _FBotStatus(self, ctx):
-        db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        db.Change_Status(ctx.channel.id, "on")
+    async def _FBotDevOn(self, ctx):
+        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.Change_Status(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devoff")
     @commands.is_owner()
     @commands.guild_only()
-    async def _FBotStatus(self, ctx):
-        db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        db.Change_Status(ctx.channel.id, "off")
+    async def _FBotDevOff(self, ctx):
+        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.Change_Status(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devrespond")
