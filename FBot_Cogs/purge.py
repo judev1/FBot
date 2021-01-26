@@ -15,6 +15,9 @@ class purge(commands.Cog):
             limit = "".join(args)
             if limit.isdigit():
                 limit = int(limit)
+                if limit > 1000:
+                    await ctx.send("`The purge limit is currently 1000 messages`")
+                    return
                 await ctx.channel.purge(limit=limit + 1)
                 msg = await ctx.send(f"`Purged {limit} messages.`")
                 await asyncio.sleep(1)
