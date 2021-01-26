@@ -37,12 +37,18 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `study`: *Work towards completing your degree*
 
 `jobs`: *Lists all jobs*
-`apply <job>`: *Apply for a job*
 `degrees`: *Lists all degrees*
+
+`apply <job>`: *Apply for a job*
 `take <degree>`: *Apply for a degree*
 
+`resign`: *Resign from your current job*
+`drop`: *Drop your current degree*
+
 `bal`/`balance` (`@member`): *Shows the balance of a member*
-`multis`/`multipliers` (`@member`): *Shows the multipliers for a member*""",
+`multis`/`multipliers` (`@member`): *Shows the multipliers for a member*
+
+`top` `bal`/`netbal`/`debt`/`netdebt`: Shows the top users in an area""",
 
 """**Fun Commands**
 

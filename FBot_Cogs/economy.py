@@ -1,10 +1,9 @@
-from discord.ext.commands import MemberConverter
 from discord.ext import commands
 from triggers import tr
-import dbfn
+import discord
 import sqlite3
 import random
-import discord
+import dbfn
 
 f = "~~f~~ "
 # TIER ONE
@@ -78,9 +77,9 @@ class economy(commands.Cog):
 
         @self.bot.event
         async def _Multiply(message):
-            # TODO: Check if FBot can talk in channel
-            # TODO: Check if user is a bot
             user = message.author
+            if user.bot: return
+            if not commands.bot_has_permissions(send_messages=True): return
             if str(message.channel.type) == "private": guild_id = 0
             else: guild_id = message.guild.id
             commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
@@ -108,10 +107,8 @@ class economy(commands.Cog):
         if not user: user = ctx.author
         db = self.bot.db
         profile = list(db.getprofile(user.id))
-        if profile[4] == "None": # WHEN NONE IS NO MORE DELETE
-            job = f"Unemployed: {f}1000"
-        else:
-            job = f"{job}: {f}{jobs[job][0]}"
+        job = profile[4]
+        job = f"{job}: {f}{jobnames[job][0]}"
         if profile[5] == "None":
             degree = "No degree"
         else: degree = f"{profile[5]} - {profile[6]}/{degreenames[profile[5]][0]}"
@@ -133,22 +130,15 @@ class economy(commands.Cog):
         book = dbfn.reactionbook(self.bot, ctx)
         for tier in jobs.copy():
             for job in tier:
-                
-                # WHEN NONE IS NO MORE DELETE
-                if job == "Unemployed": job = "None"
-                
+                out = ["**"]
                 if db.getjob(ctx.author.id) in [job]:
                     quals = ["📝"]
                 elif job in db.getjobs(ctx.author.id):
                     quals = ["🔓"]
                 else:
-                    quals = ["🔒"]
-
-                # WHEN NONE IS NO MORE DELETE
-                if job == "None": job = "Unemployed"
-
-                tier[job] += quals
-            book.createpages(tier, LINE=f"%2 **%l** - {f}%0\n*%1*\n",
+                    quals,  out = ["🔒"], ["~~"]
+                tier[job] += quals + out
+            book.createpages(tier, LINE=f"%2 %3%l%3 - {f}%0\n*%1*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {i}**\n")
             i += 1
         await book.createbook(COLOUR=self.bot.fn.red)
@@ -161,16 +151,17 @@ class economy(commands.Cog):
         book = dbfn.reactionbook(self.bot, ctx)
         for tier in degrees.copy():
             for degree in tier:
+                out = ["**"]
                 if degree == db.getdegree(ctx.author.id):
                     reqs = ["📝"] 
                 elif tier[degree][2] in db.getjobs(ctx.author.id):
                     reqs = ["✅"]
-                elif round(db.getusermulti(ctx.author.id) / 10**4, 2) >= tier[degree][1]:
+                elif db.getusermulti(ctx.author.id) >= tier[degree][1]:
                     reqs = ["🔓"]
                 else:
-                    reqs = ["🔒"]
-                tier[degree] += reqs
-            book.createpages(tier, LINE=f"%3 **%l**\n"
+                    reqs, out = ["🔒"], ["~~"]
+                tier[degree] += reqs + out
+            book.createpages(tier, LINE=f"%3 %4%l%4\n"
                              "Course length: `%0`, Requires `x%1` multiplier\n",
                              SUBHEADER=f"**FBot Degrees - Tier {i}**\n")
             i += 1
@@ -178,14 +169,18 @@ class economy(commands.Cog):
 
     @commands.command(name="apply")
     async def _Apply(self, ctx, *, job):
+        for jobname in jobnames:
+            if job.lower() == jobname.lower():
+                job = jobname
+                break
         if job in jobnames:
             db = self.bot.db
             user = ctx.author
             if job in db.getjobs(user.id):
-                if db.getjob(user.id) == "None": # UNEMPLOYED
+                if db.getjob(user.id) == "Unemployed":
                     db.changejob(user.id, job)
                     db.worked(user.id)
-                    embed = self.bot.fn.embed("You have been given the job: `{job}`",
+                    embed = self.bot.fn.embed(f"You have been given the job: `{job}`",
                                "Please wait an hour before you start working")
                     embed.set_author(name="Application accepted!")
                     await ctx.send(embed=embed)
@@ -197,10 +192,14 @@ class economy(commands.Cog):
 
     @commands.command(name="take")
     async def _Take(self, ctx, *, degree):
+        for degreename in degreenames:
+            if degree.lower() == degreename.lower():
+                degree = degreename
+                break
         if degree in degreenames:
             db = self.bot.db
             user = ctx.author
-            if round(db.getusermulti(user.id) / 10**4, 2) >= degreenames[degree][1]:
+            if db.getusermulti(user.id) >= degreenames[degree][1]:
                 if degreenames[degree][2] not in db.getjobs(user.id):
                     if db.getdegree(user.id) == "None":
                         db.changedegree(user.id, degree)
@@ -215,6 +214,31 @@ class economy(commands.Cog):
             else: message = "You do not meet the requirements to take this degree"
         else: message = "This degree does not exist, how odd"
         await ctx.send(message)
+
+    @commands.command(name="resign")
+    async def _Resign(self, ctx):
+        db = self.bot.db
+        job = db.getjob(ctx.author.id)
+        if job != "Unemployed":
+            db.resign(ctx.author.id)
+            an = "an" if job[0].lower() in "aeiou" else "a"
+            if job.startswith("FB"): an = "an"
+            message = f"You have resigned as {an} **{job}**\nYou may re-apply at anytime"
+        else:
+            message = "You have can't resign, you're unemployed!"
+        await ctx.send(message)
+
+    @commands.command(name="drop")
+    async def _Drop(self, ctx):
+        db = self.bot.db
+        degree = db.getdegree(ctx.author.id)
+        if degree != "None":
+            db.drop(ctx.author.id)
+            message = f"You have dropped **{degree}**\nYou may take it again at anytime"
+        else:
+            message = "You have can't resign, you're unemployed!"
+        await ctx.send(message)
+        
     
     @commands.command(name="work")
     @commands.cooldown(1, 3600, type=commands.BucketType.user)
@@ -222,19 +246,23 @@ class economy(commands.Cog):
         db = self.bot.db
         user = ctx.author
         if db.canwork(user.id):
-            # guild value for private channels
             job = db.getjob(user.id)
-            multis = db.getmultis(user.id, ctx.guild.id)
-            
-            # WHEN NONE IS NO MORE DELETE
-            if job == "None": job = "Unemployed"
-            
-            salary = round(jobnames[job][0] * multis[0] * multis[1])
             tax = random.uniform(0.1, 0.5) * 100
+
+            if job == "Unemployed": jobmulti = 1.0
+            else: jobmulti = db.getjobs[job] / 100
+
+            salary = jobnames[job][0]
+            if str(ctx.channel.type) == "private":
+                salary *= db.getusermulti(user.id)
+            else:
+                multis = db.getmultis(user.id, ctx.guild.id)
+                salary *= multis[0] * multis[1]
+
             income = round(salary * (tax / 100))
             balance = db.work(user.id, job, income)
             embed = self.bot.fn.embed("FBot work",
-                    f"You work and earn: **{f}{salary}**\n"
+                    f"You work and earn: **{f}{round(salary)}**\n"
                     f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
                     f"Your new balance is: **{f}{balance}**")
             await ctx.send(embed=embed)
@@ -254,7 +282,6 @@ class economy(commands.Cog):
         db = self.bot.db
         user = ctx.author
         if db.canstudy(user.id):
-            # guild value for private channels
             degree = db.getdegree(user.id)
             if degree == "None":
                 await ctx.send("You're not taking a degree right now")
@@ -267,17 +294,16 @@ class economy(commands.Cog):
                 embed = self.bot.fn.embed("Degree completed!",
                         f"You may now apply for the **{degreenames[degree][2]} job**")
             else:
-                self.bot.db.studied(user.id)
+                db.studied(user.id)
                 embed = self.bot.fn.embed(f"You studied for **{degree}**",
                         f"Degree course progress: `{progress}/{length}`")
             await ctx.send(embed=embed)
         else:
-            wait = self.bot.db.laststudy(user.id)
+            wait = db.laststudy(user.id)
             await ctx.send(f"You must wait another {wait} mins to study again")
 
     @_Study.error
     async def on_command_error(self, ctx, error):
-        print(error)
         if type(error) is commands.CommandOnCooldown:
             wait = self.bot.db.laststudy(ctx.author.id)
             await ctx.send(f"You must wait another {wait} mins to study again")
@@ -296,68 +322,39 @@ class economy(commands.Cog):
         if not user: user = ctx.author
         db = self.bot.db
         job = db.getjob(user.id)
-        # CHANGE TO UNEMPLOYED
-        if job == "None":
+        if job == "Unemployed":
             jobmulti = 1.0
-            job = "Unemployed"
-        else: jobmulti = db.getjobs[job] / 100
-        # REMOVE SERVER MULTIPLIER IN DMS
-        multis = self.bot.db.getmultis(user.id, ctx.guild.id)
+        else: jobmulti = db.getjobs(user.id)[job] / 100
+        if str(ctx.channel.type) == "private":
+            multi = db.getmultis(user.id, ctx.guild.id)
+            message = f"Personal Multiplier: `x{multi}`"
+        else:
+            multis = db.getmultis(user.id, ctx.guild.id)
+            message = (f"Personal Multiplier: `x{multis[0]}`\n"
+                       f"Server Multiplier: `x{multis[1]}`")
         embed = self.bot.fn.embed(f"{user.display_name}'s multipliers:",
-                f"Personal Multiplier: `x{multis[0]}`\n"
-                f"Server Multiplier: `x{multis[1]}`\n"
-                f"**{job}** Multiplier: `x{jobmulti}`")
+                message + f"\n{job} Multiplier: `x{jobmulti}`")
         await ctx.send(embed=embed)
-
     
-    @commands.command(name="baltop")
-    async def _BalTop(self, ctx):
-        c = self.bot.db.conn.cursor()
-        msg = ""
-        async with ctx.channel.typing():
-            c.execute("SELECT user_id, fbux FROM users ORDER BY fbux DESC LIMIT 5")
-            for rank, row in enumerate(c):
-                user_id, balance = row
-                user_name = str(self.bot.get_user(user_id))
-                msg += f"\n{rank+1}. {user_name}: {f}{balance}"
-        await ctx.send(msg)
-    
-    @commands.command(name="debttop")
-    async def _DebtTop(self, ctx):
-        c = self.bot.db.conn.cursor()
-        msg = ""
-        async with ctx.channel.typing():
-            c.execute("SELECT user_id, debt FROM users ORDER BY debt DESC LIMIT 5")
-            for rank, row in enumerate(c):
-                user_id, balance = row
-                user_name = str(self.bot.get_user(user_id))
-                msg += f"\n{rank+1}. {user_name}: {f}{balance}"
-        await ctx.send(msg)
+    @commands.command(name="top")
+    @commands.cooldown(1, 10, type=commands.BucketType.user)
+    async def _Top(self, ctx, toptype):
+        if toptype in ["bal", "netbal", "debt", "netdebt"]:
+            message = ""
+            async with ctx.channel.typing():
+                results = self.bot.db.gettop(toptype)
+                for rank, row in results:
+                    user_id, typeitem = row
+                    try: user_name = self.bot.get_user(user_id).display_name
+                    except: user_name = "User"
+                    message += f"{rank+1}. {user_name}: {f}{typeitem}\n"
+            embed = self.bot.fn.embed(f"FBot Top {toptype}", message)
+            await ctx.send(embed=embed)
+        else: await ctx.send("We don't have a leaderboard for that...")
 
-    @commands.command(name="netdebttop")
-    async def _DebtTop(self, ctx):
-        c = self.bot.db.conn.cursor()
-        msg = ""
-        async with ctx.channel.typing():
-            c.execute("SELECT user_id, netdebt FROM users ORDER BY netdebt DESC LIMIT 5")
-            for rank, row in enumerate(c):
-                user_id, balance = row
-                user_name = str(self.bot.get_user(user_id))
-                msg += f"\n{rank+1}. {user_name}: {f}{balance}"
-        await ctx.send(msg)
-
-    @commands.command(name="nettop")
-    async def _NetTop(self, ctx):
-        c = self.bot.db.conn.cursor()
-        msg = ""
-        async with ctx.channel.typing():
-            c.execute("SELECT user_id, netfbux FROM users ORDER BY netfbux DESC LIMIT 5")
-            for rank, row in enumerate(c):
-                user_id, balance = row
-                user_name = str(self.bot.get_user(user_id))
-                msg += f"\n{rank+1}. {user_name}: {f}{balance}"
-        await ctx.send(msg)
-    
+    @commands.command(name="store", aliases=["shop"])
+    async def _Store(self, ctx):
+        await ctx.send("This feauture is still in development")
     
 def setup(bot):
     bot.add_cog(economy(bot))

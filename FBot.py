@@ -13,6 +13,7 @@ from triggers import tr
 # MULTIPLIER FOR DMs
 # LEADERBOARDS
 # REMOVE CASE SENSITIVITY
+# STORE
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -29,7 +30,11 @@ bot.db = db()
 tr.trigger_load()
 bot.ftime = ftime()
 
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
+c = bot.db.conn.cursor()
+c.execute("UPDATE users SET job='Unemployed' WHERE job='None'")
+bot.db.conn.commit()
+
+token = bot.fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
 
 print(f" > Session started at {bot.ftime.start}")
 
@@ -44,7 +49,7 @@ async def on_ready():
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
-        if cog not in ["economy.py"]: # Cogs not to load
+        if cog not in ["dailystats.py", "bonk.py", "bigpp.py"]: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])

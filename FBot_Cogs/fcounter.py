@@ -93,6 +93,7 @@ class fcounter(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command("highscores", aliases=["highscore", "hs"])
+    @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def _leaderboard(self, ctx):
         name = ctx.author.display_name
         async with ctx.channel.typing():

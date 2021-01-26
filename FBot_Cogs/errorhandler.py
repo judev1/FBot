@@ -16,26 +16,32 @@ class errorhandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        error = getattr(error, "original", error)
         fn = self.bot.fn
-
-        if isinstance(error, commands.CommandNotFound): return
-
-        elif isinstance(error, commands.DisabledCommand):
+        if type(error) is commands.CommandNotFound:
+            return
+        elif type(error) is commands.DisabledCommand:
             embed = fn.errorembed("Command Not Found",
                     f"{ctx.command} has been disabled")
-        elif isinstance(error, commands.MissingPermissions):
+        elif type(error) is commands.MissingPermissions:
             embed = fn.errorembed("Missing Permissions",
                     "The bot is missing permissions to execute the command")
-        elif isinstance(error, commands.NotOwner):
+        elif type(error) is commands.NotOwner:
             embed = fn.errorembed("Missing Permissions",
                     f"You do not own this bot")
-        elif isinstance(error, commands.BadArgument):
+        elif type(error) is commands.BadArgument:
             embed = fn.errorembed("Invalid Argument",
                     f"The argument you used was not recognised")
-        elif isinstance(error, commands.MissingRequiredArgument):
+        elif type(error) is commands.MissingRequiredArgument:
             embed = fn.errorembed("Missing Argument",
                     f"This command is missing an argument")
+        elif type(error) is commands.CommandOnCooldown:
+            if error.retry_after < 10:
+                retry = str(error.cooldown) + "` seconds"
+            if error.retry_after < 120:
+                retry = str(round(error.retry_after)) + "` seconds"
+            else: retry = str(round(error.retry_after / 60)) + "` mins"
+            embed = fn.embed("You are being ratelimited",
+                    f"You may use this command again in `{retry}")
         else:
             try:
                 embed = fn.embed("An unusual error has occurred",
@@ -46,9 +52,12 @@ class errorhandler(commands.Cog):
                 try:
                     await ctx.channel.send(embed=embed)
                 except:
-                    channel = await ctx.author.create_dm()
-                    await channel.send(embed=embed)
-                    
+                    try:
+                        channel = await ctx.author.create_dm()
+                        await channel.send(embed=embed)
+                    except: pass
+
+                error = getattr(error, "original", error)
                 embed = fn.embed(f"Error On Message `{ctx.message.content}`",
                         f"```Ignoring exception in command: {ctx.command}```"
                         f"```{error}``````{ctx.message}```")

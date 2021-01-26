@@ -186,20 +186,17 @@ class db:
         return c.fetchone()[0]
 
     def getmultis(self, user_id, guild_id):
+        usermulti = self.getusermulti(user_id)
         c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
-        usermulti = round(c.fetchone()[0]/(10**4), 2)
         t = (guild_id,)
         c.execute("SELECT multiplier FROM guilds WHERE guild_id=?", t)
-        guildmulti = round(c.fetchone()[0]/(10**6), 2)
-        return (usermulti, guildmulti)
+        return (usermulti, round(c.fetchone()[0]/(10**6), 2))
 
     def getusermulti(self, user_id):
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
+        return round(c.fetchone()[0]/(10**4), 2)
 
     def getjobs(self, user_id):
         c = conn.cursor()
@@ -215,9 +212,9 @@ class db:
 
     def changejob(self, user_id, job):
         c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT degree FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
+        t = (job, user_id)
+        c.execute("UPDATE users SET job=? WHERE user_id=?", t)
+        conn.commit()
 
     def getdegree(self, user_id):
         c = conn.cursor()
@@ -289,6 +286,18 @@ class db:
         c.execute("UPDATE users SET laststudy=? WHERE user_id=?", t)
         conn.commit()
 
+    def resign(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("UPDATE users SET job='Unemployed' WHERE user_id=?", t)
+        conn.commit()
+
+    def drop(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("UPDATE users SET degree='None', degreeprogress=0 WHERE user_id=?", t)
+        conn.commit()
+
     def updatebal(self, user_id, income):
         c = conn.cursor()
         t = (income, income, user_id)
@@ -313,6 +322,13 @@ class db:
         t = (str(jobs), user_id)
         c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
         conn.commit()
+
+    def gettop(self, tt):
+        if tt == "bal": tt = "fbux"
+        elif tt == "netbal": tt = "netfbux"
+        c = conn.cursor()
+        c.execute(f"SELECT user_id, {tt} FROM users ORDER BY {tt} DESC LIMIT 15")
+        return enumerate(c)
         
 
     # Prefix

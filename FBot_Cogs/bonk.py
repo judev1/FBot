@@ -26,6 +26,7 @@ class bonk(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def bonk(self, ctx, to_bonk=None):
         #await ctx.send("Ooopsie! The `bonk` command is temporarily disabled")
         #return

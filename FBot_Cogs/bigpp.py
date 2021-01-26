@@ -26,6 +26,7 @@ class bigpp(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def bigpp(self, ctx, to_bigpp=None):
         #await ctx.send("Ooopsie! The `bigpp` command is temporarily disabled")
         #return
