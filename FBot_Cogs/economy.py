@@ -266,6 +266,7 @@ class economy(commands.Cog):
                     f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
                     f"Your new balance is: **{f}{balance}**")
             await ctx.send(embed=embed)
+            # Chance of debt collectors
         else:
             wait = db.lastwork(user.id)
             await ctx.send(f"You must wait another {wait} mins to work again")
@@ -288,6 +289,7 @@ class economy(commands.Cog):
                 return
             progress = db.study(user.id)
             length = degreenames[degree][0]
+            # Gain debt
             if progress == length:
                 db.finishdegree(user.id)
                 db.startjob(user.id, degreenames[degree][2])
@@ -298,6 +300,7 @@ class economy(commands.Cog):
                 embed = self.bot.fn.embed(f"You studied for **{degree}**",
                         f"Degree course progress: `{progress}/{length}`")
             await ctx.send(embed=embed)
+            # Chance of debt collectors
         else:
             wait = db.laststudy(user.id)
             await ctx.send(f"You must wait another {wait} mins to study again")
@@ -313,9 +316,7 @@ class economy(commands.Cog):
         if not user: user = ctx.author
         db = self.bot.db
         balance = db.getbal(user.id)
-        embed = self.bot.fn.embed(f"{user.display_name}'s balance: "
-                                  f"{f}{balance}", "")
-        await ctx.send(embed=embed)
+        await ctx.send(f"{user.display_name}'s balance: **{f}{balance}**")
 
     @commands.command(name="multis", aliases=["multipliers"])
     async def _Multipliers(self, ctx, user: discord.User=None):
@@ -326,7 +327,7 @@ class economy(commands.Cog):
             jobmulti = 1.0
         else: jobmulti = db.getjobs(user.id)[job] / 100
         if str(ctx.channel.type) == "private":
-            multi = db.getmultis(user.id, ctx.guild.id)
+            multi = db.getusermulti(user.id)
             message = f"Personal Multiplier: `x{multi}`"
         else:
             multis = db.getmultis(user.id, ctx.guild.id)
