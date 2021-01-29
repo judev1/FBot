@@ -44,3 +44,6 @@ class fball(commands.Cog):
 
 def setup(bot):
     bot.add_cog(fball(bot))
+
+def teardown(bot):
+    self.bot.remove_listener(fball, "on_message")
