@@ -44,6 +44,9 @@ class triggerresponses(commands.Cog):
             for alias in command.aliases:
                 if commandcheck.startswith(alias): return
 
+        if message.content.lower().startswith("fball"):
+            return
+
         if message.content.lower() == "prefix":
             prefix = db.Get_Prefix(message.guild.id)
             if prefix == "fbot":
