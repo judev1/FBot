@@ -27,13 +27,16 @@ class errorhandler(commands.Cog):
                     "The bot is missing permissions to execute the command")
         elif type(error) is commands.NotOwner:
             embed = fn.errorembed("Missing Permissions",
-                    f"You do not own this bot")
+                    f"Only FBot Devs can run this command")
         elif type(error) is commands.BadArgument:
             embed = fn.errorembed("Invalid Argument",
                     f"The argument you used was not recognised")
         elif type(error) is commands.MissingRequiredArgument:
             embed = fn.errorembed("Missing Argument",
                     f"This command is missing an argument")
+        elif type(error) is commands.NoPrivateMessage:
+            embed = fn.errorembed("Server-only command",
+                    f"This command cannot be used outside of servers.")
         elif type(error) is commands.CommandOnCooldown:
             if error.retry_after < 10:
                 retry = str(error.cooldown) + "` seconds"
