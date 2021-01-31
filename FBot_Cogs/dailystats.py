@@ -47,18 +47,18 @@ class dailystats(commands.Cog):
 
     def get_stats_embed(self):
         fn = self.bot.fn
-        minutes = ceil((datetime.now().timestamp()-self.time_start)/60)
+        hours = ceil((datetime.now().timestamp()-self.time_start)/3600)
         total = self.commands_processed + self.triggers_processed + self.other_messages_processed
         stats = f"""Commands processed: `{self.commands_processed}`
 Triggers responded: `{self.triggers_processed}`
 Messages ignored: `{self.other_messages_processed}`
 Total count: `{total}`"""
-        title = f"FBot stats for the past {minutes} minutes:"
+        title = f"FBot stats for the past {hours} hours:"
         embed = fn.embed(title, stats)
         return embed
     
 
-    @tasks.loop(hours = 8.0) # 28800 seconds = 8 hours
+    @tasks.loop(hours = 24.0)
     async def auto_stats(self):
         if self.is_first_message:
             self.is_first_message = False
