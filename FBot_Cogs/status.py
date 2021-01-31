@@ -48,8 +48,10 @@ class status(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(name="on")
-    @commands.guild_only()
     async def _FBotOn(self, ctx):
+        if not ctx.guild:
+            await ctx.send("**FBot is always on in DMs.**")
+            return
         db = self.bot.db
         db.Add_Channel(ctx.channel.id, ctx.guild.id)
         
@@ -59,8 +61,10 @@ class status(commands.Cog):
         else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 
     @commands.command(name="off")
-    @commands.guild_only()
     async def _FBotOff(self, ctx):
+        if not ctx.guild:
+            await ctx.send("**You can never turn off FBot in DMs.**")
+            return
         db = self.bot.db
         db.Add_Channel(ctx.channel.id, ctx.guild.id)
         
