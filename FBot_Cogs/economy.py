@@ -189,6 +189,10 @@ class economy(commands.Cog):
         for tier in degrees.copy():
             for degree in tier:
                 out = ["**"]
+                # Off by one
+                temp = (degree == db.getdegree(ctx.author.id),
+                        tier[degree][2] in db.getjobs(ctx.author.id),
+                        db.getusermulti(ctx.author.id) >= tier[degree][1])
                 if degree == db.getdegree(ctx.author.id):
                     reqs = ["📝"] 
                 elif tier[degree][2] in db.getjobs(ctx.author.id):
@@ -210,7 +214,9 @@ class economy(commands.Cog):
             if job.lower() == jobname.lower():
                 job = jobname
                 break
-        if job in jobnames:
+        if job == "Unemployed":
+            message = "You can apply to be unemployed, just `FBot resign"
+        elif job in jobnames:
             db = self.bot.db
             user = ctx.author
             if job in db.getjobs(user.id):
@@ -285,7 +291,7 @@ class economy(commands.Cog):
             tax = random.uniform(0.1, 0.5) * 100
 
             if job == "Unemployed": jobmulti = 1.0
-            else: jobmulti = db.getjobs[job] / 100
+            else: jobmulti = db.getjobmulti(user.id) / 100
 
             salary = jobnames[job][0]
             if str(ctx.channel.type) == "private":
@@ -354,7 +360,7 @@ class economy(commands.Cog):
         job = db.getjob(user.id)
         if job == "Unemployed":
             jobmulti = 1.0
-        else: jobmulti = db.getjobs(user.id)[job] / 100
+        else: jobmulti = db.getjobmulti(user.id)
         if str(ctx.channel.type) == "private":
             multi = db.getusermulti(user.id)
             message = f"Personal Multiplier: `x{multi}`"
@@ -369,15 +375,27 @@ class economy(commands.Cog):
     @commands.command(name="top")
     @commands.cooldown(1, 10, type=commands.BucketType.user)
     async def _Top(self, ctx, toptype):
-        if toptype in ["bal", "netbal", "debt", "netdebt"]:
+        if toptype in ["bal", "netbal", "debt", "netdebt", "multi", "servmulti"]:
             message = ""
             async with ctx.channel.typing():
                 results = self.bot.db.gettop(toptype)
                 for rank, row in results:
-                    user_id, typeitem = row
-                    try: user_name = self.bot.get_user(user_id).display_name
-                    except: user_name = "User"
-                    message += f"{rank+1}. {user_name}: {f}{typeitem}\n"
+                    ID, typeitem = row
+                    if toptype == "servmulti":
+                        try: name = self.bot.get_guild(ID).name
+                        except: name = "Server"
+                    else:
+                        try: name = self.bot.get_user(ID).display_name
+                        except: name = "User"
+                    if toptype in ["bal", "netbal", "debt", "netdebt"]:
+                        if typeitem == 0: break
+                        message += f"{rank+1}. {name}: **{f}{typeitem}**\n"
+                    elif toptype == "multi":
+                        if typeitem == 10000: break
+                        message += f"{rank+1}. {name}: `x{typeitem/10000}`\n"
+                    else:
+                        if typeitem == 1000000: break
+                        message += f"{rank+1}. {name}: `x{typeitem/1000000}`\n"
             embed = self.bot.fn.embed(f"FBot Top {toptype}", message)
             await ctx.send(embed=embed)
         else: await ctx.send("We don't have a leaderboard for that...")

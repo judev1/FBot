@@ -48,7 +48,7 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `bal`/`balance` `(@member)`: *Shows the balance of a member*
 `multis`/`multipliers` `(@member)`: *Shows the multipliers for a member*
 
-`top` `bal`/`netbal`/`debt`/`netdebt`: Shows the top users in an area""",
+`top` `bal`/`netbal`/`debt`/`netdebt`/`multi`/`servmulti`: Gives a leaderboard for an area""",
 
 """**Fun Commands**
 
