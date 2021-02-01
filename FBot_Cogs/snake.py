@@ -87,7 +87,7 @@ class snake(commands.Cog):
         self.bot = bot
         
     @commands.command(name="snake")
-    @commands.cooldown(1, 7200, type=commands.BucketType.user)
+    @commands.cooldown(1, 60, type=commands.BucketType.user)
     async def _Snake(self, ctx):
 
         game = snakegame()
@@ -126,7 +126,7 @@ class snake(commands.Cog):
             await msg.edit(content=game.board())
             if not game.alive: break
 
-        fbux = game.score * 600
+        fbux = game.score * 10
         self.bot.db.updatebal(ctx.author.id, fbux)
         await ctx.send("**You died, game over!**\n"
                        f"However you managed to earn **~~f~~ {fbux}**")
@@ -134,8 +134,8 @@ class snake(commands.Cog):
     @_Snake.error
     async def on_command_error(self, ctx, error):
         if type(error) is commands.CommandOnCooldown:
-            wait = round(error.retry_after / 60)
-            await ctx.send(f"You must wait another {wait} mins before playing snake again")
+            wait = round(error.retry_after)
+            await ctx.send(f"You must wait another {wait} seconds before playing snake again")
         
 def setup(bot):
     bot.add_cog(snake(bot))

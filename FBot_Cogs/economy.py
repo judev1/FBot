@@ -277,7 +277,6 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="work")
-    @commands.cooldown(1, 3600, type=commands.BucketType.user)
     async def _Work(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -307,14 +306,7 @@ class economy(commands.Cog):
             wait = db.lastwork(user.id)
             await ctx.send(f"You must wait another {wait} mins to work again")
 
-    @_Work.error
-    async def on_command_error(self, ctx, error):
-        if type(error) is commands.CommandOnCooldown:
-            wait = self.bot.db.lastwork(ctx.author.id)
-            await ctx.send(f"You must wait another {wait} mins to work again")
-
     @commands.command(name="study")
-    @commands.cooldown(1, 3600, type=commands.BucketType.user)
     async def _Study(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -343,12 +335,6 @@ class economy(commands.Cog):
             # Chance of debt collectors
         else:
             wait = db.laststudy(user.id)
-            await ctx.send(f"You must wait another {wait} mins to study again")
-
-    @_Study.error
-    async def on_command_error(self, ctx, error):
-        if type(error) is commands.CommandOnCooldown:
-            wait = self.bot.db.laststudy(ctx.author.id)
             await ctx.send(f"You must wait another {wait} mins to study again")
 
     @commands.command(name="balance", aliases=["bal"])
