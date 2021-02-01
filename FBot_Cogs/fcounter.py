@@ -72,7 +72,7 @@ class fcounter(commands.Cog):
             await ctx.send("Set the current channel to counting channel")
         else: await ctx.send("Only administrators can set the counting channel")
 
-    @commands.command("devcounter")
+    @commands.command("devsetcounter", aliases=["devsetcounting","devcounter","devcounting"])
     @commands.is_owner()
     async def dev_set_counter_channel(self, ctx):
         self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
