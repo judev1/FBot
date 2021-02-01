@@ -13,6 +13,7 @@ class snakegame():
         self.score = 0
         self.width  = 8
         self.height = 8
+        self.direction = "right"
 
         self.snake = deque()
         self.snake.appendleft((0, 4))
@@ -51,12 +52,13 @@ class snakegame():
             output += "\n"
         return output
 
-    def move(self, direction):
+    def move(self):
         x, y = self.snake[0]
+        direction = self.direction
         if direction == "up": y -= 1
-        if direction == "down": y += 1
+        elif direction == "down": y += 1
         if direction == "left": x -= 1
-        if direction == "right": x += 1
+        elif direction == "right": x += 1
 
         if x < 0 or x > self.width-1 or y < 0 or y > self.height-1:
             self.alive = False
@@ -85,46 +87,29 @@ class snake(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
+        self.games = {}
         
-    @commands.command(name="snake")
+    @commands.command(name="snake", alliases=["snek"])
     @commands.cooldown(1, 60, type=commands.BucketType.user)
     async def _Snake(self, ctx):
 
-        game = snakegame()
+        user_id = ctx.author.id
+        if user_id in self.games:
+            ctx.send("You are already in a game!")
+            return
+
+        game = self.games[user_id] = snakegame()
         msg = await ctx.send(game.board())
 
         for emoji in emojis:
             await msg.add_reaction(emoji)
 
-        def check(reaction, user):
-            emoji = (str(reaction.emoji) in emojis)
-            author = (user == ctx.author)
-            message = (reaction.message.id == msg.id)
-            return emoji and author and message
-
-
-        wait = self.bot.wait_for
-        async def forreaction():
-            #timeout =  max(2 - (3 * game.score / 40), 0.5)
-            timeout = 0.8
-            return await wait("reaction_add", timeout=timeout, check=check)
-
-        lastmove = "right"
         while True:
-            try:
-                reaction, user = await forreaction()
-                await msg.remove_reaction(reaction, user)
-            except asyncio.exceptions.TimeoutError:
-                reaction = None
-            except:
-                return
-            if reaction:
-                lastmove = emojinames[emojis.index(reaction.emoji)]
-                game.move(lastmove)
-            else: game.move(lastmove)
-            
+            await asyncio.sleep(0.8)
+            game.move()
             await msg.edit(content=game.board())
             if not game.alive: break
+        del self.games[user_id]
 
         fbux = game.score * 10
         self.bot.db.updatebal(ctx.author.id, fbux)
@@ -136,6 +121,14 @@ class snake(commands.Cog):
         if type(error) is commands.CommandOnCooldown:
             wait = round(error.retry_after)
             await ctx.send(f"You must wait another {wait} seconds before playing snake again")
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        if user.id not in self.games: return
+        emoji = reaction.emoji
+        if emoji in emojis:
+            self.games[user.id].direction = emojinames[emojis.index(emoji)]        
+        await reaction.message.remove_reaction(reaction, user)
         
 def setup(bot):
     bot.add_cog(snake(bot))
