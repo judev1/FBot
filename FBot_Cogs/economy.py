@@ -166,7 +166,8 @@ class economy(commands.Cog):
 
         i = 1
         book = dbfn.reactionbook(self.bot, ctx)
-        for tier in jobs.copy():
+        for tier in jobs:
+            tiercopy = {}
             for job in tier:
                 out = ["**"]
                 if db.getjob(ctx.author.id) in [job]:
@@ -175,8 +176,8 @@ class economy(commands.Cog):
                     quals = ["🔓"]
                 else:
                     quals,  out = ["🔒"], ["~~"]
-                tier[job] += quals + out
-            book.createpages(tier, LINE=f"%2 %3%l%3 - {f}%0\n*%1*\n",
+                tiercopy[degree] = tier[degree] + quals + out
+            book.createpages(tiercopy, LINE=f"%2 %3%l%3 - {f}%0\n*%1*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {i}**\n")
             i += 1
         await book.createbook(COLOUR=self.bot.fn.red)
