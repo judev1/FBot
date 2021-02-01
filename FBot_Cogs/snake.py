@@ -24,7 +24,9 @@ class snakegame():
 
     def board(self):
         output = f"**Score:** {self.score}\n"
+        output += ":white_large_square:" * (self.width + 2) + "\n"
         for y in range(self.height):
+            output += ":white_large_square:"
             for x in range(self.width):
                 if (x, y) in self.snake:
                     if (x, y) == self.snake[0]:
@@ -49,7 +51,8 @@ class snakegame():
                         output += ":radioactive:"
                 else:
                     output += ":black_large_square:"
-            output += "\n"
+            output += ":white_large_square:\n"
+        output += ":white_large_square:" * (self.width + 2)
         return output
 
     def move(self):
