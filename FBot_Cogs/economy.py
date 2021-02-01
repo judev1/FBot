@@ -187,7 +187,8 @@ class economy(commands.Cog):
 
         i = 1
         book = dbfn.reactionbook(self.bot, ctx)
-        for tier in degrees.copy():
+        for tier in degrees:
+            tiercopy = {}
             for degree in tier:
                 out = ["**"]
                 if degree == db.getdegree(ctx.author.id):
@@ -198,8 +199,8 @@ class economy(commands.Cog):
                     reqs = ["🔓"]
                 else:
                     reqs, out = ["🔒"], ["~~"]
-                tier[degree] += reqs + out
-            book.createpages(tier, LINE=f"%3 %4%l%4\n"
+                tiercopy[degree] = tier[degree] + reqs + out
+            book.createpages(tiercopy, LINE=f"%3 %4%l%4\n"
                              "Course length: `%0`, Requires `x%1` multiplier\n",
                              SUBHEADER=f"**FBot Degrees - Tier {i}**\n")
             i += 1
