@@ -12,6 +12,9 @@ class purge(commands.Cog):
     @commands.guild_only()
     @commands.bot_has_permissions(manage_messages=True)
     async def do_purge(self, ctx, *args):
+        if not ctx.message.author.guild_permissions.manage_messages:
+            await ctx.send("**`You do not have the manage_messages permissions.`**")
+            return
         if ctx.channel.id in ongoing_purges:
             msg = await ctx.send("**A purge is already in progress, calm yoself.**")
             await asyncio.sleep(1)
