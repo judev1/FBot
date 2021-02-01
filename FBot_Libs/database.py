@@ -190,13 +190,17 @@ class db:
         c = conn.cursor()
         t = (guild_id,)
         c.execute("SELECT multiplier FROM guilds WHERE guild_id=?", t)
-        return (usermulti, round(c.fetchone()[0]/(10**6), 2))
+        return (usermulti, c.fetchone()[0]/(10**6))
 
     def getusermulti(self, user_id):
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
-        return round(c.fetchone()[0]/(10**4), 2)
+        return c.fetchone()[0]/(10**4)
+
+    def getjobmulti(self, user_id):
+        job = self.getjob(user_id)
+        return self.getjobs(user_id)[job] / 100
 
     def getjobs(self, user_id):
         c = conn.cursor()
@@ -334,11 +338,13 @@ class db:
         conn.commit()
 
     def gettop(self, tt):
+        if tt == "servmulti": ID, table = "guild_id", "guilds"
+        else: ID, table = "user_id", "users"
         if tt == "bal": tt = "fbux"
-        elif tt == "netbal": tt = "netfbux"
+        elif tt in ["multi", "servmulti"]: tt = "multiplier"
         c = conn.cursor()
-        c.execute(f"SELECT user_id, {tt} FROM users ORDER BY {tt} DESC LIMIT 15")
-        return enumerate(c)        
+        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT 20")
+        return enumerate(c)
 
     # Prefix
 
