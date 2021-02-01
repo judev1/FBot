@@ -1,6 +1,7 @@
 from discord.ext import commands
 from triggers import tr
 import discord
+import asyncio
 import sqlite3
 import random
 import dbfn
@@ -82,12 +83,12 @@ t8degrees = {"NOT CREATED YET": [56, 100, "NOT CREATED YET"],
 # TIER NINE
 t9jobs = {"NOT CREATED YET": [800000000, "NOT CREATED YET"], # CEO
           "Billionare": [1000000000, "The description is in the job title"],
-          "Rick Roller": [100000000, "Back in the golden days of the 'net..."], # Special Rick Roll Command
-          "FBot Deveolper": [0, "a c c u r a t e"]} # Can't gain any debt # Gets a nice golden colour on their embeds, also FBot addresses them as Lord}
+          "Rick Roller": [2000000000, "Back in the golden days of the 'net..."], # Special Rick Roll Command
+          "FBot Develolper": [0, "a c c u r a t e"]} # Can't gain any debt # Gets a nice golden colour on their embeds, also FBot addresses them as Lord}
 t9degrees = {"NOT CREATED YET": [80, 100, "NOT CREATED YET"],
              "Becoming Rich Quik": [85, 8, "Billionare"],
-             "Trolling": [90, 100, "Rick Roller"],
-             "clicky-clacky keyboard pressing": [100, 10, "FBot Dev"]}
+             "Trolling": [90, 9, "Rick Roller"],
+             "Clicky-Clacky Keyboard Pressing": [100, 10, "FBot Develolper"]}
 
 jobs = [t1jobs, t2jobs, t3jobs, t4jobs, t5jobs, t6jobs, t7jobs, t8jobs, t9jobs]
 degrees = [t1degrees, t2degrees, t3degrees, t4degrees, t5degrees, t6degrees, t7degrees, t8degrees, t9degrees]
@@ -189,10 +190,6 @@ class economy(commands.Cog):
         for tier in degrees.copy():
             for degree in tier:
                 out = ["**"]
-                # Off by one
-                temp = (degree == db.getdegree(ctx.author.id),
-                        tier[degree][2] in db.getjobs(ctx.author.id),
-                        db.getusermulti(ctx.author.id) >= tier[degree][1])
                 if degree == db.getdegree(ctx.author.id):
                     reqs = ["📝"] 
                 elif tier[degree][2] in db.getjobs(ctx.author.id):
