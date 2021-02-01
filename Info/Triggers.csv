@@ -1,3 +1,7 @@
+FBot is \FBot's \FBots \F Bot is \F Bot's \F Bots\<@!711934102906994699> is\<@!711934102906994699>'s\<@!711934102906994699>s,start,anycase,"No, {username}'s {after}",1
+FBot \F Bot \<@!711934102906994699> ,start,anycase,"No, {username} {after}",1
+FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
+FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
 Fuck FBot\Fuck F Bot\Fuck <@!711934102906994699>,whole,anycase,"No, fuck *you*",1
 Fuck me FBot\Fuck me F Bot\Fuck me <@!711934102906994699>,start,anycase,Hard pass,1
 Fuck me,start,anycase,"I'll fuck {username}{after}, if you want…",1
@@ -5,6 +9,10 @@ Fuck you FBot\Fuck you F Bot\Fuck you <@!711934102906994699>,whole,anycase,"No, 
 Fuck you\Fuck u,whole,anycase,No fuck you,1
 Fuck ,start,anycase,"Yeah, fuck {after}",1
 Fuck,whole,anycase,FUCK!,1
+F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, F *you*",1
+F ,start,anycase,"Press F to pay respects",1
+F me,whole,anycase,"Yeah, F {username}",1
+F u\U,whole,anycase,"Yeah, F you",1
 I am FBot\I'm FBot\Im FBot\I am F Bot\I'm F Bot\Im F Bot\I am <@!711934102906994699>\I'm <@!711934102906994699>\Im <@!711934102906994699>,whole,anycase,"No you're not, I'm FBot",1
 I am \I'm \Im ,start,anycase,"Hi {after}, I'm FBot",1
 I have \I've \Ive ,start,anycase,Yeah {username} has {after},3
@@ -113,20 +121,20 @@ Tysm FBot\Tysm F Bot\Tysm <@711934102906994699>,start,anycase,No problem {userna
 Thanks\Thank you\Ty,whole,anycase,Actually no thank you,2
 Thanks \Thank you \Ty ,start,anycase,"No, just no, they didn't do anything",2
 Tysm,start,anycase,That's a stupid thing to be *so* thankful for,2
-Hello\Hi\Hey\Hola,whole,anycase,{answer},1
+Hello\Hi\Hey\Hola,whole,anycase,"No, please go away",1
+Hello \Hi \Hey \Hola ,start,anycase,WHY DON'T I GET A HELLO?!,1
 Hello FBot\Hello F Bot\Hello <@711934102906994699>,whole,anycase,"Hello, {username}",1
 Hi FBot\Hi F Bot\Hi <@711934102906994699>,start,anycase,Hi {username},1
 Hey FBot\Hey F Bot\Hey <@711934102906994699>,start,anycase,Hey {username},1
 Hola FBot\Hola F Bot\Hola <@711934102906994699>,start,anycase,Hola amigo,1
-Hello \Hi \Hey \Hola ,start,anycase,WHY DON'T I GET A HELLO?!,1
-Goodbye\Bye\Cya\Adios\Farewell\Ttyl,whole,anycase,{answer},1
+Goodbye\Bye\Cya\Adios\Farewell\Ttyl,whole,anycase,Yeah please leave,1
+Goodbye \Bye \Cya \Adios \Farewel \Ttyl ,start,anycase,WHY DON'T I GET A GOODBYE?!,1
 Goodbye FBot\Goodbye F Bot\Goodbye <@!711934102906994699>,start,anycase,"Goodbye, {username}",1
 Bye FBot\Bye F Bot\Bye <@!711934102906994699>,start,anycase,Bye {username},1
 Cya FBot\Cya F Bot\Cya <@!711934102906994699>,start,anycase,Cya {username},1
 Adios FBot\Adios F Bot\Adios <@!711934102906994699>,start,anycase,Adios amigo,1
 Farewell FBot\Farewell F Bot\Farewell <@!711934102906994699>,start,anycase,Farewell dearest {username},1
 Ttyl FBot\Ttyl F Bot\Ttyl <@!711934102906994699>,start,anycase,Wasn't talking to you {username},1
-Goodbye \Bye \Cya \Adios \Farewel \Ttyl ,start,anycase,WHY DON'T I GET A GOODBYE?!,1
 Welcome ,start,anycase,Welcome {after},2
 Welcome,whole,anycase,WELCOME!,2
 Country roads,whole,anycase,Take me home,1
@@ -134,14 +142,6 @@ To the place,whole,anycase,I BELONG,1
 West Virginia,whole,anycase,Mountain mama,1
 Take me home,whole,anycase,Country roads,1
 ?,end,anycase,{answer},3
-FBot is \FBot's \FBots \F Bot is \F Bot's \F Bots\<@!711934102906994699> is\<@!711934102906994699>'s\<@!711934102906994699>s,start,anycase,"No, {username}'s {after}",1
-FBot \F Bot \<@!711934102906994699> ,start,anycase,"No, {username} {after}",1
-FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
-FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
-F FBot\F F Bot\F <@!711934102906994699>,whole,anycase,"No, F *you*",1
-F ,start,anycase,"Press F to pay respects",1
-F me,whole,anycase,"Yeah, F {username}",1
-F u\U,whole,anycase,"Yeah, F you",1
 :)\:D\(:\C:\c:,anywhere,exact,"Their guard is down, now strike",2
 :(\D:\):,anywhere,exact,"Ignore me, I'm definitely not enjoying your suffering",2
 <3\:3,anywhere,exact,Cute...,2

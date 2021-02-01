@@ -13,7 +13,8 @@ class help(commands.Cog):
 
                 "**Useful Commands**\n"
                 "Use `FBot on/off` to toggle fbot\n"
-                "Use `FBot cmds` for a list of commands\n\n"
+                "Use `FBot cmds` for a list of commands\n"
+                "Use `FBot economy` for help on with our economy\n\n"
 
                 "**Useful Links**\n"
                 f"[Our Top.gg page]({fn.topgg}) and "

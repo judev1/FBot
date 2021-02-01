@@ -5,10 +5,11 @@ class dblcog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        fn = bot.fn
-        self.dblpy = DBL.DBLClient(self.bot, fn.gettoken(4),
-            webhook_path=fn.gettoken(5), webhook_auth=fn.gettoken(6),
-            webhook_port=int(fn.gettoken(7)))
+        self.fn = bot.fn
+        voteschannel = self.bot.get_channel(757722305395949572).send
+        self.dblpy = DBL.DBLClient(self.bot, self.fn.gettoken(4),
+            webhook_path="/dblwebhook", webhook_auth=self.fn.gettoken(5),
+            webhook_port=6000)
 
     @commands.command(name="dbl")
     @commands.is_owner()
@@ -24,12 +25,18 @@ class dblcog(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.Cog.listener()
+    async def on_dbl_test(self, data):
+        print("Test")
+        print(data)
+        embed = self.bot.fn.embed("FBot DBL vote", f"```{data}```")
+        await self.voteschannel(embed=embed)
+
+    @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         print("VOTE RECIEVED")
         print(data)
-        channel = self.bot.get_channel(757722305395949572)
         embed = self.bot.fn.embed("FBot DBL vote", f"```{data}```")
-        await channel.send(embed=embed)
+        await self.voteschannel(embed=embed)
 
 def setup(bot):
     bot.add_cog(dblcog(bot))

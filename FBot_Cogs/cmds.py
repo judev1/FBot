@@ -7,7 +7,7 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 
  Page 1: **Contents**
  Page 2: **General Commands**
- Page 3: **Economy Commands**
+ Page 3: **NEW Economy Commands**
  Page 4: **Fun Commands**
  Page 5: **Counting Commands**
  Page 6: **Infomation Commands**
@@ -25,13 +25,13 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `status` `server` `mod`: **ADMIN ONLY** *Displays the status for hidden channels too*
 
 `help`: *Gives some helpful links and commands*
-`snipe`: *Get the last deleted message*
+`snipe` `(number)`: *Get the last number of editted and deleted messages, up to 10*
 `purge`/`thanos` `<number>`: **ADMIN ONLY** *Deletes a number of messages*""",
 
 """**Economy Commands**
 
 `economy`: *Gives a handy guide to FBot's economy system*
-`profile` (`@member`): *Shows the profile of a member*
+`profile` `(@member)`: *Shows the profile of a member*
 
 `work`: *Allows you to work to earn that sweet sweet cash*
 `study`: *Work towards completing your degree*
@@ -39,14 +39,14 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `jobs`: *Lists all jobs*
 `degrees`: *Lists all degrees*
 
-`apply <job>`: *Apply for a job*
-`take <degree>`: *Apply for a degree*
+`apply` `<job>`: *Apply for a job*
+`take` `<degree>`: *Apply for a degree*
 
 `resign`: *Resign from your current job*
 `drop`: *Drop your current degree*
 
-`bal`/`balance` (`@member`): *Shows the balance of a member*
-`multis`/`multipliers` (`@member`): *Shows the multipliers for a member*
+`bal`/`balance` `(@member)`: *Shows the balance of a member*
+`multis`/`multipliers` `(@member)`: *Shows the multipliers for a member*
 
 `top` `bal`/`netbal`/`debt`/`netdebt`: Shows the top users in an area""",
 
@@ -58,7 +58,11 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `ppsize` (`@member`): *Gets a members actual ppsize*
 `fball`/`8ball` <question>: *Ask FBot (and you don't need to you the prefix!)*
 `say` `<message>`: *Makes FBot say whatever you want*
-`dm`/`dms`: *Bring FBot into your DMs, why? Who knows!*""",
+`dm`/`dms`: *Bring FBot into your DMs, why? Who knows!*
+
+**NEW Minigames**
+
+`snake`: *Play our very own discord snake game for FBux*""",
 
 """**Counting Commands**
 
@@ -164,7 +168,7 @@ help you unlock new degree which in turn gives you access to new jobs.""",
 Wanna see your progress as a FBoter? Use `FBot profile`. Wanna laugh at inferior
 mortals? Use `FBot profile @inferior mortal`. Wanna view your multipliers?
 Use `FBot mutlis`. Want me to stop? No? That's what I thought. You can use
-`FBot cmds` to view a full list of available commands
+`FBot cmds` to view a full list of available commands.
 
 **Competitive**
 It's no fun winning and not knowing it, know it. Use `FBot baltop` to view the
@@ -178,7 +182,11 @@ hard earned cash, than in more cash and future content!
 
 **Suggestions**
 We are always working on new ways to improve FBot, if you have any suggestions,
-or just wanna drop by for a chat, use `FBot server` to join our server"""]
+or just wanna drop by for a chat, use `FBot server` to join our server.
+
+**Extra**
+Currently there is no way to remove debt, but since it doesn't cause you any
+harm, you'll just have to learn to live with it."""]
 
 class cmds(commands.Cog):
     

@@ -1,3 +1,1 @@
-f"""**Releasing FBot's own currency soon!**
-
-**Slide into FBot's DMs with** `FBot dms`"""
+f"""**FBot Economy has been released, along with v1.9!""""

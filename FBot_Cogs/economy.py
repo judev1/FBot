@@ -7,59 +7,90 @@ import dbfn
 
 f = "~~f~~ "
 # TIER ONE
-t1jobs = {"Unemployed": [1000, "You gotta dismantle the government somehow"], # No degree, starting job
-          "Waitor": [8000, "This seems like a good idea you said, I'll enjoy this a lot you said"],
-          "Janitor": [10000, "They ask you how you are, and you just have to say you're fine when you're not really fine, but you just can't get into it, because they would never understand"],
-          "Plumber": [15000, "Just because you're not a janitor doesn't mean I'll let you near my kids"]
-          }
-t1degrees = {"Food Touching": [1, 1, "Waitor"],
-             "Touching": [3, 1.01, "Janitor"],
-             "Touching Shit": [5, 1.05, "Plumber"]
-             }
+t1jobs = {"Unemployed": [1000, "Take those government benefits"], # No degree, starting job
+          "Scarecrow": [8000, "The birds. THEY FEAR ME"],
+          "Factory Worker": [10000, "难以制作手机"],
+          "Cleaner": [12000, "Don't touch my sheet"],
+          "Plumber": [15000, "This job's pretty shitty if I'm being honest"]}
+t1degrees = {"Standing": [2, 1.01, "Scarecrow"],
+             "Birth Control": [3, 1.05, "Factory Worker"],
+             "Cleaning": [4, 1.1, "Cleaner"],
+             "Shittery": [5, 1.15, "Plumber"]}
 # TIER TWO
-t2jobs = {"Loan Shark": [20000, "No one can escape debt, **no one**"],
-         "Physic": [25000, "I only work 9 to 5, except between 10 to 3 when I'm having lunch, and I'm available all weekdays, except for Monday, Wednesday, Thursday and Friday, that'll be 25000 for the first session and you'll need to pay for the next 8 seesions, with intrest of course. So when can I expect to see you?"]
-          }
-t2degrees = {"Baiting": [8, 1.1, "Loan Shark"],
-             "Bullshittery": [14, 1.15, "Physic"]
-             }
+t2jobs = {"Undertaker": [20000, "Sometimes when I bury bodies it wasn't because I committed a crime"],
+          "Artist": [25000, "I'm actually not an artist; I've been framed"],
+          "Nudist": [30000, "Stop being so clothed minded"],
+          "Licensed Virgin": [3500, "The only difference is now you get paid for it"]}
+t2degrees = {"Undertaking": [8, 1.25, "Undertaker"],
+             "Art": [8, 1.3, "Artist"],
+             "Feet Pics": [8, 1.35, "Nudist"],
+             "Being yourself": [8, 1.4, "Licensed Virgin"]}
 # TIER THREE
-t3jobs = {}
-t3degrees = {}
+t3jobs = {"Pizza Delivery Guy": [5000, "The better the day the less we get paid"],
+          "Offical Bread Taster": [60000, "You can't taste the bread, until you've touched the bread"],
+          "The Milkman": [70000, "I am the milkman, my milk is delicious"],
+          "Ass Waxer": [80000, "Feel the ass, wax the ass"]}
+t3degrees = {"Pizza Making": [10, 1.5, "Pizza Delivery Guy"],
+             "Bread Baking": [12, 1.6, "Offical Bread Taster"],
+             "Milk Shaking": [14, 1.7, "The Milkman"],
+             "Ass Quaking": [16, 2.8, "Ass Waxer"]}
 # TIER FOUR
-t4jobs = {}
-t4degrees = {}
+t4jobs = {"Professional Redditor": [100000, "Although life is tough, remember that it's not worth living"],
+          "Discord Mod": [110000, "You're not a pedo 'til you're charged"],
+          "Cocaine Man": [140000, "They misspelled my job title, I sell propane"],
+          "Propane Man": [150000, "They misspelled my job title, I sell cocaine"]}
+t4degrees = {"Obesity": [18, 2.0, "Professional Redditor"],
+             "Predatory Behaviours": [18, 2.15, "Discord Mod"],
+             "Selling Propane": [18, 2.35, "Cocaine Man"],
+             "Selling Propane": [18, 2.5, "Propane Man"]}
 # TIER FIVE
-t5jobs = {}
-t5degrees = {}
+t5jobs = {"Psychic": [200000, "Professional four-chin teller"],
+          "Loan Shark": [250000, "Suprisingly I still get debt"],
+          "Sociopath": [300000, "Feelings? Like with your fingers?"],
+          "Politician": [350000, "I love black people, hell my best friend is black!"]}
+t5degrees = {"Bullshitting": [22, 2.7, "Psychic"],
+             "Baiting": [24, 2.9, "Loan Shark"],
+             "Politics": [26, 3.1, "Sociopath"],
+             "Sociopathy": [26, 3.1, "Politician"]}
 # TIER SIX
-t6jobs = {"Resposible Inheriter": [50000000, "Your job is to recieve money from your rich and dying relatives"], # No degree
-          "Irresposible Inheriter": [100000000, "Similar to resposible inheriter but with the mindset: Budget funerals are the way to go!"] # Becomes responsible
-          }
-t6degrees = {"Funding Trust": [60, 5, "Iresposible Inheriter"]
-             }
+t6jobs = {"Resposible Inheriter": [500000, "Your job is to 'borrow' money from your rich and dying relatives"], # No degree
+          "Irresposible Inheriter": [600000, "Similar to resposible inheriter but with the mindset: budget funerals are the way to go!"], # Becomes responsible
+          "NOT CREATED YET": [700000, "NOT CREATED YET"],
+          "NOT CREATED YET": [800000, "NOT CREATED YET"]}
+t6degrees = {"Funding Trust": [30, 3.5, "Resposible Inheriter"],
+             "Trust Funding": [32, 3.6, "Irresposible Inheriter"],
+             "NOT CREATED YET": [34, 100, "NOT CREATED YET"],
+             "NOT CREATED YET": [36, 100, "NOT CREATED YET"]}
 # TIER SEVEN
-t7jobs = {"Crime Lord": [200000000, "Even crime lords need a degree in crime lording"]
-          }
-t7degrees = {"Crime Lording": [80, 6, "Crime Lord"]
-             }
+t7jobs = {"Crime Lord": [100000, "Even crime lords need a degree in crime lording"],
+          "Dictator": [2000000, "My people have freedom. Freedom to do what I tell them"],
+          "Literally Hitler": [5000000, "I was not framed"],
+          "NOT CREATED YET": [10000000, "NOT CREATED YET"]}
+t7degrees = {"Crime Lording": [40, 4, "Crime Lord"],
+             "Freedom": [44, 4.5, "Dictator"],
+             "Ex-Artistry": [48, 5, "Literally Hitler"],
+             "NOT CREATED YET": [52, 100, "NOT CREATED YET"]}
 # TIER EIGHT
-t8jobs = {"Billionare": [1000000000, "The description is in the job title"],
-          "FBot Deveolper": [0, "a c c u r a t e"], # Can't gain any debt # Gets a nice golden colour on their embeds, also FBot addresses them as Lord
-          }
-t8degrees = {"Becoming Rich Quik": [100, 8, "Billionare"],
-             "clicky-clacky keyboard pressing": [150, 10, "FBot Dev"]
-             }
-# PUNNISHMENT JOBS
-pjobs = {
-         "Mormon": [-1000, "You devote your life to a good cause, for now at least"], # There is a chace you'll become enlightened whenever you switch jobs
-         "Karen": [-5000, "Just great, now everyone hates you"], # When you have no debt and a lot of money (in tier 3)
-         "Light Mode Enthusiast": [-50000, "Maybe if you stopped using discord light mode you might actually make some money"], # Not sure yet
-         "Ex-FBot Deveolper": [-100000, "FBot has maintence costs, glad you noticed"] # When you change jobs after being an FBot Developer
-         }
+t8jobs = {"NOT CREATED YET": [50000000, "NOT CREATED YET"],
+          "NOT CREATED YET": [100000000, "NOT CREATED YET"],
+          "NOT CREATED YET": [200000000, "NOT CREATED YET"],
+          "NOT CREATED YET": [400000000, "NOT CREATED YET"]}
+t8degrees = {"NOT CREATED YET": [56, 100, "NOT CREATED YET"],
+             "NOT CREATED YET": [60, 100, "NOT CREATED YET"],
+             "NOT CREATED YET": [64, 100, "NOT CREATED YET"],
+             "NOT CREATED YET": [70, 100, "NOT CREATED YET"]}
+# TIER NINE
+t9jobs = {"NOT CREATED YET": [800000000, "NOT CREATED YET"], # CEO
+          "Billionare": [1000000000, "The description is in the job title"],
+          "Rick Roller": [100000000, "Back in the golden days of the 'net..."], # Special Rick Roll Command
+          "FBot Deveolper": [0, "a c c u r a t e"]} # Can't gain any debt # Gets a nice golden colour on their embeds, also FBot addresses them as Lord}
+t9degrees = {"NOT CREATED YET": [80, 100, "NOT CREATED YET"],
+             "Becoming Rich Quik": [85, 8, "Billionare"],
+             "Trolling": [90, 100, "Rick Roller"],
+             "clicky-clacky keyboard pressing": [100, 10, "FBot Dev"]}
 
-jobs = [t1jobs, t2jobs, t3jobs, t4jobs, t5jobs, t6jobs, t7jobs, t8jobs]
-degrees = [t1degrees, t2degrees, t3degrees, t4degrees, t5degrees, t6degrees, t7degrees, t8degrees]
+jobs = [t1jobs, t2jobs, t3jobs, t4jobs, t5jobs, t6jobs, t7jobs, t8jobs, t9jobs]
+degrees = [t1degrees, t2degrees, t3degrees, t4degrees, t5degrees, t6degrees, t7degrees, t8degrees, t9degrees]
 
 jobnames, degreenames = {}, {}
 for tier in jobs:
@@ -108,7 +139,6 @@ class economy(commands.Cog):
         db = self.bot.db
         profile = list(db.getprofile(user.id))
         job = profile[4]
-        job = f"{job}: {f}{jobnames[job][0]}"
         if profile[5] == "None":
             degree = "No degree"
         else: degree = f"{profile[5]} - {profile[6]}/{degreenames[profile[5]][0]}"
@@ -121,6 +151,13 @@ class economy(commands.Cog):
         embed.add_field(name="Degree", value=degree)
         embed.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed=embed)
+
+    @commands.command(name="gift")
+    @commands.is_owner()
+    async def _Gift(self, ctx, amount, user: discord.User=None):
+        if not user: user = ctx.author
+        self.bot.db.updatebal(user.id, amount)
+        await ctx.send("Lucky you")
 
     @commands.command(name="jobs")
     async def _Jobs(self, ctx):
@@ -238,8 +275,7 @@ class economy(commands.Cog):
         else:
             message = "You have can't resign, you're unemployed!"
         await ctx.send(message)
-        
-    
+
     @commands.command(name="work")
     @commands.cooldown(1, 3600, type=commands.BucketType.user)
     async def _Work(self, ctx):
@@ -287,17 +323,21 @@ class economy(commands.Cog):
             if degree == "None":
                 await ctx.send("You're not taking a degree right now")
                 return
-            progress = db.study(user.id)
+            salary = jobnames[db.getjob(user.id)][0]
+            debt = round(salary * random.uniform(0.05, 0.4))
+            
+            progress = db.study(user.id, debt)
             length = degreenames[degree][0]
-            # Gain debt
             if progress == length:
                 db.finishdegree(user.id)
                 db.startjob(user.id, degreenames[degree][2])
                 embed = self.bot.fn.embed("Degree completed!",
-                        f"You may now apply for the **{degreenames[degree][2]} job**")
+                        f"You studied and gained debt: **{f}{round(debt)}**\n"
+                        f"You may now apply for the **{degreenames[degree][2]}** job")
             else:
                 db.studied(user.id)
                 embed = self.bot.fn.embed(f"You studied for **{degree}**",
+                        f"You studied and gained debt: **{f}{debt}**\n"
                         f"Degree course progress: `{progress}/{length}`")
             await ctx.send(embed=embed)
             # Chance of debt collectors
@@ -315,8 +355,11 @@ class economy(commands.Cog):
     async def _Balance(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db = self.bot.db
-        balance = db.getbal(user.id)
-        await ctx.send(f"{user.display_name}'s balance: **{f}{balance}**")
+        bal, debt = db.getbal(user.id)
+        embed = self.bot.fn.embed(f"{user.display_name}'s balance",
+                f"FBux: **{f}{bal}**\n"
+                f"Debt: **{f}{debt}**")
+        await ctx.send(embed=embed)
 
     @commands.command(name="multis", aliases=["multipliers"])
     async def _Multipliers(self, ctx, user: discord.User=None):

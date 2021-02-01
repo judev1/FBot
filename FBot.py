@@ -8,10 +8,6 @@ from functions import fn, ftime
 from database import db
 from triggers import tr
 
-# TODO
-# MULTIPLIER FOR DMs
-# STORE
-
 intents = discord.Intents.default()
 intents.typing = False
 intents.presences = False
@@ -28,7 +24,9 @@ tr.trigger_load()
 bot.ftime = ftime()
 
 c = bot.db.conn.cursor()
-c.execute("UPDATE users SET job='Unemployed' WHERE job='None'")
+c.execute("UPDATE users SET job='Unemployed' WHERE job='None';")
+c.execute("UPDATE channels SET status='off' WHERE status='0';")
+c.execute("UPDATE guilds SET modtoggle='off' WHERE modtoggle='0'")
 bot.db.conn.commit()
 
 token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
@@ -46,7 +44,7 @@ async def on_ready():
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
-        if cog not in ["economy.py"]: # Cogs not to load
+        if cog not in []: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])

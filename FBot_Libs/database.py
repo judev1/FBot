@@ -182,8 +182,8 @@ class db:
     def getbal(self, user_id):
         c = conn.cursor()
         t = (user_id,)
-        c.execute("SELECT fbux FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
+        c.execute("SELECT fbux, debt FROM users WHERE user_id=?", t)
+        return c.fetchone()
 
     def getmultis(self, user_id, guild_id):
         usermulti = self.getusermulti(user_id)
@@ -241,8 +241,9 @@ class db:
         self.worked(user_id)
         return balance
 
-    def study(self, user_id):
+    def study(self, user_id, debt):
         c = conn.cursor()
+        self.updatedebt(user_id, debt)
         t = (user_id,)
         c.execute("UPDATE users SET degreeprogress=degreeprogress+1 WHERE user_id=?", t)
         conn.commit()
@@ -307,6 +308,15 @@ class db:
         c.execute("SELECT fbux FROM users WHERE user_id=?", t)
         return c.fetchone()[0]
 
+    def updatedebt(self, user_id, debt):
+        c = conn.cursor()
+        t = (debt, debt, user_id)
+        c.execute("UPDATE users SET debt=debt+?, netdebt=netdebt+? WHERE user_id=?", t)
+        conn.commit()
+        t = (user_id,)
+        c.execute("SELECT debt FROM users WHERE user_id=?", t)
+        return c.fetchone()[0]
+
     def finishdegree(self, user_id):
         c = conn.cursor()
         t = (user_id,)
@@ -328,8 +338,7 @@ class db:
         elif tt == "netbal": tt = "netfbux"
         c = conn.cursor()
         c.execute(f"SELECT user_id, {tt} FROM users ORDER BY {tt} DESC LIMIT 15")
-        return enumerate(c)
-        
+        return enumerate(c)        
 
     # Prefix
 
