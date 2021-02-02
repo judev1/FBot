@@ -374,7 +374,9 @@ class economy(commands.Cog):
     @commands.command(name="top")
     @commands.cooldown(1, 10, type=commands.BucketType.user)
     async def _Top(self, ctx, toptype):
-        if toptype in ["bal", "netbal", "debt", "netdebt", "multi", "servmulti"]:
+        if toptype == "netbal":
+            toptype = "netfbux"
+        if toptype in ["bal", "netfbux", "debt", "netdebt", "multi", "servmulti"]:
             message = ""
             async with ctx.channel.typing():
                 results = self.bot.db.gettop(toptype)
@@ -386,7 +388,7 @@ class economy(commands.Cog):
                     else:
                         try: name = self.bot.get_user(ID).display_name
                         except: name = "User"
-                    if toptype in ["bal", "netbal", "debt", "netdebt"]:
+                    if toptype in ["bal", "netfbux", "debt", "netdebt"]:
                         if typeitem == 0: break
                         message += f"{rank+1}. {name}: **{f}{typeitem}**\n"
                     elif toptype == "multi":
