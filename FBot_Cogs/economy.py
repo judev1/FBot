@@ -176,7 +176,7 @@ class economy(commands.Cog):
                     quals = ["🔓"]
                 else:
                     quals,  out = ["🔒"], ["~~"]
-                tiercopy[degree] = tier[degree] + quals + out
+                tiercopy[job] = tier[job] + quals + out
             book.createpages(tiercopy, LINE=f"%2 %3%l%3 - {f}%0\n*%1*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {i}**\n")
             i += 1
