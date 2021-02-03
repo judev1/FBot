@@ -160,7 +160,7 @@ class db:
         t = (user_id,)
         c.execute("SELECT user_id FROM users WHERE user_id=?", t)
         if c.fetchone() is None:
-            t = (user_id,-1,10000,0,0,0,0,'None', '{}', 'None',0,0,0)
+            t = (user_id,-1,10000,0,0,0,0,'Unemployed', '{}', 'None',0,0,0)
             marks = ",".join(["?"] * 13)
             c.execute(f"INSERT INTO users VALUES({marks})", t)
             conn.commit()
