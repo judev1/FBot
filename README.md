@@ -1,23 +1,25 @@
-# **FBot**
+# [**FBot**](https://fbot.breadhub.uk)
+##### *The most annoying bot on discord*
 
-## *The most annoying bot on discord*
-Currently FBot is only being used on 480+ Servers with 30K+ members and almost 2500 lines of code
+### Features
+- Turn FBot on in your channel to acces its <b>spam feauture</b>. FBots can also be modified to be unique to each server. You can make mods only able to turn FBot on and off, you can change the amount of messages FBot responds to, you can even change the prefix if `FBot ` isn't to your liking
+- <b>FBot economy</b>. FBot has it's own economy system which runs on FBux, **~~f~~**. You can earn money and debt, while all time being taxed. You can work and study, for jobs and degrees using degrees to unlock jobs and spamming to unlock degrees (similar to experience). There are leaderboards for almost everything, you can see the people with the highest balance, highest net balance, highest debt, highest net debt, highest multiplier (again experience) and server multiplier. With this being a fairly new feature, more commands will be added soon!
+- Our own <b>counting feature</b>, allow your members to count, you'd be suprised how bad people are at this
+- We even have some <b>fun commands</b>! A special Discord snake minigame, an actual ppsize calculator (it's never wrong), an 8ball feature called fball (which to date has never made a mistake), as well as some fun photo processing commands like bonk and bigpp, you'll have to try them to find out
+- <b>Information and utility</b>, we have many commands for imformation like a serverinfo command which gives a rundown of your server, as well as a some useful utility commands like snipe (gets deleted and editted messages) and purge (also known as thanos, deletes messages). Uniquely our snipe can retrieve up to 10 messages
+- <b>Increased activity</b>! Don't take my word for it, listen to all those pings *they vibin*
+- <b>Always online</b>, we pride ourselves in having a spam bot which function 24/7 mostly without errors (mostly ok!)
 
-## **Don't just take our word for it:**
-##### *`Oh... this bot is just spam`*
-##### *`How do you turn this thing off?`*
-##### *`8 minutes of my life I can never get back`*
-##### *`Why is this thing, a thing?`*
-
-## **Now featuring `FBot economy`!*
-We've just introduced a new feature: FBot economy; work, study, earn money and debt, with even more new features being added soon!
-
-## **Support:**
-If you'd like to discuss anything with us or if you have any feedback, problems or suggestions, we'd be more than happy to here them, you can find us [here on discord](https://discord.gg/BDpXRq9) or DM us on discord `@justjude#2296` or `@LinesGuy#9260`
-
-## **Links:**
-[Invite FBot to your server](https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot)
-[Join FBot's server](https://discord.gg/BDpXRq9)
-[FBot's code on Github](https://github.com/judev1/FBot)
-[FBot's Top.gg page](https://top.gg/bot/711934102906994699)
-[Vote for FBot!](https://top.gg/bot/711934102906994699/vote)
+### **So yeah we can talk ourselves up, so what do our users think?**
+ > "*Oh... this bot is just spam*"
+ 
+ > "*How do you turn this thing off?*"
+ 
+ > "*8 minutes of my life I can never get back*"
+ 
+ > "*Why is this thing a thing?*"
+ 
+ ## **Contact:**
+f you have any suggestions or feedback or find an error, or even chat wanna chat, please feel free to [join our server!](https://discord.gg/BDpXRq9) Or DM us on discord `@justjude#2296` or `@LinesGuy#9260`
+ 
+ ### [**What are you waiting for? Invite FBot today!**](https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot)
