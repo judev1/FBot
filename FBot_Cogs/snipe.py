@@ -1,5 +1,8 @@
+import discord
 from discord.ext import commands
 from collections import deque # deque = queue datatype
+import os
+import io
 
 snipes = dict()
 max_snipes = 10 # max snipes per channel
@@ -51,10 +54,18 @@ class snipe(commands.Cog):
             # snipe[1] is the string "Deleted" or "Edited"
             member = snipe[0].author
             msg += f"""Sender: `{member.display_name}` (`{member}`)
-Type: `{snipe[1]}`
-Original message: `{snipe[0].content}`\n"""
-        embed = self.bot.fn.embed("FBot snipe", msg)
-        await ctx.send(embed=embed)
+{snipe[1]}:
+{snipe[0].content}\n\n"""
+        if len(msg) > 2000:
+            with io.open("fbot_snipe.txt", "w+", encoding="utf8") as file:
+                file.write(msg)
+            await ctx.send(
+                "`Sniped messages were longer than 2000 chars, sending as file:`",
+                file=discord.File(r"fbot_snipe.txt"))
+            os.remove("fbot_snipe.txt")
+        else:
+            embed = self.bot.fn.embed("FBot snipe", msg)
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(snipe(bot))
