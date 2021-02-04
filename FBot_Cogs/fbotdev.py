@@ -27,7 +27,7 @@ class fbotdev(commands.Cog):
         fn = self.bot.fn
         try:
             evalcontent = eval(content)
-            embed = fn.embed("FBot eval", f" ```{evalcontent}```")
+            embed = fn.embed("FBot eval", f" ```python\n{evalcontent}```")
             await ctx.send(embed=embed)
         except Exception as e:
             if content == "": content = "NULL"
@@ -171,9 +171,12 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="await")
     @commands.is_owner()
-    async def _Await(self, ctx, function, *, args):
-        await ctx.send(embed=self.bot.fn.embed("FBot await", f"```await {function}({args})```"))
-        await eval(function)(eval(args))
+    async def _Await(SELF, CTX, FUNCTION, *, ARGS):
+        global self, ctx, function, args
+        self, ctx, function, args = SELF, CTX, FUNCTION, ARGS
+        await ctx.send(embed=self.bot.fn.embed("FBot await", f"```python\nawait {function}({args})```"))
+        exec(f"global temp\nasync def temp():\n    await {function}({args})")
+        await temp()
         
 
 def setup(bot):
