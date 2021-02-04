@@ -55,8 +55,12 @@ class snipe(commands.Cog):
             member = snipe[0].author
             msg += f"""Sender: `{member.display_name}` (`{member}`)
 {snipe[1]}:
-{snipe[0].content}\n\n"""
-        if len(msg) > 2000:
+{snipe[0].content}\n"""
+            if len(snipe[0].content) == 0:
+                msg += "`(If message is blank, it may have been an image, join message or pin)`\n"
+
+            msg += "\n"  # one more newline for good luck
+        if len(msg) > 1900:  # 2048 char limit minus embed overhead
             with io.open("fbot_snipe.txt", "w+", encoding="utf8") as file:
                 file.write(msg)
             await ctx.send(
