@@ -169,5 +169,12 @@ class fbotdev(commands.Cog):
     async def _Host(self, ctx):
         await ctx.send("This instance is running on: " + socket.gethostname())
 
+    @commands.command(name="await")
+    @commands.is_owner()
+    async def _Await(self, ctx, function, *, args):
+        await ctx.send(embed=self.bot.fn.embed("FBot await", f"```await {function}({args})```"))
+        await eval(function)(eval(args))
+        
+
 def setup(bot):
     bot.add_cog(fbotdev(bot))
