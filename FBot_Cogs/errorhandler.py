@@ -37,6 +37,9 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.NoPrivateMessage:
             embed = fn.errorembed("Server-only command",
                     f"This command cannot be used outside of servers.")
+        elif type(error) is commands.UserNotFound:
+            embed = fn.errorembed("User not found",
+                    f"Invalid user parameter. Check command help.")
         elif type(error) is commands.CommandOnCooldown:
             if error.retry_after < 10:
                 retry = str(error.cooldown) + "` seconds"
