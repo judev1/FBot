@@ -83,7 +83,7 @@ class help(commands.Cog):
                 "Use `FBot cmds` for a list of commands",
                 "Use `FBot economy` for help with our currency\n",
                 "**Useful Links**",
-                f"[Invite FBot]({fn.topgg}) or "
+                f"[Invite FBot]({fn.top}) or "
                 f"[join our server!]({fn.server})")
 
         await ctx.send(embed=embed)
