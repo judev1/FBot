@@ -16,7 +16,7 @@ class info(commands.Cog):
             if str(servers.id) != "264445053596991498":
                 totalmembers += servers.member_count
 
-        embed = self.bot.fn.embed("FBot Info", "")
+        embed = self.bot.fn.embed("FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds) - 1)
         embed.add_field(name="Last Updated", value=fn.getinfo("lastupdated"))

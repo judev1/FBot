@@ -10,7 +10,7 @@ f = "~~f~~ "
 # TIER ONE
 t1jobs = {"Unemployed": [1000, "Take those government benefits"], # No degree, starting job
           "Scarecrow": [8000, "The birds. THEY FEAR ME"],
-          "Factory Worker": [10000, "难以制作手机"],
+          "Factory Worker": [10000, "很难制造手机"],
           "Cleaner": [12000, "Don't touch my sheet"],
           "Plumber": [15000, "This job's pretty shitty if I'm being honest"]}
 t1degrees = {"Standing": [2, 1.01, "Scarecrow"],
@@ -34,7 +34,7 @@ t3jobs = {"Pizza Delivery Guy": [5000, "The better the day the less we get paid"
 t3degrees = {"Pizza Making": [10, 1.5, "Pizza Delivery Guy"],
              "Bread Baking": [12, 1.6, "Offical Bread Taster"],
              "Milk Shaking": [14, 1.7, "The Milkman"],
-             "Ass Quaking": [16, 2.8, "Ass Waxer"]}
+             "Ass Quaking": [16, 1.8, "Ass Waxer"]}
 # TIER FOUR
 t4jobs = {"Professional Redditor": [100000, "Although life is tough, remember that it's not worth living"],
           "Discord Mod": [110000, "You're not a pedo 'til you're charged"],
@@ -43,7 +43,7 @@ t4jobs = {"Professional Redditor": [100000, "Although life is tough, remember th
 t4degrees = {"Obesity": [18, 2.0, "Professional Redditor"],
              "Predatory Behaviours": [18, 2.15, "Discord Mod"],
              "Selling Propane": [18, 2.35, "Cocaine Man"],
-             "Selling Propane": [18, 2.5, "Propane Man"]}
+             "Selling Cocaine": [18, 2.5, "Propane Man"]}
 # TIER FIVE
 t5jobs = {"Psychic": [200000, "Professional four-chin teller"],
           "Loan Shark": [250000, "Suprisingly I still get debt"],
@@ -290,9 +290,9 @@ class economy(commands.Cog):
             tax = random.uniform(0.1, 0.5) * 100
 
             if job == "Unemployed": jobmulti = 1.0
-            else: jobmulti = db.getjobmulti(user.id) / 100
+            else: jobmulti = db.getjobmulti(user.id)
 
-            salary = jobnames[job][0]
+            salary = jobnames[job][0] * jobmulti
             if str(ctx.channel.type) == "private":
                 salary *= db.getusermulti(user.id)
             else:
@@ -403,7 +403,31 @@ class economy(commands.Cog):
 
     @commands.command(name="store", aliases=["shop"])
     async def _Store(self, ctx):
-        await ctx.send("This feauture is still in development")
+        await ctx.send("This feature is still in development")
+        
+    @commands.command(name="vote")
+    async def _Vote(self, ctx):
+        fn, db = self.bot.fn, self.bot.db
+        user = ctx.author
+
+        job = db.getjob(user.id)
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user.id)
+        salary = jobnames[job][0] * jobmulti
+        if str(ctx.channel.type) == "private":
+            salary *= db.getusermulti(user.id)
+        else:
+            multis = db.getmultis(user.id, ctx.guild.id)
+            salary *= multis[0] * multis[1]
+        
+        embed = fn.embed("FBot Vote",
+                         "If you vote you'll earn your salary except without tax",
+                         f"So **~~f~~ {round(salary)}** if I'm not mistaken\n",
+                         "**THIS FEATURE HAS NOT YET BEEN IMPLEMENTED**",
+                         "**SO VOTE, SURE, BUT NO REWARDS YET**\n",
+                         f"[Top.gg vote]({fn.votetop})",
+                         f"[discordbotlist]({fn.votedbl})")
+        await ctx.send(embed=embed)
     
 def setup(bot):
     bot.add_cog(economy(bot))

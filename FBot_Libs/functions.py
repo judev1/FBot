@@ -70,23 +70,26 @@ class fn:
                 if bannedchar == char: return char
             return None
 
-    def embed(self, title, info):
-        return Embed(title=title, description=info, colour=self.red)
+    def embed(self, title, *desc, url=""):
+        desc = "\n".join(desc)
+        return Embed(title=title, description=desc, colour=self.red, url=url)
 
     def errorembed(self, error, info):
         return Embed(title=f"**Error:** `{error}`",
                description=f"```{info}```", colour=self.red)
 
     red = 0xF42F42
+    
+    top = "https://top.gg/bot/711934102906994699"
+    dbl = "https://discordbotlist.com/bots/fbot"
+    votetop = "https://top.gg/bot/711934102906994699/vote"
+    votedbl = "https://discordbotlist.com/bots/fbot/upvote"
 
+    site = "https://fbot.breadhub.uk"
+    server = "https://fbot.breadhub.uk/server"
+    invite = "https://fbot.breadhub.uk/invite"
     github = "https://github.com/judev1/FBot"
-    topgg = "https://top.gg/bot/711934102906994699"
-
-    server = "https://discord.gg/BDpXRq9"
     fbot = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
-
-    vote = "https://top.gg/bot/711934102906994699/vote"
-    invite = "https://discord.com/oauth2/authorize?client_id=711934102906994699&permissions=8&scope=bot"
 
 class ftime:
 
