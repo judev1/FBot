@@ -41,7 +41,7 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(guild.name, guild.description)
+        embed = self.bot.fn.embed(guild.name)  # guild.description
         embed.add_field(name="Members", value=memcount)# + botcount)
         #embed.add_field(name="Users", value=memcount)
         #embed.add_field(name="Bots", value=botcount)
