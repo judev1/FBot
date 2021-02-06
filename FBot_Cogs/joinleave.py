@@ -20,7 +20,7 @@ class joinleave(commands.Cog):
         #    120 * 60, temporary=True)
         #except: invite = "error resolving invite"
 
-        embed = self.bot.fn.embed(f"**Added** to `{newguild}`", newguild.id)
+        embed = self.bot.fn.embed(f"**Added** to `{newguild}`", str(newguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         #embed.add_field(name="Bot count", value=f"`{botcount - 1}`")
@@ -37,7 +37,7 @@ class joinleave(commands.Cog):
         #    if not member.bot:memcount += 1
         #    else: botcount += 1
         
-        embed = self.bot.fn.embed(f"**Removed** from `{oldguild}`", oldguild.id)
+        embed = self.bot.fn.embed(f"**Removed** from `{oldguild}`", str(oldguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         #embed.add_field(name="Bot count", value=f"`{botcount}`")
