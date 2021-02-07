@@ -12,11 +12,20 @@ class purge(commands.Cog):
     @commands.command(name="purge", aliases=["thanos"])
     @commands.guild_only()
     @commands.check(cooldown)
-    @commands.bot_has_permissions(manage_messages=True)
     async def do_purge(self, ctx, *args):
+
+        # Check sender has permission        
         if not ctx.message.author.guild_permissions.manage_messages:
             await ctx.send("**`You do not have the manage_messages permissions.`**")
             return
+
+        # Check bot has permission
+        if not ctx.channel.permissions_for(
+            ctx.guild.get_member(self.bot.user.id)).manage_messages:
+            await ctx.send("**`FBot does not have the 'manage_messages' permission. Go annoy a server admin.`**")
+            return
+
+        # Check there is not an ongoing purge in same channel
         if ctx.channel.id in ongoing_purges:
             msg = await ctx.send("**A purge is already in progress, calm yoself.**")
             await asyncio.sleep(1)
@@ -24,6 +33,7 @@ class purge(commands.Cog):
                 await msg.delete()
             except: pass # message might have been deleted
             return
+        
         if len(args) != 0:
             limit = "".join(args)
             if limit.isdigit():
