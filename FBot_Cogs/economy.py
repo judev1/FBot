@@ -118,15 +118,15 @@ class economy(commands.Cog):
         async def _Multiply(message):
             user = message.author
             if user.bot: return
-            if db.Get_Cooldown(user.id) > 0: return
             if not commands.bot_has_permissions(send_messages=True): return
             if str(message.channel.type) == "private": guild_id = 0
             else: guild_id = message.guild.id
             commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
             for command in self.bot.walk_commands():
-                if command.cog_name == "fbotdev": return
-                elif command.name in nomulticmds: return
+                if command.cog_name == "fbotdev": continue
+                elif command.name in nomulticmds: continue
                 if commandcheck.startswith(command.name):
+                    if db.Get_Cooldown(user.id) > 0: return
                     db.increasemultiplier(user.id, guild_id, 2)
                     if db.premium(user.id):
                         db.Update_Cooldown(user.id, 3)
@@ -134,6 +134,7 @@ class economy(commands.Cog):
                     return
                 for alias in command.aliases:
                     if commandcheck.startswith(alias):
+                        if db.Get_Cooldown(user.id) > 0: return
                         db.increasemultiplier(user.id, guild_id, 2)
                         if db.premium(user.id):
                             db.Update_Cooldown(user.id, 3)
