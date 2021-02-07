@@ -2,11 +2,17 @@ from discord.ext import commands
 from dbfn import reactionbook
 from functions import cooldown
 
-ehelp = ["""**Basic Overview**
+ehelp = ["""**Overview**
 Welcome to FBot's economy! This will be your guide to FBot economy system.
 Firstly the big question, how do you earn money? To earn money, or FBux,
 indicated by this symbol: ' ~~f~~ ', you must work.
 
+ Page 1: **Overview**
+ Page 2: **Introduction**
+ Page 3: **Working, Studying and Multipliers**
+ Page 4: **Information and More**""",
+
+"""**Introduction**
 Working is fairly straight forward, every hour you can take a work shift and
 earn your jobs worth of money (minus tax). Now I bet that sounds pretty neat,
 but with FBot's multi trillion dollar maintenance costs, we have to keep tax
@@ -62,6 +68,9 @@ stay posted.
 Use your money, to get... more money. Learn how to commit tax evasion or money
 laundering, or whatever else we choose to add! What better way to invest your
 hard earned cash, than in more cash and future content!
+
+VOTE FOR FBOT and get your entire salary WITHOUT TAX, use `FBot vote` to find
+out more.
 
 We are always working on new ways to improve FBot, if you have any suggestions,
 or just wanna drop by for a chat, use `FBot server` to join our server.
