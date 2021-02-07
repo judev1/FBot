@@ -67,7 +67,7 @@ class triggerresponses(commands.Cog):
         elif message.content.lower() == "feet pics":
             msg = await send("FBot says:\n(Drum roll please)")
             await asyncio.sleep(2)
-            await msg.edit(f"FBot says:\nFeet pics {choice(tf)} be granted!")
+            await msg.edit(content=f"FBot says:\nFeet pics {choice(tf)} be granted!")
             return
 
         if str(message.channel.type) != "private":
