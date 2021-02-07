@@ -24,12 +24,6 @@ bot.db = db()
 tr.trigger_load()
 bot.ftime = ftime()
 
-from datetime import datetime
-c = bot.db.conn.cursor()
-c.execute("ALTER TABLE users ADD COLUMN cooldown integer")
-c.execute("UPDATE users SET cooldown=?", (datetime.now().timestamp(),))
-bot.db.conn.commit()
-
 token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
 
 print(f" > Session started at {bot.ftime.start}")
