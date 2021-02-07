@@ -14,6 +14,15 @@ def cooldown(ctx):
 class fn:
 
     def gettoken(self, num):
+        if num == 1:
+            print(f"""
+################################################
+# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
+################################################
+# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
+################################################
+# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
+################################################\n\n""")
         with open("./Info/Tokens.txt", "r") as file: data = file.readlines()
         return data[int(num)][:-1]
 
