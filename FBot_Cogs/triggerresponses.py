@@ -38,6 +38,11 @@ class triggerresponses(commands.Cog):
 
         if message.author.bot: return
 
+        # If fbot doesn't have permission to send messages, return
+        if not message.channel.permissions_for(
+            message.guild.get_member(self.bot.user.id)).send_messages:
+            return
+
         commandcheck = content[len(self.bot.fn.getprefix(self.bot, message)):]
         for command in self.bot.walk_commands():
             if commandcheck.startswith(command.name): return
