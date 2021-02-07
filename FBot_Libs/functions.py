@@ -9,7 +9,7 @@ def cooldown(ctx):
     user = ctx.author
     usercooldown = db.Get_Cooldown(user.id)
     if usercooldown <= 0:
-        db.Update_Cooldown(user.id)
+        db.Update_Cooldown(user.id, 8)
         return True
     raise commands.CommandOnCooldown(commands.BucketType.user, usercooldown)
 
