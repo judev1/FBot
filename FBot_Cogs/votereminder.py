@@ -1,14 +1,17 @@
 from discord.ext import tasks, commands
 
+class fakeuser: id = 0
+user = fakeuser
+
 class votereminder(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.vote_channel = self.bot.get_channel(757722305395949572)
-        self.fbot_general = self.bot.get_channel(717735765936701454)
+##        self.vote_channel = self.bot.get_channel(757722305395949572)
+##        self.fbot_general = self.bot.get_channel(717735765936701454)
         
-##        self.vote_channel = self.bot.get_channel(727320090483359844)
-##        self.fbot_general = self.vote_channel
+        self.vote_channel = self.bot.get_channel(727320090483359844)
+        self.fbot_general = self.vote_channel
         # ^ for fbot 3 testing
         self.vote_reminder.start()
         self.is_first_message = True
@@ -16,12 +19,15 @@ class votereminder(commands.Cog):
     @commands.command(name="votereminder")
     @commands.is_owner()
     async def manual_votereminder(self, ctx):
-        await ctx.send(self.get_votereminder())
+        await ctx.send(embed=self.get_votereminder_embed())
 
-    def get_votereminder(self):
+    def get_votereminder_embed(self):
         fn = self.bot.fn
-        msg = "vote 4 fbot xd\n\nhttps://top.gg/bot/711934102906994699/vote"
-        return msg
+        return fn.embed(fakeuser,
+                        "Vote 4 fbot xd",
+                        "You can [vote](https://top.gg/bot/711934102906994699/vote) every 12 hours and earn MAD FBUX",
+                        url=fn.votetop)
+    #"(https://top.gg/bot/711934102906994699/vote)",
 
     def cog_unload(self):
         self.vote_reminder.cancel()
@@ -30,10 +36,10 @@ class votereminder(commands.Cog):
     async def vote_reminder(self):
         if self.is_first_message:
             self.is_first_message = False
-            #return
-        msg = self.get_votereminder()
-        await self.vote_channel.send(msg)
-        await self.fbot_general.send(msg)
+            return
+        embed = self.get_votereminder_embed()
+        await self.vote_channel.send(embed=embed)
+        await self.fbot_general.send(embed=embed)
         
 def setup(bot):
     bot.add_cog(votereminder(bot))
