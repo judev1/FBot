@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 
 class modtoggle(commands.Cog):
     
@@ -7,6 +8,7 @@ class modtoggle(commands.Cog):
         
     @commands.command(name="modtoggle")
     @commands.guild_only()
+    @commands.check(cooldown)
     async def _Modtoggle(self, ctx, arg):
         db = self.bot.db
         

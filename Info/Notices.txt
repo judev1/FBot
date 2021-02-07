@@ -1,1 +1,0 @@
-f"""**FBot Economy has been released, along with v1.9!""""

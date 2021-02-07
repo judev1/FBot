@@ -65,14 +65,14 @@ class fcounter(commands.Cog):
             if message.content.startswith(str(last_number)):
                 await message.channel.send(f"**The last number in this channel was edited**\nThe next number is `{last_number+1}`")
 
-    @commands.command("setcounter", aliases=["setcounting", "counter", "counting"])
+    @commands.command("counting")
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
             self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
             await ctx.send("Set the current channel to counting channel")
         else: await ctx.send("Only administrators can set the counting channel")
 
-    @commands.command("devsetcounter", aliases=["devsetcounting","devcounter","devcounting"])
+    @commands.command("devcounting")
     @commands.is_owner()
     async def dev_set_counter_channel(self, ctx):
         self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
@@ -87,12 +87,12 @@ class fcounter(commands.Cog):
             #last_sender = ctx.guild.get_member(user_id).display_name
             last_sender = self.bot.get_user(user_id).name
         except: last_sender = "Nobody"
-        embed = self.bot.fn.embed("FBot counter",
+        embed = self.bot.fn.embed(ctx.author, "FBot counter",
                 f"The current number is `{last_number}`, the next is `{last_number + 1}`"
                 f"\nLast sender is `{last_sender}`")
         await ctx.send(embed=embed)
 
-    @commands.command("highscores", aliases=["highscore", "hs"])
+    @commands.command("hs")
     @commands.cooldown(1, 5, type=commands.BucketType.user)
     async def _leaderboard(self, ctx):
         name = ctx.author.display_name
@@ -107,10 +107,10 @@ class fcounter(commands.Cog):
                     guild_name = "(Deleted guild)"
                 highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
                 guild_rank += 1
-            embed = self.bot.fn.embed("FBot counting leaderboard", highscores)
+            embed = self.bot.fn.embed(ctx.author, "FBot counting leaderboard", highscores)
         await ctx.send(embed=embed)
 
-    @commands.command("devsetnumber")
+    @commands.command("devnumber")
     @commands.is_owner()
     async def _setnumber(self, ctx, *, number):
         if not number.isdigit(): await ctx.send("Not a number")

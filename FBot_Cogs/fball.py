@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 from random import choice
 
 responses = ["Without a doubt... yes.",
@@ -38,7 +39,8 @@ class fball(commands.Cog):
                 await message.channel.send(choice(responses))
         self.bot.add_listener(_FBall, "on_message")
 
-    @commands.command(name="fball", aliases=["8ball"])
+    @commands.command(name="fball")
+    @commands.check(cooldown)
     async def _FBot_FBall(self, ctx):
         await ctx.send(choice(responses))
 

@@ -18,15 +18,16 @@ owners = [671791003065384987, 216260005827969024, 311178459919417344]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
 
+fn.bot = bot
 bot.fn = fn
 bot.db = db()
 tr.trigger_load()
 bot.ftime = ftime()
 
+from datetime import datetime
 c = bot.db.conn.cursor()
-c.execute("UPDATE users SET job='Unemployed' WHERE job='None';")
-c.execute("UPDATE channels SET status='off' WHERE status='0';")
-c.execute("UPDATE guilds SET modtoggle='off' WHERE modtoggle='0'")
+c.execute("ALTER TABLE users ADD COLUMN cooldown integer")
+c.execute("UPDATE users SET cooldown=?", (datetime.now().timestamp(),))
 bot.db.conn.commit()
 
 token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris

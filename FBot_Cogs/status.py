@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 from dbfn import reactionbook
 
 class status(commands.Cog):
@@ -7,8 +8,10 @@ class status(commands.Cog):
         self.bot = bot
         
     @commands.command(name="status")
+    @commands.check(cooldown)
     async def _Status(self, ctx, *args):
         db = self.bot.db
+        user = ctx.author
         if str(ctx.channel.type) != "private":
             db.Add_Channel(ctx.channel.id, ctx.guild.id)
         if len(args) in [1, 2]:
@@ -28,6 +31,7 @@ class status(commands.Cog):
                 header = f"Modtoggle: `{db.Get_Modtoggle(guild_id)}` Responds to: `{db.Get_Priority(guild_id)}`"
                 empty1 = "`There are no channels`\n`in the Database set to on`"
                 empty2 = "`There are no channels`\n`in the Database set to off`"
+                colour = self.bot.db.getcolour(user.id)
 
                 book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
                 if mod:
@@ -36,12 +40,12 @@ class status(commands.Cog):
                 else:
                     book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"), subcheck1=(view_channel, None))
                     book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"), subcheck1=(view_channel, None))
-                await book.createbook(HEADER=header, COLOUR=self.bot.fn.red)
+                await book.createbook(HEADER=header, COLOUR=colour)
         else:
             if str(ctx.channel.type) == "private":
-                embed = self.bot.fn.embed("FBot is always on in DMs", "")
+                embed = self.bot.fn.embed(user, "FBot is always on in DMs")
             else:
-                embed = self.bot.fn.embed("FBot Status", "")
+                embed = self.bot.fn.embed(user, "FBot Status")
                 embed.add_field(name="FBot Status", value=f"`{db.Get_Status(ctx.channel.id)}`")
                 embed.add_field(name="Modtoggle", value=f"`{db.Get_Modtoggle(ctx.guild.id)}`")
                 embed.add_field(name="Respond to", value=f"`{db.Get_Priority(ctx.guild.id)}`")

@@ -1,15 +1,17 @@
 from discord.ext import commands
+from functions import cooldown
 
 class version(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="version", aliases=["ver"])
+    @commands.command(name="ver")
+    @commands.check(cooldown)
     async def _Version(self, ctx):
         fn = self.bot.fn
         ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
-        embed = fn.embed("FBot's Version", "")
+        embed = fn.embed(ctx.author, "FBot's Version")
         embed.add_field(name="Version", value=f"`{ver}`")
         embed.add_field(name="Released", value=f"`{updated}`")
         await ctx.send(embed=embed)

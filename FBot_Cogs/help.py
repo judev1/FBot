@@ -1,5 +1,6 @@
 from discord.ext import commands
 from dbfn import reactionbook
+from functions import cooldown
 
 ehelp = ["""**Basic Overview**
 Welcome to FBot's economy! This will be your guide to FBot economy system.
@@ -73,11 +74,12 @@ class help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="help", aliases=["?"])
+    @commands.command(name="help")
+    @commands.check(cooldown)
     async def _Help(self, ctx):
         fn = self.bot.fn
         
-        embed = fn.embed("FBot Help",
+        embed = fn.embed(ctx.author, "FBot Help",
                 "**Useful Commands**",
                 "Use `FBot on/off` to toggle fbot",
                 "Use `FBot cmds` for a list of commands",
@@ -90,9 +92,10 @@ class help(commands.Cog):
 
     @commands.command(name="economy")
     async def _Economy(self, ctx):
+        colour = self.bot.db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Economy")
         book.createpages(ehelp, ITEM_PER_PAGE=True)
-        await book.createbook(MODE="numbers", COLOUR=self.bot.fn.red, TIMEOUT=60)
+        await book.createbook(MODE="numbers", COLOUR=colour, TIMEOUT=60)
 
 def setup(bot):
     bot.add_cog(help(bot))

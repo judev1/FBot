@@ -6,7 +6,7 @@ conn = sqlite3.connect(path)
 
 class db:
 
-    def __init__(self):
+    def __init__(self, verbose=True):
         
         self.conn = conn # For sharing with other cogs/files
         c = conn.cursor()
@@ -38,7 +38,8 @@ class db:
                           degree string NOT NULL,
                           lastwork integer NOT NULL,
                           laststudy integer NOT NULL,
-                          degreeprogress integer NOT NULL
+                          degreeprogress integer NOT NULL,
+                          cooldown integer NOT NULL
                           )""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS counter (
@@ -50,7 +51,7 @@ class db:
                           )""")
         
         conn.commit()
-        print(" > Connected to FBot.db")
+        print(" > Connected to FBot.db") if verbose else False
 
     def Check_Guilds(self, guilds):
         c = conn.cursor()
@@ -152,6 +153,17 @@ class db:
             newdata.append((channel[0], channel[1]))
         return newdata
 
+    def Update_Cooldown(self, user_id, cooldown):
+        c = conn.cursor()
+        t = (datetime.now().timestamp() + cooldown, user_id)
+        c.execute("UPDATE users SET cooldown=? WHERE user_id=?", t)
+        conn.commit()
+
+    def Get_Cooldown(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("SELECT cooldown FROM users WHERE user_id=?", t)
+        return round(c.fetchone()[0] - datetime.now().timestamp(), 2)
 
     # Economy
 
@@ -160,8 +172,8 @@ class db:
         t = (user_id,)
         c.execute("SELECT user_id FROM users WHERE user_id=?", t)
         if c.fetchone() is None:
-            t = (user_id,-1,10000,0,0,0,0,'Unemployed', '{}', 'None',0,0,0)
-            marks = ",".join(["?"] * 13)
+            t = (user_id,-1,10000,0,0,0,0,"Unemployed","{}","None",0,0,0,0)
+            marks = ",".join(["?"] * 14)
             c.execute(f"INSERT INTO users VALUES({marks})", t)
             conn.commit()
 
@@ -345,6 +357,13 @@ class db:
         c = conn.cursor()
         c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT 20")
         return enumerate(c)
+
+    # Premium
+
+    def getcolour(self, user_id):
+        if user_id in [671791003065384987, 216260005827969024]:
+            return 0xDAA520 #0xA7700B
+        return 0xF42F42
 
     # Prefix
 

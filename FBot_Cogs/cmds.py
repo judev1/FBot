@@ -1,7 +1,9 @@
 from discord.ext import commands
+from functions import cooldown
 from dbfn import reactionbook
 
-cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
+cmdpages = ("""**FBot Commands**
+Write `FBot ` (the prefix) however you want, I don't care
 *If you ever lose your prefix use plain* `prefix` *to get it*
 
  Page 1: **Contents**
@@ -46,8 +48,12 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 *Gives you all the information about economy found on the economy page*
 `profile (@member)`: **NEW**
 *Returns your economy profile, or anyone else whom you specify*
-`store`: **NEW**
-*Not yet implemented*
+`bal (@member)`: **NEW**
+*Shows your balance or that of a member*
+`multis (@member)`: **NEW**
+*Shows your multipliers or a members*
+`top [bal | netbal | debt | netdebt | multi | servmulti]`: **NEW**
+*Shows the top for a type. more to be added*
 
 `work`: **NEW**
 *Can be used once an hour to earn that sweet sweet cash, after tax of course*
@@ -58,23 +64,14 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 *Returns a list of degrees, modified so that it's relevent to you*
 `degrees`: **NEW**
 *Returns a list of degrees, modified so that it's relevent to you*
-
 `apply` `<job>`: **NEW**
 *Apply for a job, you must unlock the relative degree first*
 `take` `<degree>`: **NEW**
 *Take a degree, you must have a high enough multiplier first*
-
 `resign`: **NEW**
 *Quit your current job, great for slackers and those changing jobs*
 `drop`: **NEW**
-*Had enough of you're degree? Drop it! But be careful, all your progress for that degree will be lost*
-
-`bal (@member)`: **NEW**
-*Shows your balance or that of a member*
-`multis (@member)`: **NEW**
-*Shows your multipliers or a members*
-`top [bal | netbal | debt | netdebt | multi | servmulti]`: **NEW**
-*Shows the top for a type. more to be added""",
+*Had enough of you're degree? Drop it! But be careful, all your progress for that degree will be lost*""",
 
 """**Fun Commands**
 
@@ -108,18 +105,19 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 
 """**Information Commands**
 
-`info`: *Displays some infomation about the FBot*
-`serverinfo`: *Displays infomation about the server*
-`stats`: *Shows message stats for FBot in  a peroid*
+`info`:
+*Shows information about FBot including server count, version, uptime and more*
+`serverinfo`:
+*Gives information about the current server*
+`stats`:
+*Shows message processing information for a given time*
 
-`session`/`uptime`: *Gives a session overview*
-`version`/`ver`: *Shows the version of the bot*
-`ping`: *Shows the current ping for the bot*
-
-`events`/`event`: *Shows any events that are running and gives an overview of it*
-`notices`/`notice`: *Shows some cool stuff :)*
-`cl`/`cls`/`changelogs` (`<ver>`/`list`/`recent`):
-*Gets changelogs*""",
+`session`:
+*Gives the current session information for FBot*
+`ver`:
+*Shows the current version of FBot including when it was last updated*
+`ping`:
+*Check FBot's current ping*""",
 
 """**Link Commands**
 
@@ -132,24 +130,29 @@ cmdpages = ("""**Write `FBot ` (the prefix) however you want, I don't care**
 `server`:
 *Gives a link to join our server*""")
 
-devcmdpage = ["""**General Commands**
-`devon`/`devoff`
+devcmdpage = ["""`devon`/`devoff`
 `devmodtoggle [on | off]`
+`devrespond [few | some | all]`
 
 `eval <to eval>`
 `await <function> <to await>`
 
-`reload` `<cog>`: *Reloads a cog*
-`load` `<cog>`: *Loads a cog*
-`unload` `<cog>`: *Unloads a cog*
+`reload` `<cog>`
+`load` `<cog>`
+`unload` `<cog>`
 
-`servers`/`members` (broken)
+`dbl`
+`host`
+`treload`
+`commands`
+
+`jokeinfo`
+`servers | members` **(broken)**
 `search <query>`
 `lookup <server_id>`
 `newinvite <server_id>`
 
-`host`
-`treload`
+`gift <fbux> @user`
 `devsetnumber <number>`
 `presence <newpresence>`
 `send <channel_id> <message>`
@@ -161,18 +164,21 @@ class cmds(commands.Cog):
         self.bot = bot
         self.red = bot.fn.red
         
-    @commands.command(name="commands", aliases=["cmds"])
+    @commands.command(name="cmds")
+    @commands.check(cooldown)
     async def _Commands(self, ctx, *page):
-        book = reactionbook(self.bot, ctx, TITLE="FBot Commands")
+        colour = self.bot.db.getcolour(ctx.author.id)
+        book = reactionbook(self.bot, ctx)
         book.createpages(cmdpages, ITEM_PER_PAGE=True)
-        await book.createbook(MODE="numbers", COLOUR=self.red)
+        await book.createbook(MODE="numbers", COLOUR=colour)
 
     @commands.command(name="devcmds")
     @commands.is_owner()
     async def _DevCommands(self, ctx):
+        colour = self.bot.db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Dev Commands")
         book.createpages(devcmdpage)
-        await book.createbook(MODE="numbers", COLOUR=self.red)
+        await book.createbook(MODE="numbers", COLOUR=colour)
 
 def setup(bot):
     bot.add_cog(cmds(bot))

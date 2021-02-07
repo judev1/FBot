@@ -1,8 +1,8 @@
 from discord.ext import tasks, commands
-from triggers import tr
+from functions import cooldown
 from datetime import datetime
+from triggers import tr
 from math import ceil
-
 
 class dailystats(commands.Cog):
     
@@ -42,10 +42,12 @@ class dailystats(commands.Cog):
         else:
             self.other_messages_processed += 1
 
-    def cog_unload(self):
-        self.auto_stats.cancel()
+    @commands.command(name="stats")
+    @commands.check(cooldown)
+    async def manual_stats(self, ctx):
+        await ctx.send(embed=self.get_stats_embed(ctx.author))
 
-    def get_stats_embed(self):
+    def get_stats_embed(self, user):
         fn = self.bot.fn
         hours = ceil((datetime.now().timestamp()-self.time_start)/3600)
         total = self.commands_processed + self.triggers_processed + self.other_messages_processed
@@ -53,11 +55,11 @@ class dailystats(commands.Cog):
 Triggers responded: `{self.triggers_processed}`
 Messages ignored: `{self.other_messages_processed}`
 Total count: `{total}`"""
-        title = f"FBot stats for the past {hours} hours:"
-        embed = fn.embed(title, stats)
-        return embed
-    
+        return fn.embed(user, f"FBot stats for the past {hours} hours:", stats)
 
+    def cog_unload(self):
+        self.auto_stats.cancel()
+    
     @tasks.loop(hours = 24.0)
     async def auto_stats(self):
         if self.is_first_message:
@@ -69,18 +71,6 @@ Total count: `{total}`"""
         self.triggers_processed = 0
         self.other_messages_processed = 0
         self.time_start = datetime.now().timestamp()
-
-    @commands.command(name="stats", aliases=["dailystats"])
-    async def manual_stats(self, ctx):        
-        embed = self.get_stats_embed()
-        await ctx.send(embed=embed)
         
-        
-
 def setup(bot):
     bot.add_cog(dailystats(bot))
-
-
-
-
-

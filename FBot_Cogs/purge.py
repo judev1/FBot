@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 import asyncio
 
 ongoing_purges = set()
@@ -8,8 +9,9 @@ class purge(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="purge", aliases=["zahando", "thanos", "clear"])
+    @commands.command(name="purge", aliases=["thanos"])
     @commands.guild_only()
+    @commands.check(cooldown)
     @commands.bot_has_permissions(manage_messages=True)
     async def do_purge(self, ctx, *args):
         if not ctx.message.author.guild_permissions.manage_messages:

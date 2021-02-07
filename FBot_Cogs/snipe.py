@@ -1,6 +1,7 @@
-import discord
 from discord.ext import commands
+from functions import cooldown
 from collections import deque # deque = queue datatype
+import discord
 import os
 import io
 
@@ -12,28 +13,12 @@ class snipe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_message_delete(self, message):
-        if not message.guild: return
-        if message.channel.id not in snipes:
-            
-            snipes[message.channel.id] = deque(maxlen=max_snipes)
-        snipes[message.channel.id].appendleft((message, "Deleted message"))
-
-    @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
-        if before.content == after.content: return
-        if not before.guild: return
-        # message = before
-        
-        if before.channel.id not in snipes:
-            snipes[before.channel.id] = deque(maxlen=max_snipes)
-        snipes[before.channel.id].appendleft((before, "Edited message"))
-
     @commands.command(name="snipe")
-    async def do_snipe(self, ctx, number=1):
+    @commands.check(cooldown)
+    async def _Snipe(self, ctx, number=1):
+        user = ctx.author
         if ctx.message.channel.id not in snipes:
-            embed = self.bot.fn.embed("FBot Snipe",
+            embed = self.bot.fn.embed(user, "FBot Snipe",
                     "```No recently deleted/edited messages to snipe```")
             await ctx.send(embed=embed)
             return
@@ -68,8 +53,26 @@ class snipe(commands.Cog):
                 file=discord.File(r"fbot_snipe.txt"))
             os.remove("fbot_snipe.txt")
         else:
-            embed = self.bot.fn.embed("FBot snipe", msg)
+            embed = self.bot.fn.embed(user, "FBot snipe", msg)
             await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        if not message.guild: return
+        if message.channel.id not in snipes:
+            
+            snipes[message.channel.id] = deque(maxlen=max_snipes)
+        snipes[message.channel.id].appendleft((message, "Deleted message"))
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        if before.content == after.content: return
+        if not before.guild: return
+        # message = before
+        
+        if before.channel.id not in snipes:
+            snipes[before.channel.id] = deque(maxlen=max_snipes)
+        snipes[before.channel.id].appendleft((before, "Edited message"))
 
 def setup(bot):
     bot.add_cog(snipe(bot))

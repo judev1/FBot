@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 
 class say(commands.Cog):
     
@@ -6,6 +7,7 @@ class say(commands.Cog):
         self.bot = bot
         
     @commands.command(name="say")
+    @commands.check(cooldown)
     async def _Say(self, ctx, *, inp: str):
         await ctx.message.delete()
         await ctx.send(inp + "ㅤ")

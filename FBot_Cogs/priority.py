@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 
 class priority(commands.Cog):
     
@@ -7,6 +8,7 @@ class priority(commands.Cog):
         
     @commands.command(name="respond")
     @commands.guild_only()
+    @commands.check(cooldown)
     async def _Priority(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             db = self.bot.db

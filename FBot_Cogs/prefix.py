@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 
 class prefix(commands.Cog):
     
@@ -7,6 +8,7 @@ class prefix(commands.Cog):
 
     @commands.command(name="prefix")
     @commands.guild_only()
+    @commands.check(cooldown)
     async def _ChangePrefix(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             fn, db = self.bot.fn, self.bot.db

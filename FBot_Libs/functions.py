@@ -1,6 +1,17 @@
+from discord.ext import commands
 from datetime import datetime, timezone
 from discord import Embed
+from database import db
 import os
+
+db = db(verbose=False)
+def cooldown(ctx):
+    user = ctx.author
+    usercooldown = db.Get_Cooldown(user.id)
+    if usercooldown <= 0:
+        db.Update_Cooldown(user.id)
+        return True
+    raise commands.CommandOnCooldown(commands.BucketType.user, usercooldown)
 
 class fn:
 
@@ -13,20 +24,6 @@ class fn:
         if info == "lastupdated": return data[0][:-1]
         elif info == "ver": return data[1][:-1]
         else: raise NameError(f"No variable called '{info}'")
-
-    def getnotices(self):
-        with open("./Info/Notices.txt", "r") as file:
-            data = file.readlines()
-            notices = ""
-            for line in data: notices += str(line)
-        return eval(notices)
-
-    def getevents(self):
-        with open("./Info/Events.txt", "r") as file:
-            data = file.readlines()
-            events = ""
-            for line in data: events += str(line)
-        return eval(events)
 
     def getcogs(self):
         cogs = []
@@ -41,13 +38,6 @@ class fn:
             if os.path.isfile(os.path.join("Info/Change_Logs", ver)):
                 vers.append(ver[:-4])
         return sorted(vers, reverse=True)
-
-    def getcls(self, ver):
-        with open(f"./Info/Change_Logs/{ver}.txt", "r") as file:
-            data = file.readlines()
-            cl = ""
-            for line in data: cl += str(line)
-        return eval(cl)
 
     def getprefix(self, bot, message):
         prefix = "fbot"
@@ -70,14 +60,15 @@ class fn:
                 if bannedchar == char: return char
             return None
 
-    def embed(self, title, *desc, url=""):
+    def embed(self, user, title, *desc, url=""):
+        colour = self.bot.db.getcolour(user.id)
         desc = "\n".join(desc)
-        return Embed(title=title, description=desc, colour=self.red, url=url)
+        return Embed(title=title, description=desc, colour=colour, url=url)
 
     def errorembed(self, error, info):
         return Embed(title=f"**Error:** `{error}`",
                description=f"```{info}```", colour=self.red)
-
+    
     red = 0xF42F42
     
     top = "https://top.gg/bot/711934102906994699"
