@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 from triggers import tr
 import discord
 import asyncio
@@ -21,13 +22,13 @@ t1degrees = {"Standing": [2, 1.01, "Scarecrow"],
 t2jobs = {"Undertaker": [20000, "Sometimes when I bury bodies it wasn't because I committed a crime"],
           "Artist": [25000, "I'm actually not an artist; I've been framed"],
           "Nudist": [30000, "Stop being so clothed minded"],
-          "Licensed Virgin": [3500, "The only difference is now you get paid for it"]}
+          "Licensed Virgin": [35000, "The only difference is now you get paid for it"]}
 t2degrees = {"Undertaking": [8, 1.25, "Undertaker"],
              "Art": [8, 1.3, "Artist"],
              "Feet Pics": [8, 1.35, "Nudist"],
              "Being yourself": [8, 1.4, "Licensed Virgin"]}
 # TIER THREE
-t3jobs = {"Pizza Delivery Guy": [5000, "The better the day the less we get paid"],
+t3jobs = {"Pizza Delivery Guy": [50000, "The better the day the less the pay"],
           "Offical Bread Taster": [60000, "You can't taste the bread, until you've touched the bread"],
           "The Milkman": [70000, "I am the milkman, my milk is delicious"],
           "Ass Waxer": [80000, "Feel the ass, wax the ass"]}
@@ -101,6 +102,8 @@ for tier in degrees:
     for degree in tier:
         degreenames[degree] = tier[degree]
 
+nomulticmds = ["devcmds", "gift", "devcounter", "devnumber", "shutup", "jokeinfo"]
+
 class economy(commands.Cog):
 
     def __init__(self, bot):
@@ -111,11 +114,14 @@ class economy(commands.Cog):
         async def _Multiply(message):
             user = message.author
             if user.bot: return
+            if db.Get_Cooldown(user.id) > 0: return
             if not commands.bot_has_permissions(send_messages=True): return
             if str(message.channel.type) == "private": guild_id = 0
             else: guild_id = message.guild.id
             commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
             for command in self.bot.walk_commands():
+                if command.cog_name == "fbotdev": continue
+                elif command.name in nomulticmds: continue
                 if commandcheck.startswith(command.name):
                     db.increasemultiplier(user.id, guild_id, 2)
                     return
@@ -135,6 +141,7 @@ class economy(commands.Cog):
         self.bot.add_listener(_Multiply, "on_message")
 
     @commands.command(name="profile")
+    @commands.check(cooldown)
     async def _Profile(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db = self.bot.db
@@ -143,7 +150,7 @@ class economy(commands.Cog):
         if profile[5] == "None":
             degree = "No degree"
         else: degree = f"{profile[5]} - {profile[6]}/{degreenames[profile[5]][0]}"
-        embed = self.bot.fn.embed(f"{user.display_name}'s profile:", "")
+        embed = self.bot.fn.embed(user, f"{user.display_name}'s profile:")
         embed.add_field(name="FBux", value=profile[0])
         embed.add_field(name="Debt", value=profile[2])
         embed.add_field(name="Job", value=job)
@@ -155,12 +162,14 @@ class economy(commands.Cog):
 
     @commands.command(name="gift")
     @commands.is_owner()
+    @commands.check(cooldown)
     async def _Gift(self, ctx, amount, user: discord.User=None):
         if not user: user = ctx.author
         self.bot.db.updatebal(user.id, amount)
         await ctx.send("Lucky you")
 
     @commands.command(name="jobs")
+    @commands.check(cooldown)
     async def _Jobs(self, ctx):
         db = self.bot.db
 
@@ -180,9 +189,10 @@ class economy(commands.Cog):
             book.createpages(tiercopy, LINE=f"%2 %3%l%3 - {f}%0\n*%1*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {i}**\n")
             i += 1
-        await book.createbook(COLOUR=self.bot.fn.red)
+        await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="degrees")
+    @commands.check(cooldown)
     async def _Degrees(self, ctx):
         db = self.bot.db
 
@@ -205,9 +215,10 @@ class economy(commands.Cog):
                              "Course length: `%0`, Requires `x%1` multiplier\n",
                              SUBHEADER=f"**FBot Degrees - Tier {i}**\n")
             i += 1
-        await book.createbook(COLOUR=self.bot.fn.red)
+        await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="apply")
+    @commands.check(cooldown)
     async def _Apply(self, ctx, *, job):
         for jobname in jobnames:
             if job.lower() == jobname.lower():
@@ -222,8 +233,9 @@ class economy(commands.Cog):
                 if db.getjob(user.id) == "Unemployed":
                     db.changejob(user.id, job)
                     db.worked(user.id)
-                    embed = self.bot.fn.embed(f"You have been given the job: `{job}`",
-                               "Please wait an hour before you start working")
+                    embed = self.bot.fn.embed(user,
+                            f"You have been given the job: `{job}`",
+                            "Please wait an hour before you start working")
                     embed.set_author(name="Application accepted!")
                     await ctx.send(embed=embed)
                     return
@@ -233,6 +245,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="take")
+    @commands.check(cooldown)
     async def _Take(self, ctx, *, degree):
         for degreename in degreenames:
             if degree.lower() == degreename.lower():
@@ -246,8 +259,9 @@ class economy(commands.Cog):
                     if db.getdegree(user.id) == "None":
                         db.changedegree(user.id, degree)
                         db.studied(user.id)
-                        embed = self.bot.fn.embed(f"You are now taking the degree: `{degree}`",
-                                   "Please wait an hour before you start studying")
+                        embed = self.bot.fn.embed(user,
+                                f"You are now taking the degree: `{degree}`",
+                                "Please wait an hour before you start studying")
                         embed.set_author(name="Application accepted!")
                         await ctx.send(embed=embed)
                         return
@@ -258,6 +272,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="resign")
+    @commands.check(cooldown)
     async def _Resign(self, ctx):
         db = self.bot.db
         job = db.getjob(ctx.author.id)
@@ -271,6 +286,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="drop")
+    @commands.check(cooldown)
     async def _Drop(self, ctx):
         db = self.bot.db
         degree = db.getdegree(ctx.author.id)
@@ -282,6 +298,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="work")
+    @commands.check(cooldown)
     async def _Work(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -301,7 +318,7 @@ class economy(commands.Cog):
 
             income = round(salary * (tax / 100))
             balance = db.work(user.id, job, income)
-            embed = self.bot.fn.embed("FBot work",
+            embed = self.bot.fn.embed(user, "FBot work",
                     f"You work and earn: **{f}{round(salary)}**\n"
                     f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
                     f"Your new balance is: **{f}{balance}**")
@@ -312,6 +329,7 @@ class economy(commands.Cog):
             await ctx.send(f"You must wait another {wait} mins to work again")
 
     @commands.command(name="study")
+    @commands.check(cooldown)
     async def _Study(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -328,12 +346,12 @@ class economy(commands.Cog):
             if progress == length:
                 db.finishdegree(user.id)
                 db.startjob(user.id, degreenames[degree][2])
-                embed = self.bot.fn.embed("Degree completed!",
+                embed = self.bot.fn.embed(user, "Degree completed!",
                         f"You studied and gained debt: **{f}{round(debt)}**\n"
                         f"You may now apply for the **{degreenames[degree][2]}** job")
             else:
                 db.studied(user.id)
-                embed = self.bot.fn.embed(f"You studied for **{degree}**",
+                embed = self.bot.fn.embed(user, f"You studied for **{degree}**",
                         f"You studied and gained debt: **{f}{debt}**\n"
                         f"Degree course progress: `{progress}/{length}`")
             await ctx.send(embed=embed)
@@ -342,17 +360,18 @@ class economy(commands.Cog):
             wait = db.laststudy(user.id)
             await ctx.send(f"You must wait another {wait} mins to study again")
 
-    @commands.command(name="balance", aliases=["bal"])
+    @commands.command(name="bal")
+    @commands.check(cooldown)
     async def _Balance(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db = self.bot.db
         bal, debt = db.getbal(user.id)
-        embed = self.bot.fn.embed(f"{user.display_name}'s balance",
-                f"FBux: **{f}{bal}**\n"
-                f"Debt: **{f}{debt}**")
+        embed = self.bot.fn.embed(user, f"{user.display_name}'s balance",
+                f"FBux: **{f}{bal}**", f"Debt: **{f}{debt}**")
         await ctx.send(embed=embed)
 
-    @commands.command(name="multis", aliases=["multipliers"])
+    @commands.command(name="multis")
+    @commands.check(cooldown)
     async def _Multipliers(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db = self.bot.db
@@ -367,16 +386,17 @@ class economy(commands.Cog):
             multis = db.getmultis(user.id, ctx.guild.id)
             message = (f"Personal Multiplier: `x{multis[0]}`\n"
                        f"Server Multiplier: `x{multis[1]}`")
-        embed = self.bot.fn.embed(f"{user.display_name}'s multipliers:",
+        embed = self.bot.fn.embed(user, f"{user.display_name}'s multipliers:",
                 message + f"\n{job} Multiplier: `x{jobmulti}`")
         await ctx.send(embed=embed)
     
     @commands.command(name="top")
+    @commands.check(cooldown)
     @commands.cooldown(1, 10, type=commands.BucketType.user)
     async def _Top(self, ctx, toptype):
         if toptype == "netbal":
             toptype = "netfbux"
-        if toptype in ["bal", "netfbux", "debt", "netdebt", "multi", "servmulti"]:
+        if toptype in ["bal", "netfbux", "debt", "", "multi", "servmulti"]:
             message = ""
             async with ctx.channel.typing():
                 results = self.bot.db.gettop(toptype)
@@ -397,15 +417,17 @@ class economy(commands.Cog):
                     else:
                         if typeitem == 1000000: break
                         message += f"{rank+1}. {name}: `x{typeitem/1000000}`\n"
-            embed = self.bot.fn.embed(f"FBot Top {toptype}", message)
+            embed = self.bot.fn.embed(ctx.author, f"FBot Top {toptype}", message)
             await ctx.send(embed=embed)
         else: await ctx.send("We don't have a leaderboard for that...")
 
-    @commands.command(name="store", aliases=["shop"])
+    @commands.command(name="store")
+    @commands.check(cooldown)
     async def _Store(self, ctx):
         await ctx.send("This feature is still in development")
         
     @commands.command(name="vote")
+    @commands.check(cooldown)
     async def _Vote(self, ctx):
         fn, db = self.bot.fn, self.bot.db
         user = ctx.author
@@ -420,7 +442,7 @@ class economy(commands.Cog):
             multis = db.getmultis(user.id, ctx.guild.id)
             salary *= multis[0] * multis[1]
         
-        embed = fn.embed("FBot Vote",
+        embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary except without tax",
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken\n",
                          "**THIS FEATURE HAS NOT YET BEEN IMPLEMENTED**",

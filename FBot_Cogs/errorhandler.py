@@ -43,14 +43,16 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.CommandOnCooldown:
             if error.retry_after < 10:
                 retry = str(error.cooldown) + "` seconds"
-            if error.retry_after < 120:
+            if error.retry_after < 20:
+                retry = str(round(error.retry_after, 1)) + "` seconds"
+            elif error.retry_after < 120:
                 retry = str(round(error.retry_after)) + "` seconds"
             else: retry = str(round(error.retry_after / 60)) + "` mins"
-            embed = fn.embed("You are being ratelimited",
-                    f"You may use this command again in `{retry}")
+            embed = fn.embed(ctx.author, "You are being ratelimited",
+                    f"You may use a command again in `{retry}")
         else:
             try:
-                embed = fn.embed("An unusual error has occurred",
+                embed = fn.embed(ctx.author, "An unusual error has occurred",
                         "The devs have been notified, please contact:\n"
                         "`@justjude#2296` or `@LinesGuy#9260`\n"
                         f"OR join our [support server]({fn.server}) "

@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 
 class info(commands.Cog):
     
@@ -6,6 +7,7 @@ class info(commands.Cog):
         self.bot = bot
         
     @commands.command(name="info")
+    @commands.check(cooldown)
     async def _Info(self, ctx):
 
         ftime = self.bot.ftime
@@ -16,7 +18,7 @@ class info(commands.Cog):
             if str(servers.id) != "264445053596991498":
                 totalmembers += servers.member_count
 
-        embed = self.bot.fn.embed("FBot Info")
+        embed = self.bot.fn.embed(ctx.author, "FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds) - 1)
         embed.add_field(name="Last Updated", value=fn.getinfo("lastupdated"))
@@ -26,6 +28,7 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="serverinfo")
+    @commands.check(cooldown)
     async def _ServerInfo(self, ctx):
         guild = ctx.guild
 
@@ -41,7 +44,7 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(guild.name, guild.description)
+        embed = self.bot.fn.embed(ctx.author, guild.name)  # guild.description
         embed.add_field(name="Members", value=memcount)# + botcount)
         #embed.add_field(name="Users", value=memcount)
         #embed.add_field(name="Bots", value=botcount)

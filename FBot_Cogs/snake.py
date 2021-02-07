@@ -1,7 +1,8 @@
 from discord.ext import commands
-import asyncio
+from functions import cooldown
 from collections import deque
 from random import randint
+import asyncio
 
 emojis = ["⬆️", "⬇️", "⬅️", "➡️"]
 emojinames = ["up", "down", "left", "right"]
@@ -93,6 +94,7 @@ class snake(commands.Cog):
         self.games = {}
         
     @commands.command(name="snake", alliases=["snek"])
+    @commands.check(cooldown)
     @commands.cooldown(1, 60, type=commands.BucketType.user)
     async def _Snake(self, ctx):
 

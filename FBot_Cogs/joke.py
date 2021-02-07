@@ -1,4 +1,5 @@
 from discord.ext import commands
+from functions import cooldown
 from random import choice
 import asyncio
 
@@ -14,6 +15,7 @@ class joke(commands.Cog):
         self.bot = bot
 
     @commands.command(name="joke")
+    @commands.check(cooldown)
     async def tell_joke(self, ctx):
         
         if (ctx.channel.id in active_channels):

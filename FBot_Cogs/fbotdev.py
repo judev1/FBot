@@ -13,11 +13,11 @@ class fbotdev(commands.Cog):
     @commands.command(name="treload")
     @commands.is_owner()
     async def _Treload(self, ctx):
-        name = ctx.message.author.display_name
+        name = ctx.author.display_name
         start = time()
         tr.trigger_load()
         ms = round(time() - start, 4) * 1000
-        embed = self.bot.fn.embed("FBot treload",
+        embed = self.bot.fn.embed(ctx.author, "FBot treload",
                 f"`[dev] Reloaded triggers.csv in {ms}ms`")
         await ctx.send(embed=embed)
 
@@ -27,12 +27,23 @@ class fbotdev(commands.Cog):
         fn = self.bot.fn
         try:
             evalcontent = eval(content)
-            embed = fn.embed("FBot eval", f" ```python\n{evalcontent}```")
+            embed = fn.embed(ctx.author, "FBot eval", f" ```python\n{evalcontent}```")
             await ctx.send(embed=embed)
         except Exception as e:
             if content == "": content = "NULL"
-            embed = fn.embed(f"Error in `{content}`", f"```{str(e)}```")
+            embed = fn.errorembed(f"Error in `{content}`", f"```{str(e)}```")
             await ctx.send(embed=embed)
+
+    @commands.command(name="await")
+    @commands.is_owner()
+    async def _Await(SELF, CTX, FUNCTION, *, ARGS):
+        global self, ctx, function, args
+        self, ctx, function, args = SELF, CTX, FUNCTION, ARGS
+        embed = self.bot.fn.embed(ctx.author, "FBot await",
+                f"```python\nawait {function}({args})```")
+        await ctx.send(embed=embed)
+        exec(f"global temp\nasync def temp():\n    await {function}({args})")
+        await temp()
 
     @commands.command(name="devon")
     @commands.is_owner()
@@ -108,7 +119,7 @@ class fbotdev(commands.Cog):
     async def _Lookup(self, ctx, guild_id: int):
         guild = self.bot.get_guild(guild_id)
         if guild == None:
-            embed = self.bot.fn.embed("Lookup", "No guild found")
+            embed = self.bot.fn.embed(ctx.author, "Lookup", "No guild found")
             await ctx.send(embed=embed)
         else:
             memcount = guild.member_count
@@ -136,6 +147,14 @@ class fbotdev(commands.Cog):
             embed.set_thumbnail(url=guild.icon_url)
             await ctx.send(embed=embed)
 
+    @commands.command(name="commands")
+    @commands.is_owner()
+    async def _Commands(self, ctx):
+        commands = [i.name for i in self.bot.walk_commands()]
+        embed = self.bot.fn.embed(ctx.author, "FBot Commands",
+                                  f" ```python\n{commands}```")
+        await ctx.send(embed=embed)
+
     @commands.command(name="search")
     @commands.is_owner()
     async def _Search(self, ctx, *, query):
@@ -146,9 +165,10 @@ class fbotdev(commands.Cog):
                 to_append = (guild.name, guild.id)
                 guild_list.append(to_append)
         empty = f"No matches found for `{query}`"
+        colour = self.bot.db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx)
         book.createpages(guild_list, "`%0` (`%1`)", EMPTY=empty)
-        await book.createbook(TITLE="FBot Search", RESULTS=True)
+        await book.createbook(TITLE="FBot Search", RESULTS=True, COLOUR=colour)
 
     #@commands.command(name="servers", aliases=["members"])
     #@commands.is_owner()
@@ -168,16 +188,6 @@ class fbotdev(commands.Cog):
     @commands.is_owner()
     async def _Host(self, ctx):
         await ctx.send("This instance is running on: " + socket.gethostname())
-
-    @commands.command(name="await")
-    @commands.is_owner()
-    async def _Await(SELF, CTX, FUNCTION, *, ARGS):
-        global self, ctx, function, args
-        self, ctx, function, args = SELF, CTX, FUNCTION, ARGS
-        await ctx.send(embed=self.bot.fn.embed("FBot await", f"```python\nawait {function}({args})```"))
-        exec(f"global temp\nasync def temp():\n    await {function}({args})")
-        await temp()
-        
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))

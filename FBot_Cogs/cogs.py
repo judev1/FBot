@@ -11,13 +11,12 @@ def formatunable(unable):
         else: formatedunable += f", `{cog}`"
     return formatedunable
 
-
 class cogs(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name='load')
+    @commands.command(name="load")
     @commands.is_owner()
     async def _LoadCog(self, ctx, cog):
         fn = self.bot.fn
@@ -27,11 +26,13 @@ class cogs(commands.Cog):
                 cog = cog[:-3]
                 try: self.bot.load_extension("FBot_Cogs." + cog)
                 except Exception as e: unable.append(cog)
-            embed = fn.embed("FBot cogs", "Loaded all cogs" + formatunable(unable))
+            embed = fn.embed(ctx.author, "FBot cogs",
+                             "Loaded all cogs" + formatunable(unable))
         else:
             try:
                 self.bot.load_extension("FBot_Cogs." + cog)
-                embed = fn.embed("FBot cogs", f"Loaded cog: `{cog}`")
+                embed = fn.embed(ctx.author, "FBot cogs",
+                                 f"Loaded cog: `{cog}`")
             except Exception as e:
                 embed = fn.errorembed(f"failed to load cog: {cog}", str(e))
         await ctx.send(embed=embed)
@@ -47,11 +48,13 @@ class cogs(commands.Cog):
                 if cog != "cogs":
                     try: self.bot.unload_extension("FBot_Cogs." + cog)
                     except: unable.append(cog)
-            embed = fn.embed("FBot cogs", "Unloaded all cogs" + formatunable(unable))
+            embed = fn.embed(ctx.author, "FBot cogs",
+                             "Unloaded all cogs" + formatunable(unable))
         else:
             try:
                 self.bot.unload_extension("FBot_Cogs." + cog)
-                embed = fn.embed("FBot cogs", f"Unloaded cog: `{cog}`")
+                embed = fn.embed(ctx.author, "FBot cogs",
+                                 f"Unloaded cog: `{cog}`")
             except Exception as e:
                 embed = fn.errorembed(f"failed to unload cog: {cog}", str(e))
         await ctx.send(embed=embed)
@@ -68,12 +71,14 @@ class cogs(commands.Cog):
                     self.bot.unload_extension("FBot_Cogs." + cog)
                     self.bot.load_extension("FBot_Cogs." + cog)
                 except: unable.append(cog)
-            embed = fn.embed("FBot cogs", "Reloaded all cogs" + formatunable(unable))
+            embed = fn.embed(ctx.author, "FBot cogs",
+                             "Reloaded all cogs" + formatunable(unable))
         else: 
             try:
                 self.bot.unload_extension("FBot_Cogs." + cog)
                 self.bot.load_extension("FBot_Cogs." + cog)
-                embed = fn.embed("FBot cogs", f"Reloaded cog: `{cog}`")
+                embed = fn.embed(ctx.author, "FBot cogs",
+                                 f"Reloaded cog: `{cog}`")
             except Exception as e:
                 embed = fn.errorembed(f"failed to reload cog: {cog}", str(e))
         await ctx.send(embed=embed)
@@ -82,19 +87,15 @@ class cogs(commands.Cog):
     @commands.is_owner()
     async def _Cogs(self, ctx):
         fn = self.bot.fn
-        #try:
-        if True:
-            check = "'%l'[:-3] in self.bot.cogs"
-            empty = "All cogs loaded"
-            book = reactionbook(self.bot, ctx, TITLE="FBot Cogs")
-            book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
-                             SUBHEADER="**Loaded:**", check1=(check, True))
-            book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
-                             SUBHEADER="**Not Loaded:**", check1=(check, False))
-            await book.createbook(MODE="numbers", COLOUR=fn.red)
-        #except Exception as e:
-        #    embed = fn.errorembed(f"failed to get cogs", str(e))
-        #    await ctx.send(embed=embed)
+        colour = self.bot.db.getcolour(ctx.author.id)
+        check = "'%l'[:-3] in self.bot.cogs"
+        empty = "All cogs loaded"
+        book = reactionbook(self.bot, ctx, TITLE="FBot Cogs")
+        book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
+                         SUBHEADER="**Loaded:**", check1=(check, True))
+        book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
+                         SUBHEADER="**Not Loaded:**", check1=(check, False))
+        await book.createbook(MODE="numbers", COLOUR=colour)
 
 def setup(bot):
     bot.add_cog(cogs(bot))

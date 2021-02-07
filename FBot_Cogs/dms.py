@@ -1,11 +1,13 @@
 from discord.ext import commands
+from functions import cooldown
 
 class dms(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="dms", aliases=["dm"])
+    @commands.command(name="dms")
+    @commands.check(cooldown)
     async def _DMs(self, ctx):
         channel = await ctx.author.create_dm()
         await channel.send("What do you want from me?!?")

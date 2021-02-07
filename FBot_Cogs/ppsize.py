@@ -1,6 +1,7 @@
 from discord.ext.commands import MemberConverter
 from discord import AllowedMentions
 from discord.ext import commands
+from functions import cooldown
 import sqlite3
 import random
 import re
@@ -14,6 +15,7 @@ class ppsize(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ppsize")
+    @commands.check(cooldown)
     async def ppsize(self, ctx, user_mention=None):
         async with ctx.channel.typing():
             if (user_mention is None):
