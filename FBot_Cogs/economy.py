@@ -102,6 +102,9 @@ for tier in degrees:
     for degree in tier:
         degreenames[degree] = tier[degree]
 
+class fakeuser: id = 0
+user = fakeuser()
+
 nomulticmds = ["devcmds", "gift", "devcounter", "devnumber", "shutup", "jokeinfo"]
 
 class economy(commands.Cog):
@@ -109,6 +112,7 @@ class economy(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         fn, db = bot.fn, bot.db
+        self.voteschannel = self.bot.get_channel(757722305395949572).send
 
         @self.bot.event
         async def _Multiply(message):
@@ -412,7 +416,7 @@ class economy(commands.Cog):
                         try: name = self.bot.get_guild(ID).name
                         except: name = "Server"
                     else:
-                        try: name = self.bot.get_user(ID).display_name
+                        try: name = self.bot.get_user(ID).name
                         except: name = "User"
                     if toptype in ["bal", "netfbux", "debt", "netdebt"]:
                         if typeitem == 0: break
@@ -442,20 +446,51 @@ class economy(commands.Cog):
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user.id)
         salary = jobnames[job][0] * jobmulti
-        if str(ctx.channel.type) == "private":
-            salary *= db.getusermulti(user.id)
-        else:
-            multis = db.getmultis(user.id, ctx.guild.id)
-            salary *= multis[0] * multis[1]
+        salary *= db.getusermulti(user.id)
         
         embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary except without tax",
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken\n",
-                         "**THIS FEATURE HAS NOT YET BEEN IMPLEMENTED**",
-                         "**SO VOTE, SURE, BUT NO REWARDS YET**\n",
                          f"[Top.gg vote]({fn.votetop})",
-                         f"[discordbotlist]({fn.votedbl})")
+                         f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
         await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_dbl_test(self, data):
+        db = self.bot.db
+        user_id = data["user"]
+        db.register(user_id)
+        try: name = self.bot.get_user(user_id).name
+        except: name = "User"
+        
+        job = db.getjob(user_id)
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user_id)
+        salary = jobnames[job][0] * jobmulti
+        salary = round(salary * db.getusermulti(user_id))
+            
+        embed = self.bot.fn.embed(user, "**TEST** Tog.gg vote",
+                                  f"{name} voted and gained **~~f~~ {salary}**")
+        await self.voteschannel(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_dbl_vote(self, data):
+        db = self.bot.db
+        user_id = data["user"]
+        db.register(user_id)
+        try: name = self.bot.get_user(user_id).name
+        except: name = "User"
+        
+        job = db.getjob(user_id)
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user_id)
+        salary = jobnames[job][0] * jobmulti
+        salary = round(salary * db.getusermulti(user_id))
+        db.updatebal(user_id, salary)
+            
+        embed = self.bot.fn.embed(user, "Tog.gg vote",
+                                  f"{name} voted and gained **~~f~~ {salary}**")
+        await self.voteschannel(embed=embed)
     
 def setup(bot):
     bot.add_cog(economy(bot))
