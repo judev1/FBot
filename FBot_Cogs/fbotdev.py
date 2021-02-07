@@ -75,7 +75,7 @@ class fbotdev(commands.Cog):
     @commands.is_owner()
     @commands.guild_only()
     async def _Modtoggle(self, ctx, arg):
-        db.Add_Channel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
             db.Change_Modtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
