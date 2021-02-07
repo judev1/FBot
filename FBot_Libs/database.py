@@ -360,6 +360,11 @@ class db:
 
     # Premium
 
+    def premium(self, user_id):
+        if user_id in [671791003065384987, 216260005827969024]:
+            return True
+        return False
+
     def getcolour(self, user_id):
         if user_id in [671791003065384987, 216260005827969024]:
             return 0xDAA520 #0xA7700B

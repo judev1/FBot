@@ -6,10 +6,8 @@ import os
 
 db = db(verbose=False)
 def cooldown(ctx):
-    user = ctx.author
-    usercooldown = db.Get_Cooldown(user.id)
+    usercooldown = db.Get_Cooldown(ctx.author.id)
     if usercooldown <= 0:
-        db.Update_Cooldown(user.id, 8)
         return True
     raise commands.CommandOnCooldown(commands.BucketType.user, usercooldown)
 

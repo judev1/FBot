@@ -120,14 +120,20 @@ class economy(commands.Cog):
             else: guild_id = message.guild.id
             commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
             for command in self.bot.walk_commands():
-                if command.cog_name == "fbotdev": continue
-                elif command.name in nomulticmds: continue
+                if command.cog_name == "fbotdev": return
+                elif command.name in nomulticmds: return
                 if commandcheck.startswith(command.name):
                     db.increasemultiplier(user.id, guild_id, 2)
+                    if db.premium(user.id):
+                        db.Update_Cooldown(user.id, 3)
+                    else: db.Update_Cooldown(user.id, 6)
                     return
                 for alias in command.aliases:
                     if commandcheck.startswith(alias):
                         db.increasemultiplier(user.id, guild_id, 2)
+                        if db.premium(user.id):
+                            db.Update_Cooldown(user.id, 3)
+                        else: db.Update_Cooldown(user.id, 6)
                         return
             priority, status = "all", "on"
             if str(message.channel.type) != "private":

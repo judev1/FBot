@@ -1,5 +1,8 @@
 from discord.ext import commands
 
+class fakeuser: id = 0
+user = fakeuser()
+
 class errorhandler(commands.Cog):
 
     def __init__(self, bot):
@@ -66,7 +69,7 @@ class errorhandler(commands.Cog):
                     except: pass
 
                 error = getattr(error, "original", error)
-                embed = fn.embed(f"Error On Message `{ctx.message.content}`",
+                embed = fn.embed(user, f"Error On Message `{ctx.message.content}`",
                         f"```Ignoring exception in command: {ctx.command}```"
                         f"```{error}``````{ctx.message}```")
                 await self.errorlogs.send(embed=embed)
