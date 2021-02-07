@@ -85,6 +85,8 @@ class triggerresponses(commands.Cog):
                 response = response.replace("{username}", name)
                 response = response.replace("{answer}", choice(answers))
                 response = response.replace("{funny}", choice(funny))
+                if len(response) > 2000:
+                    response = response[:2000]
                 await send(response)
                 return
 
