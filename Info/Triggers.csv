@@ -1,4 +1,5 @@
 FBot is \FBot's \FBots \F Bot is \F Bot's \F Bots\<@!711934102906994699> is\<@!711934102906994699>'s\<@!711934102906994699>s,start,anycase,"No, {username}'s {after}",1
+Vote for FBot,anywhere,anycase,"Vote for FBot",1
 FBot \F Bot \<@!711934102906994699> ,start,anycase,"No, {username} {after}",1
 FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
 FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
