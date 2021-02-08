@@ -10,7 +10,7 @@
 - FBot also guarentees **increased activity**! Don't take my word for it, listen to all those pings *they vibin*
 - **Always online**. We pride ourselves in having a spam bot which functions 24/7 mostly without errors (mostly ok!)
 
-### **So yeah we can talk ourselves up, so what do our users think?**
+### **So yeah we can talk ourselves up, but what do our users think?**
  > *"Oh... this bot is just spam"*
  
  > *"How do you turn this thing off?"*
