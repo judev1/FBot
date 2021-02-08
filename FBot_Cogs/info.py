@@ -57,5 +57,10 @@ class info(commands.Cog):
         embed.set_thumbnail(url=guild.icon_url)
         await ctx.send(embed=embed)
 
+    @commands.command(name="premium")
+    @commands.check(cooldown)
+    async def _Premium(self, ctx):
+        await ctx.send("https://fbot.breadhub.uk/premium")
+
 def setup(bot):
     bot.add_cog(info(bot))
