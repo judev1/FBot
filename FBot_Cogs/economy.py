@@ -1,6 +1,7 @@
 from discord.ext import commands
 from functions import cooldown
 from triggers import tr
+from datetime import datetime
 import discord
 import asyncio
 import sqlite3
@@ -311,33 +312,48 @@ class economy(commands.Cog):
     @commands.command(name="work")
     @commands.check(cooldown)
     async def _Work(self, ctx):
+        user = ctx.author
+
+        # Check user can work
+        conn = self.bot.db.conn
+        c = conn.cursor()
+        t = (user.id,)
+        c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
+        lastwork = c.fetchone()[0]
+        if not lastwork <= datetime.now().timestamp() / 60:
+            wait = round(lastwork - datetime.now().timestamp() / 60)
+            await ctx.send(f"You must wait another {wait} mins to work again")
+
+        job = self.bot.db.getjob(user.id)
+        
+        tax = random.uniform(0.1, 0.5) * 100
+
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user.id)
+
+        salary = jobnames[job][0] * jobmulti
+        if str(ctx.channel.type) == "private":
+            salary *= db.getusermulti(user.id)
+        else:
+            multis = self.bot.db.getmultis(user.id, ctx.guild.id)
+            salary *= multis[0] * multis[1]
+
+        income = round(salary * (tax / 100))
+        balance = self.bot.db.work(user.id, job, income)
+        embed = self.bot.fn.embed(user, "FBot work",
+                f"You work and earn: **{f}{round(salary)}**\n"
+                f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
+                f"Your new balance is: **{f}{balance}**")
+        await ctx.send(embed=embed)
+        # Chance of debt collectors
+        
+
+    @commands.command(name="scheme")
+    @commands.check(cooldown)
+    async def _Scheme(self, tx):
         db = self.bot.db
         user = ctx.author
-        if db.canwork(user.id):
-            job = db.getjob(user.id)
-            tax = random.uniform(0.1, 0.5) * 100
-
-            if job == "Unemployed": jobmulti = 1.0
-            else: jobmulti = db.getjobmulti(user.id)
-
-            salary = jobnames[job][0] * jobmulti
-            if str(ctx.channel.type) == "private":
-                salary *= db.getusermulti(user.id)
-            else:
-                multis = db.getmultis(user.id, ctx.guild.id)
-                salary *= multis[0] * multis[1]
-
-            income = round(salary * (tax / 100))
-            balance = db.work(user.id, job, income)
-            embed = self.bot.fn.embed(user, "FBot work",
-                    f"You work and earn: **{f}{round(salary)}**\n"
-                    f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
-                    f"Your new balance is: **{f}{balance}**")
-            await ctx.send(embed=embed)
-            # Chance of debt collectors
-        else:
-            wait = db.lastwork(user.id)
-            await ctx.send(f"You must wait another {wait} mins to work again")
+        
 
     @commands.command(name="study")
     @commands.check(cooldown)

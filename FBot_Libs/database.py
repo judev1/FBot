@@ -267,23 +267,11 @@ class db:
         c.execute("SELECT degreeprogress FROM users WHERE user_id=?", t)
         return c.fetchone()[0]
 
-    def canwork(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
-        return c.fetchone()[0] <= datetime.now().timestamp() / 60
-
     def canstudy(self, user_id):
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
         return c.fetchone()[0] <= datetime.now().timestamp() / 60
-
-    def lastwork(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
-        return round(c.fetchone()[0] - datetime.now().timestamp() / 60)
 
     def laststudy(self, user_id):
         c = conn.cursor()
