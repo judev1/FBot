@@ -6,7 +6,7 @@ class session(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="session")
+    @commands.command(name="session", aliases=["uptime"])
     @commands.check(cooldown)
     async def _Session(self, ctx):
         ftime = self.bot.ftime

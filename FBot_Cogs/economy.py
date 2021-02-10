@@ -457,43 +457,6 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Store(self, ctx):
         await ctx.send("This feature is still in development")
-        
-    @commands.command(name="vote")
-    @commands.check(cooldown)
-    async def _Vote(self, ctx):
-        fn, db = self.bot.fn, self.bot.db
-        user = ctx.author
-
-        job = db.getjob(user.id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user.id)
-        salary = jobnames[job][0] * jobmulti
-        salary *= db.getusermulti(user.id)
-        
-        embed = fn.embed(user, "FBot Vote",
-                         "If you vote you'll earn your salary except without tax",
-                         f"So **~~f~~ {round(salary)}** if I'm not mistaken\n",
-                         f"[Top.gg vote]({fn.votetop})",
-                         f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
-        await ctx.send(embed=embed)
-
-    @commands.Cog.listener()
-    async def on_dbl_test(self, data):
-        db = self.bot.db
-        user_id = data["user"]
-        db.register(user_id)
-        try: name = self.bot.get_user(user_id).name
-        except: name = "User"
-        
-        job = db.getjob(user_id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user_id)
-        salary = jobnames[job][0] * jobmulti
-        salary = round(salary * db.getusermulti(user_id))
-            
-        embed = self.bot.fn.embed(user, "**TEST** Tog.gg vote",
-                                  f"{name} voted and gained **~~f~~ {salary}**")
-        await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
@@ -512,6 +475,7 @@ class economy(commands.Cog):
 
         bonus = 1
         if self.bot.ftime.isweekend(): bonus = 2
+        db.increasemultiplier(user_id, 0, 20 * bonus)
             
         embed = self.bot.fn.embed(user, "Tog.gg vote",
                                   f"{name} voted and gained **~~f~~ {salary}**")

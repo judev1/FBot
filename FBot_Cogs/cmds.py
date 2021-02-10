@@ -144,7 +144,7 @@ devcmdpage = ["""`devon`/`devoff`
 `dbl`
 `host`
 `treload`
-`commands`
+`cmdlist`
 
 `jokeinfo`
 `servers | members` **(broken)**
@@ -164,7 +164,7 @@ class cmds(commands.Cog):
         self.bot = bot
         self.red = bot.fn.red
         
-    @commands.command(name="cmds")
+    @commands.command(name="cmds", aliases=["commands"])
     @commands.check(cooldown)
     async def _Commands(self, ctx, *page):
         colour = self.bot.db.getcolour(ctx.author.id)

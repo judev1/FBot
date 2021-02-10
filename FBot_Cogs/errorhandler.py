@@ -30,8 +30,7 @@ class errorhandler(commands.Cog):
             embed = fn.errorembed("Missing Permissions",
                     "The bot is missing permissions to execute the command")
         elif type(error) is commands.NotOwner:
-            embed = fn.errorembed("Missing Permissions",
-                    f"Only FBot Devs can run this command")
+            pass
         elif type(error) is commands.BadArgument:
             embed = fn.errorembed("Invalid Argument",
                     f"The argument you used was not recognised")
