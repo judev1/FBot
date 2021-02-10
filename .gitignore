@@ -1,12 +1,13 @@
-*.pyc
-*.db
+FBot.py
+FBot_Test.py
 Tokens.txt
 Triggerlogs.txt
 todo.txt
 __pycache__/
+*.pyc
+*.db
 *.vs
 *.xml
 *.iml
 resized_to_*
 to_*
-FBot_Test.py
