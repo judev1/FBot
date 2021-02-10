@@ -53,22 +53,22 @@ class errorhandler(commands.Cog):
             else: retry = str(round(error.retry_after / 60)) + "` mins"
             embed = fn.embed(ctx.author, "You are being ratelimited",
                     f"You may use a command again in `{retry}")
-        elif type(error) is commands.CommandInvokeError:
-            if type(error.original) is discord.Forbidden:
-                error = error.original
-                if error.text == "Missing Permissions":
-                    embed = fn.errorembed(error.text,
-                    f"FBot doesn't have permissions to send a message in that channel")
-                    channel = await ctx.author.create_dm()
-                    await channel.send(embed=embed)
-                    return
         else:
+            if type(error) is commands.CommandInvokeError:
+                if type(error.original) is discord.Forbidden:
+                    error = error.original
+                    if error.text == "Missing Permissions":
+                        embed = fn.errorembed(error.text,
+                        f"FBot doesn't have permissions to send a message in that channel")
+                        channel = await ctx.author.create_dm()
+                        await channel.send(embed=embed)
+                        return
+            embed = fn.embed(ctx.author, "An unusual error has occurred",
+                    "The devs have been notified, please contact:\n"
+                    "`@justjude#2296` or `@LinesGuy#9260`\n"
+                    f"OR join our [support server]({fn.server}) "
+                    "and give us a ping")
             try:
-                embed = fn.embed(ctx.author, "An unusual error has occurred",
-                        "The devs have been notified, please contact:\n"
-                        "`@justjude#2296` or `@LinesGuy#9260`\n"
-                        f"OR join our [support server]({fn.server}) "
-                        "and give us a ping")
                 try:
                     await ctx.channel.send(embed=embed)
                 except:
