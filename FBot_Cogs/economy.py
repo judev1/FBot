@@ -328,6 +328,7 @@ class economy(commands.Cog):
         if not lastwork <= datetime.now().timestamp() / 60:
             wait = round(lastwork - datetime.now().timestamp() / 60)
             await ctx.send(f"You must wait another {wait} mins to work again")
+            return
 
         job = db.getjob(user.id)
         tax = random.uniform(0.1, 0.5) * 100
