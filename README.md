@@ -2,15 +2,53 @@
 ##### *The most annoying bot on discord*
 
 ### Features
-- Turn FBot on in your channel to access its **spam feature**. FBot can also be modified to be unique to each server. You can make admin only able to turn FBot on and off, you can change the amount of messages FBot responds to, and you can even change the prefix if '`FBot `' isn't to your liking
-- **FBot economy**. FBot has it's own economy system which runs on FBux, **~~f~~**. You can earn money and debt, while all the time being taxed. You can work and study, for jobs and degrees, using degrees to unlock more jobs, and spamming to increase your multipliers (similar to experience) to unlock more degrees. There are leaderboards for almost everything, you can see the people with the highest balance, highest net balance, highest debt, highest net debt, highest multiplier and highest server multiplier. With this being a fairly new feature, more commands and feautures will be added soon!
-- Our own **counting feature**, allow your members to count, you'd be suprised how hard it is to be good at this...
-- We even have some **fun commands**! A special Discord snake minigame, an actual ppsize calculator (it's never wrong), an 8ball feature called fball (which to date has never made a mistake), as well as some fun photo processing commands like bonk and bigpp. But there's no point listening to me, go try them for yourself!
-- **Information and utility**, we have many commands for information, like a serverinfo command which gives a rundown of your server, as well as some useful utility commands like snipe (gets deleted and editted messages) and purge (also known as thanos, deletes messages). Uniquely our snipe can retrieve up to 10 messages
-- FBot also guarentees **increased activity**! Don't take my word for it, listen to all those pings *they vibin*
-- **Always online**. We pride ourselves in having a spam bot which functions 24/7 mostly without errors (mostly ok!)
+ - **Spamming**
+   - `fbot on/off` - Turn FBot’s spam feature
+   - `fbot modtoggle on/off` - Make it so only mods can toggle FBot
+   - `fbot respond all/some/few` - Change the amount of messages FBot responds to, good for bigger servers
+   - `fbot status` - See the values for fbot, modtoggle and respond in the channel
+ - **Economy**
+   - Jobs
+     - `fbot work` - Get paid based on your job and multiplier
+     - `fbot jobs` - Gives a list of jobs, including ones you can apply to, you must have completed its degree first
+     - `fbot apply <job>` - Gives you a new job
+     - `fbot resign` - Before applying for a new job you must resign from your current one
+   - Degrees
+     - `fbot study` - Progress through your degree to unlock a job
+     - `fbot degrees` - Gives a list of jobs, including ones you can take, you must have a high enough multiplier first
+     - `fbot take <degree>` - Start a new degree
+     - `fbot drop` - Drop your current degree, progress is not saved
+   - Multipliers & Information
+     - `fbot multis (@user)` - Shows your own or another user's multipliers, you can increase them by spamming
+     - `fbot vote` - Gives you links to vote and get rewards
+     - `fbot bal (@user)` - Shows your own or another user's balance and debt
+     - `fbot profile (@user)` - Gives a summary of either yourself or another user
+     - `fbot top bal/debt/multi/servmulti` - Returns the top of a type
+ - **Counting**
+   - `fbot counting` - Set the current channel to the counting channel
+   - 1... 2... - Type numbers in the chat, must be consecutive, and different people each time
+   - `fbot number/last` - Gets the last number in the channel and who sent it
+   - `fbot hs` - Gets the highscore for the server, and the top highscores
+ - **Fun**
+   - Text
+     - `fball/fbot fball` - Like 8ball but better
+     - `fbot say <message>` - Make FBot say whatever you want
+     - `fbot ppsize (@user)` - Gets the actual ppsize of a member
+   - Minigames
+     - `fbot snake` - Play our version of the snake game
+   - Image Processing
+     - `fbot bonk @user` - Bonk a user
+     - `fbot bigpp @user` - Bigpps a user
+ - **Utility**
+   - `fbot snipe <number>` - Recovers the last number of edited and deleted messages
+   - `fbot purge/thanos <number>` - Deletes the last number of messages
+   - `fbot prefix <newprefix>/reset` - Gives your server a custom prefix
+   - `fbot serverinfo` - Gives an overview of your server
+   - `fbot cmds` - Gives you an overview of FBot's commands in discord
+   - `fbot info` - Gives information about FBot
+   - `fbot links` - Givess links for FBot
 
-### **So yeah we can talk ourselves up, but what do our users think?**
+### **So yeah what do our users think?**
  > *"Oh... this bot is just spam"*
  
  > *"How do you turn this thing off?"*
