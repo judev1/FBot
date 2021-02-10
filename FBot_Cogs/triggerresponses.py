@@ -19,7 +19,7 @@ funny = ["Hmm, maybe I'll laugh too next time",
          "That is **h i l a r i o u s**",
          "L O L",
          "Wow my dude that is so funny"]
-answers = ["A building",
+answers = ["Good question",
            "idk",
            "Why are you asking me?",
            "I don't think we'll ever know"]
@@ -31,17 +31,18 @@ class triggerresponses(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if message.author.bot: return
+
         name = message.author.display_name
         send = message.channel.send
         content = message.content
         db = self.bot.db
 
-        if message.author.bot: return
-
-        # If fbot doesn't have permission to send messages, return
-        if not message.channel.permissions_for(
-            message.guild.get_member(self.bot.user.id)).send_messages:
-            return
+        if str(message.channel.type) != "private":
+            if not message.channel.permissions_for(
+                message.guild.get_member(self.bot.user.id)).send_messages:
+                return
 
         commandcheck = content[len(self.bot.fn.getprefix(self.bot, message)):]
         for command in self.bot.walk_commands():

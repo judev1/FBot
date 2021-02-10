@@ -7,19 +7,18 @@
 
 body {
 	margin: 0px;
-	font-family: "bahnschrift";
+	font-family: "segoe print";
 	color: var(--white);
 	text-align: center;
 	overflow-x: hidden;
 
 	background: var(--black);
 	background-image: url("Background.png");
-	background-size: cover;
+	background-size: 100%;
 }
 header {
-	height: 20px;
-	margin-bottom: 10px;
-	font-size: 42px;
+	height: 10px;
+	font-size: 36px;
 	font-weight: bold;
 }
 mark {
@@ -27,7 +26,7 @@ mark {
 	border-radius: 2px;
 
 	font-family: "courier";
-	font-size: 12px;
+	font-size: 10px;
 	font-weight: bold;
 	color: var(--black);
 	background: var(--red);
@@ -53,9 +52,9 @@ mark {
 	background: var(--black);
 }
 .menubar a {
-	padding: 20px 22px;
+	padding: 14px 16px;
 	opacity: 1;
-	font-size: 26px;
+	font-size: 22px;
 	text-decoration: none;
 	color: var(--white);
 	transition: color .2s;
@@ -76,7 +75,7 @@ mark {
 }
 .menubarsmall a {
 	padding: 10px 11px;
-	font-size: 20px;
+	font-size: 18px;
 	opacity: 1;
 	text-decoration: none;
 	color: var(--white);
@@ -100,7 +99,6 @@ mark {
 
 .main {
 	margin-top: 200px;
-	border-color: var(--black);
 }
 
 
@@ -127,7 +125,7 @@ input.search {
 .body {
 	padding-top: 20px;
 	left: 50%;
-	width: auto;
+	width: 80%;
 	position: absolute;
     transform: translate(-50%, 0);
 
@@ -136,18 +134,18 @@ input.search {
 	z-index: -1;
 }
 .body p {
-	padding: 20px;
+	padding: 18px;
 	text-align: justify;
 }
 .fbot {
-	font-size: 200px;
+	font-size: 160px;
 	color: var(--red);
-	text-shadow: 8px 8px var(--black);
+	text-shadow: 8px 8px black;
 }
 
 
 .cmdtable {
-	height: 300px;
+	height: 50%;
 	width: auto;
 	
     left: 50%;
@@ -166,12 +164,11 @@ input.search {
 	background: var(--red);
 }
 .cmdtable a {
-	font-size: 16px;
+	font-size: 14px;
 }
 .cmdtable a.name {
 	font-weight: bold;
-	font-size: 24px;
-
+	font-size: 20px;
 }
 table::-webkit-scrollbar {
   width: 6px;

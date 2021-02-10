@@ -18,8 +18,8 @@ fn = fn()
 owners = [671791003065384987, 216260005827969024, 311178459919417344]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
-bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
-                        webhook_auth=fn.gettoken(5), webhook_port=6000)
+bot.dbl = 1 #dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
+                          #webhook_auth=fn.gettoken(5), webhook_port=6000)
 
 fn.bot = bot
 bot.fn = fn
@@ -27,7 +27,7 @@ bot.db = db()
 tr.trigger_load()
 bot.ftime = ftime()
 
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
+token = bot.fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
 
 print(f" > Session started at {bot.ftime.start}")
 
@@ -42,7 +42,7 @@ async def on_ready():
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
-        if cog not in []: # Cogs not to load
+        if cog not in ["bonk.py", "bigpp.py", "blur.py"]: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])

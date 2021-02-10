@@ -108,6 +108,9 @@ class ftime:
         m, h, d, mo = self.get()
         return f"{h}:{m}, {d}-{mo} UTC"
 
+    def isweekend(self):
+        return datetime.now().strftime("%a") in ["sat", "sun"]
+
     def uptime(self):
         ms, hs, ds, mos = self.ms, self.hs, self.ds, self.mos
         mn, hn, dn, mon = self.get()

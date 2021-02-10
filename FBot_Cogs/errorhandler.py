@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -53,6 +54,15 @@ class errorhandler(commands.Cog):
             else: retry = str(round(error.retry_after / 60)) + "` mins"
             embed = fn.embed(ctx.author, "You are being ratelimited",
                     f"You may use a command again in `{retry}")
+        elif type(error) is commands.CommandInvokeError:
+            if type(error.original) is discord.Forbidden:
+                error = error.original
+                if error.text == "Missing Permissions":
+                    embed = fn.errorembed(error.text,
+                    f"FBot doesn't have permissions to send a message in that channel")
+                    channel = await ctx.author.create_dm()
+                    await channel.send(embed=embed)
+                    return
         else:
             try:
                 embed = fn.embed(ctx.author, "An unusual error has occurred",
@@ -68,10 +78,9 @@ class errorhandler(commands.Cog):
                         await channel.send(embed=embed)
                     except: pass
 
-                error = getattr(error, "original", error)
                 embed = fn.embed(user, f"Error On Message `{ctx.message.content}`",
                         f"```Ignoring exception in command: {ctx.command}```"
-                        f"```{error}``````{ctx.message}```")
+                        f"```{error.original}``````{ctx.message}```")
                 await self.errorlogs.send(embed=embed)
             except: pass
             finally: return

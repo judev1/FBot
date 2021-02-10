@@ -43,7 +43,11 @@ class fbotdev(commands.Cog):
                 f"```python\nawait {function}({args})```")
         await ctx.send(embed=embed)
         exec(f"global temp\nasync def temp():\n    await {function}({args})")
-        await temp()
+        result = await temp()
+        if result:
+            embed = self.bot.fn.embed(ctx.author, "FBot results",
+                f"```{result}```")
+            await ctx.send(embed=embed)
 
     @commands.command(name="devon")
     @commands.is_owner()
@@ -147,9 +151,9 @@ class fbotdev(commands.Cog):
             embed.set_thumbnail(url=guild.icon_url)
             await ctx.send(embed=embed)
 
-    @commands.command(name="commands")
+    @commands.command(name="cmdlist")
     @commands.is_owner()
-    async def _Commands(self, ctx):
+    async def _CommandList(self, ctx):
         commands = [i.name for i in self.bot.walk_commands()]
         embed = self.bot.fn.embed(ctx.author, "FBot Commands",
                                   f" ```python\n{commands}```")

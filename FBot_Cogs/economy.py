@@ -112,45 +112,50 @@ class economy(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        fn, db = bot.fn, bot.db
         self.voteschannel = self.bot.get_channel(757722305395949572).send
 
-        @self.bot.event
-        async def _Multiply(message):
-            user = message.author
-            if user.bot: return
-            if not commands.bot_has_permissions(send_messages=True): return
-            if str(message.channel.type) == "private": guild_id = 0
-            else: guild_id = message.guild.id
-            commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
-            for command in self.bot.walk_commands():
-                if command.cog_name == "fbotdev": continue
-                elif command.name in nomulticmds: continue
-                if commandcheck.startswith(command.name):
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        user = message.author
+        
+        if user.bot: return
+        if not commands.bot_has_permissions(send_messages=True): return
+        if str(message.channel.type) == "private": guild_id = 0
+        else: guild_id = message.guild.id
+        
+        bonus = 1
+        if self.bot.ftime.isweekend(): bonus = 2
+        fn, db = self.bot.fn, self.bot.db
+
+        commandcheck = message.content[len(fn.getprefix(self.bot, message)):]
+        for command in self.bot.walk_commands():
+            if command.cog_name == "fbotdev": continue
+            elif command.name in nomulticmds: continue
+            if commandcheck.startswith(command.name):
+                if db.Get_Cooldown(user.id) > 0: return
+                db.increasemultiplier(user.id, guild_id, 2 * bonus)
+                if db.premium(user.id):
+                    db.Update_Cooldown(user.id, 2)
+                else: db.Update_Cooldown(user.id, 8)
+                return
+            for alias in command.aliases:
+                if commandcheck.startswith(alias):
                     if db.Get_Cooldown(user.id) > 0: return
-                    db.increasemultiplier(user.id, guild_id, 2)
+                    db.increasemultiplier(user.id, guild_id, 2 * bonus)
                     if db.premium(user.id):
-                        db.Update_Cooldown(user.id, 3)
-                    else: db.Update_Cooldown(user.id, 6)
+                        db.Update_Cooldown(user.id, 2)
+                    else: db.Update_Cooldown(user.id, 8)
                     return
-                for alias in command.aliases:
-                    if commandcheck.startswith(alias):
-                        if db.Get_Cooldown(user.id) > 0: return
-                        db.increasemultiplier(user.id, guild_id, 2)
-                        if db.premium(user.id):
-                            db.Update_Cooldown(user.id, 3)
-                        else: db.Update_Cooldown(user.id, 6)
-                        return
-            priority, status = "all", "on"
-            if str(message.channel.type) != "private":
-                db.Add_Channel(message.channel.id, guild_id)
-                priority = db.Get_Priority(guild_id)
-                status = db.Get_Status(message.channel.id)
-            if status == "on":
-                trigger_detected = tr.trigger_respond(message, priority)[0]
-                if trigger_detected:
-                    db.increasemultiplier(user.id, guild_id, 1)
-        self.bot.add_listener(_Multiply, "on_message")
+        
+        priority, status = "all", "on"
+        if str(message.channel.type) != "private":
+            db.Add_Channel(message.channel.id, guild_id)
+            priority = db.Get_Priority(guild_id)
+            status = db.Get_Status(message.channel.id)
+        if status == "on":
+            trigger_detected = tr.trigger_respond(message, priority)[0]
+            if trigger_detected:
+                db.increasemultiplier(user.id, guild_id, 1 * bonus)
 
     @commands.command(name="profile")
     @commands.check(cooldown)
@@ -504,6 +509,9 @@ class economy(commands.Cog):
         salary = jobnames[job][0] * jobmulti
         salary = round(salary * db.getusermulti(user_id))
         db.updatebal(user_id, salary)
+
+        bonus = 1
+        if self.bot.ftime.isweekend(): bonus = 2
             
         embed = self.bot.fn.embed(user, "Tog.gg vote",
                                   f"{name} voted and gained **~~f~~ {salary}**")
