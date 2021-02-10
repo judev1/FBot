@@ -319,7 +319,7 @@ class economy(commands.Cog):
     async def _Work(self, ctx):
         user = ctx.author
 
-        # Check user can work
+        db = self.bot.db
         conn = self.bot.db.conn
         c = conn.cursor()
         t = (user.id,)
@@ -329,8 +329,7 @@ class economy(commands.Cog):
             wait = round(lastwork - datetime.now().timestamp() / 60)
             await ctx.send(f"You must wait another {wait} mins to work again")
 
-        job = self.bot.db.getjob(user.id)
-        
+        job = db.getjob(user.id)
         tax = random.uniform(0.1, 0.5) * 100
 
         if job == "Unemployed": jobmulti = 1.0
@@ -340,11 +339,11 @@ class economy(commands.Cog):
         if str(ctx.channel.type) == "private":
             salary *= db.getusermulti(user.id)
         else:
-            multis = self.bot.db.getmultis(user.id, ctx.guild.id)
+            multis = db.getmultis(user.id, ctx.guild.id)
             salary *= multis[0] * multis[1]
 
         income = round(salary * (tax / 100))
-        balance = self.bot.db.work(user.id, job, income)
+        balance = db.work(user.id, job, income)
         embed = self.bot.fn.embed(user, "FBot work",
                 f"You work and earn: **{f}{round(salary)}**\n"
                 f"After {100 - round(tax)}% tax deductions: **{f}{income}**\n"
@@ -363,6 +362,7 @@ class economy(commands.Cog):
     @commands.command(name="study")
     @commands.check(cooldown)
     async def _Study(self, ctx):
+        
         db = self.bot.db
         user = ctx.author
         if db.canstudy(user.id):
