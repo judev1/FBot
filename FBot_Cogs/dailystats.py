@@ -4,6 +4,9 @@ from datetime import datetime
 from triggers import tr
 from math import ceil
 
+class fakeuser: id = 0
+fakeuser = fakeuser()
+
 class dailystats(commands.Cog):
     
     def __init__(self, bot):
@@ -65,7 +68,7 @@ Total count: `{total}`"""
         if self.is_first_message:
             self.is_first_message = False
             return
-        embed = self.get_stats_embed()
+        embed = self.get_stats_embed(fakeuser)
         await self.stats_channel.send(embed=embed)
         self.commands_processed = 0
         self.triggers_processed = 0
