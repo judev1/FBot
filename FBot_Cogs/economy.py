@@ -459,6 +459,26 @@ class economy(commands.Cog):
     async def _Store(self, ctx):
         await ctx.send("This feature is still in development")
 
+    @commands.command(name="vote")
+    @commands.check(cooldown)
+    async def _Vote(self, ctx):
+        fn, db = self.bot.fn, self.bot.db
+        user = ctx.author
+        job = db.getjob(user.id)
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user.id)
+        salary = jobnames[job][0] * jobmulti
+        salary *= db.getusermulti(user.id)
+        
+        embed = fn.embed(user, "FBot Vote",
+                         "If you vote you'll earn your salary without tax",
+                         f"So **~~f~~ {round(salary)}** if I'm not mistaken",
+                         "AND multiplier worth x20 that of using a trigger\n",
+
+                         f"[Top.gg vote]({fn.votetop})",
+                         f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
+        await ctx.send(embed=embed)
+
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         db = self.bot.db
