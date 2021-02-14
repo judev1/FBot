@@ -94,21 +94,6 @@ class bigpp(commands.Cog):
         os.remove("./Info/resized_to_bigpp")
         execution_time = time.time() - start_time
         if debug: print(f"bigpp done in {execution_time} seconds")
-
-    @bigpp.error
-    async def bigpp_handler(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == 'to_bigpp':
-                await ctx.send("You must specify who you want to bigpp!")
-        else:
-            print('Ignoring exception in command {}:'.format(
-                ctx.command), file=sys.stderr)
-            traceback.print_exception(
-                type(error), error, error.__traceback__, file=sys.stderr)
-
-            await ctx.send("`An error occurred while executing this command.`")
-
-            
     
 
 def setup(bot):
