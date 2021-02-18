@@ -8,8 +8,7 @@ import os
 emojis = {True: "✅",
           False: "⛔"}
 
-bot_id = 713357125145067600
-#bot_id = 711934102906994699
+bot_id = 711934102906994699
 db = db(verbose=False)
 def cooldown(ctx):
     bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
