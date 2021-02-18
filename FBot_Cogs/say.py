@@ -8,17 +8,14 @@ class say(commands.Cog):
         
     @commands.command(name="say")
     @commands.check(cooldown)
-    async def _Say(self, ctx, *, inp: str):
-        await ctx.message.delete()
-        await ctx.send(inp + "ㅤ")
-
-    @_Say.error
-    async def _SayHandler(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            if error.param.name == "inp":
-                embed = self.bot.fn.errorembed("No Message",
-                        "Command usage: 'FBot say <message>'")
-            await ctx.send(embed=embed)
+    async def _Say(self, ctx, *inp):
+        inp = " ".join(inp)
+        if not inp == "":
+            try: await ctx.message.delete()
+            except: pass
+            await ctx.send(inp + "ㅤ")
+        else:
+            await ctx.send("What do you want me to say!?")
 
 def setup(bot):
     bot.add_cog(say(bot))

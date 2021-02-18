@@ -259,25 +259,17 @@ class db:
 
     def study(self, user_id, debt):
         c = conn.cursor()
-        self.updatedebt(user_id, debt)
+        debt = self.updatedebt(user_id, debt)
         t = (user_id,)
         c.execute("UPDATE users SET degreeprogress=degreeprogress+1 WHERE user_id=?", t)
         conn.commit()
+        return (self.progress(user_id), debt)
+
+    def progress(self, user_id):
+        c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT degreeprogress FROM users WHERE user_id=?", t)
         return c.fetchone()[0]
-
-    def canstudy(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
-        return c.fetchone()[0] <= datetime.now().timestamp() / 60
-
-    def laststudy(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
-        return round(c.fetchone()[0] - datetime.now().timestamp() / 60)
 
     def worked(self, user_id):
         c = conn.cursor()

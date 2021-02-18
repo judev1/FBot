@@ -25,8 +25,8 @@ class joinleave(commands.Cog):
 
         embed = self.bot.fn.embed(user, f"**Added** to `{newguild}`",
                                   str(newguild.id))
-        embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
-        embed.add_field(name="Member count", value=f"`{memcount}`")
+        embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
+        embed.add_field(name="Member count", value=f"`{memcount - 1}`")
         #embed.add_field(name="Bot count", value=f"`{botcount - 1}`")
         #embed.add_field(name="Two hour temp invite", value=f"`{invite}`")
         await self.serverlogs.send(embed=embed)
@@ -43,7 +43,7 @@ class joinleave(commands.Cog):
         
         embed = self.bot.fn.embed(user, f"**Removed** from `{oldguild}`",
                                   str(oldguild.id))
-        embed.add_field(name="Server count", value=f"`{len(self.bot.guilds) - 1}`")
+        embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount}`")
         #embed.add_field(name="Bot count", value=f"`{botcount}`")
         await self.serverlogs.send(embed=embed)

@@ -2,14 +2,40 @@ from discord.ext import commands
 from datetime import datetime, timezone
 from discord import Embed
 from database import db
+import commands as cm
 import os
 
+emojis = {True: "✅",
+          False: "⛔"}
+
+bot_id = 713357125145067600
+#bot_id = 711934102906994699
 db = db(verbose=False)
 def cooldown(ctx):
+    bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
+
+    valid = []
+    perms = {}
+    for perm in cm.perms[ctx.command.name]:
+        if not perm.startswith("("):
+            bot_perm = getattr(bot_perms, perm)
+        else: bot_perm = True
+        valid.append(bot_perm)
+        perms[perm] = bot_perm
+
+    if not all(valid):
+        page = "**Missing permissions to run this command**\n\n"
+        for perm in perms:
+            if perm.startswith("("):
+                perms[perm] = getattr(bot_perms, perm[1:-1])
+            page += f"{emojis[perms[perm]]} ~ {perm.upper()}\n"
+        raise commands.CheckFailure(message=page)
+
     usercooldown = db.Get_Cooldown(ctx.author.id)
-    if usercooldown <= 0:
-        return True
-    raise commands.CommandOnCooldown(commands.BucketType.user, usercooldown)
+    if usercooldown > 0:
+        raise commands.CommandOnCooldown(commands.BucketType.user,
+                                         usercooldown)
+    return True
 
 class fn:
 
@@ -109,7 +135,7 @@ class ftime:
         return f"{h}:{m}, {d}-{mo} UTC"
 
     def isweekend(self):
-        return datetime.now().strftime("%a") in ["sat", "sun"]
+        return datetime.now().strftime("%a") in ["Sat", "Sun"]
 
     def uptime(self):
         ms, hs, ds, mos = self.ms, self.hs, self.ds, self.mos

@@ -1,6 +1,7 @@
 from discord.ext import commands
 from dbfn import reactionbook
 from functions import cooldown
+import commands as cm
 
 ehelp = ["""**Overview**
 Welcome to FBot's economy! This will be your guide to FBot economy system.
@@ -78,26 +79,76 @@ or just wanna drop by for a chat, use `FBot server` to join our server.
 Currently there is no way to remove debt, but since it doesn't cause you any
 harm, you'll just have to learn to live with it - for now."""]
 
+contents = """
+Write `FBot ` (the prefix) however you want, I don't care
+*If you ever lose your prefix use plain* `prefix` *to get it*
+
+ Page 1: **Contents**
+ Page 2: **Spamming**
+ Page 3: **Economy**
+ Page 4: **Counting**
+ Page 5: **Fun**
+ Page 6: **Utility**
+ Page 7: **Information**"""
+
+categories = ["Spamming", "Economy", "Counting", "Fun", "Utility", "Information"]
+
 class help(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
+
+    def cmdembed(self, user, cmd):
+        try: data = cm.commands[cmd]
+        except: data = cm.devcmds[cmd]
+
+        desc = data[7]
+        # Temporary while not all commands have long descriptions
+        if desc == "": desc = data[8]
+        
+        embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
+                                  desc, "\nExample usage:" + data[6])
+
+        cat = "Category: " + data[1] + data[2]
+        embed.set_author(name=cat)
+
+        embed.add_field(name="Server only?", value=data[3])
+        embed.add_field(name="Bot perms", value=data[4])
+        embed.add_field(name="User perms", value=data[5])
+
+        return embed
         
     @commands.command(name="help")
     @commands.check(cooldown)
-    async def _Help(self, ctx):
-        fn = self.bot.fn
-        
-        embed = fn.embed(ctx.author, "FBot Help",
-                "**Useful Commands**",
-                "Use `FBot on/off` to toggle fbot",
-                "Use `FBot cmds` for a list of commands",
-                "Use `FBot economy` for help with our currency\n",
-                "**Useful Links**",
-                f"[Invite FBot]({fn.top}) or "
-                f"[join our server!]({fn.server})")
+    async def _Help(self, ctx, *command):
 
-        await ctx.send(embed=embed)
+        command = " ".join(command).lower()
+        if command == "":
+            fn = self.bot.fn
+            embed = fn.embed(ctx.author, "FBot Help",
+                    "**Useful Commands**",
+                    "Use `FBot on/off` to toggle fbot",
+                    "Use `FBot cmds` for a list of commands",
+                    "Use `FBot help <command>` for more info on a command",
+                    "Use `FBot economy` for help with our currency\n",
+                    "**Useful Links**",
+                    f"[Invite FBot]({fn.top}) or "
+                    f"[join our server!]({fn.server})")
+            await ctx.send(embed=embed)
+        else:
+            user = ctx.author
+            for cmd in cm.commands:
+                if command == cmd:
+                    await ctx.send(embed=self.cmdembed(user, cmd))
+                    return
+
+            if ctx.author.id in self.bot.owner_ids:
+                for cmd in cm.devcmds:
+                    if command.startswith(cmd):
+                        await ctx.send(embed=self.cmdembed(user, cmd))
+                        return
+
+            await ctx.send(f"No command called '{command}'")
 
     @commands.command(name="economy")
     async def _Economy(self, ctx):
@@ -105,6 +156,26 @@ class help(commands.Cog):
         book = reactionbook(self.bot, ctx, TITLE="FBot Economy")
         book.createpages(ehelp, ITEM_PER_PAGE=True)
         await book.createbook(MODE="numbers", COLOUR=colour, TIMEOUT=60)
+
+    @commands.command(name="cmds", aliases=["commands"])
+    @commands.check(cooldown)
+    async def _Commands(self, ctx):
+        colour = self.bot.db.getcolour(ctx.author.id)
+        book = reactionbook(self.bot, ctx, LINES=20)
+        book.createpages(contents, SUBHEADER="**__FBot Commands__**")
+        for category in cm.categories:
+            book.createpages(cm.categories[category], LINE="> `%0%1`:\n> *%2*\n",
+                             SUBHEADER="**__" + category + "__**\n")
+        await book.createbook(MODE="numbers", COLOUR=colour)
+
+    @commands.command(name="devcmds")
+    @commands.is_owner()
+    async def _DevCommands(self, ctx):
+        colour = self.bot.db.getcolour(ctx.author.id)
+        book = reactionbook(self.bot, ctx, LINES=20)
+        book.createpages(cm.devcmdlist, LINE="`%0`",
+                         SUBHEADER="**__FBot Dev Commands__**\n")
+        await book.createbook(MODE="numbers", COLOUR=colour)
 
 def setup(bot):
     bot.add_cog(help(bot))

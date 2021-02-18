@@ -1,24 +1,31 @@
 from discord.ext import commands
 from dbfn import reactionbook
-from triggers import tr
+import triggers as tr
+import commands as cm
+import economy as e
 from time import time
 import discord
 import socket
+
+def load(file):
+    start = time()
+    file.load()
+    return round((time() - start) * 1000, 2) 
 
 class fbotdev(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="treload")
+    @commands.command(name="csvreload")
     @commands.is_owner()
-    async def _Treload(self, ctx):
-        name = ctx.author.display_name
-        start = time()
-        tr.trigger_load()
-        ms = round(time() - start, 4) * 1000
-        embed = self.bot.fn.embed(ctx.author, "FBot treload",
-                f"`[dev] Reloaded triggers.csv in {ms}ms`")
+    async def _CSVReload(self, ctx):
+        
+        tms, cms, ems = load(tr.tr), load(cm.cmds), load(e.econ)
+        embed = self.bot.fn.embed(ctx.author, "FBot csvreload",
+                f"`[dev] Reloaded Triggers.csv in {tms}ms`",
+                f"`[dev] Reloaded Commands.csv in {cms}ms`",
+                f"`[dev] Reloaded Economy.csv in {ems}ms`")
         await ctx.send(embed=embed)
 
     @commands.command(name="eval")
@@ -31,7 +38,7 @@ class fbotdev(commands.Cog):
             await ctx.send(embed=embed)
         except Exception as e:
             if content == "": content = "NULL"
-            embed = fn.errorembed(f"Error in `{content}`", f"```{str(e)}```")
+            embed = fn.errorembed(f"Error in '{content}'", str(e))
             await ctx.send(embed=embed)
 
     @commands.command(name="await")

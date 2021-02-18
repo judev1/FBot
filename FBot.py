@@ -8,6 +8,8 @@ sys.path.insert(0, "FBot_Libs")
 from functions import fn, ftime
 from database import db
 from triggers import tr
+from commands import cmds
+from economy import econ
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -24,12 +26,15 @@ bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
 fn.bot = bot
 bot.fn = fn
 bot.db = db()
-tr.trigger_load()
+
+tr.load()
+cmds.load()
+econ.load()
+
 bot.ftime = ftime()
 
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
-
 print(f" > Session started at {bot.ftime.start}")
+token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
 
 @bot.event
 async def on_connect():

@@ -15,21 +15,21 @@ class info(commands.Cog):
 
         totalmembers = 0
         for servers in self.bot.guilds:
-            if str(servers.id) != "264445053596991498":
-                totalmembers += servers.member_count
+            totalmembers += servers.member_count
 
         embed = self.bot.fn.embed(ctx.author, "FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
-        embed.add_field(name="Servers", value=len(self.bot.guilds) - 1)
+        embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(name="Last Updated", value=fn.getinfo("lastupdated"))
         embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Members", value=totalmembers)
         embed.add_field(name="Version", value=fn.getinfo("ver"))
         await ctx.send(embed=embed)
 
-    @commands.command(name="serverinfo")
+    @commands.command(name="servinfo")
+    @commands.guild_only()
     @commands.check(cooldown)
-    async def _ServerInfo(self, ctx):
+    async def _ServInfo(self, ctx):
         guild = ctx.guild
 
         memcount = guild.member_count
@@ -44,7 +44,7 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(ctx.author, guild.name)  # guild.description
+        embed = self.bot.fn.embed(ctx.author, guild.name) # guild.description
         embed.add_field(name="Members", value=memcount)# + botcount)
         #embed.add_field(name="Users", value=memcount)
         #embed.add_field(name="Bots", value=botcount)

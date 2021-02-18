@@ -8,48 +8,68 @@ class status(commands.Cog):
         self.bot = bot
         
     @commands.command(name="status")
+    @commands.guild_only()
     @commands.check(cooldown)
-    async def _Status(self, ctx, *args):
+    async def _Status(self, ctx):
         db = self.bot.db
         user = ctx.author
-        if str(ctx.channel.type) != "private":
-            db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        if len(args) in [1, 2]:
-            if args[0] == "server":
-                if str(ctx.channel.type) == "private": return
-                try:
-                    if args[1].lower() == "mod" and ctx.author.guild_permissions.administrator:
-                        mod = True
-                    elif args[1].lower() == "mod":
-                        await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
-                        return
-                except: mod = False
-                
-                guild_id = ctx.guild.id
-                channels = db.Get_All_Status(guild_id)
-                view_channel = "bot.get_channel(%l).overwrites_for(ctx.guild.default_role).view_channel"
-                header = f"Modtoggle: `{db.Get_Modtoggle(guild_id)}` Responds to: `{db.Get_Priority(guild_id)}`"
-                empty1 = "`There are no channels`\n`in the Database set to on`"
-                empty2 = "`There are no channels`\n`in the Database set to off`"
-                colour = self.bot.db.getcolour(user.id)
 
-                book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
-                if mod:
-                    book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"))
-                    book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"))
-                else:
-                    book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"), subcheck1=(view_channel, None))
-                    book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"), subcheck1=(view_channel, None))
-                await book.createbook(HEADER=header, COLOUR=colour)
+        if str(ctx.channel.type) == "private":
+            embed = self.bot.fn.embed(user, "FBot is always on in DMs")
         else:
-            if str(ctx.channel.type) == "private":
-                embed = self.bot.fn.embed(user, "FBot is always on in DMs")
-            else:
-                embed = self.bot.fn.embed(user, "FBot Status")
-                embed.add_field(name="FBot Status", value=f"`{db.Get_Status(ctx.channel.id)}`")
-                embed.add_field(name="Modtoggle", value=f"`{db.Get_Modtoggle(ctx.guild.id)}`")
-                embed.add_field(name="Respond to", value=f"`{db.Get_Priority(ctx.guild.id)}`")
-            await ctx.send(embed=embed)
+            db.Add_Channel(ctx.channel.id, ctx.guild.id)
+            embed = self.bot.fn.embed(user, "FBot Status")
+            embed.add_field(name="FBot Status", value=f"`{db.Get_Status(ctx.channel.id)}`")
+            embed.add_field(name="Modtoggle", value=f"`{db.Get_Modtoggle(ctx.guild.id)}`")
+            embed.add_field(name="Respond to", value=f"`{db.Get_Priority(ctx.guild.id)}`")
+        await ctx.send(embed=embed)
+        
+    @commands.command(name="servstatus")
+    @commands.guild_only()
+    @commands.check(cooldown)
+    async def _ServerStatus(self, ctx):
+        db = self.bot.db
+        user = ctx.author
+
+        db.Add_Channel(ctx.channel.id, ctx.guild.id)
+                
+        guild_id = ctx.guild.id
+        channels = db.Get_All_Status(guild_id)
+        view_channel = "self.bot.get_channel(%0).overwrites_for(self.ctx.guild.default_role).pair()[1].view_channel"
+        header = f"Modtoggle: `{db.Get_Modtoggle(guild_id)}` Responds to: `{db.Get_Priority(guild_id)}`"
+        empty1 = "```There are no public channels\nin our database toggled on```"
+        empty2 = "```There are no public channels\nin our database toggled off```"
+        colour = self.bot.db.getcolour(user.id)
+
+        book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
+        book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"), subcheck1=(view_channel, False))
+        book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"), subcheck1=(view_channel, False))
+        await book.createbook(HEADER=header, COLOUR=colour)
+        
+    @commands.command(name="servstatusmod")
+    @commands.guild_only()
+    @commands.check(cooldown)
+    async def _ServerStatusMod(self, ctx):
+        db = self.bot.db
+        user = ctx.author
+        
+        db.Add_Channel(ctx.channel.id, ctx.guild.id)
+        
+        if not ctx.author.guild_permissions.administrator:
+            await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+            return
+        
+        guild = ctx.guild
+        channels = db.Get_All_Status(guild.id)
+        header = f"Modtoggle: `{db.Get_Modtoggle(guild.id)}` Responds to: `{db.Get_Priority(guild.id)}`"
+        empty1 = "```There are no channels in\nour database toggled on```"
+        empty2 = "```There are no channels in\nour database toggled off```"
+        colour = self.bot.db.getcolour(user.id)
+
+        book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
+        book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"))
+        book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"))
+        await book.createbook(HEADER=header, COLOUR=colour)
 
     @commands.command(name="on")
     async def _FBotOn(self, ctx):

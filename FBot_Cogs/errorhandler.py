@@ -53,6 +53,22 @@ class errorhandler(commands.Cog):
             else: retry = str(round(error.retry_after / 60)) + "` mins"
             embed = fn.embed(ctx.author, "You are being ratelimited",
                     f"You may use a command again in `{retry}")
+        elif type(error) is commands.CheckFailure:
+            error = str(error)
+            errorlines = error.split("\n")
+            embed = fn.embed(user, errorlines[0], *errorlines[2:])
+            try:
+                try:
+                    await ctx.send(embed=embed)
+                except: await ctx.send(error)
+            except:
+                try:
+                    channel = await ctx.author.create_dm()
+                    try:
+                        await channel.send(embed=embed)
+                    except: await channel.send(error)
+                except: pass
+            return
         else:
             if type(error) is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:

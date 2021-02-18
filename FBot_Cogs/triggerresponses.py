@@ -1,6 +1,7 @@
 from discord.ext import commands
 from random import choice
 from triggers import tr
+import commands as cm
 import asyncio
 
 tf = ["will", "will not"]
@@ -44,11 +45,14 @@ class triggerresponses(commands.Cog):
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        commandcheck = content[len(self.bot.fn.getprefix(self.bot, message)):]
-        for command in self.bot.walk_commands():
-            if commandcheck.startswith(command.name): return
-            for alias in command.aliases:
-                if commandcheck.startswith(alias): return
+        prefix = self.bot.fn.getprefix(self.bot, message)
+        commandcheck = message.content[len(prefix):]
+        for command in cm.commands:
+            if commandcheck.startswith(command):
+                return
+        for command in cm.devcmds:
+            if commandcheck.startswith(command):
+                return
 
         if message.content.lower().startswith("fball"):
             return
@@ -86,7 +90,7 @@ class triggerresponses(commands.Cog):
                 await send(choice(responses))
                 return
             
-            trigger_detected, response = tr.trigger_respond(message, priority)
+            trigger_detected, response = tr.respond(message, priority)
             if trigger_detected:
                 response = response.replace("{username}", name)
                 response = response.replace("{answer}", choice(answers))
