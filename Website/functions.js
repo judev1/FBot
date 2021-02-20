@@ -15,7 +15,7 @@ function filter() {
 			rows[i].style.display = "";
 		} else {
 			rows[i].style.display = "none";
-		}      
+		}
 	}
 }
 function search() {

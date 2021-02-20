@@ -103,7 +103,7 @@ class economy(commands.Cog):
                         try: name = self.bot.get_guild(ID).name
                         except: name = "Server"
                     else:
-                        try: name = self.bot.get_user(ID).name
+                        try: name = await self.bot.fetch_user(ID).name
                         except: name = "User"
                     if toptype in ["bal", "netfbux", "debt", "netdebt"]:
                         if typeitem == 0: break
@@ -139,18 +139,28 @@ class economy(commands.Cog):
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken",
                          "AND multiplier worth x20 that of using a trigger\n",
 
-                         "**VOTING IS DISABLED WHILE WE WORK ON SOME ISSUES**\n",
-
                          f"[Top.gg vote]({fn.votetop})",
                          f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
         await ctx.send(embed=embed)
+
+    @commands.Cog.listener()
+    async def on_dbl_test(self, data):
+        db = self.bot.db
+        user_id = data["user"]
+        db.register(user_id)
+        try: name = await self.bot.fetch_user(user_id).name
+        except: name = "User"
+            
+        embed = self.bot.fn.embed(user, "Tog.gg test",
+                                  f"{name} tested out the webhook")
+        await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         db = self.bot.db
         user_id = data["user"]
         db.register(user_id)
-        try: name = self.bot.get_user(user_id).name
+        try: name = await self.bot.fetch_user(user_id).name
         except: name = "User"
         
         job = db.getjob(user_id)
