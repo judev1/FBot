@@ -1,8 +1,14 @@
 from datetime import datetime
 import sqlite3
 
-path = f"./Info/FBot.db"
+path = "./Info/FBot.db"
 conn = sqlite3.connect(path)
+
+with open(f"./Info/FBot.db", "rb") as file:
+    time = datetime.now()
+    time = time.strftime("%d-%m-%y %H%M")
+    with open(f"./Info/db_backups/{time}.db", "xb") as newfile:
+        newfile.writelines(file.readlines())
 
 class db:
 

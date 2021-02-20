@@ -73,12 +73,17 @@ class bigpp(commands.Cog):
 
     async def cleanup(self, ctx, path, process, success):
         if success:
-            file = File(fp=path + process + "ed.jpg")
+            if process.endswith("r"): filename = process + "red.jpg"
+            else: filename = process + "ed.jpg"
+
+            file = File(fp=path + filename)
             await ctx.send(file=file)
             
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
-            os.remove(path + process + "ed.jpg")
+            try: os.remove(path + "zoom_to_" + process)
+            except: pass
+            os.remove(path + filename)
         else:
             await ctx.send("That image is too big to " + process)
 

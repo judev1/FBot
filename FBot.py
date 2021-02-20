@@ -47,7 +47,7 @@ async def on_ready():
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
-        if cog not in ["image.py"]: # Cogs not to load
+        if cog not in []: # Cogs not to load
             print(f"Loading {cog}...", end="")
             try: bot.reload_extension("FBot_Cogs." + cog[:-3])
             except: bot.load_extension("FBot_Cogs." + cog[:-3])

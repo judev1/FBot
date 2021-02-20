@@ -44,7 +44,7 @@ class economy(commands.Cog):
             embed = self.bot.fn.embed(user, "Degree completed!",
                     f"You studied and gained debt: **{f}{round(debt)}**",
                     f"Your new debt is: **{f}{newdebt}**",
-                    f"You may now apply for the **{degreenames[degree][2]}** job")
+                    f"You may now apply for the **{e.degreejobs[degree]}** job")
         else:
             db.studied(user.id)
             embed = self.bot.fn.embed(user, f"You studied for **{degree}**",

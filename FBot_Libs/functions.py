@@ -117,28 +117,22 @@ class fn:
 class ftime:
 
     def __init__(self):
-        self.ms, self.hs, self.ds, self.mos = self.get()
-
-        self.start = f"{self.hs}:{self.ms}, {self.ds}/{self.mos} UTC"
-
-    def get(self):
         time = datetime.now(tz=timezone.utc)
-        m = int(time.strftime("%M"))
-        h = int(time.strftime("%H"))
-        d = int(time.strftime("%d"))
-        mo = int(time.strftime("%m"))
-        return m, h, d, mo
+        self.ms, self.hs, self.ds, self.mos = [int(i) for i in time.strftime("%M %H %d %m").split()]
+
+        self.start = self.now()
 
     def now(self):
-        m, h, d, mo = self.get()
-        return f"{h}:{m}, {d}-{mo} UTC"
+        time = datetime.now(tz=timezone.utc)
+        return time.strftime("%H:%M, %d/%m/%y UTC")
 
     def isweekend(self):
         return datetime.now().strftime("%a") in ["Sat", "Sun"]
 
     def uptime(self):
+        time = datetime.now(tz=timezone.utc)
         ms, hs, ds, mos = self.ms, self.hs, self.ds, self.mos
-        mn, hn, dn, mon = self.get()
+        mn, hn, dn, mon = [int(i) for i in time.strftime("%M %H %d %m").split()]
 
         if mos > mon:
             mo = 60 - mos + mon

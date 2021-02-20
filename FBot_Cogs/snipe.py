@@ -80,11 +80,12 @@ class snipe(commands.Cog):
                 if  message.channel.permissions_for(
                     message.guild.get_member(bot_id)).send_messages:
                     return
+        deleter = "User"
         try:
             async for deleted in message.guild.audit_logs(limit=1,
                                  oldest_first=False, action=message_delete):
                 deleter = deleted.user.mention
-        except: deleter = "User"
+        except: pass
         
         if message.channel.id not in snipes:
             snipes[message.channel.id] = deque(maxlen=max_snipes)

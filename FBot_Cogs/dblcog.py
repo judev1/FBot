@@ -1,4 +1,5 @@
 from discord.ext import commands, tasks
+import dbl
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -13,15 +14,18 @@ class dblcog(commands.Cog):
     @commands.command(name="dbl")
     @commands.is_owner()
     async def _DBL(self, ctx):
+        embed = self.bot.fn.embed(ctx.author, "Loading...")
+        msg = await ctx.send(embed=embed)
         try:
             await self.dbl.post_guild_count()
+        except: pass
+        try:
             embed = self.bot.fn.embed(ctx.author, "Top.gg",
                     f"Updated server count: `{self.dbl.guild_count()}`")
-            await ctx.send(embed=embed)
-        except Exception as e:
-            embed = self.bot.fn.errorembed("Failed To Update Server Count",
-                    f"{type(e).__name__}: {e}")
-            await ctx.send(embed=embed)
+            await msg.edit(embed=embed)
+        except:
+            embed = self.bot.fn.embed(ctx.author, "Failed")
+            await msg.edit(embed=embed)
 
 def setup(bot):
     bot.add_cog(dblcog(bot))

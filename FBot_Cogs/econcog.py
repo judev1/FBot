@@ -139,6 +139,8 @@ class economy(commands.Cog):
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken",
                          "AND multiplier worth x20 that of using a trigger\n",
 
+                         "**VOTING IS DISABLED WHILE WE WORK ON SOME ISSUES**\n",
+
                          f"[Top.gg vote]({fn.votetop})",
                          f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
         await ctx.send(embed=embed)
