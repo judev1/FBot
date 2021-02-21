@@ -166,7 +166,7 @@ class economy(commands.Cog):
         job = db.getjob(user_id)
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user_id)
-        salary = jobnames[job][0] * jobmulti
+        salary = e.salaries[job] * jobmulti
         salary = round(salary * db.getusermulti(user_id))
         db.updatebal(user_id, salary)
 
