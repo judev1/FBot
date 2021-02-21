@@ -1,7 +1,5 @@
 from discord.ext import commands
 from functions import cooldown
-from triggers import tr
-import commands as cm
 import economy as e
 import discord
 
@@ -14,7 +12,6 @@ class economy(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.voteschannel = self.bot.get_channel(757722305395949572).send
 
     @commands.command(name="profile")
     @commands.check(cooldown)
@@ -122,61 +119,6 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Store(self, ctx):
         await ctx.send("This feature is still in development")
-
-    @commands.command(name="vote")
-    @commands.check(cooldown)
-    async def _Vote(self, ctx):
-        fn, db = self.bot.fn, self.bot.db
-        user = ctx.author
-        job = db.getjob(user.id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user.id)
-        salary = e.salaries[job] * jobmulti
-        salary *= db.getusermulti(user.id)
-        
-        embed = fn.embed(user, "FBot Vote",
-                         "If you vote you'll earn your salary without tax",
-                         f"So **~~f~~ {round(salary)}** if I'm not mistaken",
-                         "AND multiplier worth x20 that of using a trigger\n",
-
-                         f"[Top.gg vote]({fn.votetop})",
-                         f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
-        await ctx.send(embed=embed)
-
-    @commands.Cog.listener()
-    async def on_dbl_test(self, data):
-        db = self.bot.db
-        user_id = data["user"]
-        db.register(user_id)
-        try: name = await self.bot.fetch_user(user_id).name
-        except: name = "User"
-            
-        embed = self.bot.fn.embed(user, "Tog.gg test",
-                                  f"{name} tested out the webhook")
-        await self.voteschannel(embed=embed)
-
-    @commands.Cog.listener()
-    async def on_dbl_vote(self, data):
-        db = self.bot.db
-        user_id = data["user"]
-        db.register(user_id)
-        try: name = await self.bot.fetch_user(user_id).name
-        except: name = "User"
-        
-        job = db.getjob(user_id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user_id)
-        salary = e.salaries[job] * jobmulti
-        salary = round(salary * db.getusermulti(user_id))
-        db.updatebal(user_id, salary)
-
-        bonus = 1
-        if self.bot.ftime.isweekend(): bonus = 2
-        db.increasemultiplier(user_id, 0, 20 * bonus)
-            
-        embed = self.bot.fn.embed(user, "Tog.gg vote",
-                                  f"{name} voted and gained **~~f~~ {salary}**")
-        await self.voteschannel(embed=embed)
     
 def setup(bot):
     bot.add_cog(economy(bot))

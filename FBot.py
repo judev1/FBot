@@ -1,6 +1,5 @@
 from discord.ext import commands
 import discord
-import dbl
 import sys
 import os
 
@@ -20,8 +19,6 @@ fn = fn()
 owners = [671791003065384987, 216260005827969024, 311178459919417344]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
-bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
-                        webhook_auth=fn.gettoken(5), webhook_port=6000)
 
 fn.bot = bot
 bot.fn = fn
