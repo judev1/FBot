@@ -1,10 +1,13 @@
+import nest_asyncio
+nest_asyncio.apply()
+
 from discord.ext import commands
 import discord
 import sys
 import os
 
 sys.path.insert(0, "FBot_Libs")
-from functions import fn, ftime
+from functions import fn, ftime, voting_handler
 from database import db
 from triggers import tr
 from commands import cmds
@@ -19,6 +22,10 @@ fn = fn()
 owners = [671791003065384987, 216260005827969024, 311178459919417344]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
+
+voting_handler(bot)
+bot.dbl = dbl.DBLClient(bot, gettoken(4), webhook_path="/dblwebhook",
+          webhook_auth=gettoken(5), webhook_port=6000)
 
 fn.bot = bot
 bot.fn = fn

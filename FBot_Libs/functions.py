@@ -1,6 +1,6 @@
 from discord.ext import commands
 from datetime import datetime, timezone
-from discord import Embed
+from discord import Embed, Client
 from database import db
 import commands as cm
 import os
@@ -113,6 +113,36 @@ class fn:
     invite = "https://fbot.breadhub.uk/invite"
     github = "https://github.com/judev1/FBot"
     fbot = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
+
+from aiohttp import web
+import asyncio
+
+class voting_handler:
+
+    def __init__(self, bot: Client):
+
+        async def start():
+            app = web.Application(loop=self.bot.loop)
+            app.router.add_post("/vote", self.on_post_request)
+
+            runner = web.AppRunner(app)
+            await runner.setup()
+
+            server = web.TCPSite(runner, '0.0.0.0', 2296)
+            await server.start()
+        
+        self.bot = bot
+
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(start())
+
+    async def on_post_request(self, request):
+        auth = request.headers.get("Authorization")
+        if fn().gettoken(5) == auth:
+            data = await request.json()
+            self.bot.dispatch("vote", data)
+            return web.Response(status=200)
+        return web.Response(status=401)
 
 class ftime:
 

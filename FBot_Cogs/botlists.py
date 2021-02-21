@@ -1,8 +1,8 @@
-from discord.ext import commands
 from functions import cooldown, fn
+from discord.ext import commands
 import economy as e
-import discord
 import requests
+import discord
 import dbl
 
 f = "~~f~~ "
@@ -20,14 +20,12 @@ class economy(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.dbl = bot.dbl
         self.voteschannel = self.bot.get_channel(757722305395949572).send
-
-        self.dbl = dbl.DBLClient(bot, gettoken(4), webhook_path="/dblwebhook",
-                  webhook_auth=gettoken(5), webhook_port=6000)
 
     @commands.command(name="scounts")
     @commands.is_owner()
-    async def _UpdateCount(self, ctx):
+    async def _SCOUNTS(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
@@ -79,7 +77,7 @@ class economy(commands.Cog):
         else:
             content += "\n**discordbotlist.com:** failed"
             embed.description = content
-        await msg.edit(embed=embed)        
+        await msg.edit(embed=embed)
 
     @commands.command(name="vote")
     @commands.check(cooldown)
@@ -115,6 +113,11 @@ class economy(commands.Cog):
         db.increasemultiplier(user_id, 0, 20 * bonus)
 
         return salary
+
+    @commands.Cog.listener()
+    async def on_vote(self, data):
+        embed = self.bot.fn.embed(user, "Vote test", str(data))
+        await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
