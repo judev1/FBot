@@ -28,7 +28,7 @@ class economy(commands.Cog):
     @commands.command(name="scounts")
     @commands.is_owner()
     async def _UpdateCount(self, ctx):
-        servers = 677 #len(self.bot.guilds)
+        servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
 
