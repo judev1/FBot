@@ -20,13 +20,14 @@ degrees,,Economy,Degrees,No,"send_messages, embed_links, add_reactions, (manage_
 degree,(@member),Economy,Degrees,No,"send_messages, embed_links",no extra,fbot degree or fbot degree @justjude,,Gives a degree overview of a user
 take,,Economy,Degrees,No,"send_messages, embed_links",no extra,fbot take art or fbot take milk shaking,,Lets you change your degree
 drop,,Economy,Degrees,No,send_messages,no extra,fbot drop,,Lets you remove your degree
-counting,,Counting,,No,send_messages,administrator,fbot counting,,Sets the current channel as the counting channel
-number,,Counting,,No,"send_messages, embed_links",no extra,fbot number or fbot last,,Gets information about the last number
-hs,,Counting,,No,"send_messages, embed_links",no extra,fbot hs,,"Shows the server counting highscore, along with the top server highscores"
+counting,,Counting,,Yes,send_messages,administrator,fbot counting,,Sets the current channel as the counting channel
+number,,Counting,,Yes,"send_messages, embed_links",no extra,fbot number or fbot last,,Gets information about the last number
+hs,,Counting,,Yes,"send_messages, embed_links",no extra,fbot hs,,"Shows the server counting highscore, along with the top server highscores"
 ppsize,(@member),Fun,,No,send_messages,no extra,fbot ppsize or fbot ppsize @LinesGuy,,Gets the ppsize of a user
 fball,<question>,Fun,,No,send_messages,no extra,fball Is this a question? or fbot fball IS THIS A QUESTION!?!?,,FBot will answer a question
 say,<message>,Fun,,No,"send_messages, (manage_messages)",no extra,"fbot say Yes it is me, FBot",,Send a message as FBot
 dms,,Fun,,No,send_messages,no extra,fbot dms,,Talk to FBot in your dms
+premium,,Fun,,No,send_messages,no extra,fbot premium,,Get access to FBot's premium features
 bigpp,([@member | image url | attachment]),Fun,Image,No,"send_messages, attach_files",no extra,fbot bigpp or fbot bigpp @justjude,,Creates a bigpp image of a user
 bonk,([@member | image url | attachment]),Fun,Image,No,"send_messages, attach_files",no extra,fbot bonk or fbot bonk @LinesGuy,,Creates a bonked image of a user
 blur,percentage ([@member | image url | attachment]),Fun,Image,No,"send_messages, attach_files",no extra,fbot blur 100 or fbot blur 100 @justjude,,Creates a blurred image of a user
@@ -69,6 +70,5 @@ cmdlist,,Dev,,No,send_messages,owner,,,
 search,<query>,Dev,,No,send_messages,owner,,,
 host,,Dev,,No,send_messages,owner,,,
 devcmds,,Dev,,No,send_messages,owner,,,
-premium,,Fun,,No,send_messages,no extra,,,
 gift,,Dev,,No,send_messages,owner,,,
-updateservers,,Dev,,No,send_messages,owner,,,
+scounts,,Dev,,No,send_messages,owner,,,

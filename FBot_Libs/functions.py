@@ -11,24 +11,25 @@ emojis = {True: "✅",
 bot_id = 711934102906994699
 db = db(verbose=False)
 def cooldown(ctx):
-    bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
+    if str(ctx.channel.type) != "private":
+        bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
 
-    valid = []
-    perms = {}
-    for perm in cm.perms[ctx.command.name]:
-        if not perm.startswith("("):
-            bot_perm = getattr(bot_perms, perm)
-        else: bot_perm = True
-        valid.append(bot_perm)
-        perms[perm] = bot_perm
+        valid = []
+        perms = {}
+        for perm in cm.perms[ctx.command.name]:
+            if not perm.startswith("("):
+                bot_perm = getattr(bot_perms, perm)
+            else: bot_perm = True
+            valid.append(bot_perm)
+            perms[perm] = bot_perm
 
-    if not all(valid):
-        page = "**Missing permissions to run this command**\n\n"
-        for perm in perms:
-            if perm.startswith("("):
-                perms[perm] = getattr(bot_perms, perm[1:-1])
-            page += f"{emojis[perms[perm]]} ~ {perm.upper()}\n"
-        raise commands.CheckFailure(message=page)
+        if not all(valid):
+            page = "**Missing permissions to run this command**\n\n"
+            for perm in perms:
+                if perm.startswith("("):
+                    perms[perm] = getattr(bot_perms, perm[1:-1])
+                page += f"{emojis[perms[perm]]} ~ {perm.upper()}\n"
+            raise commands.CheckFailure(message=page)
 
     usercooldown = db.Get_Cooldown(ctx.author.id)
     if usercooldown > 0:

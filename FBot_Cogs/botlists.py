@@ -96,7 +96,7 @@ class economy(commands.Cog):
         embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary without tax",
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken",
-                         f"AND multiplier worth {multi} messages!\n",
+                         f"AND multiplier worth **{multi} messages**!\n",
 
                          f"[top.gg vote]({fn.votetop})",
                          f"[botsfordiscord.com]({fn.votebfd})",

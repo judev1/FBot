@@ -41,7 +41,7 @@ class fcounter(commands.Cog):
                         
                         bonus = 1
                         if self.bot.ftime.isweekend(): bonus = 2
-                        db.increasemultiplier(user.id, -1, 3 * bonus)
+                        db.increasemultiplier(message.author.id, guild_id, 2 * bonus)
 
                         await message.add_reaction("✅")
             except: pass
@@ -71,6 +71,7 @@ class fcounter(commands.Cog):
                 await message.channel.send(f"**The last number in this channel was edited**\nThe next number is `{last_number+1}`")
 
     @commands.command("counting")
+    @commands.guild_only()
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
             self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
@@ -79,11 +80,13 @@ class fcounter(commands.Cog):
 
     @commands.command("devcounting")
     @commands.is_owner()
+    @commands.guild_only()
     async def dev_set_counter_channel(self, ctx):
         self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
     @commands.command("number",  aliases=["last"])
+    @commands.guild_only()
     async def get_guild_number(self, ctx):
         name = ctx.author.display_name
         last_number = self.bot.db.getnumber(ctx.guild.id)
@@ -99,6 +102,7 @@ class fcounter(commands.Cog):
 
     @commands.command("hs")
     @commands.cooldown(1, 5, type=commands.BucketType.user)
+    @commands.guild_only()
     async def _leaderboard(self, ctx):
         name = ctx.author.display_name
         async with ctx.channel.typing():
@@ -117,6 +121,7 @@ class fcounter(commands.Cog):
 
     @commands.command("devnumber")
     @commands.is_owner()
+    @commands.guild_only()
     async def _setnumber(self, ctx, *, number):
         if not number.isdigit(): await ctx.send("Not a number")
         else:
