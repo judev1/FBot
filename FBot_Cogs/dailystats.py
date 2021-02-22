@@ -30,7 +30,7 @@ class dailystats(commands.Cog):
         if not commands.bot_has_permissions(send_messages=True):
             self.other_messages_processed += 1
             return
-        if str(message.channel.type) == "private": guild_id = 0
+        if str(message.channel.type) == "private": guild_id = -1
         else: guild_id = message.guild.id
 
         bonus = 1
@@ -67,6 +67,7 @@ class dailystats(commands.Cog):
         if status == "on":
             trigger_detected = tr.respond(message, priority)[0]
             if trigger_detected:
+                db.increasemultiplier(user.id, guild_id, 1 * bonus)
                 self.triggers_processed += 1
                 return
         self.other_messages_processed += 1

@@ -38,6 +38,11 @@ class fcounter(commands.Cog):
                     else:
                         db.updatenumber(users_number, message.author.id, guild_id)
                         db.highscore(users_number, guild_id)
+                        
+                        bonus = 1
+                        if self.bot.ftime.isweekend(): bonus = 2
+                        db.increasemultiplier(user.id, -1, 3 * bonus)
+
                         await message.add_reaction("✅")
             except: pass
 

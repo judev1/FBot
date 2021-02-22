@@ -1,3 +1,6 @@
+import os
+os.environ["MAGICK_OCL_DEVICE"] = "OFF"
+
 from wand.image import Image as wand_image
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
@@ -5,7 +8,6 @@ from functions import cooldown
 from discord import File
 import requests
 import re
-import os
 
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -146,6 +148,10 @@ class bigpp(commands.Cog):
 
         if type(amount) is not int:
             await ctx.send("Amount must be a number")
+            return
+        elif amount > 200:
+            await ctx.send("Whoa! That number is like, bigger than 200 bro")
+            return
 
         async with ctx.channel.typing():
 

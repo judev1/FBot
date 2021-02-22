@@ -91,12 +91,12 @@ class economy(commands.Cog):
         salary *= db.getusermulti(user.id)
 
         multi = 20
-        if ftime.is_weekend(): multi *= 2
+        if ftime.isweekend(): multi *= 2
         
         embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary without tax",
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken",
-                         "AND multiplier worth {multi} messages!\n",
+                         f"AND multiplier worth {multi} messages!\n",
 
                          f"[top.gg vote]({fn.votetop})",
                          f"[botsfordiscord.com]({fn.votebfd})",
@@ -121,17 +121,21 @@ class economy(commands.Cog):
 
     @commands.Cog.listener()
     async def on_vote(self, site, data):
-        user_id = int(data["user"])
+
+        if site == "botsfordiscord.com":
+            user_id = int(data["user"])
+        else: user_id = int(data["id"])
+
         self.bot.db.register(user_id)
         try: name = await self.bot.fetch_user(user_id).name
         except: name = "User"
 
-        if data["type"] == "test":
-            embed = self.bot.fn.embed(user, site + " test",
-                    f"{name} tested out the webhook")
-        elif site == "discordbotlist.com":
+        if site == "discordbotlist.com":
             embed = self.bot.fn.embed(user, "abc.xyz",
                     f"User voted for FBot!")
+        elif data["type"] == "test":
+            embed = self.bot.fn.embed(user, site + " test",
+                    f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
             salary = self.vote_rewards(user_id)
             embed = self.bot.fn.embed(user, site,
