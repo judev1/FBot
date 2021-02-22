@@ -105,9 +105,13 @@ class fn:
     
     top = "https://top.gg/bot/711934102906994699"
     dbl = "https://discordbotlist.com/bots/fbot"
+    bfd = "https://botsfordiscord.com/bot/711934102906994699"
+    dbgg = "https://discord.bots.gg/bots/711934102906994699"
+    
     votetop = "https://top.gg/bot/711934102906994699/vote"
     votedbl = "https://discordbotlist.com/bots/fbot/upvote"
-
+    votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
+    
     site = "https://fbot.breadhub.uk"
     server = "https://fbot.breadhub.uk/server"
     invite = "https://fbot.breadhub.uk/invite"
@@ -138,11 +142,16 @@ class voting_handler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if fn().gettoken(5) == auth:
-            data = await request.json()
-            self.bot.dispatch("vote", data)
-            return web.Response(status=200)
-        return web.Response(status=401)
+        if "dbl_" + fn().gettoken(5) == auth:
+            site = "discordbotlist.com"
+        elif "bfd_" + fn().gettoken(5) == auth:
+            site = "botsfordiscord.com"
+        else:
+            return web.Response(status=401)
+
+        data = await request.json()
+        self.bot.dispatch("vote", site, data)
+        return web.Response(status=200)
 
 class ftime:
 

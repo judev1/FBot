@@ -3,6 +3,7 @@ nest_asyncio.apply()
 
 from discord.ext import commands
 import discord
+import dbl
 import sys
 import os
 
@@ -24,8 +25,8 @@ bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
 
 voting_handler(bot)
-bot.dbl = dbl.DBLClient(bot, gettoken(4), webhook_path="/dblwebhook",
-          webhook_auth=gettoken(5), webhook_port=6000)
+bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
+          webhook_auth=fn.gettoken(5), webhook_port=6000)
 
 fn.bot = bot
 bot.fn = fn

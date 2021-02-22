@@ -82,24 +82,29 @@ class economy(commands.Cog):
     @commands.command(name="vote")
     @commands.check(cooldown)
     async def _Vote(self, ctx):
-        fn, db = self.bot.fn, self.bot.db
+        fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
         job = db.getjob(user.id)
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user.id)
         salary = e.salaries[job] * jobmulti
         salary *= db.getusermulti(user.id)
+
+        multi = 20
+        if ftime.is_weekend(): multi *= 2
         
         embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary without tax",
                          f"So **~~f~~ {round(salary)}** if I'm not mistaken",
-                         "AND multiplier worth x20 that of using a trigger\n",
+                         "AND multiplier worth {multi} messages!\n",
 
-                         f"[Top.gg vote]({fn.votetop})",
-                         f"[discordbotlist]({fn.votedbl}) (No rewards yet)")
+                         f"[top.gg vote]({fn.votetop})",
+                         f"[botsfordiscord.com]({fn.votebfd})",
+                         f"[discordbotlist.com]({fn.votedbl}) (No rewards)")
         await ctx.send(embed=embed)
 
     def vote_rewards(self, user_id):
+        db = self.bot.db
         
         job = db.getjob(user_id)
         if job == "Unemployed": jobmulti = 1.0
@@ -115,33 +120,46 @@ class economy(commands.Cog):
         return salary
 
     @commands.Cog.listener()
-    async def on_vote(self, data):
-        embed = self.bot.fn.embed(user, "Vote test", str(data))
+    async def on_vote(self, site, data):
+        user_id = int(data["user"])
+        self.bot.db.register(user_id)
+        try: name = await self.bot.fetch_user(user_id).name
+        except: name = "User"
+
+        if data["type"] == "test":
+            embed = self.bot.fn.embed(user, site + " test",
+                    f"{name} tested out the webhook")
+        elif site == "discordbotlist.com":
+            embed = self.bot.fn.embed(user, "abc.xyz",
+                    f"User voted for FBot!")
+        elif site == "botsfordiscord.com":
+            salary = self.vote_rewards(user_id)
+            embed = self.bot.fn.embed(user, site,
+                    f"{name} voted and gained **~~f~~ {salary}**")
         await self.voteschannel(embed=embed)
+            
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
-        db = self.bot.db
         user_id = data["user"]
-        db.register(user_id)
+        self.bot.db.register(user_id)
         try: name = await self.bot.fetch_user(user_id).name
         except: name = "User"
             
-        embed = self.bot.fn.embed(user, "Tog.gg test",
-                                  f"{name} tested out the webhook")
+        embed = self.bot.fn.embed(user, "top test",
+                f"{name} tested out the webhook")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
-        db = self.bot.db
         user_id = data["user"]
-        db.register(user_id)
+        self.bot.db.register(user_id)
         try: name = await self.bot.fetch_user(user_id).name
         except: name = "User"
 
         salary = self.vote_rewards(user_id)
-        embed = self.bot.fn.embed(user, "Tog.gg vote",
-                                  f"{name} voted and gained **~~f~~ {salary}**")
+        embed = self.bot.fn.embed(user, "top.gg",
+                f"{name} voted and gained **~~f~~ {salary}**")
         await self.voteschannel(embed=embed)
     
 def setup(bot):
