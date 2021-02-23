@@ -55,6 +55,16 @@ class db:
                           user_id integer NOT NULL,
                           record integer NOT NULL
                           )""")
+
+        c.execute("""CREATE TABLE IF NOT EXISTS votes (
+                          user_id integer NOT NULL,
+                          topvotes integer NOT NULL,
+                          dblvotes integer NOT NULL,
+                          bfdvotes integer NOT NULL,
+                          total_topvotes integer NOT NULL,
+                          total_dblvotes integer NOT NULL,
+                          total_bfdvotes integer NOT NULL
+                          )""")
         
         conn.commit()
         print(" > Connected to FBot.db") if verbose else False
@@ -343,6 +353,23 @@ class db:
         c = conn.cursor()
         c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT 20")
         return enumerate(c)
+
+    # Voting
+
+    def vote(self, user_id, site):
+        c = conn.cursor()
+        user_id = int(user_id)
+        t = (user_id,)
+        c.execute("SELECT user_id FROM votes WHERE user_id=?", t)
+        if c.fetchone() is None:
+            t = (user_id, 0, 0, 0, 0, 0, 0)
+            marks = ",".join(["?"] * 7)
+            c.execute(f"INSERT INTO votes VALUES({marks})", t)
+            conn.commit()
+        t = (user_id, )
+        c.execute(f"UPDATE votes SET {site}votes={site}votes+1, "
+                  f"total_{site}votes=total_{site}votes+1 WHERE user_id=?", t)
+        conn.commit()
 
     # Premium
 

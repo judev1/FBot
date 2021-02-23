@@ -103,21 +103,21 @@ class economy(commands.Cog):
                          f"[discordbotlist.com]({fn.votedbl}) (No rewards)")
         await ctx.send(embed=embed)
 
-    def vote_rewards(self, user_id):
-        db = self.bot.db
-        
-        job = db.getjob(user_id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user_id)
-        salary = e.salaries[job] * jobmulti
-        salary = round(salary * db.getusermulti(user_id))
-        db.updatebal(user_id, salary)
+    def vote_rewards(self, user_id, count):
+        for i in range(count):
+            db = self.bot.db
+            
+            job = db.getjob(user_id)
+            if job == "Unemployed": jobmulti = 1.0
+            else: jobmulti = db.getjobmulti(user_id)
+            salary = e.salaries[job] * jobmulti
+            salary = round(salary * db.getusermulti(user_id))
+            db.updatebal(user_id, salary)
 
-        bonus = 1
-        if self.bot.ftime.isweekend(): bonus = 2
-        db.increasemultiplier(user_id, 0, 20 * bonus)
-
-        return salary
+            bonus = 1
+            if self.bot.ftime.isweekend(): bonus = 2
+            db.increasemultiplier(user_id, 0, 20 * bonus)
+        return salary * count
 
     @commands.Cog.listener()
     async def on_vote(self, site, data):
@@ -132,17 +132,18 @@ class economy(commands.Cog):
         except: name = "User"
 
         if site == "discordbotlist.com":
+            bot.db.vote(user_id, "dbl")
             embed = self.bot.fn.embed(user, "discordbotlist.com",
                     f"User voted for FBot!")
         elif data["type"] == "test":
             embed = self.bot.fn.embed(user, site + " test",
                     f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
-            salary = self.vote_rewards(user_id)
+            bot.db.vote(user_id, "bfd")
+            salary = self.vote_rewards(user_id, 1)
             embed = self.bot.fn.embed(user, site,
                     f"{name} voted and gained **~~f~~ {salary}**")
         await self.voteschannel(embed=embed)
-            
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
@@ -159,15 +160,43 @@ class economy(commands.Cog):
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         user_id = data["user"]
+        bot.db.vote(user_id, "top")
         self.bot.db.register(user_id)
         #try: name = await self.bot.fetch_user(user_id).name
         try: name = self.bot.get_user(user_id).name
         except: name = "User"
 
-        salary = self.vote_rewards(user_id)
+        salary = self.vote_rewards(user_id, 1)
         embed = self.bot.fn.embed(user, "top.gg",
                 f"{name} voted and gained **~~f~~ {salary}**")
         await self.voteschannel(embed=embed)
+
+    @commands.command(name="monthly")
+    @commands.is_owner()
+    async def monthly_winners(self, ctx):
+        
+        message = []
+        async with ctx.channel.typing():
+            c = self.bot.db.conn.cursor()
+            c.execute(f"SELECT user_id, topvotes FROM votes ORDER BY "
+                      "topvotes DESC LIMIT 3")
+            for rank, row in enumerate(c):
+                user_id, votes = row
+                #try: name = await self.bot.fetch_user(user_id).name
+                try: name = self.bot.get_user(user_id).name
+                except: name = "User"
+                message.append(f"{rank+1}. **{name}** with **{votes} votes**")
+                if rank == 0:
+                    salary = self.vote_rewards(user_id, 5)
+                elif rank == 1:
+                    salary = self.vote_rewards(user_id, 4)
+                elif rank == 2:
+                    salary = self.vote_rewards(user_id, 3)
+                message.append(f"earns **{f}{salary}**\n")
+        c.execute(f"UPDATE votes SET topvotes=0, dblvotes=0, bfdvotes=0")
+        embed = self.bot.fn.embed(user, "FBot Monthly rewards", *message)
+        await ctx.send(embed=embed)
+        
     
 def setup(bot):
     bot.add_cog(economy(bot))
