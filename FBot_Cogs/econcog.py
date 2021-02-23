@@ -100,7 +100,8 @@ class economy(commands.Cog):
                         try: name = self.bot.get_guild(ID).name
                         except: name = "Server"
                     else:
-                        try: name = await self.bot.fetch_user(ID).name
+                        #try: name = await self.bot.fetch_user(user_id).name
+                        try: name = self.bot.get_user(user_id).name
                         except: name = "User"
                     if toptype in ["bal", "netfbux", "debt", "netdebt"]:
                         if typeitem == 0: break

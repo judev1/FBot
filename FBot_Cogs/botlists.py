@@ -127,11 +127,12 @@ class economy(commands.Cog):
         else: user_id = int(data["id"])
 
         self.bot.db.register(user_id)
-        try: name = await self.bot.fetch_user(user_id).name
+        #try: name = await self.bot.fetch_user(user_id).name
+        try: name = self.bot.get_user(user_id).name
         except: name = "User"
 
         if site == "discordbotlist.com":
-            embed = self.bot.fn.embed(user, "abc.xyz",
+            embed = self.bot.fn.embed(user, "discordbotlist.com",
                     f"User voted for FBot!")
         elif data["type"] == "test":
             embed = self.bot.fn.embed(user, site + " test",
@@ -147,7 +148,8 @@ class economy(commands.Cog):
     async def on_dbl_test(self, data):
         user_id = data["user"]
         self.bot.db.register(user_id)
-        try: name = await self.bot.fetch_user(user_id).name
+        #try: name = await self.bot.fetch_user(user_id).name
+        try: name = self.bot.get_user(user_id).name
         except: name = "User"
             
         embed = self.bot.fn.embed(user, "top test",
@@ -158,7 +160,8 @@ class economy(commands.Cog):
     async def on_dbl_vote(self, data):
         user_id = data["user"]
         self.bot.db.register(user_id)
-        try: name = await self.bot.fetch_user(user_id).name
+        #try: name = await self.bot.fetch_user(user_id).name
+        try: name = self.bot.get_user(user_id).name
         except: name = "User"
 
         salary = self.vote_rewards(user_id)
