@@ -92,10 +92,10 @@ class economy(commands.Cog):
 
         multi = 20
         if ftime.isweekend(): multi *= 2
-        
+
         embed = fn.embed(user, "FBot Vote",
                          "If you vote you'll earn your salary without tax",
-                         f"So **~~f~~ {round(salary)}** if I'm not mistaken",
+                         f"So {fn.fnum(salary)} if I'm not mistaken",
                          f"AND multiplier worth **{multi} messages**!\n",
 
                          f"[top.gg vote]({fn.votetop})",
@@ -127,9 +127,8 @@ class economy(commands.Cog):
         else: user_id = int(data["id"])
 
         self.bot.db.register(user_id)
-        #try: name = await self.bot.fetch_user(user_id).name
-        try: name = self.bot.get_user(user_id).name
-        except: name = "User"
+        name = await self.bot.fetch_user(user_id)
+        if not name: name = "User"
 
         if site == "discordbotlist.com":
             bot.db.vote(user_id, "dbl")
@@ -142,7 +141,7 @@ class economy(commands.Cog):
             bot.db.vote(user_id, "bfd")
             salary = self.vote_rewards(user_id, 1)
             embed = self.bot.fn.embed(user, site,
-                    f"{name} voted and gained **~~f~~ {salary}**")
+                    f"{name} voted and gained {self.bot.fn.fnum(salary)}")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
@@ -150,8 +149,8 @@ class economy(commands.Cog):
         user_id = data["user"]
         self.bot.db.register(user_id)
         #try: name = await self.bot.fetch_user(user_id).name
-        try: name = self.bot.get_user(user_id).name
-        except: name = "User"
+        name = await self.bot.fetch_user(user_id)
+        if not name: name = "User"
             
         embed = self.bot.fn.embed(user, "top test",
                 f"{name} tested out the webhook")
@@ -162,13 +161,12 @@ class economy(commands.Cog):
         user_id = data["user"]
         bot.db.vote(user_id, "top")
         self.bot.db.register(user_id)
-        #try: name = await self.bot.fetch_user(user_id).name
-        try: name = self.bot.get_user(user_id).name
-        except: name = "User"
+        name = await self.bot.fetch_user(user_id)
+        if not name: name = "User"
 
         salary = self.vote_rewards(user_id, 1)
         embed = self.bot.fn.embed(user, "top.gg",
-                f"{name} voted and gained **~~f~~ {salary}**")
+                f"{name} voted and gained {self.bot.fn.fnum(salary)}")
         await self.voteschannel(embed=embed)
 
     @commands.command(name="monthly")
@@ -182,17 +180,16 @@ class economy(commands.Cog):
                       "topvotes DESC LIMIT 3")
             for rank, row in enumerate(c):
                 user_id, votes = row
-                #try: name = await self.bot.fetch_user(user_id).name
-                try: name = self.bot.get_user(user_id).name
-                except: name = "User"
-                message.append(f"{rank+1}. **{name}** with **{votes} votes**")
+                name = await self.bot.fetch_user(user_id)
+                if not name: name = "User"
                 if rank == 0:
                     salary = self.vote_rewards(user_id, 5)
                 elif rank == 1:
                     salary = self.vote_rewards(user_id, 4)
                 elif rank == 2:
                     salary = self.vote_rewards(user_id, 3)
-                message.append(f"earns **{f}{salary}**\n")
+                message.append(f"{rank+1}. **{name}** with **{votes} votes**" +
+                               f" earned {self.bot.fn.fnum(salary)}\n")
         c.execute(f"UPDATE votes SET topvotes=0, dblvotes=0, bfdvotes=0")
         embed = self.bot.fn.embed(user, "FBot Monthly rewards", *message)
         await ctx.send(embed=embed)

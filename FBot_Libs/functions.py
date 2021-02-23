@@ -101,6 +101,9 @@ class fn:
     def errorembed(self, error, info):
         return Embed(title=f"**Error:** `{error}`",
                description=f"```{info}```", colour=self.red)
+
+    def fnum(self, num):
+        return f"**~~f~~ {round(float(num)):,}**"#.replace(",", ", ")
     
     red = 0xF42F42
     

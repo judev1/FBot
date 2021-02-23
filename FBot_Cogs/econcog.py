@@ -17,7 +17,7 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Profile(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
         profile = list(db.getprofile(user.id))
         job = profile[4]
         if profile[5] == "None":
@@ -26,11 +26,11 @@ class economy(commands.Cog):
             degree = profile[5]
             degree = f"{degree} - {profile[6]}/{e.courses[degree][0]}"
         embed = self.bot.fn.embed(ctx.author, f"{user.display_name}'s profile:")
-        embed.add_field(name="FBux", value=profile[0])
-        embed.add_field(name="Debt", value=profile[2])
+        embed.add_field(name="FBux", value=fnum(profile[0]))
+        embed.add_field(name="Debt", value=fnum(profile[2]))
         embed.add_field(name="Job", value=job)
-        embed.add_field(name="Net FBux", value=profile[1])
-        embed.add_field(name="Net Debt", value=profile[3])
+        embed.add_field(name="Net FBux", value=fnum(profile[1]))
+        embed.add_field(name="Net Debt", value=fnum(profile[3]))
         embed.add_field(name="Degree", value=degree)
         embed.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed=embed)
@@ -53,10 +53,10 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Balance(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
         bal, debt = db.getbal(user.id)
         embed = self.bot.fn.embed(ctx.author, f"{user.display_name}'s balance",
-                f"FBux: **{f}{bal}**", f"Debt: **{f}{debt}**")
+                f"FBux: {fnum(bal)}", f"Debt: {fnum(debt)}")
         await ctx.send(embed=embed)
 
     @commands.command(name="multis")
@@ -94,18 +94,18 @@ class economy(commands.Cog):
             message = ""
             async with ctx.channel.typing():
                 results = self.bot.db.gettop(toptype)
+                fnum = self.bot.fn.fnum
                 for rank, row in results:
                     ID, typeitem = row
                     if toptype == "servmulti":
                         try: name = self.bot.get_guild(ID).name
                         except: name = "Server"
                     else:
-                        #try: name = await self.bot.fetch_user(user_id).name
-                        try: name = self.bot.get_user(user_id).name
-                        except: name = "User"
+                        name = await self.bot.fetch_user(ID)
+                        if not name: name = "User"
                     if toptype in ["bal", "netfbux", "debt", "netdebt"]:
                         if typeitem == 0: break
-                        message += f"{rank+1}. {name}: **{f}{typeitem}**\n"
+                        message += f"{rank+1}. {name}: {fnum(typeitem)}\n"
                     elif toptype == "multi":
                         if typeitem == 10000: break
                         message += f"{rank+1}. {name}: `x{typeitem/10000}`\n"

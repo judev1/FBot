@@ -17,7 +17,7 @@ class economy(commands.Cog):
     @commands.command(name="study")
     @commands.check(cooldown)
     async def _Study(self, ctx):
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
         user = ctx.author
 
         c = db.conn.cursor()
@@ -42,14 +42,14 @@ class economy(commands.Cog):
             db.finishdegree(user.id)
             db.startjob(user.id, e.degreejobs[degree])
             embed = self.bot.fn.embed(user, "Degree completed!",
-                    f"You studied and gained debt: **{f}{round(debt)}**",
-                    f"Your new debt is: **{f}{newdebt}**",
+                    f"You studied and gained debt: {fnum(debt)}",
+                    f"Your new debt is: {fnum(newdebt)}",
                     f"You may now apply for the **{e.degreejobs[degree]}** job")
         else:
             db.studied(user.id)
             embed = self.bot.fn.embed(user, f"You studied for **{degree}**",
-                    f"You studied and gained debt: **{f}{debt}**",
-                    f"Your new debt is: **{f}{newdebt}**",
+                    f"You studied and gained debt: {fnum(debt)}",
+                    f"Your new debt is: {fnum(newdebt)}",
                     f"Degree course progress: `{progress}/{length}`")
         await ctx.send(embed=embed)
         # Chance of debt collectors            
@@ -84,7 +84,7 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Degree(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
         degree = db.getdegree(user.id)
         title = f"{user.display_name}'s degree information"
         if degree == "None":
@@ -95,12 +95,11 @@ class economy(commands.Cog):
             length = e.courses[degree][0]
             job = e.degreejobs[degree]
             salary = e.salaries[job]
-            debtl = round(salary * 0.05)
-            debtu = round(salary * 0.40)
+            debtl, debtu = salary * 0.05, salary * 0.40
             embed = self.bot.fn.embed(ctx.author, title,
                     f"Currently taking **{degree}** for **{job}**",
                     f"Progress: **{progress}/{length}**",
-                    f"Debt range: **{f}{debtl}** - **{f}{debtu}**")
+                    f"Debt range: {fnum(debtl)} - {fnum(debtu)}")
         await ctx.send(embed=embed)
 
     @commands.command(name="take")

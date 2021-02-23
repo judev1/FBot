@@ -18,7 +18,7 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Work(self, ctx):
         user = ctx.author
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
 
         c = db.conn.cursor()
         t = (user.id,)
@@ -45,9 +45,9 @@ class economy(commands.Cog):
         income = round(salary * (tax / 100))
         balance = db.work(user.id, job, income)
         embed = self.bot.fn.embed(user, "FBot work",
-                f"You work and earn: **{f}{round(salary)}**",
-                f"After {100 - round(tax)}% tax deductions: **{f}{income}**",
-                f"Your new balance is: **{f}{balance}**")
+                f"You work and earn: **{fnum(salary)}**",
+                f"After {100 - round(tax)}% tax deductions: {fnum(income)}",
+                f"Your new balance is: {fnum(balance)}")
         await ctx.send(embed=embed)
 
         # Chance of debt collectors
@@ -70,10 +70,11 @@ class economy(commands.Cog):
                 else:
                     quals, out = "🔒", "~~"
                 degree = e.jobdegrees[job]
-                tierjobs[job] = (degree, salary, desc, quals, out)
+                tierjobs[job] = (degree, self.bot.fn.fnum(salary),
+                                 desc, quals, out)
             book.createpages(tierjobs,
                              LINE=f"%3 %4__%l__ - *needs %0*%4\n"
-                             f"Salary: **{f}%1**\n*%2*\n",
+                             f"Salary: %1\n*%2*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {tier}**\n")
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
@@ -81,7 +82,7 @@ class economy(commands.Cog):
     @commands.check(cooldown)
     async def _Job(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
-        db = self.bot.db
+        db, fnum = self.bot.db, self.bot.fn.fnum
         job = db.getjob(user.id)
         title = f"{user.display_name}'s job information"
         salary = e.salaries[job]
@@ -95,11 +96,10 @@ class economy(commands.Cog):
         else:
             multis = db.getmultis(user.id, ctx.guild.id)
             salary *= multis[0] * multis[1]
-        incomel = round(salary * 0.1)
-        incomeu = round(salary * 0.5)
+        incomel, incomeu = salary * 0.1, salary * 0.5
         embed = self.bot.fn.embed(ctx.author, title,
-                f"Currently taking **{job}** (**{f}{round(salary)}**)",
-                f"After tax: **{f}{incomel}** - **{f}{incomeu}**")
+                f"Currently taking **{job}** ({fnum(salary)})",
+                f"After tax: {fnum(incomel)} - {fnum(incomeu)}")
         await ctx.send(embed=embed)
 
     @commands.command(name="apply")
