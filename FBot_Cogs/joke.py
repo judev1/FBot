@@ -15,6 +15,7 @@ class joke(commands.Cog):
         self.bot = bot
 
     @commands.command(name="joke")
+    @commands.guild_only()
     @commands.check(cooldown)
     async def tell_joke(self, ctx):
         
@@ -40,6 +41,8 @@ class joke(commands.Cog):
         active_channels.remove(ctx.channel.id)
                 
     @commands.command(name="shutup")
+    @commands.guild_only()
+    @commands.check(cooldown)
     async def stop_joke(self, ctx):
         if (ctx.channel.id in active_channels):
             active_channels.remove(ctx.channel.id)

@@ -8,7 +8,6 @@ class status(commands.Cog):
         self.bot = bot
         
     @commands.command(name="status")
-    @commands.guild_only()
     @commands.check(cooldown)
     async def _Status(self, ctx):
         db = self.bot.db

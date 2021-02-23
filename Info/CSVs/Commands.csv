@@ -25,6 +25,8 @@ number,,Counting,,Yes,"send_messages, embed_links",no extra,fbot number or fbot 
 hs,,Counting,,Yes,"send_messages, embed_links",no extra,fbot hs,,"Shows the server counting highscore, along with the top server highscores"
 ppsize,(@member),Fun,,No,send_messages,no extra,fbot ppsize or fbot ppsize @LinesGuy,,Gets the ppsize of a user
 fball,<question>,Fun,,No,send_messages,no extra,fball Is this a question? or fbot fball IS THIS A QUESTION!?!?,,FBot will answer a question
+joke,,Fun,,Yes,send_messages,no extra,fbot joke,,FBot starts telling a joke
+shutup,,Fun,,Yes,send_messages,no extra,fbot shutup,,FBot stops telling the joke
 say,<message>,Fun,,No,"send_messages, (manage_messages)",no extra,"fbot say Yes it is me, FBot",,Send a message as FBot
 dms,,Fun,,No,send_messages,no extra,fbot dms,,Talk to FBot in your dms
 premium,,Fun,,No,send_messages,no extra,fbot premium,,Get access to FBot's premium features
@@ -72,3 +74,4 @@ host,,Dev,,No,send_messages,owner,,,
 devcmds,,Dev,,No,send_messages,owner,,,
 gift,,Dev,,No,send_messages,owner,,,
 scounts,,Dev,,No,send_messages,owner,,,
+jokeinfo,,Dev,,No,send_messages,,,,

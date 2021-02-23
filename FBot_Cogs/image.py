@@ -75,7 +75,7 @@ class bigpp(commands.Cog):
 
     async def cleanup(self, ctx, path, process, success):
         if success:
-            if process.endswith("r"): filename = process + "red.jpg"
+            if process in ["blurred"]: filename = process + "red.jpg"
             else: filename = process + "ed.jpg"
 
             file = File(fp=path + filename)
