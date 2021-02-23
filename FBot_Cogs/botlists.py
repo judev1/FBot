@@ -131,14 +131,14 @@ class economy(commands.Cog):
         if not name: name = "User"
 
         if site == "discordbotlist.com":
-            bot.db.vote(user_id, "dbl")
+            self.bot.db.vote(user_id, "dbl")
             embed = self.bot.fn.embed(user, "discordbotlist.com",
-                    f"User voted for FBot!")
+                    f"{name} voted for FBot!")
         elif data["type"] == "test":
             embed = self.bot.fn.embed(user, site + " test",
                     f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
-            bot.db.vote(user_id, "bfd")
+            self.bot.db.vote(user_id, "bfd")
             salary = self.vote_rewards(user_id, 1)
             embed = self.bot.fn.embed(user, site,
                     f"{name} voted and gained {self.bot.fn.fnum(salary)}")
@@ -159,7 +159,7 @@ class economy(commands.Cog):
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         user_id = data["user"]
-        bot.db.vote(user_id, "top")
+        self.bot.db.vote(user_id, "top")
         self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
