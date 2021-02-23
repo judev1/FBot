@@ -19,7 +19,6 @@ class dailystats(commands.Cog):
         self.commands_ignored = 0
         self.triggers_processed = 0
         self.other_messages_processed = 0
-        self.auto_stats.start()
         self.is_first_message = True
 
     @commands.Cog.listener()
@@ -84,25 +83,10 @@ class dailystats(commands.Cog):
                  f"Total count: `{total}`")
         return fn.embed(user, f"FBot stats for the past {hours} hours:", *stats)
 
-    def cog_unload(self):
-        self.auto_stats.cancel()
-
     @commands.command(name="stats")
     @commands.check(cooldown)
     async def manual_stats(self, ctx):
         await ctx.send(embed=self.embed(ctx.author))
-    
-    @tasks.loop(hours = 24.0)
-    async def auto_stats(self):
-        if self.is_first_message:
-            self.is_first_message = False
-            return
-        await self.stats_channel.send(embed=self.embed(fakeuser))
-        self.commands_processed = 0
-        self.commands_ignored = 0
-        self.triggers_processed = 0
-        self.other_messages_processed = 0
-        self.time_start = datetime.now().timestamp()
         
 def setup(bot):
     bot.add_cog(dailystats(bot))
