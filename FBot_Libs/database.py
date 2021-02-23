@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import sqlite3
 
 path = "./Info/FBot.db"
@@ -7,6 +8,8 @@ conn = sqlite3.connect(path)
 with open(f"./Info/FBot.db", "rb") as file:
     time = datetime.now()
     time = time.strftime("%d-%m-%y %H%M")
+    if not os.path.exists(os.path.join("Info", "db_backups")):
+        os.makedirs(os.path.join("Info", "db_backups"))
     with open(f"./Info/db_backups/{time}.db", "xb") as newfile:
         newfile.writelines(file.readlines())
 
