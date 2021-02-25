@@ -79,19 +79,25 @@ or just wanna drop by for a chat, use `FBot server` to join our server.
 Currently there is no way to remove debt, but since it doesn't cause you any
 harm, you'll just have to learn to live with it - for now."""]
 
-contents = """
-Write `FBot ` (the prefix) however you want, I don't care
-*If you ever lose your prefix use plain* `prefix` *to get it*
+descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
+"All the commands you need to start making FBux... and debt!",
+"Commands to set up counting, show the last number, and highscores",
+"Image processing, say command, mingames and more!",
+"Snipe and purge, severinfo and more!",
+"Info about FBot including links, uptime, version and more!"]
 
- Page 1: **Contents**
- Page 2: **Spamming**
- Page 3: **Economy**
- Page 4: **Counting**
- Page 5: **Fun**
- Page 6: **Utility**
- Page 7: **Information**"""
+CMDS_EMOJI = "📃"
+LINK_EMOJI = "🔗"
 
-categories = ["Spamming", "Economy", "Counting", "Fun", "Utility", "Information"]
+CONTENTS_EMOJI = "🔖"
+SPAM_EMOJI = "🗣️"
+ECON_EMOJI = "💰"
+COUNT_EMOJI = "☝️"
+FUN_EMOJI = "🤪"
+UTIL_EMOJI = "⚙️"
+INFO_EMOJI = "❔"
+emojis = [CONTENTS_EMOJI, SPAM_EMOJI, ECON_EMOJI, COUNT_EMOJI,
+          FUN_EMOJI, UTIL_EMOJI, INFO_EMOJI]
 
 class help(commands.Cog):
     
@@ -107,7 +113,7 @@ class help(commands.Cog):
         if desc == "": desc = data[8]
         
         embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
-                                  desc, "\nExample usage:" + data[6])
+                                  desc, "\nExample usage:", data[6])
 
         cat = "Category: " + data[1] + data[2]
         embed.set_author(name=cat)
@@ -115,6 +121,8 @@ class help(commands.Cog):
         embed.add_field(name="Server only?", value=data[3])
         embed.add_field(name="Bot perms", value=data[4])
         embed.add_field(name="User perms", value=data[5])
+
+        embed.set_image(url=self.bot.fn.banner)
 
         return embed
         
@@ -125,15 +133,24 @@ class help(commands.Cog):
         command = " ".join(command).lower()
         if command == "":
             fn = self.bot.fn
-            embed = fn.embed(ctx.author, "FBot Help",
-                    "**Useful Commands**",
-                    "Use `FBot on/off` to toggle fbot",
-                    "Use `FBot cmds` for a list of commands",
-                    "Use `FBot help <command>` for more info on a command",
-                    "Use `FBot economy` for help with our currency\n",
-                    "**Useful Links**",
-                    f"[Invite FBot]({fn.top}) or "
-                    f"[join our server!]({fn.server})")
+            embed = fn.embed(ctx.author, "")
+
+            embed.add_field(name=f"{CMDS_EMOJI} **__Helpful Commands__**",
+            value="Good commands to get you started", inline=False)
+            embed.add_field(name="`FBot on/off`", value="Toggles spamming feature")
+            embed.add_field(name="`FBot cmds`", value="Gives a list of commands")
+            embed.add_field(name="`FBot economy`", value="Gives help for economy")
+            embed.add_field(name="`FBot help <command>`", value="Gives some with a command")
+            embed.add_field(name="`prefix`", value="Tells you the prefix for FBot on the server")
+
+            embed.add_field(name=f"{LINK_EMOJI} **__Helpful Links__**",
+            value="Some useful links For reference", inline=False)
+            embed.add_field(name="`Invite FBot`",
+            value=f"[Here!]({fn.invite} 'Custom invite link woooo')")
+            embed.add_field(name="`Our Support Server`",
+            value=f"[Here!]({fn.server} 'Custom server invite link woooo')")
+            embed.set_image(url=self.bot.fn.banner)
+
             await ctx.send(embed=embed)
         else:
             user = ctx.author
@@ -160,13 +177,50 @@ class help(commands.Cog):
     @commands.command(name="cmds", aliases=["commands"])
     @commands.check(cooldown)
     async def _Commands(self, ctx):
+
         colour = self.bot.db.getcolour(ctx.author.id)
-        book = reactionbook(self.bot, ctx, LINES=20)
-        book.createpages(contents, SUBHEADER="**__FBot Commands__**")
-        for category in cm.categories:
-            book.createpages(cm.categories[category], LINE="> `%0%1`:\n> *%2*\n",
-                             SUBHEADER="**__" + category + "__**\n")
-        await book.createbook(MODE="numbers", COLOUR=colour)
+        
+        embeds = [self.bot.fn.embed(ctx.author, "**__FBot commands__**")]
+        embeds[0].set_image(url=self.bot.fn.banner)
+        for i, category in enumerate(cm.categories):
+            embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
+            value=f"[Hover for more]({self.bot.fn.votetop} '{descriptions[i]}')")
+            embed = self.bot.fn.embed(ctx.author,
+                    f"{emojis[i+1]} **__{category} Commands__**")
+            for cmd, args, desc in cm.categories[category]:
+                embed.add_field(name=f"`{cmd}`", value=f"*{desc}*")
+            embed.set_image(url=self.bot.fn.banner)
+            embeds.append(embed)
+
+        page = 0
+        msg = await ctx.send(embed=embeds[page])
+
+        for emoji in emojis:
+            await msg.add_reaction(emoji)
+
+        def check(reaction, user):
+            emoji = (str(reaction.emoji) in emojis)
+            author = (user == ctx.author)
+            message = (reaction.message.id == msg.id)
+            return emoji and author and message
+
+        wait = self.bot.wait_for
+        async def forreaction():
+            return await wait("reaction_add", timeout=60, check=check)
+        
+        while True:
+            try:
+                reaction, user = await forreaction()
+                try: await msg.remove_reaction(reaction, user)
+                except: pass
+                page = emojis.index(str(reaction.emoji))
+                await msg.edit(embed=embeds[page])
+            except:
+                embed = embeds[page]
+                embed.set_footer(text=f"Request timed out")
+                try: await msg.edit(embed=embed)
+                except: pass
+                break
 
     @commands.command(name="devcmds")
     @commands.is_owner()

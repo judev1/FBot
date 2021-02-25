@@ -33,7 +33,7 @@ class cmds:
                 row[C_BOT] = "*" + "*,\n*".join(row[C_BOT].split(", ")) + "*"
                 row[C_USER] = "*" + "*,\n*".join(row[C_USER].split(", ")) + "*"
 
-                row[C_USAGE] = row[C_USAGE].replace(" or ", "``````")
+                row[C_USAGE] = row[C_USAGE].replace(" or ", "```\n```")
                 row[C_USAGE] = "```" + row[C_USAGE] + "```"
 
                 if row[C_CAT] != "Dev":

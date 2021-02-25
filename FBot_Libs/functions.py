@@ -121,6 +121,7 @@ class fn:
     invite = "https://fbot.breadhub.uk/invite"
     github = "https://github.com/judev1/FBot"
     fbot = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
+    banner = "https://cdn.discordapp.com/attachments/717735765936701454/814109371117862943/out4.gif"
 
 from aiohttp import web
 import asyncio

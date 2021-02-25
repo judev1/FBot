@@ -1,24 +1,29 @@
-Bent fork,fork,21,Collectable,Doesn't really have any value but it looks sorta funny,"Add inventory value, or can be sold for half its value"
-Meatloaf,meatloaf,144,Collectable,I was expecting a loaf of bread made out of meat,"Add inventory value, or can be sold for half its value"
-Golden Coin,coin,2500,Collectable,"It's worth a lot, probaly","Add inventory value, or can be sold for half its value"
-Bread Shaped Dorito,dorito,69420,Collectable,Damn that's fancy,"Add inventory value, or can be sold for half its value"
-Crayon,crayon,1,Spammable,It can only be used to write one letter,"Add inventory value, or can be exchanged for multiplier"
-Nametag,nametag,2,Spammable,You can see a single letter is inscribed onto it,"Add inventory value, or can be exchanged for multiplier"
-Keyboard,keyboard,3,Spammable,"All keys are missing, but one","Add inventory value, or can be exchanged for multiplier"
-Meme,meme,4,Spammable,"It's got a picture of you, that's pretty funny","Add inventory value, or can be exchanged for multiplier"
-Trumpet,trumpet,5,Spammable,Ear rape the haters,"Add inventory value, or can be exchanged for multiplier"
-Bleach,bleach,10,Spammable,Take two glasses with your cereal,"Add inventory value, or can be exchanged for multiplier"
+Bent fork,fork,21,Collectable,Doesn't really have any value but it looks sorta funny,"Adds inventory value, or can be sold for half its value"
+Meatloaf,meatloaf,144,Collectable,I was expecting a loaf of bread made out of meat,"Adds inventory value, or can be sold for half its value"
+Golden Coin,coin,2500,Collectable,"It's worth a lot, probaly","Adds inventory value, or can be sold for half its value"
+The Pirate King,pk,6666,Collectable,I am the pirate king,"Adds inventory value, or can be sold for half its value"
+Bread Shaped Dorito,dorito,69420,Collectable,Damn that's fancy,"Adds inventory value, or can be sold for half its value"
+Crayon,crayon,1,Spammable,It can only be used to write one letter,"Adds inventory value, or can be sold for half its value"
+Nametag,nametag,2,Spammable,You can see a single letter is inscribed onto it,"Adds inventory value, or can be sold for half its value"
+Keyboard,keyboard,3,Spammable,"All keys are missing, but one","Adds inventory value, or can be sold for half its value"
+Meme,meme,4,Spammable,"It's got a picture of you, that's pretty funny","Adds inventory value, or can be sold for half its value"
+Trumpet,trumpet,5,Spammable,Ear rape the haters,"Adds inventory value, or can be sold for half its value"
+Bleach,bleach,10,Spammable,Take two glasses with your cereal,"Adds inventory value, or can be sold for half its value"
 ID Card,id,0,Item,"You found an ID card, let's hope it belongs to a debt/tax collector",Can be used to take a random person's debt/tax
 Money Laundering,laundry,0,Item,This laundry might be good for something after all,Lets you work 4 times without cooldown
 Tax Evasion,evasion,0,Item,Fun for the whole family to enjoy!,Removes tax from your next 2 works
 All Nighter,nighter,0,Item,This feature is hyper realistic,Lets you study 2 times without cooldown
 Scolarship,scolarship,0,Item,"Debt is for the week, or you 3 studys from now",Removes debt from your next 2 studys
 Economic Recession,recession,0,Item,Take advantage of a recsession and loose some debt,Exchanges FBux for debt at low intrest rates
-Bank,bank,0,Legendary Items,"When people are getting taxed, someone's making money",Collect all tax or debt for 30 mins
-Save,save,0,Legendary Items,Like a revive but worse,Protection against one counting mistake for 30 mins
-Steroids,steroids,0,Legendary Items,"Use steriods to send twice as many messages, what else are they for?",Allows you to earn twice as much multiplier for 30 mins
-Werm,werm,1000000,Pet,,Spams with you sometimes
-Human,human,100000000,Pet,,Spams with you sometimes
-Pocket Creature,creature,10000000000,Pet,,Spams with you sometimes
-Bot,bot,1.00E+11,Pet,,Spams with you sometimes
-Loaf of Bread,bread,1.00E+12,Pet,,Spams with you sometimes
+Bank,bank,0,Legendary Item,"When people are getting taxed, someone's making money",Collect all tax or debt for 30 mins
+Save,save,0,Legendary Item,Like a revive but worse,Protection against one counting mistake for 30 mins
+Steroids,steroids,0,Legendary Item,"Use steriods to send twice as many messages, what else are they for?",Allows you to earn twice as much multiplier for 30 mins
+Werm,werm,0,Pet,,"Spamming buddy, helps earn you multiplier"
+Human,human,0,Pet,,"Spamming buddy, helps earn you multiplier"
+Pocket Creature,creature,0,Pet,,"Spamming buddy, helps earn you multiplier"
+Bot,bot,0,Pet,,"Spamming buddy, helps earn you multiplier"
+Loaf of Bread,bread,0,Pet,,"Spamming buddy, helps earn you multiplier"
+Common FBox,cfbox,0,FBox,,
+Uncommon FBox,ufbox,0,FBox,,
+Rare FBox,rfbox,0,FBox,,
+Legendary FBox,lfbox,0,FBox,,

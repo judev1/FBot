@@ -169,6 +169,23 @@ class economy(commands.Cog):
                 f"{name} voted and gained {self.bot.fn.fnum(salary)}")
         await self.voteschannel(embed=embed)
 
+    @commands.command(name="votehs")
+    @commands.check(cooldown)
+    async def _Votehs(self, ctx):
+        
+        message = []
+        async with ctx.channel.typing():
+            c = self.bot.db.conn.cursor()
+            c.execute(f"SELECT user_id, topvotes FROM votes ORDER BY "
+                      "topvotes DESC LIMIT 5")
+            for rank, row in enumerate(c):
+                user_id, votes = row
+                name = await self.bot.fetch_user(user_id)
+                if not name: name = "User"
+                message.append(f"{rank+1}. **{name}** with **{votes} votes**")
+        embed = self.bot.fn.embed(user, "Top votes this month", *message)
+        await ctx.send(embed=embed)
+
     @commands.command(name="monthly")
     @commands.is_owner()
     async def monthly_winners(self, ctx):

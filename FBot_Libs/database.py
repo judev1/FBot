@@ -383,7 +383,7 @@ class db:
 
     def getcolour(self, user_id):
         if user_id in [671791003065384987, 216260005827969024]:
-            return 0xDAA520 #0xA7700B
+            return 0xF42F42 #0xDAA520 #0xA7700B
         return 0xF42F42
 
     # Prefix
