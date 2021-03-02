@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 
 class session(commands.Cog):
     
@@ -7,7 +7,7 @@ class session(commands.Cog):
         self.bot = bot
         
     @commands.command(name="session", aliases=["uptime"])
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Session(self, ctx):
         ftime = self.bot.ftime
         embed = self.bot.fn.embed(ctx.author, "FBot's Session")

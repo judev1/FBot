@@ -10,7 +10,7 @@ with open(f"./Info/FBot.db", "rb") as file:
     time = time.strftime("%d-%m-%y %H%M")
     if not os.path.exists(os.path.join("Info", "db_backups")):
         os.makedirs(os.path.join("Info", "db_backups"))
-    with open(f"./Info/db_backups/{time}.db", "xb") as newfile:
+    with open(f"./Info/db_backups/{time}.db", "wb+") as newfile:
         newfile.writelines(file.readlines())
 
 class db:
@@ -48,7 +48,10 @@ class db:
                           lastwork integer NOT NULL,
                           laststudy integer NOT NULL,
                           degreeprogress integer NOT NULL,
-                          cooldown integer NOT NULL
+                          cooldown integer NOT NULL,
+                          inventory string NOT NULL,
+                          commands integer NOT NULL,
+                          triggers integer NOT NULL
                           )""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS counter (
@@ -191,8 +194,8 @@ class db:
         t = (user_id,)
         c.execute("SELECT user_id FROM users WHERE user_id=?", t)
         if c.fetchone() is None:
-            t = (user_id,-1,10000,0,0,0,0,"Unemployed","{}","None",0,0,0,0)
-            marks = ",".join(["?"] * 14)
+            t = (user_id,-1,10000,0,0,0,0,"Unemployed","{}","None",0,0,0,0,"{}",0,0)
+            marks = ",".join(["?"] * 17)
             c.execute(f"INSERT INTO users VALUES({marks})", t)
             conn.commit()
 
@@ -314,6 +317,13 @@ class db:
         c.execute("UPDATE users SET degree='None', degreeprogress=0 WHERE user_id=?", t)
         conn.commit()
 
+    def setbal(self, user_id, bal):
+        c = conn.cursor()
+        if bal < 0: bal = 0
+        t = (bal, user_id)
+        c.execute("UPDATE users SET fbux=? WHERE user_id=?", t)
+        conn.commit()
+
     def updatebal(self, user_id, income):
         c = conn.cursor()
         t = (income, income, user_id)
@@ -348,14 +358,61 @@ class db:
         c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
         conn.commit()
 
-    def gettop(self, tt):
-        if tt == "servmulti": ID, table = "guild_id", "guilds"
-        else: ID, table = "user_id", "users"
-        if tt == "bal": tt = "fbux"
-        elif tt in ["multi", "servmulti"]: tt = "multiplier"
+    def gettop(self, tt, amount, obj_id):
+        tt = tt.replace("votes", "vote")
+        tt = tt.replace("multis", "multi")
+        tt = tt.replace("bal", "fbux")
+        if tt == "vote":
+            tt = "topvotes"
+            ID, table = "user_id", "votes"
+        elif tt == "counting":
+            tt = "record"
+            ID, table = "guild_id", "counter"
+        elif tt == "multi":
+            tt = "multiplier"
+            ID, table = "user_id", "users"
+        elif tt == "servmulti":
+            tt = "multiplier"
+            ID, table = "guild_id", "guilds"
+        else:
+            ID, table = "user_id", "users"
         c = conn.cursor()
-        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT 20")
-        return enumerate(c)
+        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT {amount}")
+        top = enumerate(c)
+
+        c = conn.cursor()
+        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC")
+        for rank, row in enumerate(c):
+            newobj_id, selftop = row
+            if newobj_id == obj_id:
+                break
+        rank = str(rank+1)
+        if rank.endswith("1") and not rank.endswith("11"): rank += "st"
+        elif rank.endswith("2") and not rank.endswith("12"): rank += "nd"
+        elif rank.endswith("3") and not rank.endswith("13"): rank += "rd"
+        else: rank += "th"
+        return (top, selftop, rank)
+
+    def getinventory(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute(f"SELECT inventory FROM users where user_id=?", t)
+        return eval(c.fetchone()[0])
+
+    def getitem(self, user_id, item):
+        inv = self.getinventory(user_id)
+        if item in inv:
+            return inv[item]
+        return 0
+
+    def additem(self, user_id, item, amount):
+        items = self.getitem(user_id, item)
+        inv = self.getinventory(user_id)
+        inv[item] = items + amount
+        c = conn.cursor()
+        t = (str(inv), user_id)
+        c.execute(f"UPDATE users SET inventory=? WHERE user_id=?", t)
+        conn.commit()
 
     # Voting
 

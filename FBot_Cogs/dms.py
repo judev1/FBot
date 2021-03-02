@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 
 class dms(commands.Cog):
     
@@ -7,7 +7,7 @@ class dms(commands.Cog):
         self.bot = bot
         
     @commands.command(name="dms")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _DMs(self, ctx):
         channel = await ctx.author.create_dm()
         await channel.send("What do you want from me?!?")

@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 from dbfn import reactionbook
 
 class status(commands.Cog):
@@ -8,7 +8,7 @@ class status(commands.Cog):
         self.bot = bot
         
     @commands.command(name="status")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Status(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -24,8 +24,7 @@ class status(commands.Cog):
         await ctx.send(embed=embed)
         
     @commands.command(name="servstatus")
-    @commands.guild_only()
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _ServerStatus(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -46,8 +45,7 @@ class status(commands.Cog):
         await book.createbook(HEADER=header, COLOUR=colour)
         
     @commands.command(name="servstatusmod")
-    @commands.guild_only()
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _ServerStatusMod(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -71,7 +69,8 @@ class status(commands.Cog):
         await book.createbook(HEADER=header, COLOUR=colour)
 
     @commands.command(name="on")
-    async def _FBotOn(self, ctx):
+    @commands.check(predicate)
+    async def _On(self, ctx):
         if not ctx.guild:
             await ctx.send("**FBot is always on in DMs.**")
             return
@@ -84,7 +83,8 @@ class status(commands.Cog):
         else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 
     @commands.command(name="off")
-    async def _FBotOff(self, ctx):
+    @commands.check(predicate)
+    async def _Off(self, ctx):
         if not ctx.guild:
             await ctx.send("**You can never turn off FBot in DMs.**")
             return

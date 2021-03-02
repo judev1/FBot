@@ -1,7 +1,7 @@
 from discord.ext.commands import MemberConverter
 from discord import AllowedMentions
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 import sqlite3
 import random
 import re
@@ -15,7 +15,7 @@ class ppsize(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ppsize")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def ppsize(self, ctx, user_mention=None):
         async with ctx.channel.typing():
             if (user_mention is None):
@@ -31,31 +31,31 @@ class ppsize(commands.Cog):
 
             if (member is not None):
                 ppsize = None
-                
-                try:
-                    ppsize = self.bot.db.getppsize(member.id)
-                    if ppsize < 0:
-                        ppsize = random.randint(0, 16)
-                        self.bot.db.updateppsize(member.id, ppsize)
-                except:
-                    # Member is not in db (or is a bot)
-                    if member.bot:
-                        message = "Bots don't have pps, you know that?"
-                    else:
+
+                if member.bot:
+                    message = "Bots don't have pps, you do know that?"
+                else:
+                    try:
+                        ppsize = self.bot.db.getppsize(member.id)
+                        if ppsize < 0:
+                            ppsize = random.randint(0, 16)
+                            self.bot.db.updateppsize(member.id, ppsize)
+                    except:
                         # Register user and give them a ppsize
                         self.bot.db.register(member.id)
                         ppsize = random.randint(0, 16)
                         self.bot.db.updateppsize(member.id, ppsize)
-                        
-                if (ppsize is not None):
-                    pp = "8" + "=" * ppsize + "D"
-                    message = f"{member.mention}'s ppsize: `{pp}`"
+                            
+                    if (ppsize is not None):
+                        pp = "8" + "=" * ppsize + "D"
+                        message = f"{member.mention}'s ppsize: `{pp}`"
         await ctx.send(message, allowed_mentions=AllowedMentions.all())
 
              
 
     @commands.command(name="devsetppsize")
     @commands.is_owner()
+    @commands.check(predicate)
     async def setppsize(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
             await ctx.send("Too big: ppsize exceeds max message length")

@@ -1,9 +1,11 @@
+from traceback import format_exception
 from discord.ext import commands
+from functions import predicate
 from dbfn import reactionbook
+from time import time
 import triggers as tr
 import commands as cm
 import economy as e
-from time import time
 import discord
 import socket
 
@@ -19,6 +21,7 @@ class fbotdev(commands.Cog):
         
     @commands.command(name="csvreload")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _CSVReload(self, ctx):
         
         tms, cms, ems = load(tr.tr), load(cm.cmds), load(e.econ)
@@ -30,19 +33,41 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="eval")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Eval(self, ctx, *, content):
-        fn = self.bot.fn
+
+        bot = self.bot
+        fn = bot.fn
+        db = bot.db
+        ftime = bot.ftime
+
+        channel = ctx.channel
+        author = ctx.author
+        message = ctx.message
+
+        colour = self.bot.db.getcolour(ctx.author.id)
+        book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
+        
         try:
-            evalcontent = eval(content)
-            embed = fn.embed(ctx.author, "FBot eval", f" ```python\n{evalcontent}```")
-            await ctx.send(embed=embed)
+            result = str(eval(content))
         except Exception as e:
-            if content == "": content = "NULL"
-            embed = fn.errorembed(f"Error in '{content}'", str(e))
-            await ctx.send(embed=embed)
+            result = "".join(format_exception(e, e, e.__traceback__))
+
+        pages = []
+        content = f"Input:\n```py\n{content}```\n"
+        for i in range(0, len(result), 2000):
+            pages.append(f"Output:\n```py\n{result[i : i + 2000]}\n```")
+        if len(content + pages[0]) > 2000:
+            pages.insert(0, content)
+        else:
+            pages[0] = content + pages[0]
+        book.createpages(pages, ITEM_PER_PAGE=True)
+
+        await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
     @commands.command(name="await")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Await(SELF, CTX, FUNCTION, *, ARGS):
         global self, ctx, function, args
         self, ctx, function, args = SELF, CTX, FUNCTION, ARGS
@@ -58,7 +83,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="devon")
     @commands.is_owner()
-    @commands.guild_only()
+    @commands.check(predicate)
     async def _FBotDevOn(self, ctx):
         self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
         self.bot.db.Change_Status(ctx.channel.id, "on")
@@ -66,7 +91,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="devoff")
     @commands.is_owner()
-    @commands.guild_only()
+    @commands.check(predicate)
     async def _FBotDevOff(self, ctx):
         self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
         self.bot.db.Change_Status(ctx.channel.id, "off")
@@ -75,6 +100,7 @@ class fbotdev(commands.Cog):
     @commands.command(name="devrespond")
     @commands.is_owner()
     @commands.guild_only()
+    @commands.check(predicate)
     async def _Dev_Priority(self, ctx, *, arg):
         if arg in {"few", "some", "all"}:
             self.bot.db.Change_Priority(ctx.guild.id, arg)
@@ -84,7 +110,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="devmodtoggle")
     @commands.is_owner()
-    @commands.guild_only()
+    @commands.check(predicate)
     async def _Modtoggle(self, ctx, arg):
         self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
@@ -96,6 +122,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="presence")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _ChangePresence(self, ctx, *, content):
         await self.bot.change_presence(status=discord.Status.online,
                                        activity=discord.Game(name=content))
@@ -103,12 +130,14 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="send")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Send(self, ctx, channel: discord.TextChannel, *, message):
         await channel.send(message)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="userdm")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _UserDM(self, ctx, user: discord.User, *, message):
         dm = await user.create_dm()
         await dm.send(message)
@@ -116,6 +145,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="newinvite")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _CreateInvite(self, ctx, guild_id: int):
         guild = self.bot.get_guild(guild_id)
         try:
@@ -127,6 +157,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="lookup")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Lookup(self, ctx, guild_id: int):
         guild = self.bot.get_guild(guild_id)
         if guild == None:
@@ -160,6 +191,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="cmdlist")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _CommandList(self, ctx):
         commands = [i.name for i in self.bot.walk_commands()]
         embed = self.bot.fn.embed(ctx.author, "FBot Commands",
@@ -168,6 +200,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="search")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Search(self, ctx, *, query):
         query = query.lower()
         guild_list = []
@@ -197,6 +230,7 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="host")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _Host(self, ctx):
         await ctx.send("This instance is running on: " + socket.gethostname())
 

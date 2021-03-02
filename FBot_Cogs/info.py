@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 
 class info(commands.Cog):
     
@@ -7,7 +7,7 @@ class info(commands.Cog):
         self.bot = bot
         
     @commands.command(name="info")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Info(self, ctx):
 
         ftime = self.bot.ftime
@@ -27,8 +27,7 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
-    @commands.guild_only()
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _ServInfo(self, ctx):
         guild = ctx.guild
 
@@ -58,7 +57,7 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="premium")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Premium(self, ctx):
         await ctx.send("https://fbot.breadhub.uk/premium")
 

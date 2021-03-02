@@ -4,12 +4,14 @@ C_NAME = 0 # Name of the command
 C_ARGS = 1 # Extra args
 C_CAT = 2 # Category
 C_SUBCAT = 3 # Sub-Category
-C_GUILD = 4 # Guild Only
-C_BOT = 5 # Bot Permissions
-C_USER = 6 # User Permissions
-C_USAGE = 7 # Example Usage(s)
-C_LDESC = 8 # Command Long Description
-C_SDESC = 9 # Command Short Description
+C_COOL = 4 # Cooldown
+C_PCOOL = 5 # Premium cooldown
+C_GUILD = 6 # Guild Only
+C_BOT = 7 # Bot Permissions
+C_USER = 8 # User Permissions
+C_USAGE = 9 # Example Usage(s)
+C_LDESC = 10 # Command Long Description
+C_SDESC = 11 # Command Short Description
 
 class cmds:
     
@@ -29,11 +31,14 @@ class cmds:
                 if row[C_SUBCAT] != "":
                     row[C_SUBCAT] = " - " + row[C_SUBCAT]
 
+                row[C_COOL] = int(row[C_COOL])
+                row[C_PCOOL] = int(row[C_PCOOL])
+
                 row[C_GUILD] = "*" + row[C_GUILD] + "*"
                 row[C_BOT] = "*" + "*,\n*".join(row[C_BOT].split(", ")) + "*"
                 row[C_USER] = "*" + "*,\n*".join(row[C_USER].split(", ")) + "*"
 
-                row[C_USAGE] = row[C_USAGE].replace(" or ", "```\n```")
+                row[C_USAGE] = row[C_USAGE].replace(" or ", "``````")
                 row[C_USAGE] = "```" + row[C_USAGE] + "```"
 
                 if row[C_CAT] != "Dev":
@@ -44,6 +49,7 @@ class cmds:
                 else:
                     devcmds[row[C_NAME]] = row[1:]
                     devcmdlist.append(row)
+                
         print(" > Loaded Commands.csv")
 
     def search(query, dev=False):

@@ -46,7 +46,7 @@ class triggerresponses(commands.Cog):
                 return
 
         prefix = self.bot.fn.getprefix(self.bot, message)
-        commandcheck = message.content[len(prefix):]
+        commandcheck = content[len(prefix):]
         for command in cm.commands:
             if commandcheck.startswith(command):
                 return
@@ -54,37 +54,43 @@ class triggerresponses(commands.Cog):
             if commandcheck.startswith(command):
                 return
 
-        if message.content.lower().startswith("fball"):
+        if content.lower().startswith("fball"):
             return
 
-        if message.content.lower() == "prefix":
+        if content.lower() == "prefix":
             if not message.guild:
                 await send("The prefix for DMs is `FBot `")
                 return
             prefix = db.Get_Prefix(message.guild.id)
             if prefix == "fbot":
-                await send("The prefix for this server is `FBot ` (the default)")
+                await send("The prefix for this server is `fbot ` (the default)")
             else:
                 await send(f"The prefix for this server is `{prefix}`")
 
-        elif message.content.lower() == "smol pp":
+        elif content.lower() == "smol pp":
             await send("https://tenor.com/view/tiny-small-little-just-alittle-guy-inch-gif-5676598")
             return
-        elif message.content.lower() == "micropenis":
+        elif content.lower() == "micropenis":
             await send("https://tenor.com/view/girl-talks-naughty-small-dick-micropenis-gif-11854548")
             return
 
-        elif message.content.lower() == "feet pics":
+        elif content.lower() == "feet pics":
             msg = await send("FBot says:\n(Drum roll please)")
             await asyncio.sleep(2)
             await msg.edit(content=f"FBot says:\nFeet pics {choice(tf)} be granted!")
             return
 
         if str(message.channel.type) != "private":
+            prefix = db.Get_Prefix(message.guild.id)
             db.Add_Channel(message.channel.id, message.guild.id)
             priority = db.Get_Priority(message.guild.id)
-        else: priority = "all"
-        if str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
+        else: priority, prefix = "all", "fbot"
+        if prefix == "fbot": prefix = "fbot "
+
+        if content == f"<@!{self.bot.user.id}>":
+            await send(f"My prefix is `{prefix}`"
+                       f"\nUse `{prefix}help` for more help")
+        elif str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
 
             if message.attachments:
                 await send(choice(responses))
@@ -98,7 +104,6 @@ class triggerresponses(commands.Cog):
                 if len(response) > 2000:
                     response = response[:2000]
                 await send(response)
-                return
 
 def setup(bot):
     bot.add_cog(triggerresponses(bot))

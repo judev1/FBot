@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 from collections import deque
 from random import randint
 import asyncio
@@ -94,8 +94,7 @@ class snake(commands.Cog):
         self.games = {}
         
     @commands.command(name="snake", alliases=["snek"])
-    @commands.check(cooldown)
-    @commands.cooldown(1, 60, type=commands.BucketType.user)
+    @commands.check(predicate)
     async def _Snake(self, ctx):
 
         user_id = ctx.author.id
@@ -120,12 +119,6 @@ class snake(commands.Cog):
         self.bot.db.updatebal(ctx.author.id, fbux)
         await ctx.send("**You died, game over!**\n"
                        f"However you managed to earn **~~f~~ {fbux}**")
-
-    @_Snake.error
-    async def on_command_error(self, ctx, error):
-        if type(error) is commands.CommandOnCooldown:
-            wait = round(error.retry_after)
-            await ctx.send(f"You must wait another {wait} seconds before playing snake again")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

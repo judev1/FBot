@@ -1,29 +1,30 @@
-Bent fork,fork,21,Collectable,Doesn't really have any value but it looks sorta funny,"Adds inventory value, or can be sold for half its value"
-Meatloaf,meatloaf,144,Collectable,I was expecting a loaf of bread made out of meat,"Adds inventory value, or can be sold for half its value"
-Golden Coin,coin,2500,Collectable,"It's worth a lot, probaly","Adds inventory value, or can be sold for half its value"
-The Pirate King,pk,6666,Collectable,I am the pirate king,"Adds inventory value, or can be sold for half its value"
-Bread Shaped Dorito,dorito,69420,Collectable,Damn that's fancy,"Adds inventory value, or can be sold for half its value"
-Crayon,crayon,1,Spammable,It can only be used to write one letter,"Adds inventory value, or can be sold for half its value"
-Nametag,nametag,2,Spammable,You can see a single letter is inscribed onto it,"Adds inventory value, or can be sold for half its value"
-Keyboard,keyboard,3,Spammable,"All keys are missing, but one","Adds inventory value, or can be sold for half its value"
-Meme,meme,4,Spammable,"It's got a picture of you, that's pretty funny","Adds inventory value, or can be sold for half its value"
-Trumpet,trumpet,5,Spammable,Ear rape the haters,"Adds inventory value, or can be sold for half its value"
-Bleach,bleach,10,Spammable,Take two glasses with your cereal,"Adds inventory value, or can be sold for half its value"
-ID Card,id,0,Item,"You found an ID card, let's hope it belongs to a debt/tax collector",Can be used to take a random person's debt/tax
-Money Laundering,laundry,0,Item,This laundry might be good for something after all,Lets you work 4 times without cooldown
-Tax Evasion,evasion,0,Item,Fun for the whole family to enjoy!,Removes tax from your next 2 works
-All Nighter,nighter,0,Item,This feature is hyper realistic,Lets you study 2 times without cooldown
-Scolarship,scolarship,0,Item,"Debt is for the week, or you 3 studys from now",Removes debt from your next 2 studys
-Economic Recession,recession,0,Item,Take advantage of a recsession and loose some debt,Exchanges FBux for debt at low intrest rates
-Bank,bank,0,Legendary Item,"When people are getting taxed, someone's making money",Collect all tax or debt for 30 mins
-Save,save,0,Legendary Item,Like a revive but worse,Protection against one counting mistake for 30 mins
-Steroids,steroids,0,Legendary Item,"Use steriods to send twice as many messages, what else are they for?",Allows you to earn twice as much multiplier for 30 mins
-Werm,werm,0,Pet,,"Spamming buddy, helps earn you multiplier"
-Human,human,0,Pet,,"Spamming buddy, helps earn you multiplier"
-Pocket Creature,creature,0,Pet,,"Spamming buddy, helps earn you multiplier"
-Bot,bot,0,Pet,,"Spamming buddy, helps earn you multiplier"
-Loaf of Bread,bread,0,Pet,,"Spamming buddy, helps earn you multiplier"
-Common FBox,cfbox,0,FBox,,
-Uncommon FBox,ufbox,0,FBox,,
-Rare FBox,rfbox,0,FBox,,
-Legendary FBox,lfbox,0,FBox,,
+Bent fork,fork,<:bent_fork:815234697561899028>,21,Collectable,Doesn't really have any value but it looks sorta funny,can be sold for half its value
+Meatloaf,meatloaf,<:meatloaf:815276753287118869>,144,Collectable,You're telling me you weren't expecting a loaf of bread made out of meat…?,can be sold for half its value
+Golden Coin,coin,<:fcoin:814638932833992756>,2500,Collectable,"It's worth a lot, probably",can be sold for half its value
+The Pirate King,pk,:crab: ,6666,Collectable,I am the pirate king,can be sold for half its value
+Bread Shaped Dorito,breaddorito,:crab: ,42069,Collectable,Damn that's fancy,can be sold for half its value
+Dorito Shaped Bread,doritobread,:crab: ,69420,Collectable,Damn that's fancier,can be sold for half its value
+Crayon,crayon,:crayon: ,1,Spammable,It can only be used to write one letter,can be exchanged for multis
+Nametag,nametag,:label:,2,Spammable,You can see a single letter is inscribed onto it,can be exchanged for multis
+Keyboard,keyboard,:keyboard: ,3,Spammable,"All keys are missing, but one",can be exchanged for multis
+Meme,meme,:crab: ,4,Spammable,"It's got a picture of you, that's pretty funny",can be exchanged for multis
+Trumpet,trumpet,:trumpet: ,5,Spammable,Ear rape the haters,can be exchanged for multis
+Bleach,bleach,:crab: ,10,Spammable,Take two glasses with your cereal,can be exchanged for multis
+ID Card,id, :receipt: ,0,Boosts,"You found an ID card, let's hope it belongs to a debt/tax collector",can be used to take a random person's debt/tax
+Money Laundering,laundry,:crab: ,0,Boosts,This laundry might be good for something after all,lets you work 4 times without cooldown
+Tax Evasion,evasion,:crab: ,0,Boosts,Fun for the whole family to enjoy!,removes tax from your next 2 works
+All Nighter,nighter,:crab: ,0,Boosts,This feature is hyper realistic,lets you study 2 times without cooldown
+Scolarship,scolarship,:crab: ,0,Boosts,"Debt is for the week, or you 3 studys from now",removes debt from your next 2 studys
+Economic Recession,recession,:crab: ,0,Boosts,Take advantage of a recsession and loose some debt,exchanges FBux for debt at low intrest rates
+Bank,bank,:crab: ,0,Legendary Boost,"When people are getting taxed, someone's making money",collects all tax or debt for 30 mins
+Save,save,:crab: ,0,Legendary Boost,Like a revive but worse,protects you against one counting mistake for 30 mins
+Steroids,steroids,:crab: ,0,Legendary Boost,"Use steriods to send twice as many messages, what else are they for?",allows you to earn twice as much multiplier for 30 mins
+Werm,werm,<:werm_head:815237276157345824><:werm_body:815237276745465927><:werm_tail:815237276841148416>,0,Pet,Join the cult,earns multiplier with you
+Human,human,:crab: ,0,Pet,I don't know why you'd want one of these,earns multiplier with you
+Pocket Creature,creature,:crab: ,0,Pet,"Oh no, don't worry, you're supposed to keep them in your pockets",earns multiplier with you
+Bot,bot,:crab: ,0,Pet,"Doesn't make much noise, but can really do your head in",earns multiplier with you
+Loaf of Bread,bread,:crab: ,0,Pet,No fuss we these fellas,earns multiplier with you
+Common FBox,cfbox,:crab: ,0,FBox,"Spamables, whoop whoop",contains 5 Spamables
+Uncommon FBox,ufbox,:crab: ,0,FBox,"Spamables AND a collectable, what is this? A cross over episode?","contains 10 Spamables, and 1 Collectable"
+Rare FBox,rfbox,:crab: ,0,FBox,"Like an uncommon box, but just much better","contains 20 Spamables, 2 Collectables, and 1 Item"
+Legendary FBox,lfbox,:crab: ,0,FBox,One word: epik,"contains 25 Spamables, 3 Collectables, 2 Items, and either 1 Pet or Legenday item"

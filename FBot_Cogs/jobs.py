@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 from datetime import datetime
 import economy as e
 import discord
@@ -15,7 +15,7 @@ class economy(commands.Cog):
         self.bot = bot
 
     @commands.command(name="work")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Work(self, ctx):
         user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -50,10 +50,34 @@ class economy(commands.Cog):
                 f"Your new balance is: {fnum(balance)}")
         await ctx.send(embed=embed)
 
-        # Chance of debt collectors
+        bal, debt = db.getbal(user.id)
+        if bal == 0:
+            db.updatedebt(user.id, salary)
+            msg = ("You get a visit from the debt collectors!" +
+                   "They laugh at your empty balance" +
+                   f"You gain {fnum(salary)} more debt")
+        elif debt > bal:
+            debt = salary * random.uniform(0.1, 0.5)
+            salary = salary * random.uniform(0.1, 0.5)
+            db.updatedebt(user.id, debt)
+            db.setbal(user.id, bal - salary)
+            msg = ("They laugh at your overwhelming debt" +
+                   f"You gain {fnum(debt)} more debt" +
+                   f"While loosing {fnum(salary)}")
+        else:
+            if debt == 0: return
+            if not random.randint(0, 1): return
+            salary = salary * random.uniform(0.1, 0.5)
+            db.setbal(user.id, bal - salary)
+            msg = ("You get a visit from the debt collectors!" +
+                   "They pinch some of your fbux" +
+                   f"You loose {fnum(salary)}")
+        embed = self.bot.fn.embed(user, "You get a visit from the debt collectors!",
+                         msg)
+        await ctx.send(embed=embed)
 
     @commands.command(name="jobs")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Jobs(self, ctx):
         db = self.bot.db
 
@@ -79,7 +103,7 @@ class economy(commands.Cog):
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="job")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Job(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -103,7 +127,7 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="apply")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Apply(self, ctx, *, job):
         job = job.lower()
         if job == "unemployed":
@@ -128,7 +152,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="resign")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Resign(self, ctx):
         db = self.bot.db
         job = db.getjob(ctx.author.id)

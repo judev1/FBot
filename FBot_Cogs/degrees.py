@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 from datetime import datetime
 import economy as e
 import discord
@@ -15,9 +15,9 @@ class economy(commands.Cog):
         self.bot = bot
 
     @commands.command(name="study")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Study(self, ctx):
-        db, fnum = self.bot.db, self.bot.fn.fnum
+        db, fn = self.bot.db, self.bot.fn
         user = ctx.author
 
         c = db.conn.cursor()
@@ -33,29 +33,63 @@ class economy(commands.Cog):
         if degree == "None":
             await ctx.send("You're not taking a degree right now")
             return
-        salary = e.salaries[db.getjob(user.id)]
-        debt = round(salary * random.uniform(0.05, 0.40))
+        job = db.getjob(user.id)
+        salary = e.salaries[job]
+
+        if job == "Unemployed": jobmulti = 1.0
+        else: jobmulti = db.getjobmulti(user.id)
+
+        salary = e.salaries[job] * jobmulti
+        if str(ctx.channel.type) == "private":
+            salary *= db.getusermulti(user.id)
+        else:
+            multis = db.getmultis(user.id, ctx.guild.id)
+            salary *= multis[0] * multis[1]
+        
+        debt = round(salary * random.uniform(0.1, 0.5))
         
         progress, newdebt = db.study(user.id, debt)
         length = e.courses[degree][0]
         if progress == length:
             db.finishdegree(user.id)
             db.startjob(user.id, e.degreejobs[degree])
-            embed = self.bot.fn.embed(user, "Degree completed!",
-                    f"You studied and gained debt: {fnum(debt)}",
-                    f"Your new debt is: {fnum(newdebt)}",
-                    f"You may now apply for the **{e.degreejobs[degree]}** job")
+            end = f"You may now apply for the **{e.degreejobs[degree]}** job"
         else:
             db.studied(user.id)
-            embed = self.bot.fn.embed(user, f"You studied for **{degree}**",
-                    f"You studied and gained debt: {fnum(debt)}",
-                    f"Your new debt is: {fnum(newdebt)}",
-                    f"Degree course progress: `{progress}/{length}`")
+            end = f"Degree course progress: `{progress}/{length}`"
+        embed = fn.embed(user, f"You studied for **{degree}**",
+                f"You studied and gained {fn.fnum(debt)} worth of debt",
+                f"You now have {fn.fnum(newdebt)} of debt", end)
         await ctx.send(embed=embed)
-        # Chance of debt collectors            
+
+        bal, debt = db.getbal(user.id)
+        if bal == 0:
+            db.updatedebt(user.id, salary)
+            msg = ("You get a visit from the debt collectors!" +
+                   "They laugh at your empty balance" +
+                   f"You gain {fn.fnum(salary)} more debt")
+        elif debt > bal:
+            debt = salary * random.uniform(0.1, 0.5)
+            salary = salary * random.uniform(0.1, 0.5)
+            db.updatedebt(user.id, debt)
+            db.setbal(user.id, bal - salary)
+            msg = ("They laugh at your overwhelming debt" +
+                   f"You gain {fn.fnum(debt)} more debt" +
+                   f"While loosing {fn.fnum(salary)}")
+        else:
+            if debt == 0: return
+            if not random.randint(0, 1): return
+            salary = salary * random.uniform(0.1, 0.5)
+            db.setbal(user.id, bal - salary)
+            msg = ("You get a visit from the debt collectors!" +
+                   "They pinch some of your fbux" +
+                   f"You loose {fn.fnum(salary)}")
+        embed = fn.embed(user, "You get a visit from the debt collectors!",
+                         msg)
+        await ctx.send(embed=embed)
 
     @commands.command(name="degrees")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Degrees(self, ctx):
         db = self.bot.db
 
@@ -81,7 +115,7 @@ class economy(commands.Cog):
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="degree")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Degree(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -95,6 +129,14 @@ class economy(commands.Cog):
             length = e.courses[degree][0]
             job = e.degreejobs[degree]
             salary = e.salaries[job]
+            if job == "Unemployed": jobmulti = 1.0
+            else: jobmulti = db.getjobmulti(user.id)
+            salary = e.salaries[job] * jobmulti
+            if str(ctx.channel.type) == "private":
+                salary *= db.getusermulti(user.id)
+            else:
+                multis = db.getmultis(user.id, ctx.guild.id)
+                salary *= multis[0] * multis[1]
             debtl, debtu = salary * 0.05, salary * 0.40
             embed = self.bot.fn.embed(ctx.author, title,
                     f"Currently taking **{degree}** for **{job}**",
@@ -103,7 +145,7 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="take")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Take(self, ctx, *, degree):
         degree = degree.lower()
         if degree in e.degreenames:
@@ -128,7 +170,7 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="drop")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Drop(self, ctx):
         db = self.bot.db
         degree = db.getdegree(ctx.author.id)

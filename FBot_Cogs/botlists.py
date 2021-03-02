@@ -1,4 +1,4 @@
-from functions import cooldown, fn
+from functions import predicate, fn
 from discord.ext import commands
 import economy as e
 import requests
@@ -25,6 +25,7 @@ class economy(commands.Cog):
 
     @commands.command(name="scounts")
     @commands.is_owner()
+    @commands.check(predicate)
     async def _SCOUNTS(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
@@ -80,7 +81,7 @@ class economy(commands.Cog):
         await msg.edit(embed=embed)
 
     @commands.command(name="vote")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Vote(self, ctx):
         fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
@@ -101,6 +102,37 @@ class economy(commands.Cog):
                          f"[top.gg vote]({fn.votetop})",
                          f"[botsfordiscord.com]({fn.votebfd})",
                          f"[discordbotlist.com]({fn.votedbl}) (No rewards)")
+        await ctx.send(embed=embed)
+
+    @commands.command(name="votehs")
+    @commands.check(predicate)
+    async def _Votehs(self, ctx):
+        await ctx.send("`fbot votehs` has moved to `fbot top votes`")
+
+    @commands.command(name="monthly")
+    @commands.is_owner()
+    @commands.check(predicate)
+    async def monthly_winners(self, ctx):
+        
+        message = []
+        async with ctx.channel.typing():
+            c = self.bot.db.conn.cursor()
+            c.execute(f"SELECT user_id, topvotes FROM votes ORDER BY "
+                      "topvotes DESC LIMIT 3")
+            for rank, row in enumerate(c):
+                user_id, votes = row
+                name = await self.bot.fetch_user(user_id)
+                if not name: name = "User"
+                if rank == 0:
+                    salary = self.vote_rewards(user_id, 5)
+                elif rank == 1:
+                    salary = self.vote_rewards(user_id, 4)
+                elif rank == 2:
+                    salary = self.vote_rewards(user_id, 3)
+                message.append(f"{rank+1}. **{name}** with **{votes} votes**" +
+                               f" earned {self.bot.fn.fnum(salary)}\n")
+        c.execute(f"UPDATE votes SET topvotes=0, dblvotes=0, bfdvotes=0")
+        embed = self.bot.fn.embed(user, "FBot Monthly rewards", *message)
         await ctx.send(embed=embed)
 
     def vote_rewards(self, user_id, count):
@@ -168,48 +200,6 @@ class economy(commands.Cog):
         embed = self.bot.fn.embed(user, "top.gg",
                 f"{name} voted and gained {self.bot.fn.fnum(salary)}")
         await self.voteschannel(embed=embed)
-
-    @commands.command(name="votehs")
-    @commands.check(cooldown)
-    async def _Votehs(self, ctx):
-        
-        message = []
-        async with ctx.channel.typing():
-            c = self.bot.db.conn.cursor()
-            c.execute(f"SELECT user_id, topvotes FROM votes ORDER BY "
-                      "topvotes DESC LIMIT 5")
-            for rank, row in enumerate(c):
-                user_id, votes = row
-                name = await self.bot.fetch_user(user_id)
-                if not name: name = "User"
-                message.append(f"{rank+1}. **{name}** with **{votes} votes**")
-        embed = self.bot.fn.embed(user, "Top votes this month", *message)
-        await ctx.send(embed=embed)
-
-    @commands.command(name="monthly")
-    @commands.is_owner()
-    async def monthly_winners(self, ctx):
-        
-        message = []
-        async with ctx.channel.typing():
-            c = self.bot.db.conn.cursor()
-            c.execute(f"SELECT user_id, topvotes FROM votes ORDER BY "
-                      "topvotes DESC LIMIT 3")
-            for rank, row in enumerate(c):
-                user_id, votes = row
-                name = await self.bot.fetch_user(user_id)
-                if not name: name = "User"
-                if rank == 0:
-                    salary = self.vote_rewards(user_id, 5)
-                elif rank == 1:
-                    salary = self.vote_rewards(user_id, 4)
-                elif rank == 2:
-                    salary = self.vote_rewards(user_id, 3)
-                message.append(f"{rank+1}. **{name}** with **{votes} votes**" +
-                               f" earned {self.bot.fn.fnum(salary)}\n")
-        c.execute(f"UPDATE votes SET topvotes=0, dblvotes=0, bfdvotes=0")
-        embed = self.bot.fn.embed(user, "FBot Monthly rewards", *message)
-        await ctx.send(embed=embed)
         
     
 def setup(bot):

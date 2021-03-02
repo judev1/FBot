@@ -1,6 +1,6 @@
 from discord import AuditLogAction
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 from collections import deque
 import discord
 import os
@@ -16,7 +16,7 @@ class snipe(commands.Cog):
         self.bot = bot
 
     @commands.command(name="snipe")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Snipe(self, ctx, number=10):
         user = ctx.author
         if ctx.message.channel.id not in snipes:

@@ -8,6 +8,14 @@ D_NAME = 4 # Relative degree name
 D_LENGTH = 5 # Degree length
 D_MULTI = 6 # Multiplier required for degree
 
+I_NAME = 0 # Name of the item
+I_ID = 1 # For inputing
+I_EMOJI = 2 # Emoji
+I_VALUE = 3 # How much the item is worth in your inventory
+I_CAT = 4 # Category
+I_DESC = 5 # Description
+I_USAGE = 6 # How to use it
+
 class econ:
     
     def load():
@@ -40,6 +48,12 @@ class econ:
 
                 degreejobs[row[D_NAME]] = row[J_NAME]
                 jobdegrees[row[J_NAME]] = row[D_NAME]
+        global items
+        items = {}
+        with open("Info/CSVs/Items.csv") as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=",")
+            for row in csv_reader:
+                items[row[I_ID]] = row
         print(" > Loaded Economy.csv")
 
     def search(query, dev=False):

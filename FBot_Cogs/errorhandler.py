@@ -23,36 +23,29 @@ class errorhandler(commands.Cog):
         fn = self.bot.fn
         if type(error) is commands.CommandNotFound:
             return
-        elif type(error) is commands.DisabledCommand:
-            embed = fn.errorembed("Command Not Found",
-                    f"{ctx.command} has been disabled")
         elif type(error) is commands.MissingPermissions:
-            embed = fn.errorembed("Missing Permissions",
-                    "The bot is missing permissions to execute the command")
+            return
         elif type(error) is commands.NotOwner:
             return
+        elif type(error) is commands.DisabledCommand:
+            await ctx.send("**This command is disabled**\n" +
+                  "If you'd like to find out more join our support server")
         elif type(error) is commands.BadArgument:
-            embed = fn.errorembed("Invalid Argument",
-                    f"The argument you used was not recognised")
+            await ctx.send("**Bad argument**\n" +
+                  "Whoops! Looks like one of the arguments you entered is a bit off...")
         elif type(error) is commands.MissingRequiredArgument:
-            embed = fn.errorembed("Missing Argument",
-                    f"This command is missing an argument")
+            await ctx.send("**Command missing an argument**\n" +
+                  "Whoops! You've missed an argument for this command")
         elif type(error) is commands.NoPrivateMessage:
-            embed = fn.errorembed("Server-only command",
-                    f"This command cannot be used outside of servers.")
+            await ctx.send("**Server only command**\n" +
+                  "This command can only be used in a server")
         elif type(error) is commands.UserNotFound:
-            embed = fn.errorembed("User not found",
-                    f"Invalid user parameter. Check command help.")
+            await ctx.send("**No user found**\n" +
+                  "Hmm we couldn't find that user, maybe try something else")
         elif type(error) is commands.CommandOnCooldown:
-            if error.retry_after < 10:
-                retry = str(error.cooldown) + "` seconds"
-            if error.retry_after < 20:
-                retry = str(round(error.retry_after, 1)) + "` seconds"
-            elif error.retry_after < 120:
-                retry = str(round(error.retry_after)) + "` seconds"
-            else: retry = str(round(error.retry_after / 60)) + "` mins"
-            embed = fn.embed(ctx.author, "You are being ratelimited",
-                    f"You may use a command again in `{retry}")
+            retry = round(error.retry_after, 2)
+            await ctx.send("**You're on cooldown!**\n" +
+                  f"Please wait `{retry}s` to use this command")
         elif type(error) is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
@@ -68,7 +61,6 @@ class errorhandler(commands.Cog):
                         await channel.send(embed=embed)
                     except: await channel.send(error)
                 except: pass
-            return
         else:
             if type(error) is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:
@@ -98,8 +90,6 @@ class errorhandler(commands.Cog):
                         f"```{error.original}``````{ctx.message}```")
                 await self.errorlogs.send(embed=embed)
             except: pass
-            finally: return
-        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(errorhandler(bot))

@@ -1,5 +1,5 @@
 from discord.ext import tasks, commands
-from functions import cooldown
+from functions import predicate
 from datetime import datetime
 from triggers import tr
 import commands as cm
@@ -8,18 +8,15 @@ from math import ceil
 class fakeuser: id = 0
 fakeuser = fakeuser()
 
-class dailystats(commands.Cog):
+class stats(commands.Cog):
     
     def __init__(self, bot):
         self.bot = bot
-        self.stats_channel = self.bot.get_channel(803050054095994900) # fbot 1
-        #self.stats_channel = self.bot.get_channel(727320090483359844) # fbot 3
         self.time_start = datetime.now().timestamp()
         self.commands_processed = 0
         self.commands_ignored = 0
         self.triggers_processed = 0
         self.other_messages_processed = 0
-        self.is_first_message = True
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -45,9 +42,6 @@ class dailystats(commands.Cog):
                     self.commands_ignored += 1
                 else:
                     db.increasemultiplier(user.id, guild_id, 2 * bonus)
-                    if db.premium(user.id):
-                        db.Update_Cooldown(user.id, 2)
-                    else: db.Update_Cooldown(user.id, 8)
                     self.commands_processed += 1
                 return
         for command in cm.devcmds:
@@ -73,7 +67,7 @@ class dailystats(commands.Cog):
 
     def embed(self, user):
         fn = self.bot.fn
-        hours = ceil((datetime.now().timestamp()-self.time_start)/3600)
+        hours = ceil((datetime.now().timestamp() - self.time_start) / 3600)
         total = (self.commands_processed + self.commands_ignored +
                  self.triggers_processed + self.other_messages_processed)
         stats = (f"Commands processed: `{self.commands_processed}`",
@@ -84,9 +78,9 @@ class dailystats(commands.Cog):
         return fn.embed(user, f"FBot stats for the past {hours} hours:", *stats)
 
     @commands.command(name="stats")
-    @commands.check(cooldown)
-    async def manual_stats(self, ctx):
+    @commands.check(predicate)
+    async def _Stats(self, ctx):
         await ctx.send(embed=self.embed(ctx.author))
         
 def setup(bot):
-    bot.add_cog(dailystats(bot))
+    bot.add_cog(stats(bot))

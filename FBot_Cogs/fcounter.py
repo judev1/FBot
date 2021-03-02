@@ -1,5 +1,6 @@
 from discord.ext import commands
 from discord import AllowedMentions
+from functions import predicate
 
 class fcounter(commands.Cog):
 
@@ -72,6 +73,7 @@ class fcounter(commands.Cog):
 
     @commands.command("counting")
     @commands.guild_only()
+    @commands.check(predicate)
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
             self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
@@ -80,13 +82,13 @@ class fcounter(commands.Cog):
 
     @commands.command("devcounting")
     @commands.is_owner()
-    @commands.guild_only()
+    @commands.check(predicate)
     async def dev_set_counter_channel(self, ctx):
         self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
     @commands.command("number",  aliases=["last"])
-    @commands.guild_only()
+    @commands.check(predicate)
     async def get_guild_number(self, ctx):
         name = ctx.author.display_name
         last_number = self.bot.db.getnumber(ctx.guild.id)
@@ -101,33 +103,18 @@ class fcounter(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command("hs")
-    @commands.cooldown(1, 5, type=commands.BucketType.user)
-    @commands.guild_only()
+    @commands.check(predicate)
     async def _leaderboard(self, ctx):
-        name = ctx.author.display_name
-        async with ctx.channel.typing():
-            guild_rank = 0
-            highscores = f"Highscore for this guild is `{self.bot.db.gethighscore(ctx.guild.id)}`\n\n"
-            ranks = [":first_place:", ":second_place:", ":third_place:", ":medal:", ":medal:"]
-            for guild_id, record in self.bot.db.gethighscores():
-                try:
-                    guild_name = self.bot.get_guild(guild_id).name
-                except:
-                    guild_name = "(Deleted guild)"
-                highscores += f" {ranks[guild_rank]} {guild_name} - `{record}`\n"
-                guild_rank += 1
-            embed = self.bot.fn.embed(ctx.author, "FBot counting leaderboard", highscores)
-        await ctx.send(embed=embed)
+        await ctx.send("`fbot hs` has moved to `fbot top counting`")
 
     @commands.command("devnumber")
     @commands.is_owner()
-    @commands.guild_only()
+    @commands.check(predicate)
     async def _setnumber(self, ctx, *, number):
         if not number.isdigit(): await ctx.send("Not a number")
         else:
             self.bot.db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
             await ctx.message.add_reaction("✅")
-
 
 def setup(bot):
     bot.add_cog(fcounter(bot))

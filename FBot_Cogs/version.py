@@ -1,5 +1,5 @@
 from discord.ext import commands
-from functions import cooldown
+from functions import predicate
 
 class version(commands.Cog):
     
@@ -7,7 +7,7 @@ class version(commands.Cog):
         self.bot = bot
         
     @commands.command(name="ver")
-    @commands.check(cooldown)
+    @commands.check(predicate)
     async def _Version(self, ctx):
         fn = self.bot.fn
         ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")

@@ -1,21 +1,20 @@
-from discord.ext import commands
 from datetime import datetime, timezone
+from discord.ext import commands
 from discord import Embed, Client
 from database import db
 import commands as cm
+import time
 import os
 
 emojis = {True: "✅",
           False: "⛔"}
 
-bot_id = 711934102906994699
 db = db(verbose=False)
-def cooldown(ctx):
+def predicate(ctx):
     if str(ctx.channel.type) != "private":
         bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
 
-        valid = []
-        perms = {}
+        valid, perms = [], {}
         for perm in cm.perms[ctx.command.name]:
             if not perm.startswith("("):
                 bot_perm = getattr(bot_perms, perm)
@@ -30,25 +29,88 @@ def cooldown(ctx):
                     perms[perm] = getattr(bot_perms, perm[1:-1])
                 page += f"{emojis[perms[perm]]} ~ {perm.upper()}\n"
             raise commands.CheckFailure(message=page)
+    else:
+        if cm.commands[ctx.command.name][5] == "*Yes*":
+            raise commands.NoPrivateMessage()
 
-    usercooldown = db.Get_Cooldown(ctx.author.id)
-    if usercooldown > 0:
-        raise commands.CommandOnCooldown(commands.BucketType.user,
-                                         usercooldown)
+    cooldown = coolcache.cooldown(ctx)
+    if cooldown:
+        raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
     return True
+    
+
+class CooldownCache:
+
+    _commands = dict()
+    _cooldowns = dict()
+
+    def add_command(self, command, cooldowns):
+
+        self._commands[command] = cooldowns
+        setattr(self, command, dict())
+
+    def cooldown(self, ctx):
+
+        command = ctx.command.name
+        user = ctx.author.id
+        premium = int(db.premium(user))
+        command_cooldowns = self._commands[command]
+        cooldowns = getattr(self, command)
+        now = time.time()
+        cooldown = 0
+
+        if user in self._cooldowns:
+            if now >= self._cooldowns[user]:
+                del self._cooldowns[user]
+            else:
+                cooldown = self._cooldowns[user] - now
+        
+        if user in cooldowns:
+            if now >= cooldowns[user]:
+                del cooldowns[user]
+            else:
+                cooldown = cooldowns[user] - now
+
+        if not cooldown:
+            if premium:
+                self._cooldowns[user] = now + 2
+            else:
+                self._cooldowns[user] = now + 8
+            cooldowns[user] = now + command_cooldowns[premium]
+
+        for user in self._cooldowns.copy():
+            if now >= self._cooldowns[user]:
+                del self._cooldowns[user]
+            else: break
+
+        for user in cooldowns.copy():
+            if now >= cooldowns[user]:
+                del cooldowns[user]
+            else: break
+
+        return cooldown
+
+    def clear(self):
+        del self.__dict__
 
 class fn:
 
+    def setbot(self, bot):
+        self.bot = bot
+        global bot_id, coolcache
+        bot_id = bot.user.id
+        bot.coolcache = coolcache = CooldownCache()
+
     def gettoken(self, num):
         if num == 1:
-            print(f"""
-################################################
-# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
-################################################
-# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
-################################################
-# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #
-################################################\n\n""")
+            print("################################################",
+                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
+                  "################################################",
+                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
+                  "################################################",
+                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
+                  "################################################",
+                  sep="\n", end="\n\n")
         with open("./Info/Tokens.txt", "r") as file: data = file.readlines()
         return data[int(num)][:-1]
 
@@ -102,8 +164,11 @@ class fn:
         return Embed(title=f"**Error:** `{error}`",
                description=f"```{info}```", colour=self.red)
 
-    def fnum(self, num):
-        return f"**~~f~~ {round(float(num)):,}**"#.replace(",", ", ")
+    def fnum(self, num, bold=True):
+        value = f"~~f~~ {round(float(num)):,}"#.replace(",", ", ")
+        if bold:
+            return "**" + value + "**"
+        return value
     
     red = 0xF42F42
     
