@@ -1,4 +1,4 @@
-from discord.ext import commands
+﻿from discord.ext import commands
 from functions import predicate
 import economy as e
 import discord
@@ -74,9 +74,9 @@ class economy(commands.Cog):
         elif amount > debt:
             await ctx.send("You don't have that much debt to pay off!")
         else:
-            if db.getjob(user.id) == "Unemployed": jobmulti = 1.0
-            else: jobmulti = db.getjobmulti(user.id)
-            interest = (db.getusermulti(ctx.author.id) * jobmulti) - 1
+            if db.getjob(ctx.author.id) == "Unemployed": jobmulti = 1.0
+            else: jobmulti = db.getjobmulti(ctx.author.id)
+            interest = round(db.getusermulti(ctx.author.id) * jobmulti, 4)
             loss = round(amount * interest)
             if loss > bal:
                 embed = fn.embed(user, f"You try and pay off debt",

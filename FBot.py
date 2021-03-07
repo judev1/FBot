@@ -39,28 +39,6 @@ econ.load()
 
 bot.ftime = ftime()
 
-
-
-# Temp database code
-conn = bot.db.conn
-
-c = conn.cursor()
-c.execute("ALTER TABLE users ADD COLUMN inventory string;")
-c.execute("ALTER TABLE users ADD COLUMN commands integer;")
-c.execute("ALTER TABLE users ADD COLUMN triggers integer;")
-c.execute("ALTER TABLE votes ADD COLUMN lasttopvote integer;")
-c.execute("ALTER TABLE votes ADD COLUMN lastbfdvote integer;")
-c.execute("ALTER TABLE votes ADD COLUMN lastdblvote integer")
-conn.commit()
-
-c = conn.cursor()
-c.execute("UPDATE users SET inventory='{}', commands=0, triggers=0;")
-c.execute("UPDATE votes SET lasttopvote=0, lastbfdvote=0, lastdblvote=0")
-conn.commit()
-# Temp database code
-
-
-
 print(f" > Session started at {bot.ftime.start}")
 token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
 

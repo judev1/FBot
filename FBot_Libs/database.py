@@ -454,6 +454,7 @@ class db:
         t = (user_id,)
         c.execute(f"SELECT last{site}vote FROM votes where user_id=?", t)
         lastvote = c.fetchone()[0]
+        if not lastvote: return None
         if site in ["top", "dbl"]:
             nextvote = (lastvote + 60*60*12) - time.time()
         elif site == "bfd":
