@@ -1,25 +1,26 @@
 from datetime import datetime
-import os
 import sqlite3
+import time
+import os
 
 path = "./Info/FBot.db"
 conn = sqlite3.connect(path)
 
-with open(f"./Info/FBot.db", "rb") as file:
-    time = datetime.now()
-    time = time.strftime("%d-%m-%y %H%M")
+with open("./Info/FBot.db", "rb") as file:
+    now = datetime.now()
+    filename = now.strftime("%y-%m-%d %H%M")
     if not os.path.exists(os.path.join("Info", "db_backups")):
         os.makedirs(os.path.join("Info", "db_backups"))
-    with open(f"./Info/db_backups/{time}.db", "wb+") as newfile:
+    with open(f"./Info/db_backups/{filename}.db", "wb+") as newfile:
         newfile.writelines(file.readlines())
 
 class db:
 
     def __init__(self, verbose=True):
-        
+
         self.conn = conn # For sharing with other cogs/files
         c = conn.cursor()
-        
+
         c.execute("""CREATE TABLE IF NOT EXISTS guilds (
                           guild_id integer NOT NULL,
                           modtoggle string NOT NULL,
@@ -71,7 +72,7 @@ class db:
                           total_dblvotes integer NOT NULL,
                           total_bfdvotes integer NOT NULL
                           )""")
-        
+
         conn.commit()
         print(" > Connected to FBot.db") if verbose else False
 
@@ -82,13 +83,13 @@ class db:
         for guild_id in discord_guild_ids:
             t = (guild_id,)
             try:
-                c.execute(f"SELECT * FROM guilds where guild_id=?", t)
+                c.execute("SELECT * FROM guilds where guild_id=?", t)
                 c.fetchone()[0]
             except:
                 self.Add_Guild(guild_id)
 
         count = 0
-        c.execute(f"SELECT guild_id FROM guilds")
+        c.execute("SELECT guild_id FROM guilds")
         for guild_id in c.fetchall():
             if not (guild_id[0] in discord_guild_ids):
                 count += 1
@@ -96,7 +97,7 @@ class db:
         print("Deleted", count, "guilds from 'guilds'")
 
         count = 0
-        c.execute(f"SELECT guild_id FROM channels")
+        c.execute("SELECT guild_id FROM channels")
         for guild_id in c.fetchall():
             if not (guild_id[0] in discord_guild_ids):
                 count += 1
@@ -104,13 +105,13 @@ class db:
         print("Deleted", count, "guild channels from 'channels'")
 
         count = 0
-        c.execute(f"SELECT guild_id FROM counter")
+        c.execute("SELECT guild_id FROM counter")
         for guild_id in c.fetchall():
             if not (guild_id[0] in discord_guild_ids):
                 count += 1
                 c.execute("DELETE FROM counter WHERE guild_id=?", guild_id)
         print("Deleted", count, "guilds from 'counter'\n")
-                
+
         conn.commit()
 
     # General
@@ -177,7 +178,7 @@ class db:
 
     def Update_Cooldown(self, user_id, cooldown):
         c = conn.cursor()
-        t = (datetime.now().timestamp() + cooldown, user_id)
+        t = (time.time() + cooldown, user_id)
         c.execute("UPDATE users SET cooldown=? WHERE user_id=?", t)
         conn.commit()
 
@@ -185,7 +186,7 @@ class db:
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT cooldown FROM users WHERE user_id=?", t)
-        return round(c.fetchone()[0] - datetime.now().timestamp(), 2)
+        return round(c.fetchone()[0] - time.time(), 2)
 
     # Economy
 
@@ -295,13 +296,13 @@ class db:
 
     def worked(self, user_id):
         c = conn.cursor()
-        t = (datetime.now().timestamp() / 60 + 60, user_id)
+        t = (time.time() / 60 + 60, user_id)
         c.execute("UPDATE users SET lastwork=? WHERE user_id=?", t)
         conn.commit()
 
     def studied(self, user_id):
         c = conn.cursor()
-        t = (datetime.now().timestamp() / 60 + 60, user_id)
+        t = (time.time() / 60 + 60, user_id)
         c.execute("UPDATE users SET laststudy=? WHERE user_id=?", t)
         conn.commit()
 
@@ -341,6 +342,12 @@ class db:
         t = (user_id,)
         c.execute("SELECT debt FROM users WHERE user_id=?", t)
         return c.fetchone()[0]
+
+    def payoff(self, user_id, debt, loss):
+        c = conn.cursor()
+        t = (debt, loss, user_id)
+        c.execute("UPDATE users SET debt=debt-?, fbux=fbux-? WHERE user_id=?", t)
+        conn.commit()
 
     def finishdegree(self, user_id):
         c = conn.cursor()
@@ -414,6 +421,15 @@ class db:
         c.execute(f"UPDATE users SET inventory=? WHERE user_id=?", t)
         conn.commit()
 
+    def removeitem(self, user_id, item, amount):
+        items = self.getitem(user_id, item)
+        inv = self.getinventory(user_id)
+        inv[item] = items - amount
+        c = conn.cursor()
+        t = (str(inv), user_id)
+        c.execute(f"UPDATE users SET inventory=? WHERE user_id=?", t)
+        conn.commit()
+
     # Voting
 
     def vote(self, user_id, site):
@@ -428,8 +444,28 @@ class db:
             conn.commit()
         t = (user_id, )
         c.execute(f"UPDATE votes SET {site}votes={site}votes+1, "
-                  f"total_{site}votes=total_{site}votes+1 WHERE user_id=?", t)
+                  f"total_{site}votes=total_{site}votes+1, "
+                  f"last{site}vote={time.time()} WHERE user_id=?", t)
         conn.commit()
+    
+    def nextvote(self, user_id, site):
+        c = conn.cursor()
+        user_id = int(user_id)
+        t = (user_id,)
+        c.execute(f"SELECT last{site}vote FROM votes where user_id=?", t)
+        lastvote = c.fetchone()[0]
+        if site in ["top", "dbl"]:
+            nextvote = (lastvote + 60*60*12) - time.time()
+        elif site == "bfd":
+            lastvote = datetime.fromtimestamp(lastvote)
+            now = datetime(lastvote.year, lastvote.month, lastvote.day)
+            nextvote = (now.timestamp() + 60*60*24) - time.time()
+        rawhours = nextvote / 60 / 60
+        mins = round((rawhours - int(rawhours)) * 60)
+        hours = int(rawhours)
+        if hours < 0 or mins < 0:
+            return None
+        return (mins, hours)
 
     # Premium
 
@@ -484,7 +520,7 @@ class db:
         conn.commit()
 
     # Counting
-        
+
     def ignorechannel(self, guild_id, channel_id):
         c = conn.cursor()
         t = (guild_id,)
@@ -546,9 +582,9 @@ class db:
             t = (number, guild_id,)
             c.execute("UPDATE counter SET record=? WHERE guild_id=?", t)
             conn.commit()
-        
-    def setcountingchannel(self, channel_id, guild_id):	
+
+    def setcountingchannel(self, channel_id, guild_id):
         c = conn.cursor()
-        t = (channel_id, guild_id)	
-        c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)	
+        t = (channel_id, guild_id)
+        c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
         conn.commit()

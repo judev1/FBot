@@ -1,11 +1,10 @@
 from discord.ext import commands
 from functions import predicate
-from datetime import datetime
+from dbfn import reactionbook
 import economy as e
 import discord
-import sqlite3
 import random
-import dbfn
+import time
 
 f = "~~f~~ "
 
@@ -17,15 +16,15 @@ class economy(commands.Cog):
     @commands.command(name="study")
     @commands.check(predicate)
     async def _Study(self, ctx):
-        db, fn = self.bot.db, self.bot.fn
+        fn, db = self.bot.fn, self.bot.db
         user = ctx.author
 
         c = db.conn.cursor()
         t = (user.id,)
         c.execute("SELECT laststudy FROM users WHERE user_id=?", t)
         laststudy = c.fetchone()[0]
-        if not laststudy <= datetime.now().timestamp() / 60:
-            wait = round(laststudy - datetime.now().timestamp() / 60)
+        if not laststudy <= time.time() / 60:
+            wait = round(laststudy - time.time() / 60)
             await ctx.send(f"You must wait another {wait} mins to study again")
             return
 
@@ -34,20 +33,19 @@ class economy(commands.Cog):
             await ctx.send("You're not taking a degree right now")
             return
         job = db.getjob(user.id)
-        salary = e.salaries[job]
 
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user.id)
 
-        salary = e.salaries[job] * jobmulti
+        salary = e.salaries[e.degreejobs[degree]] * jobmulti
         if str(ctx.channel.type) == "private":
             salary *= db.getusermulti(user.id)
         else:
             multis = db.getmultis(user.id, ctx.guild.id)
             salary *= multis[0] * multis[1]
-        
+
         debt = round(salary * random.uniform(0.1, 0.5))
-        
+
         progress, newdebt = db.study(user.id, debt)
         length = e.courses[degree][0]
         if progress == length:
@@ -58,31 +56,30 @@ class economy(commands.Cog):
             db.studied(user.id)
             end = f"Degree course progress: `{progress}/{length}`"
         embed = fn.embed(user, f"You studied for **{degree}**",
-                f"You studied and gained {fn.fnum(debt)} worth of debt",
-                f"You now have {fn.fnum(newdebt)} of debt", end)
+                f"You studied and gained {fn.fnum(debt)} debt",
+                f"You now have {fn.fnum(newdebt)} debt", end)
         await ctx.send(embed=embed)
+        if debt == newdebt: return
 
         bal, debt = db.getbal(user.id)
-        if bal == 0:
+        if not bal:
             db.updatedebt(user.id, salary)
-            msg = ("You get a visit from the debt collectors!" +
-                   "They laugh at your empty balance" +
+            msg = ("They laugh at your empty balance\n" +
                    f"You gain {fn.fnum(salary)} more debt")
         elif debt > bal:
             debt = salary * random.uniform(0.1, 0.5)
             salary = salary * random.uniform(0.1, 0.5)
             db.updatedebt(user.id, debt)
             db.setbal(user.id, bal - salary)
-            msg = ("They laugh at your overwhelming debt" +
-                   f"You gain {fn.fnum(debt)} more debt" +
+            msg = ("They laugh at your overwhelming debt\n" +
+                   f"You gain {fn.fnum(debt)} more debt\n" +
                    f"While loosing {fn.fnum(salary)}")
         else:
-            if debt == 0: return
-            if not random.randint(0, 1): return
+            if not debt: return
+            if random.randint(0, 1): return
             salary = salary * random.uniform(0.1, 0.5)
             db.setbal(user.id, bal - salary)
-            msg = ("You get a visit from the debt collectors!" +
-                   "They pinch some of your fbux" +
+            msg = ("They pinch some of your fbux\n" +
                    f"You loose {fn.fnum(salary)}")
         embed = fn.embed(user, "You get a visit from the debt collectors!",
                          msg)
@@ -93,7 +90,7 @@ class economy(commands.Cog):
     async def _Degrees(self, ctx):
         db = self.bot.db
 
-        book = dbfn.reactionbook(self.bot, ctx)
+        book = reactionbook(self.bot, ctx)
         for tier in e.degrees:
             tierdegrees = {}
             for degree, length, multi in e.degrees[tier]:
@@ -109,7 +106,7 @@ class economy(commands.Cog):
                 job = e.degreejobs[degree]
                 tierdegrees[degree] = (job, length, multi, reqs, out)
             book.createpages(tierdegrees,
-                             LINE=f"%3 %4__%l__ - *unlocks %0*%4\n"
+                             LINE="%3 %4__%l__ - *unlocks %0*%4\n"
                              "Course length: `%1`, Requires `x%2` multiplier\n",
                              SUBHEADER=f"**FBot Degrees - Tier {tier}**\n")
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
@@ -125,20 +122,19 @@ class economy(commands.Cog):
             embed = self.bot.fn.embed(user, title,
                     "Not currently taking a degree")
         else:
-            progress = db.progress(user.id)
-            length = e.courses[degree][0]
-            job = e.degreejobs[degree]
-            salary = e.salaries[job]
-            if job == "Unemployed": jobmulti = 1.0
+            if db.getjob(user.id) == "Unemployed": jobmulti = 1.0
             else: jobmulti = db.getjobmulti(user.id)
-            salary = e.salaries[job] * jobmulti
+            job = e.degreejobs[degree]
+            salary = e.salaries[e.degreejobs[degree]] * jobmulti
             if str(ctx.channel.type) == "private":
                 salary *= db.getusermulti(user.id)
             else:
                 multis = db.getmultis(user.id, ctx.guild.id)
                 salary *= multis[0] * multis[1]
-            debtl, debtu = salary * 0.05, salary * 0.40
-            embed = self.bot.fn.embed(ctx.author, title,
+            progress = db.progress(user.id)
+            length = e.courses[degree][0]
+            debtl, debtu = salary * 0.1, salary * 0.5
+            embed = self.bot.fn.embed(user, title,
                     f"Currently taking **{degree}** for **{job}**",
                     f"Progress: **{progress}/{length}**",
                     f"Debt range: {fnum(debtl)} - {fnum(debtu)}")

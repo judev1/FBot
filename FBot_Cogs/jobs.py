@@ -1,11 +1,10 @@
 from discord.ext import commands
 from functions import predicate
-from datetime import datetime
+from dbfn import reactionbook
 import economy as e
 import discord
-import sqlite3
 import random
-import dbfn
+import time
 
 f = "~~f~~ "
 
@@ -24,8 +23,8 @@ class economy(commands.Cog):
         t = (user.id,)
         c.execute("SELECT lastwork FROM users WHERE user_id=?", t)
         lastwork = c.fetchone()[0]
-        if not lastwork <= datetime.now().timestamp() / 60:
-            wait = round(lastwork - datetime.now().timestamp() / 60)
+        if not lastwork <= time.time() / 60:
+            wait = round(lastwork - time.time() / 60)
             await ctx.send(f"You must wait another {wait} mins to work again")
             return
 
@@ -51,26 +50,26 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
         bal, debt = db.getbal(user.id)
-        if bal == 0:
+        salary = e.salaries[e.degreejobs[db.getdegree(user.id)]] * jobmulti
+        salary *= db.getusermulti(user.id)
+        if not bal:
             db.updatedebt(user.id, salary)
-            msg = ("You get a visit from the debt collectors!" +
-                   "They laugh at your empty balance" +
+            msg = ("They laugh at your empty balance\n" +
                    f"You gain {fnum(salary)} more debt")
         elif debt > bal:
             debt = salary * random.uniform(0.1, 0.5)
             salary = salary * random.uniform(0.1, 0.5)
             db.updatedebt(user.id, debt)
             db.setbal(user.id, bal - salary)
-            msg = ("They laugh at your overwhelming debt" +
-                   f"You gain {fnum(debt)} more debt" +
+            msg = ("They laugh at your overwhelming debt\n" +
+                   f"You gain {fnum(debt)} more debt\n" +
                    f"While loosing {fnum(salary)}")
         else:
-            if debt == 0: return
-            if not random.randint(0, 1): return
+            if not debt: return
+            if random.randint(0, 1): return
             salary = salary * random.uniform(0.1, 0.5)
             db.setbal(user.id, bal - salary)
-            msg = ("You get a visit from the debt collectors!" +
-                   "They pinch some of your fbux" +
+            msg = ("They pinch some of your fbux\n" +
                    f"You loose {fnum(salary)}")
         embed = self.bot.fn.embed(user, "You get a visit from the debt collectors!",
                          msg)
@@ -81,7 +80,7 @@ class economy(commands.Cog):
     async def _Jobs(self, ctx):
         db = self.bot.db
 
-        book = dbfn.reactionbook(self.bot, ctx)
+        book = reactionbook(self.bot, ctx)
         for tier in e.jobs:
             if not tier: continue
             tierjobs = {}
@@ -97,8 +96,8 @@ class economy(commands.Cog):
                 tierjobs[job] = (degree, self.bot.fn.fnum(salary),
                                  desc, quals, out)
             book.createpages(tierjobs,
-                             LINE=f"%3 %4__%l__ - *needs %0*%4\n"
-                             f"Salary: %1\n*%2*\n",
+                             LINE="%3 %4__%l__ - *needs %0*%4\n"
+                             "Salary: %1\n*%2*\n",
                              SUBHEADER=f"**FBot Jobs - Tier {tier}**\n")
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
@@ -110,7 +109,7 @@ class economy(commands.Cog):
         job = db.getjob(user.id)
         title = f"{user.display_name}'s job information"
         salary = e.salaries[job]
-        
+
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user.id)
 
@@ -121,8 +120,9 @@ class economy(commands.Cog):
             multis = db.getmultis(user.id, ctx.guild.id)
             salary *= multis[0] * multis[1]
         incomel, incomeu = salary * 0.1, salary * 0.5
-        embed = self.bot.fn.embed(ctx.author, title,
-                f"Currently taking **{job}** ({fnum(salary)})",
+        embed = self.bot.fn.embed(user, title,
+                f"Currently taking **{job}**",
+                f"Salary: {fnum(salary)}",
                 f"After tax: {fnum(incomel)} - {fnum(incomeu)}")
         await ctx.send(embed=embed)
 
@@ -164,6 +164,6 @@ class economy(commands.Cog):
         else:
             message = "You have can't resign, you're unemployed!"
         await ctx.send(message)
-    
+
 def setup(bot):
     bot.add_cog(economy(bot))

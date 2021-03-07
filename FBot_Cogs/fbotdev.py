@@ -1,18 +1,19 @@
 from traceback import format_exception
 from discord.ext import commands
 from functions import predicate
+from datetime import datetime
 from dbfn import reactionbook
-from time import time
 import triggers as tr
 import commands as cm
 import economy as e
 import discord
 import socket
+import time
 
-def load(file):
-    start = time()
-    file.load()
-    return round((time() - start) * 1000, 2) 
+def load(csv):
+    start = time.time()
+    csv.load()
+    return round((time.time() - start) * 1000, 2) 
 
 class fbotdev(commands.Cog):
     
@@ -40,10 +41,14 @@ class fbotdev(commands.Cog):
         fn = bot.fn
         db = bot.db
         ftime = bot.ftime
+        coolcache = bot.coolcache
 
         channel = ctx.channel
         author = ctx.author
         message = ctx.message
+
+        if str(channel.type) != "private":
+            guild = ctx.guild
 
         colour = self.bot.db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")

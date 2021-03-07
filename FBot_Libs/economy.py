@@ -48,12 +48,23 @@ class econ:
 
                 degreejobs[row[D_NAME]] = row[J_NAME]
                 jobdegrees[row[J_NAME]] = row[D_NAME]
-        global items
-        items = {}
+        global items, collectibles, spamables, boosts, lboosts, pets
+        items, collectibles, spamables, boosts, lboosts, pets = {}, [], [], [], [], []
         with open("Info/CSVs/Items.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
+                row[I_VALUE] = int(row[I_VALUE])
                 items[row[I_ID]] = row
+                if row[I_CAT] == "Collectible":
+                    collectibles.append(row[I_ID])
+                elif row[I_CAT] == "Spamable":
+                    spamables.append(row[I_ID])
+                elif row[I_CAT] == "Boost":
+                    boosts.append(row[I_ID])
+                elif row[I_CAT] == "Legendary Boost":
+                    lboosts.append(row[I_ID])
+                elif row[I_CAT] == "Pet":
+                    pets.append(row[I_ID])
         print(" > Loaded Economy.csv")
 
     def search(query, dev=False):

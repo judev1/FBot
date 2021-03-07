@@ -1,18 +1,18 @@
-from discord.ext import tasks, commands
+from discord.ext import commands
 from functions import predicate
-from datetime import datetime
 from triggers import tr
 import commands as cm
 from math import ceil
+import time
 
 class fakeuser: id = 0
 fakeuser = fakeuser()
 
 class stats(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-        self.time_start = datetime.now().timestamp()
+        self.time_start = time.time()
         self.commands_processed = 0
         self.commands_ignored = 0
         self.triggers_processed = 0
@@ -29,10 +29,10 @@ class stats(commands.Cog):
         if str(message.channel.type) == "private": guild_id = -1
         else: guild_id = message.guild.id
 
-        bonus = 1
-        if self.bot.ftime.isweekend(): bonus = 2
+        multi = 1
+        if self.bot.ftime.isweekend(): multi = 2
         fn, db = self.bot.fn, self.bot.db
-        
+
         fn, db = self.bot.fn, self.bot.db
         prefix = fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
@@ -41,7 +41,7 @@ class stats(commands.Cog):
                 if db.Get_Cooldown(user.id) > 0:
                     self.commands_ignored += 1
                 else:
-                    db.increasemultiplier(user.id, guild_id, 2 * bonus)
+                    db.increasemultiplier(user.id, guild_id, multi * 2)
                     self.commands_processed += 1
                 return
         for command in cm.devcmds:
@@ -51,7 +51,7 @@ class stats(commands.Cog):
                 else:
                     self.commands_ignored += 1
                 return
-        
+
         priority, status = "all", "on"
         if str(message.channel.type) != "private":
             db.Add_Channel(message.channel.id, guild_id)
@@ -60,27 +60,27 @@ class stats(commands.Cog):
         if status == "on":
             trigger_detected = tr.respond(message, priority)[0]
             if trigger_detected:
-                db.increasemultiplier(user.id, guild_id, 1 * bonus)
+                db.increasemultiplier(user.id, guild_id, multi)
                 self.triggers_processed += 1
                 return
         self.other_messages_processed += 1
 
     def embed(self, user):
         fn = self.bot.fn
-        hours = ceil((datetime.now().timestamp() - self.time_start) / 3600)
+        hours = ceil((time.time() - self.time_start) / 3600)
         total = (self.commands_processed + self.commands_ignored +
                  self.triggers_processed + self.other_messages_processed)
-        stats = (f"Commands processed: `{self.commands_processed}`",
-                 f"Commands ignored: `{self.commands_ignored}`",
-                 f"Triggers responded: `{self.triggers_processed}`",
-                 f"Messages ignored: `{self.other_messages_processed}`",
-                 f"Total count: `{total}`")
-        return fn.embed(user, f"FBot stats for the past {hours} hours:", *stats)
+        return fn.embed(user, f"FBot stats for the past {hours} hours:",
+               f"Commands processed: `{self.commands_processed}`",
+               f"Commands ignored: `{self.commands_ignored}`",
+               f"Triggers responded: `{self.triggers_processed}`",
+               f"Messages ignored: `{self.other_messages_processed}`",
+               f"Total count: `{total}`")
 
     @commands.command(name="stats")
     @commands.check(predicate)
     async def _Stats(self, ctx):
         await ctx.send(embed=self.embed(ctx.author))
-        
+
 def setup(bot):
     bot.add_cog(stats(bot))

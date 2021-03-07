@@ -9,6 +9,7 @@ profile,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix
 bal,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix}bal or {prefix}bal @LinesGuy,,Gives the current balance of a user
 multis,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix}multis or {prefix}multis @justjude,,Gets the multipliers for a user
 vote,,Economy,,8,2,No,"send_messages, embed_links",no extra,{prefix}vote,,Returns links to vote for FBot and earn rewards
+payoff,amount,Economy,,20,5,No,"send_messages, embed_links",no extra,{prefix}payoff 10000 or {prefix}payoff all,,Lets you pay off your debt at high interest rates
 work,,Economy,Jobs,8,2,No,"send_messages, embed_links",no extra,{prefix}work,,Can be used once an hour to earn FBux
 jobs,,Economy,Jobs,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}jobs,,Gives and overview of jobs relevent to the sender
 job,(@member),Economy,Jobs,12,3,No,"send_messages, embed_links",no extra,{prefix}job or {prefix}job @LinesGuy,,Gives a job overview of a user
@@ -19,8 +20,12 @@ degrees,,Economy,Degrees,40,10,No,"send_messages, embed_links, add_reactions, (m
 degree,(@member),Economy,Degrees,12,3,No,"send_messages, embed_links",no extra,{prefix}degree or {prefix}degree @justjude,,Gives a degree overview of a user
 take,,Economy,Degrees,8,2,No,"send_messages, embed_links",no extra,{prefix}take art or {prefix}take milk shaking,,Lets you change your degree
 drop,,Economy,Degrees,8,2,No,send_messages,no extra,{prefix}drop,,Lets you remove your degree
-item,<item id>,Economy,Items,12,3,No,"send_messages, embed_links, ",No extra,{prefix}inv,,Gives you information about an item
+item,<item id>,Economy,Items,12,3,No,"send_messages, embed_links",No extra,{prefix}inv,,Gives you information about an item
 inv,,Economy,Items,8,2,No,"send_messages, embed_links, add_reactions, (manage_messages)",No extra,{prefix}item fork or {prefix}item bleach,,Shows the current items you have in your possession
+store,,Economy,Items,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",No extra,{prefix}store,,Gives you a complete list of items
+buy,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}buy fork or {prefix}buy bleach,,Purchase items from the store
+sell,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}sell fork or {prefix}sell bleach,,Sell items from your inventory
+use,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}use fork or {prefix}use bleach,,Use items from your inventory
 counting,,Counting,,8,2,Yes,send_messages,administrator,{prefix}counting,,Sets the current channel as the counting channel
 number,,Counting,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}number or {prefix}last,,Gets information about the last number
 ppsize,(@member),Fun,,8,2,No,send_messages,no extra,{prefix}ppsize or {prefix}ppsize @LinesGuy,,Gets the ppsize of a user

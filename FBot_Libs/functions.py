@@ -37,7 +37,6 @@ def predicate(ctx):
     if cooldown:
         raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
     return True
-    
 
 class CooldownCache:
 
@@ -64,7 +63,7 @@ class CooldownCache:
                 del self._cooldowns[user]
             else:
                 cooldown = self._cooldowns[user] - now
-        
+
         if user in cooldowns:
             if now >= cooldowns[user]:
                 del cooldowns[user]
@@ -169,24 +168,23 @@ class fn:
         if bold:
             return "**" + value + "**"
         return value
-    
+
     red = 0xF42F42
-    
+
     top = "https://top.gg/bot/711934102906994699"
     dbl = "https://discordbotlist.com/bots/fbot"
     bfd = "https://botsfordiscord.com/bot/711934102906994699"
     dbgg = "https://discord.bots.gg/bots/711934102906994699"
-    
+
     votetop = "https://top.gg/bot/711934102906994699/vote"
     votedbl = "https://discordbotlist.com/bots/fbot/upvote"
     votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
-    
+
     site = "https://fbot.breadhub.uk"
     server = "https://fbot.breadhub.uk/server"
     invite = "https://fbot.breadhub.uk/invite"
     github = "https://github.com/judev1/FBot"
-    fbot = "https://cdn.discordapp.com/icons/717735765936701450/b2649caffd40fae44442bec642b69efd.webp?size=1024"
-    banner = "https://cdn.discordapp.com/attachments/717735765936701454/814109371117862943/out4.gif"
+    banner = "https://fbot.breadhub.uk/banner"
 
 from aiohttp import web
 import asyncio
@@ -204,7 +202,7 @@ class voting_handler:
 
             server = web.TCPSite(runner, '0.0.0.0', 2296)
             await server.start()
-        
+
         self.bot = bot
 
         loop = asyncio.get_event_loop()
@@ -227,7 +225,7 @@ class ftime:
 
     def __init__(self):
         time = datetime.now(tz=timezone.utc)
-        self.ms, self.hs, self.ds, self.mos = [int(i) for i in time.strftime("%M %H %d %m").split()]
+        self.min_start, self.hour_start, self.day_start, self.month_start = [int(i) for i in time.strftime("%M %H %d %m").split()]
 
         self.start = self.now()
 
@@ -240,43 +238,43 @@ class ftime:
 
     def uptime(self):
         time = datetime.now(tz=timezone.utc)
-        ms, hs, ds, mos = self.ms, self.hs, self.ds, self.mos
-        mn, hn, dn, mon = [int(i) for i in time.strftime("%M %H %d %m").split()]
+        min_start, hour_start, day_start, month_start = self.min_start, self.hour_start, self.day_start, self.month_start
+        min_now, hour_now, day_now, month_now = [int(i) for i in time.strftime("%M %H %d %m").split()]
 
-        if mos > mon:
-            mo = 60 - mos + mon
-        else: mo = mon - mos
-        
-        if ds > dn:
-            if mos == 2:
-                d = 28 - ds
-            elif mos in [4, 6, 9, 10]:
-                d = 30 - ds
+        if month_start > month_now:
+            months = 60 - month_start + month_now
+        else: months = month_now - month_start
+
+        if day_start > day_now:
+            if month_start == 2:
+                days = 28 - day_start
+            elif month_start in [4, 6, 9, 10]:
+                days = 30 - day_start
             else:
-                d = 31 - ds
-            d += dn
-            m -= 1
-        else: d = dn - ds
+                days = 31 - day_start
+            days += day_now
+            months -= 1
+        else: days = day_now - day_start
 
-        if hs > hn:
-            h = 24 - hs + hn
-            d -= 1
-        else: h = hn - hs
+        if hour_start > hour_now:
+            hours = 24 - hour_start + hour_now
+            days -= 1
+        else: hours = hour_now - hour_start
 
-        if ms > mn:
-            m = 60 - ms + mn
-            h -= 1
-        else: m = mn - ms
+        if min_start > min_now:
+            mins = 60 - min_start + min_now
+            hours -= 1
+        else: mins = min_now - min_start
 
-        dp, hp, mp = "s", "s", "s"
-        if d in [0, 1]: dp = ""
-        if h in [0, 1]: hp = ""
-        if m in [0, 1]: mp = ""
-        
-        if d > 0:
-            uptime = f"{d} day{dp}, {h} hour{hp}"
-        elif h > 0:
-            uptime = f"{h} hour{hp}, {m} minute{mp}"
-        else: uptime = f"{m} minute{mp}"
+        days_plural, hours_plural, mins_plural = "s", "s", "s"
+        if days in [0, 1]: days_plural = ""
+        if hours in [0, 1]: hours_plural = ""
+        if mins in [0, 1]: mins_plural = ""
+
+        if days > 0:
+            uptime = f"{days} day{days_plural}, {hours} hour{hours_plural}"
+        elif hours > 0:
+            uptime = f"{hours} hour{hours_plural}, {mins} minute{mins_plural}"
+        else: uptime = f"{mins} minute{mins_plural}"
 
         return uptime

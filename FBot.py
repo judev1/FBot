@@ -42,24 +42,27 @@ bot.ftime = ftime()
 
 
 # Temp database code
-"""
 conn = bot.db.conn
 
 c = conn.cursor()
 c.execute("ALTER TABLE users ADD COLUMN inventory string;")
 c.execute("ALTER TABLE users ADD COLUMN commands integer;")
-c.execute("ALTER TABLE users ADD COLUMN triggers integer")
+c.execute("ALTER TABLE users ADD COLUMN triggers integer;")
+c.execute("ALTER TABLE votes ADD COLUMN lasttopvote integer;")
+c.execute("ALTER TABLE votes ADD COLUMN lastbfdvote integer;")
+c.execute("ALTER TABLE votes ADD COLUMN lastdblvote integer")
 conn.commit()
 
 c = conn.cursor()
-c.execute("UPDATE users SET inventory='{}', commands=0, triggers=0")
+c.execute("UPDATE users SET inventory='{}', commands=0, triggers=0;")
+c.execute("UPDATE votes SET lasttopvote=0, lastbfdvote=0, lastdblvote=0")
 conn.commit()
-"""
+# Temp database code
 
 
 
 print(f" > Session started at {bot.ftime.start}")
-token = bot.fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
+token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
 
 @bot.event
 async def on_connect():
@@ -81,7 +84,7 @@ async def on_ready():
     print("\n > Finished loading cogs")
 
     for command in cm.commands:
-        bot.coolcache.add_command(command, cm.commands[command][3:5])
+        bot.coolcache.add_command(command, tuple(cm.commands[command][3:5]))
     for command in cm.devcmds:
         bot.coolcache.add_command(command, (0, 0))
     print(" > Finished setting up cooldowns\n")

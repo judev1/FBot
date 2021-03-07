@@ -202,6 +202,7 @@ class help(commands.Cog):
         embeds = [self.bot.fn.embed(ctx.author, "**__FBot commands__**")]
         embeds[0].set_image(url=self.bot.fn.banner)
         for i, category in enumerate(cm.categories):
+            if category == "temp": break
             embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
             value=f"[Hover for more]({self.bot.fn.votetop} '{descriptions[i]}')")
             embed = self.bot.fn.embed(ctx.author,

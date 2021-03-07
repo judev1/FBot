@@ -3,6 +3,7 @@ Tokens.txt
 Triggerlogs.txt
 todo.txt
 __pycache__/
+.vscode/
 Temp/
 *.pyc
 *.db
