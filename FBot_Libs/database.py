@@ -438,8 +438,8 @@ class db:
         t = (user_id,)
         c.execute("SELECT user_id FROM votes WHERE user_id=?", t)
         if c.fetchone() is None:
-            t = (user_id, 0, 0, 0, 0, 0, 0)
-            marks = ",".join(["?"] * 7)
+            t = (user_id, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+            marks = ",".join(["?"] * 10)
             c.execute(f"INSERT INTO votes VALUES({marks})", t)
             conn.commit()
         t = (user_id, )

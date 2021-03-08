@@ -50,8 +50,12 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
         bal, debt = db.getbal(user.id)
-        salary = e.salaries[e.degreejobs[db.getdegree(user.id)]] * jobmulti
-        salary *= db.getusermulti(user.id)
+        degree = db.getdegree(user.id)
+        if degree != "None":
+            salary = e.salaries[e.degreejobs[degree]]
+        else:
+            salary = e.salaries[job]
+        salary *= db.getusermulti(user.id) * jobmulti
         if not bal:
             db.updatedebt(user.id, salary)
             msg = ("They laugh at your empty balance\n" +
