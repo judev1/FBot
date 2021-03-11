@@ -30,3 +30,4 @@ If you have any suggestions or feedback, find an error, or just wanna chat, plea
 
 [![Discord Bots](https://top.gg/api/widget/711934102906994699.svg)](https://top.gg/bot/711934102906994699)
 [![Bots for Discord](https://botsfordiscord.com/api/bot/711934102906994699/widget)](https://botsfordiscord.com/bots/711934102906994699)
+[![Discord Bot List](https://discordbotlist.com/bots/fbot/widget)](https://discordbotlist.com/bots/fbot)
