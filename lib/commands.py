@@ -19,7 +19,7 @@ class cmds:
 
         global commands, devcmds, categories, perms, devcmdlist
         commands, devcmds, categories, perms, devcmdlist = {}, {}, {}, {}, []
-        with open("Info/CSVs/Commands.csv") as csv_file:
+        with open("data/CSVs/Commands.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
 

@@ -14,10 +14,10 @@ white = (255, 255, 255)
 nogodfont = ImageFont.truetype("arial.ttf", 30)
 godfont = ImageFont.truetype("arial.ttf", 50)
 
-bigpp_img = wand_image(filename="Info/bigpp.png")
-bonk_img = wand_image(filename="Info/bonk.png")
-triggered_img = wand_image(filename="Info/triggered.png")
-sneak_img = wand_image(filename="Info/sneak.png")
+bigpp_img = wand_image(filename="data/bigpp.png")
+bonk_img = wand_image(filename="data/bonk.png")
+triggered_img = wand_image(filename="data/triggered.png")
+sneak_img = wand_image(filename="data/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 
@@ -96,7 +96,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_bigpp = " ".join(to_bigpp)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_bigpp)
             member = await self.get_member(ctx.guild, to_bigpp)
             
@@ -122,7 +122,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_bonk = " ".join(to_bonk)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_bonk)
             member = await self.get_member(ctx.guild, to_bonk)
             
@@ -156,7 +156,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_blur = " ".join(to_blur)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_blur)
             member = await self.get_member(ctx.guild, to_blur)
             
@@ -182,7 +182,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_trigger = " ".join(to_trigger)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_trigger)
             member = await self.get_member(ctx.guild, to_trigger)
             
@@ -209,7 +209,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_sneak = " ".join(to_sneak)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_sneak)
             member = await self.get_member(ctx.guild, to_sneak)
             
@@ -234,7 +234,7 @@ class bigpp(commands.Cog):
         async with ctx.channel.typing():
 
             to_god = " ".join(to_god)
-            path = "Info/Temp/" + str(ctx.author.id) + "_"
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             #member = self.get_member(ctx.guild, to_god)
             member = await self.get_member(ctx.guild, to_god)
             

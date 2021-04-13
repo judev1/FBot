@@ -24,7 +24,7 @@ class econ:
         global salaries, courses, degreejobs, jobdegrees
         jobs, degrees, jobnames, degreenames = {}, {}, {}, {}
         salaries, courses, degreejobs, jobdegrees = {}, {}, {}, {}
-        with open("Info/CSVs/Economy.csv", encoding="utf_8_sig") as csv_file:
+        with open("data/CSVs/Economy.csv", encoding="utf_8_sig") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
 
@@ -50,7 +50,7 @@ class econ:
                 jobdegrees[row[J_NAME]] = row[D_NAME]
         global items, collectibles, spamables, boosts, lboosts, pets
         items, collectibles, spamables, boosts, lboosts, pets = {}, [], [], [], [], []
-        with open("Info/CSVs/Items.csv") as csv_file:
+        with open("data/CSVs/Items.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
                 row[I_VALUE] = int(row[I_VALUE])

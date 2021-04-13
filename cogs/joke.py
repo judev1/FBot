@@ -4,9 +4,9 @@ from random import choice
 import asyncio
 
 active_channels = set()
-with open("Info/Jokes/joke.txt", "r") as file:
+with open("data/Jokes/joke.txt", "r") as file:
     pingpong_joke = file.read().split("\n")
-with open("Info/Jokes/snakejoke.txt", "r") as file:
+with open("data/Jokes/snakejoke.txt", "r") as file:
     snake_joke = file.read().split("\n")
 
 class joke(commands.Cog):

@@ -26,13 +26,13 @@ class cogs(commands.Cog):
             unable = []
             for cog in fn.getcogs():
                 cog = cog[:-3]
-                try: self.bot.load_extension("FBot_Cogs." + cog)
+                try: self.bot.load_extension("cogs." + cog)
                 except Exception as e: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
                              "Loaded all cogs" + formatunable(unable))
         else:
             try:
-                self.bot.load_extension("FBot_Cogs." + cog)
+                self.bot.load_extension("cogs." + cog)
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Loaded cog: `{cog}`")
             except Exception as e:
@@ -49,13 +49,13 @@ class cogs(commands.Cog):
             for cog in fn.getcogs():
                 cog = cog[:-3]
                 if cog != "cogs":
-                    try: self.bot.unload_extension("FBot_Cogs." + cog)
+                    try: self.bot.unload_extension("cogs." + cog)
                     except: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
                              "Unloaded all cogs" + formatunable(unable))
         else:
             try:
-                self.bot.unload_extension("FBot_Cogs." + cog)
+                self.bot.unload_extension("cogs." + cog)
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Unloaded cog: `{cog}`")
             except Exception as e:
@@ -72,15 +72,15 @@ class cogs(commands.Cog):
             for cog in fn.getcogs():
                 cog = cog[:-3]
                 try:
-                    self.bot.unload_extension("FBot_Cogs." + cog)
-                    self.bot.load_extension("FBot_Cogs." + cog)
+                    self.bot.unload_extension("cogs." + cog)
+                    self.bot.load_extension("cogs." + cog)
                 except: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
                              "Reloaded all cogs" + formatunable(unable))
         else: 
             try:
-                self.bot.unload_extension("FBot_Cogs." + cog)
-                self.bot.load_extension("FBot_Cogs." + cog)
+                self.bot.unload_extension("cogs." + cog)
+                self.bot.load_extension("cogs." + cog)
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Reloaded cog: `{cog}`")
             except Exception as e:

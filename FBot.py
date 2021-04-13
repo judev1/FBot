@@ -7,7 +7,7 @@ import dbl
 import sys
 import os
 
-sys.path.insert(0, "FBot_Libs")
+sys.path.insert(0, "lib")
 from functions import fn, ftime, voting_handler
 from database import db
 from triggers import tr
@@ -56,8 +56,8 @@ async def on_ready():
     for cog in bot.fn.getcogs():
         if cog not in []: # Cogs not to load
             print(f"Loading {cog}...", end="")
-            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
-            except: bot.load_extension("FBot_Cogs." + cog[:-3])
+            try: bot.reload_extension("cogs." + cog[:-3])
+            except: bot.load_extension("cogs." + cog[:-3])
             finally: print("Done")
     print("\n > Finished loading cogs")
 
