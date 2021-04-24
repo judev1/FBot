@@ -1,0 +1,85 @@
+on,,Spamming,,8,2,Yes,add_reactions,no extra,{prefix}on,"We all have that one friend who was so annoying, we blocked them on every single social media platform, so by using this command you'll essentially be inviting them back into your life. So what are you gonna do...? Yeah, good choice",Toggles FBot's spam feature in the current channel
+off,,Spamming,,8,2,Yes,add_reactions,no extra,{prefix}off,"To use within 10 seconds of using `{prefix}on`, after you realise it was a very bad choice, fully regret it, and want everything to be back to the way it was beforehand",Toggles FBot's spam feature in the current channel
+modtoggle,[on | off],Spamming,,8,2,Yes,add_reactions,administrator,{prefix}modtoggle on,"When your members figure out how to turn {prefix}off, change it so that only your trusted administrators can",Toggles whether only admin can toggle FBot's spam feature
+respond,[few | some | all],Spamming,,8,2,Yes,add_reactions,no extra,{prefix}respond some,"Perfect for when you want FBot in your life, but then again you don't actually, and you're just lying to yourself saying that you don't care about about your members spamming in your main chat but in actuallity you do care and you wish it would stop, so by using this command you can change how many messages FBot will respond to, less messages it responds to means less spam",Changes the amount of triggers FBot responds to
+status,,Spamming,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}status,"Forgot whether you toggled FBot on in the channel? Maybe you don't remember if modtoggle is on or not? Or maybe you wanna check what level of messages FBot is currently responding to? Even if you only want the answer for one of these, you're gonna get 'em all, its called efficiency baby, get used to it","Shows what FBot's spam feature is set to, along with modtoggle and respond"
+servstatus,,Spamming,,40,10,Yes,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}servstatus,"So you've got 100 channels and you cant remember which ones FBot is toggled on in, and which ones it isn't, this command gives you a list of all of them. And yes, we do know you only have 3 channels","Just like 'status', but shows what FBot's spam feature is set to in the entire server"
+servstatusmod,,Spamming,,40,10,Yes,"send_messages, embed_links, add_reactions, (manage_messages)",administrator,{prefix}modservstatus,"Some of your channels not showing up when using the `servstatus` command? They might be private. As an admin you can use this command to see what channels FBot is toggled on/off in, channels that you wouldn't usually be able to see","Just like 'servstatus', but also included hidden channels"
+profile,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix}profile or {prefix}profile @justjude,,Gives an overview of a user
+bal,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix}bal or {prefix}bal @LinesGuy,,Gives the current balance of a user
+multis,(@member),Economy,,12,3,No,"send_messages, embed_links",no extra,{prefix}multis or {prefix}multis @justjude,,Gets the multipliers for a user
+vote,,Economy,,8,2,No,"send_messages, embed_links",no extra,{prefix}vote,,Returns links to vote for FBot and earn rewards
+payoff,amount,Economy,,20,5,No,"send_messages, embed_links",no extra,{prefix}payoff 10000 or {prefix}payoff all,,Lets you pay off your debt at high interest rates
+work,,Economy,Jobs,8,2,No,"send_messages, embed_links",no extra,{prefix}work,,Can be used once an hour to earn FBux
+jobs,,Economy,Jobs,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}jobs,,Gives and overview of jobs relevent to the sender
+job,(@member),Economy,Jobs,12,3,No,"send_messages, embed_links",no extra,{prefix}job or {prefix}job @LinesGuy,,Gives a job overview of a user
+apply,,Economy,Jobs,8,2,No,"send_messages, embed_links",no extra,{prefix}appy cleaner or {prefix}apply billionare,,Lets you change your job
+resign,,Economy,Jobs,8,2,No,send_messages,no extra,{prefix}resign,,Lets you remove your job
+study,,Economy,Degrees,8,2,No,"send_messages, embed_links",no extra,{prefix}study,,Can be used once an hour to progress through your degree
+degrees,,Economy,Degrees,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}degrees,,Gives and overview of degrees relevent to the sender
+degree,(@member),Economy,Degrees,12,3,No,"send_messages, embed_links",no extra,{prefix}degree or {prefix}degree @justjude,,Gives a degree overview of a user
+take,,Economy,Degrees,8,2,No,"send_messages, embed_links",no extra,{prefix}take art or {prefix}take milk shaking,,Lets you change your degree
+drop,,Economy,Degrees,8,2,No,send_messages,no extra,{prefix}drop,,Lets you remove your degree
+item,<item id>,Economy,Items,12,3,No,"send_messages, embed_links",No extra,{prefix}inv,,Gives you information about an item
+inv,,Economy,Items,8,2,No,"send_messages, embed_links, add_reactions, (manage_messages)",No extra,{prefix}item fork or {prefix}item bleach,,Shows the current items you have in your possession
+store,,Economy,Items,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",No extra,{prefix}store,,Gives you a complete list of items
+buy,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}buy fork or {prefix}buy bleach,,Purchase items from the store
+sell,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}sell fork or {prefix}sell bleach,,Sell items from your inventory
+use,<item> (<amount>|all),Economy,Items,20,5,No,"send_messages, embed_links",No extra,{prefix}use fork or {prefix}use bleach,,Use items from your inventory
+counting,,Counting,,8,2,Yes,send_messages,administrator,{prefix}counting,,Sets the current channel as the counting channel
+number,,Counting,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}number or {prefix}last,,Gets information about the last number
+ppsize,(@member),Fun,,8,2,No,send_messages,no extra,{prefix}ppsize or {prefix}ppsize @LinesGuy,,Gets the ppsize of a user
+fball,<question>,Fun,,8,2,No,send_messages,no extra,fball Is this a question? or {prefix}fball IS THIS A QUESTION!?!?,,FBot will answer a question
+joke,,Fun,,8,2,Yes,send_messages,no extra,{prefix}joke,,FBot starts telling a joke
+say,<message>,Fun,,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}say Yes it is me, FBot",,Send a message as FBot
+dms,,Fun,,8,2,No,send_messages,no extra,{prefix}dms,,Talk to FBot in your dms
+premium,,Fun,,8,2,No,send_messages,no extra,{prefix}premium,,Get access to FBot's premium features
+top,[toptype],Fun,,40,10,No,"send_messages, embed_links",no extra,{prefix}top bal or {prefix}top multi,"Want to know who has the highest number of votes this month, or who has the highest debt? This command lets you see the highest users/servers of a type. The types are as follows (with more to be added): `votes`, `counting`, `bal`, `netbal`, `debt`, `netdebt`, `multis` and `servmultis`",Gets the top users/servers in a category
+bigpp,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}bigpp or {prefix}bigpp @justjude,,Creates a bigpp image of a user
+bonk,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}bonk or {prefix}bonk @LinesGuy,,Creates a bonked image of a user
+blur,percentage ([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}blur 100 or {prefix}blur 100 @justjude,,Creates a blurred image of a user
+trigger,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}trigger or {prefix}trigger @LinesGuy,,Creates a triggered image of a user
+sneak,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}sneak or {prefix}sneak @justjude,,Creates a sneaky image of a user
+god,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}god or {prefix}god @LinesGuy,,Creates a godlike image of a user
+snake,,Fun,Minigames,60,15,No,"send_messages, add_reactions, (manage_messages)",no extra,{prefix}snake,,Lets you play our interactable snake game
+snipe,(1-10),Utility,,8,2,No,"send_messages, embed_links, (view_audit_log)",no extra,{prefix}snipe or {prefix}snipe 9,,Gets the last number of deleted and editted messages
+purge,<amount>,Utility,,8,2,Yes,"send_messages, manage_messages",manage_messages,{prefix}purge 10 or {prefix}thanos 11,,Purges a certain number of messages
+prefix,[<new prefix> | reset],Utility,,8,2,No,send_messages,administrator,prefix or {prefix}prefix f! or {prefix}prefix reset,,Changes the prefix for the server
+help,(command),Utility,,16,4,No,"send_messages, embed_links",no extra,{prefix}help or {prefix}help cmds,,Allows you to get specific information on individual commands
+cmds,,Utility,,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}cmds,,Gives you an overview of commands
+economy,,Utility,,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}economy,,Gives you an overview of our economy system
+info,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}info,,Get information about FBot
+servinfo,,Information,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}servinfo,,Gets information about the server
+session,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}session,,Gives you information about FBot's current session
+ver,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ver,,Gives you information about Fbot's version
+ping,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ping,,Gets you FBot's ping
+stats,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}stats,,Gives message processing stats for a period
+links,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}links,,Gets all links affiliated with FBot
+invite,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}invite,,Gives you a link to invite FBot to your server
+server,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}server,,Gives you a link to join FBot's server
+csvreload,,Dev,,0,0,No,send_messages,owner,,,
+eval,<content>,Dev,,0,0,No,send_messages,owner,,,
+await,<function> <content>,Dev,,0,0,No,send_messages,owner,,,
+devon,,Dev,,0,0,Yes,send_messages,owner,,,
+devoff,,Dev,,0,0,Yes,send_messages,owner,,,
+devrespond,[few | some | all],Dev,,0,0,Yes,send_messages,owner,,,
+devmodtoggle,[on | off],Dev,,0,0,Yes,send_messages,owner,,,
+load,<cog>,Dev,,0,0,No,send_messages,owner,,,
+unload,<cog>,Dev,,0,0,No,send_messages,owner,,,
+reload,<cog>,Dev,,0,0,No,send_messages,owner,,,
+cogs,,Dev,,0,0,No,send_messages,owner,,,
+presence,<new presence>,Dev,,0,0,No,send_messages,owner,,,
+send,<channel id> <message>,Dev,,0,0,No,send_messages,owner,,,
+userdm,"""@user <message>""",Dev,,0,0,No,send_messages,owner,,,
+newinvite,<server id>,Dev,,0,0,No,send_messages,owner,,,
+lookup,<server id>,Dev,,0,0,No,send_messages,owner,,,
+cmdlist,,Dev,,0,0,No,send_messages,owner,,,
+search,<query>,Dev,,0,0,No,send_messages,owner,,,
+host,,Dev,,0,0,No,send_messages,owner,,,
+devcmds,,Dev,,0,0,No,send_messages,owner,,,
+gift,,Dev,,0,0,No,send_messages,owner,,,
+scounts,,Dev,,0,0,No,send_messages,owner,,,
+jokeinfo,,Dev,,0,0,No,send_messages,owner,,,
+montly,,Dev,,0,0,No,send_messages,owner,,,
+hs,,temp,,8,2,Yes,send_messages,no extra,{prefix}hs,,temp
+votehs,,temp,,8,2,Yes,send_messages,no extra,{prefix}hs,,temp

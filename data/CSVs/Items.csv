@@ -1,0 +1,34 @@
+Bent fork,fork,<:bent_fork:815234697561899028>,21,Collectible,Doesn't really have any value but it looks sorta funny,can be sold for half its value
+Meatloaf,meatloaf,<:meatloaf:815276753287118869>,144,Collectible,You're telling me you weren't expecting a loaf of bread made out of meat�?,can be sold for half its value
+Golden Coin,coin,<:fcoin:814638932833992756>,2500,Collectible,"It's worth a lot, probably",can be sold for half its value
+The Pirate King,pk,:crab: ,6666,Collectible,I am the pirate king,can be sold for half its value
+Bread Shaped Dorito,breaddorito,:crab: ,42069,Collectible,Damn that's fancy,can be sold for half its value
+Dorito Shaped Bread,doritobread,:crab: ,69420,Collectible,Damn that's fancier,can be sold for half its value
+Crayon,crayon,:crayon: ,1,Spamable,It can only be used to write one letter,can be exchanged for multis
+Nametag,nametag,:label:,2,Spamable,You can see a single letter is inscribed onto it,can be exchanged for multis
+Keyboard,keyboard,:keyboard: ,3,Spamable,"All keys are missing, but one",can be exchanged for multis
+Meme,meme,:crab: ,4,Spamable,"It's got a picture of you, that's pretty funny",can be exchanged for multis
+Trumpet,trumpet,:trumpet: ,5,Spamable,Ear rape the haters,can be exchanged for multis
+Bleach,bleach,:crab: ,10,Spamable,Take two glasses with your cereal,can be exchanged for multis
+ID Card,id, :receipt: ,0,Boost,"You found an ID card, let's hope it belongs to a debt/tax collector",can be used to take a random person's debt/tax
+Money Laundering,laundry,:crab: ,0,Boost,This laundry might be good for something after all,lets you work 4 times without cooldown
+Tax Evasion,evasion,:crab: ,0,Boost,Fun for the whole family to enjoy!,removes tax from your next 2 works
+All Nighter,nighter,:crab: ,0,Boost,This feature is hyper realistic,lets you study 2 times without cooldown
+Scolarship,scolarship,:crab: ,0,Boost,"Debt is for the week, or you 3 studys from now",removes debt from your next 2 studys
+Economic Recession,recession,:crab: ,0,Boost,Take advantage of a recsession and loose some debt,exchanges FBux for debt at low intrest rates
+Bank,bank,:crab: ,0,Legendary Boost,"When people are getting taxed, someone's making money",collects all tax or debt for 30 mins
+Save,save,:crab: ,0,Legendary Boost,Like a revive but worse,protects you against one counting mistake for 30 mins
+Steroids,steroids,:crab: ,0,Legendary Boost,"Use steriods to send twice as many messages, what else are they for?",allows you to earn twice as much multiplier for 30 mins
+Werm,werm,<:werm_head:815237276157345824><:werm_body:815237276745465927><:werm_tail:815237276841148416>,0,Pet,Join the cult,earns multiplier with you
+Rainbow Werm,rainbowwerm,<:rainbow_werm_head:815240957222060044><:rainbow_werm_body:815240957754736670><:rainbow_werm_tail:815240957846749214>,0,Pet,:sparkles: Join the cult :sparkles: ,earns multiplier with you
+Human,human,:crab: ,0,Pet,I don't know why you'd want one of these,earns multiplier with you
+Mutant Plant Animal,green,:crab: ,0,Pet,One of those pocket creatures,earns multiplier with you
+Ugly Red Salamander,red,:crab: ,0,Pet,One of those pocket creatures,earns multiplier with you
+Hybrid Turtle Squirrel,blue,:crab: ,0,Pet,One of those pocket creatures,earns multiplier with you
+Yellow Clown Rat,yellow,:crab: ,0,Pet,One of those pocket creatures,earns multiplier with you
+Bot,bot,:crab: ,0,Pet,"Doesn't make much noise, but can really do your head in",earns multiplier with you
+Loaf of Bread,bread,:crab: ,0,Pet,No fuss we these fellas,earns multiplier with you
+Common FBox,cfbox,:crab: ,0,FBox,"Spamables, whoop whoop",contains 5 Spamables
+Uncommon FBox,ufbox,:crab: ,0,FBox,"Spamables AND a collectible, what is this? A cross over episode?","contains 10 Spamables, and 1 Collectible"
+Rare FBox,rfbox,:crab: ,0,FBox,"Like an uncommon box, but just much better","contains 20 Spamables, 2 Collectibles, and 1 Boost"
+Legendary FBox,lfbox,:crab: ,0,FBox,One word: epik,"contains 25 Spamables, 3 Collectibles, 2 Boosts, and either 1 Pet or Legenday Boost"

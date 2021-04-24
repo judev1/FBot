@@ -7,12 +7,14 @@ import dbl
 import sys
 import os
 
-sys.path.insert(0, "FBot_Libs")
+sys.path.insert(0, "lib")
 from functions import fn, ftime, voting_handler
 from database import db
 from triggers import tr
 from commands import cmds
 from economy import econ
+
+import commands as cm
 
 intents = discord.Intents.default()
 intents.typing = False
@@ -28,7 +30,6 @@ voting_handler(bot)
 bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
           webhook_auth=fn.gettoken(5), webhook_port=6000)
 
-fn.bot = bot
 bot.fn = fn
 bot.db = db()
 
@@ -49,15 +50,22 @@ async def on_connect():
 async def on_ready():
     print(f" > Finished signing into Discord as {bot.user}\n")
     bot.db.Check_Guilds(bot.guilds)
+    fn.setbot(bot)
 
     bot.remove_command("help")
     for cog in bot.fn.getcogs():
         if cog not in []: # Cogs not to load
             print(f"Loading {cog}...", end="")
-            try: bot.reload_extension("FBot_Cogs." + cog[:-3])
-            except: bot.load_extension("FBot_Cogs." + cog[:-3])
+            try: bot.reload_extension("cogs." + cog[:-3])
+            except: bot.load_extension("cogs." + cog[:-3])
             finally: print("Done")
-    print("\n > Finished loading cogs\n")
+    print("\n > Finished loading cogs")
+
+    for command in cm.commands:
+        bot.coolcache.add_command(command, tuple(cm.commands[command][3:5]))
+    for command in cm.devcmds:
+        bot.coolcache.add_command(command, (0, 0))
+    print(" > Finished setting up cooldowns\n")
        
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="'FBot help'"))
