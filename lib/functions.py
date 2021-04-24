@@ -100,19 +100,6 @@ class fn:
         bot_id = bot.user.id
         bot.coolcache = coolcache = CooldownCache()
 
-    def gettoken(self, num):
-        if num == 1:
-            print("################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  sep="\n", end="\n\n")
-        with open("./data/Tokens.txt", "r") as file: data = file.readlines()
-        return data[int(num)][:-1]
-
     def getinfo(self, info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
         if info == "lastupdated": return data[0][:-1]
