@@ -41,7 +41,7 @@ class fbotdev(commands.Cog):
         fn = bot.fn
         db = bot.db
         ftime = bot.ftime
-        coolcache = bot.coolcache
+        cache = bot.cache
 
         channel = ctx.channel
         author = ctx.author

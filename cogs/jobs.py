@@ -55,7 +55,8 @@ class economy(commands.Cog):
             salary = e.salaries[e.degreejobs[degree]]
         else:
             salary = e.salaries[job]
-        salary *= db.getusermulti(user.id) * jobmulti
+        interest = round(db.getusermulti(user_id) * jobmulti, 4)
+        salary *= db.getusermulti(user.id) * jobmulti * interest
         if not bal:
             db.updatedebt(user.id, salary)
             msg = ("They laugh at your empty balance\n" +

@@ -18,12 +18,6 @@ class purge(commands.Cog):
             await ctx.send("**`You do not have the manage_messages permissions.`**")
             return
 
-        # Check bot has permission
-        if not ctx.channel.permissions_for(
-            ctx.guild.get_member(self.bot.user.id)).manage_messages:
-            await ctx.send("**`FBot does not have the 'manage_messages' permission. Go annoy a server admin.`**")
-            return
-
         # Check there is not an ongoing purge in same channel
         if ctx.channel.id in ongoing_purges:
             msg = await ctx.send("**A purge is already in progress, calm yoself.**")

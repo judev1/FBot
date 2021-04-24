@@ -5,8 +5,8 @@ import discord
 
 LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
-toptypes = ["votes", "vote", "counting", "multi", "servmulti", "multis", "servmultis", "fbux",
-            "bal", "netbal", "netfbux", "debt"]
+toptypes = ["votes", "counting", "multi", "servmulti",
+            "bal", "netbal", "fbux", "netfbux", "debt", "netdebt"]
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -79,13 +79,13 @@ class economy(commands.Cog):
             interest = round(db.getusermulti(ctx.author.id) * jobmulti, 4)
             loss = round(amount * interest)
             if loss > bal:
-                embed = fn.embed(user, f"You try and pay off debt",
+                embed = fn.embed(user, "You try and pay off debt",
                     f"The debt you owe accumulates `{interest}%` interest",
                     f"Your measly balance, {fn.fnum(bal)}",
                     f"Can't afford to pay {fn.fnum(loss)} worth of debt")
             else:
                 db.payoff(ctx.author.id, amount, loss)
-                embed = fn.embed(user, f"You try and pay off debt",
+                embed = fn.embed(user, "You try and pay off debt",
                     f"The debt you owe accumulates `{interest}%` interest",
                     f"Your loose {fn.fnum(loss)}",
                     f"But pay off {fn.fnum(amount)} worth of debt")
@@ -124,61 +124,71 @@ class economy(commands.Cog):
     @commands.command(name="top")
     @commands.check(predicate)
     async def _Top(self, ctx, toptype):
-        toptype = toptype.lower()
+
+        toptype = toptype.lower().replace("multis", "multi")
         if toptype in toptypes:
-            if toptype in ["counting", "servmulti", "servmultis"]:
+            if toptype in ["counting", "servmulti"]:
                 if str(ctx.channel.type) == "private":
-                    await ctx.send(f"top {toptype} can only be used in a server")
+                    await ctx.send(f"Top {toptype} can only be used in a server")
                     return
                 obj_id = ctx.guild.id
-            else: obj_id = ctx.author.id
+            else:
+                obj_id = ctx.author.id
+
             async with ctx.channel.typing():
                 fn, db = self.bot.fn, self.bot.db
                 top, selftop, rank = db.gettop(toptype, 12, obj_id)
-                if toptype in ["vote", "votes"]:
+                if toptype == "vote":
                     selftop = f"with `{selftop}` vote(s) this month"
                 elif toptype == "counting":
                     selftop = f"with a highscore of `{selftop}`"
-                elif toptype in ["multi", "multis"]:
+                elif toptype == "multi":
                     selftop = f"with a multiplier of `x{selftop/10000}`"
-                elif toptype in ["servmulti", "servmultis"]:
+                elif toptype == "servmulti":
                     selftop = f"with a server multiplier of `x{selftop/1000000}`"
                 else:
                     selftop = f"with {fn.fnum(selftop)}"
                 embed = fn.embed(ctx.author, f"FBot Top {toptype}",
                                  f"Ranked `{rank}` " + selftop)
-                for rank, row in top:
+
+                cache = self.bot.cache["Names"]
+                for rank, row in enumerate(top):
                     ID, typeitem = row
-                    if toptype in ["counting", "servmulti", "servmultis"]:
-                        try: name = self.bot.get_guild(ID).name
-                        except: name = "Deleted Server"
-                        if ctx.guild.id == ID:
-                            name = f"**--> __{name}__ <--**"
-                    else:
-                        name = await self.bot.fetch_user(ID)
-                        name = formatname(name, ID)
-                        if ctx.author.id == ID:
-                            name = f"**--> __{name}__ <--**"
+                    name = cache.get(ID)
+                    if not name:
+                        if toptype in ["counting", "servmulti"]:
+                            try: name = self.bot.get_guild(ID).name
+                            except: name = "Unknown Server"
+                            if ctx.guild.id == ID:
+                                name = f"**--> __{name}__ <--**"
+                        else:
+                            name = formatname(await self.bot.fetch_user(ID), ID)
+                            if ctx.author.id == ID:
+                                name = f"**--> __{name}__ <--**"
+                        cache.add(ID, name)
 
-                    if rank == 0: rank = ":first_place: 1st with "
-                    elif rank == 1: rank = ":second_place: 2nd with "
-                    elif rank == 2: rank = ":third_place: 3rd with "
-                    else: rank = f":medal: {rank+1}th with "
+                    rank = str(rank + 1)
+                    if rank == "1": medal = ":first_place:"
+                    elif rank == "2": medal = ":second_place:"
+                    elif rank =="3": medal = ":third_place:"
+                    else: medal = ":medal:"
 
-                    if toptype in ["vote", "votes"]:
-                        embed.add_field(name=rank + f"{typeitem} votes", value=name)
-                    elif toptype == "counting":
-                        embed.add_field(name=rank + f"`{typeitem}`", value=name)
-                    elif toptype in ["multi", "multis"]:
-                        embed.add_field(name=rank + f"`x{typeitem/10000}`", value=name)
-                    elif toptype in ["servmulti", "servmultis"]:
-                        embed.add_field(name=rank + f"`x{typeitem/1000000}`", value=name)
-                    else:
-                        embed.add_field(name=rank + fn.fnum(typeitem), value=name)
+                    if rank.endswith("1") and rank != "11": rank = f"{medal} {rank}st with "
+                    elif rank.endswith("2") and rank != "12": rank = f"{medal} {rank}nd with "
+                    elif rank.endswith("3") and rank != "13": rank = f"{medal} {rank}rd with "
+                    else: rank = f"{medal} {rank}th with "
+
+                    if toptype == "votes": content = f"{typeitem} votes"
+                    elif toptype == "counting": content = f"`{typeitem}`"
+                    elif toptype == "multi": content = f"`x{typeitem/10000}`"
+                    elif toptype == "servmulti": content = f"`x{typeitem/1000000}`"
+                    else: content = fn.fnum(typeitem)
+                    embed.add_field(name=rank + content, value=name)
+
             await ctx.send(embed=embed)
+
         else:
             await ctx.send("We don't have a leaderboard for that...")
-            return
 
 def setup(bot):
     bot.add_cog(economy(bot))

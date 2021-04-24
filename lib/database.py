@@ -73,6 +73,13 @@ class db:
                           total_bfdvotes integer NOT NULL
                           )""")
 
+        c.execute("""CREATE TABLE IF NOT EXISTS bans (
+                          user_id integer NOT NULL,
+                          multis string NOT NULL,
+                          triggers string NOT NULL,
+                          bot string NOT NULL
+                          )""")
+
         conn.commit()
         print(" > Connected to FBot.db") if verbose else False
 
@@ -365,39 +372,68 @@ class db:
         c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
         conn.commit()
 
-    def gettop(self, tt, amount, obj_id):
-        tt = tt.replace("votes", "vote")
-        tt = tt.replace("multis", "multi")
-        tt = tt.replace("bal", "fbux")
-        if tt == "vote":
-            tt = "topvotes"
-            ID, table = "user_id", "votes"
-        elif tt == "counting":
-            tt = "record"
-            ID, table = "guild_id", "counter"
-        elif tt == "multi":
-            tt = "multiplier"
-            ID, table = "user_id", "users"
-        elif tt == "servmulti":
-            tt = "multiplier"
-            ID, table = "guild_id", "guilds"
+    def gettop(self, toptype, amount, obj_id):
+
+        if toptype == "votes":
+            TABLE, DATA, ID = "votes", "total_topvotes, total_bfdvotes, total_dblvotes", "user_id"
+        elif toptype == "counting":
+            TABLE, DATA, ID = "counter", "record", "guild_id"
+        elif toptype == "multi":
+            TABLE, DATA, ID = "users", "multiplier", "user_id"
+        elif toptype == "servmulti":
+            TABLE, DATA, ID = "guilds", "multiplier", "guild_id"
+        elif toptype == "bal":
+            TABLE, DATA, ID = "users", "fbux, debt", "user_id"
+        elif toptype == "netbal":
+            TABLE, DATA, ID = "users", "netfbux, netdebt", "user_id"
         else:
-            ID, table = "user_id", "users"
-        c = conn.cursor()
-        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC LIMIT {amount}")
-        top = enumerate(c)
+            TABLE, DATA, ID = "users", toptype, "user_id"
+
+        if toptype == "votes":
+            ORDER = "total_topvotes + total_bfdvotes + total_dblvotes"
+        elif toptype == "bal":
+            ORDER = "fbux - debt"
+        elif toptype == "netbal":
+            ORDER = "netfbux - netdebt"
+        else:
+            ORDER = DATA
 
         c = conn.cursor()
-        c.execute(f"SELECT {ID}, {tt} FROM {table} ORDER BY {tt} DESC")
-        for rank, row in enumerate(c):
-            newobj_id, selftop = row
-            if newobj_id == obj_id:
+        c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC LIMIT {amount}")
+        top = c.fetchall()
+
+        c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC")
+        for rank, data in enumerate(c):
+            if data[0] == obj_id:
+                selftop = data[1:]
+                if toptype == "votes":
+                    selftop = sum(selftop)
+                elif toptype == "bal":
+                    selftop = selftop[0] - selftop[1]
+                elif toptype == "netbal":
+                    selftop = selftop[0] - selftop[1]
+                else:
+                    selftop = selftop[0]
                 break
-        rank = str(rank+1)
+
+        rank = str(rank + 1)
         if rank.endswith("1") and not rank.endswith("11"): rank += "st"
         elif rank.endswith("2") and not rank.endswith("12"): rank += "nd"
         elif rank.endswith("3") and not rank.endswith("13"): rank += "rd"
         else: rank += "th"
+
+        if toptype in ["votes", "bal", "netbal"]:
+            newtop = []
+            for data in top:
+                if toptype == "votes":
+                    item = sum(data[1:])
+                elif toptype == "bal":
+                    item = data[1] - data[2]
+                elif toptype == "netbal":
+                    item = data[1] - data[2]
+                newtop.append([data[0], item])
+            top = newtop
+
         return (top, selftop, rank)
 
     def getinventory(self, user_id):
@@ -432,9 +468,8 @@ class db:
 
     # Voting
 
-    def vote(self, user_id, site):
+    def add_voter(self, user_id):
         c = conn.cursor()
-        user_id = int(user_id)
         t = (user_id,)
         c.execute("SELECT user_id FROM votes WHERE user_id=?", t)
         if c.fetchone() is None:
@@ -442,12 +477,19 @@ class db:
             marks = ",".join(["?"] * 10)
             c.execute(f"INSERT INTO votes VALUES({marks})", t)
             conn.commit()
-        t = (user_id, )
+
+    def vote(self, user_id, site):
+        user_id = int(user_id)
+        self.add_voter(user_id)
+
+        c = conn.cursor()
+        t = (user_id,)
         c.execute(f"UPDATE votes SET {site}votes={site}votes+1, "
                   f"total_{site}votes=total_{site}votes+1, "
                   f"last{site}vote={time.time()} WHERE user_id=?", t)
+
         conn.commit()
-    
+
     def nextvote(self, user_id, site):
         c = conn.cursor()
         user_id = int(user_id)
@@ -519,6 +561,20 @@ class db:
         t = (size, user_id)
         c.execute("UPDATE users SET ppsize=? WHERE user_id=?", t)
         conn.commit()
+    
+    # Stats
+
+    def usecommand(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("UPDATE users SET commands=commands+? WHERE user_id=?", t)
+        conn.commit()
+    
+    def usetrigger(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("UPDATE users SET triggers=triggers+? WHERE user_id=?", t)
+        conn.commit()
 
     # Counting
 
@@ -589,3 +645,51 @@ class db:
         t = (channel_id, guild_id)
         c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
         conn.commit()
+
+    # Bans
+
+    def offender(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("SELECT user_id FROM bans WHERE user_id=?", t)
+        if c.fetchone() is None:
+            c.execute("INSERT INTO bans VALUES(?, false, false, false)", t)
+            conn.commit()
+
+    def multiBan(self, user_id, value):
+        self.offender(user_id)
+        c = conn.cursor()
+        t = (value, user_id)
+        c.execute("UPDATE bans SET multis=? where user_id=?", t)
+        conn.commit()
+    
+    def isMultiBanned(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("SELECT multis FROM bans WHERE user_id=?", t)
+        value = c.fetchone()
+        if value is None:
+            return False
+        if value[0] == "true":
+            return True
+    
+    def isTriggerBanned(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("SELECT triggers FROM bans WHERE user_id=?", t)
+        value = c.fetchone()
+        if value is None:
+            return False
+        if value[0] == "true":
+             return True
+    
+    def isBanned(self, user_id):
+        c = conn.cursor()
+        t = (user_id,)
+        c.execute("SELECT bot FROM bans WHERE user_id=?", t)
+        value = c.fetchone()
+        if value is None:
+            return False
+        if value[0] == "true":
+            return True
+

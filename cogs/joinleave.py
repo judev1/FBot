@@ -58,7 +58,7 @@ class joinleave(commands.Cog):
         embed = self.bot.fn.embed(user, f"**Removed** from `{oldguild}`",
                                   str(oldguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
-        embed.add_field(name="Member count", value=f"`{memcount}`")
+        embed.add_field(name="Member count", value=f"`{memcount - 1}`")
         await self.serverlogs.send(embed=embed)
 
 def setup(bot):

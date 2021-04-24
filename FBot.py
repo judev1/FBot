@@ -40,7 +40,7 @@ econ.load()
 bot.ftime = ftime()
 
 print(f" > Session started at {bot.ftime.start}")
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
+token = bot.fn.gettoken(2) # 1 for FBot, 2 for Jude, 3 for Chris
 
 @bot.event
 async def on_connect():
@@ -62,9 +62,9 @@ async def on_ready():
     print("\n > Finished loading cogs")
 
     for command in cm.commands:
-        bot.coolcache.add_command(command, tuple(cm.commands[command][3:5]))
+        bot.cache["Cooldowns"].add_command(command, tuple(cm.commands[command][3:5]))
     for command in cm.devcmds:
-        bot.coolcache.add_command(command, (0, 0))
+        bot.cache["Cooldowns"].add_command(command, (0, 0))
     print(" > Finished setting up cooldowns\n")
        
     await bot.change_presence(status=discord.Status.online,

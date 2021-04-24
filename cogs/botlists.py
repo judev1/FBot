@@ -84,6 +84,7 @@ class economy(commands.Cog):
     async def _Vote(self, ctx):
         fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
+
         job = db.getjob(user.id)
         if job == "Unemployed": jobmulti = 1.0
         else: jobmulti = db.getjobmulti(user.id)
@@ -95,6 +96,7 @@ class economy(commands.Cog):
 
         embed = fn.embed(user, "FBot Vote",
                          "Each site has unique voting rewards")
+
         def getvalue(site):
             nextvote = db.nextvote(user.id, site)
             if nextvote:
@@ -112,6 +114,7 @@ class economy(commands.Cog):
                     value = "10x **Spamables**"
             return value
 
+        db.add_voter(user.id)
         embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
         embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")
         embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
