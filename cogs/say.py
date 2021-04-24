@@ -1,3 +1,4 @@
+from discord import AllowedMentions
 from discord.ext import commands
 from functions import predicate
 
@@ -13,7 +14,7 @@ class say(commands.Cog):
         if not inp == "":
             try: await ctx.message.delete()
             except: pass
-            await ctx.send(inp + "ㅤ")
+            await ctx.send(inp + "ㅤ", allowed_mentions=AllowedMentions.none())
         else:
             await ctx.send("What do you want me to say!?")
 

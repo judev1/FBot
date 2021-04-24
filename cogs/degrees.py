@@ -62,13 +62,14 @@ class economy(commands.Cog):
         if debt == newdebt: return
 
         bal, debt = db.getbal(user.id)
+        interest = round(db.getusermulti(user_id) * jobmulti, 4)
         if not bal:
             db.updatedebt(user.id, salary)
             msg = ("They laugh at your empty balance\n" +
                    f"You gain {fn.fnum(salary)} more debt")
         elif debt > bal:
             debt = salary * random.uniform(0.1, 0.5)
-            salary = salary * random.uniform(0.1, 0.5)
+            salary = salary * random.uniform(0.1, 0.5)  * interest
             db.updatedebt(user.id, debt)
             db.setbal(user.id, bal - salary)
             msg = ("They laugh at your overwhelming debt\n" +
@@ -77,7 +78,7 @@ class economy(commands.Cog):
         else:
             if not debt: return
             if random.randint(0, 1): return
-            salary = salary * random.uniform(0.1, 0.5)
+            salary = salary * random.uniform(0.1, 0.5)  * interest
             db.setbal(user.id, bal - salary)
             msg = ("They pinch some of your fbux\n" +
                    f"You loose {fn.fnum(salary)}")

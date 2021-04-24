@@ -29,8 +29,8 @@ bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
 
 voting_handler(bot)
-bot.dbl = dbl.DBLClient(bot, os.getenv("DBL_CLIENT_TOKEN"), webhook_path="/dblwebhook",
-          webhook_auth=os.getenv("WEBHOOK_TOKEN"), webhook_port=6000)
+bot.dbl = dbl.DBLClient(bot, os.getenv("TOPGG_TOKEN"), webhook_path="/dblwebhook",
+          webhook_auth=os.getenv("WEBHOOK_AUTH"), webhook_port=6000)
 
 bot.fn = fn
 bot.db = db()
@@ -64,9 +64,9 @@ async def on_ready():
     print("\n > Finished loading cogs")
 
     for command in cm.commands:
-        bot.coolcache.add_command(command, tuple(cm.commands[command][3:5]))
+        bot.cache["Cooldowns"].add_command(command, tuple(cm.commands[command][3:5]))
     for command in cm.devcmds:
-        bot.coolcache.add_command(command, (0, 0))
+        bot.cache["Cooldowns"].add_command(command, (0, 0))
     print(" > Finished setting up cooldowns\n")
        
     await bot.change_presence(status=discord.Status.online,

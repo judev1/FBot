@@ -1,15 +1,12 @@
-from datetime import datetime, timezone
 from discord.ext import commands
-from discord import Embed, Client
-from database import db
+from discord import Embed
 import commands as cm
-import time
+from cache import *
 import os
 
 emojis = {True: "✅",
           False: "⛔"}
 
-db = db(verbose=False)
 def predicate(ctx):
     if str(ctx.channel.type) != "private":
         bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
@@ -33,72 +30,24 @@ def predicate(ctx):
         if cm.commands[ctx.command.name][5] == "*Yes*":
             raise commands.NoPrivateMessage()
 
-    cooldown = coolcache.cooldown(ctx)
+    cooldown = cache["Cooldowns"].cooldown(ctx)
     if cooldown:
         raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
     return True
-
-class CooldownCache:
-
-    _commands = dict()
-    _cooldowns = dict()
-
-    def add_command(self, command, cooldowns):
-
-        self._commands[command] = cooldowns
-        setattr(self, command, dict())
-
-    def cooldown(self, ctx):
-
-        command = ctx.command.name
-        user = ctx.author.id
-        premium = int(db.premium(user))
-        command_cooldowns = self._commands[command]
-        cooldowns = getattr(self, command)
-        now = time.time()
-        cooldown = 0
-
-        if user in self._cooldowns:
-            if now >= self._cooldowns[user]:
-                del self._cooldowns[user]
-            else:
-                cooldown = self._cooldowns[user] - now
-
-        if user in cooldowns:
-            if now >= cooldowns[user]:
-                del cooldowns[user]
-            else:
-                cooldown = cooldowns[user] - now
-
-        if not cooldown:
-            if premium:
-                self._cooldowns[user] = now + 2
-            else:
-                self._cooldowns[user] = now + 8
-            cooldowns[user] = now + command_cooldowns[premium]
-
-        for user in self._cooldowns.copy():
-            if now >= self._cooldowns[user]:
-                del self._cooldowns[user]
-            else: break
-
-        for user in cooldowns.copy():
-            if now >= cooldowns[user]:
-                del cooldowns[user]
-            else: break
-
-        return cooldown
-
-    def clear(self):
-        del self.__dict__
 
 class fn:
 
     def setbot(self, bot):
         self.bot = bot
-        global bot_id, coolcache
+
+        global cache, bot_id
         bot_id = bot.user.id
-        bot.coolcache = coolcache = CooldownCache()
+        bot.cache = dict()
+        cache = bot.cache
+
+        bot.cache["Cooldowns"] = Cooldowns()
+        bot.cache["Names"] = Names()
+        bot.cache["RateLimits"] = RateLimits()
 
     def getinfo(self, info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
@@ -132,6 +81,8 @@ class fn:
                 prefix = content[:6]
         if not message.author.bot:
             bot.db.register(message.author.id)
+        if bot.db.isBanned(message.author.id):
+            return False
         return prefix
 
     def checkchars(self, prefix):
@@ -173,6 +124,7 @@ class fn:
     github = "https://github.com/judev1/FBot"
     banner = "https://fbot.breadhub.uk/banner"
 
+from discord import Client
 from aiohttp import web
 import asyncio
 
@@ -197,9 +149,9 @@ class voting_handler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + fn().gettoken(5) == auth:
+        if "dbl_" + os.getenv("DBL_TOKEN") == auth:
             site = "discordbotlist.com"
-        elif "bfd_" + fn().gettoken(5) == auth:
+        elif "bfd_" + os.getenv("BFD_TOKEN") == auth:
             site = "botsfordiscord.com"
         else:
             return web.Response(status=401)
@@ -207,6 +159,8 @@ class voting_handler:
         data = await request.json()
         self.bot.dispatch("vote", site, data)
         return web.Response(status=200)
+
+from datetime import datetime, timezone
 
 class ftime:
 
@@ -254,9 +208,9 @@ class ftime:
         else: mins = min_now - min_start
 
         days_plural, hours_plural, mins_plural = "s", "s", "s"
-        if days in [0, 1]: days_plural = ""
-        if hours in [0, 1]: hours_plural = ""
-        if mins in [0, 1]: mins_plural = ""
+        if days == 1: days_plural = ""
+        if hours == 1: hours_plural = ""
+        if mins == 1: mins_plural = ""
 
         if days > 0:
             uptime = f"{days} day{days_plural}, {hours} hour{hours_plural}"
