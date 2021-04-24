@@ -10,3 +10,4 @@ Temp/
 *.vs
 *.xml
 *.iml
+.env

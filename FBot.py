@@ -6,6 +6,8 @@ import discord
 import dbl
 import sys
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 sys.path.insert(0, "lib")
 from functions import fn, ftime, voting_handler
@@ -22,13 +24,13 @@ intents.presences = False
 
 fn = fn()
 
-owners = [671791003065384987, 216260005827969024, 311178459919417344]
+owners = [671791003065384987, 216260005827969024]
 bot = commands.Bot(command_prefix=fn.getprefix,
                    owner_ids=owners, intents=intents)
 
 voting_handler(bot)
-bot.dbl = dbl.DBLClient(bot, fn.gettoken(4), webhook_path="/dblwebhook",
-          webhook_auth=fn.gettoken(5), webhook_port=6000)
+bot.dbl = dbl.DBLClient(bot, os.getenv("DBL_CLIENT_TOKEN"), webhook_path="/dblwebhook",
+          webhook_auth=os.getenv("WEBHOOK_TOKEN"), webhook_port=6000)
 
 bot.fn = fn
 bot.db = db()
@@ -40,7 +42,7 @@ econ.load()
 bot.ftime = ftime()
 
 print(f" > Session started at {bot.ftime.start}")
-token = bot.fn.gettoken(1) # 1 for FBot, 2 for Jude, 3 for Chris
+token = os.getenv("FBOT_TOKEN") # 1 for FBot, 2 for Jude, 3 for Chris
 
 @bot.event
 async def on_connect():
