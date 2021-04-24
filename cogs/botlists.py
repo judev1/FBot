@@ -3,13 +3,13 @@ from discord.ext import commands
 import economy as e
 import requests
 import random
+import os
 
 f = "~~f~~ "
 
 class fakeuser: id = 0
 user = fakeuser()
 
-gettoken = fn().gettoken
 bot_id = "711934102906994699"
 bfdapi = f"https://botsfordiscord.com/api/bot/{bot_id}"
 dbggapi = f"https://discord.bots.gg/api/v1/bots/{bot_id}/stats"
@@ -42,7 +42,7 @@ class economy(commands.Cog):
 
         # botsfordiscord.com
         data = {"server_count": servers}
-        headers = {"Authorization": gettoken(6)}
+        headers = {"Authorization": os.getenv("BFD_TOKEN")}
         res = requests.post(bfdapi, data=data, headers=headers)
 
         if "200" in res.__str__():
@@ -55,7 +55,7 @@ class economy(commands.Cog):
 
         # discord.bots.gg
         data = {"guildCount": servers}
-        headers = {"Authorization": gettoken(7)}
+        headers = {"Authorization": os.getenv("DBGG_TOKEN")}
         res = requests.post(dbggapi, data=data, headers=headers)
 
         if "200" in res.__str__():
@@ -68,7 +68,7 @@ class economy(commands.Cog):
 
         # discordbotlist.com
         data = {"guilds": servers}
-        headers = {"Authorization": gettoken(8)}
+        headers = {"Authorization": os.getenv("DBL_TOKEN")}
         res = requests.post(dblapi, data=data, headers=headers)
 
         if "200" in res.__str__():

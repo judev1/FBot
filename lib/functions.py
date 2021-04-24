@@ -49,19 +49,6 @@ class fn:
         bot.cache["Names"] = Names()
         bot.cache["RateLimits"] = RateLimits()
 
-    def gettoken(self, num):
-        if num == 1:
-            print("################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  "# /!\ YOU ARE RUNNING ON FBOT'S MAIN TOKEN /!\ #",
-                  "################################################",
-                  sep="\n", end="\n\n")
-        with open("./data/Tokens.txt", "r") as file: data = file.readlines()
-        return data[int(num)][:-1]
-
     def getinfo(self, info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
         if info == "lastupdated": return data[0][:-1]
@@ -162,9 +149,9 @@ class voting_handler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + fn().gettoken(5) == auth:
+        if "dbl_" + os.getenv("DBL_TOKEN") == auth:
             site = "discordbotlist.com"
-        elif "bfd_" + fn().gettoken(5) == auth:
+        elif "bfd_" + os.getenv("BFD_TOKEN") == auth:
             site = "botsfordiscord.com"
         else:
             return web.Response(status=401)
