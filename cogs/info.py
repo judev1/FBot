@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from triggers import tr
 import commands as cm
 from math import ceil

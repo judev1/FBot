@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from dbfn import reactionbook
 
 class status(commands.Cog):

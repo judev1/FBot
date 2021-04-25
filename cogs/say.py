@@ -1,6 +1,5 @@
 from discord import AllowedMentions
 from discord.ext import commands
-from functions import predicate
 
 class say(commands.Cog):
     

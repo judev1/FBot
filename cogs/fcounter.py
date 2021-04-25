@@ -1,6 +1,5 @@
 from discord.ext import commands
 from discord import AllowedMentions
-from functions import predicate
 
 class fcounter(commands.Cog):
 

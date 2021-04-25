@@ -1,7 +1,6 @@
 from discord.ext.commands import MemberConverter
 from discord import AllowedMentions
 from discord.ext import commands
-from functions import predicate
 import sqlite3
 import random
 import re

@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from collections import deque
 from random import randint
 import asyncio

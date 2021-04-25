@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from random import choice
 import economy as e
 

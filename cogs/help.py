@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from dbfn import reactionbook
 import commands as cm
 

@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 
 class dms(commands.Cog):
     

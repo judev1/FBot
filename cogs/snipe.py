@@ -1,6 +1,5 @@
 from discord import AuditLogAction
 from discord.ext import commands
-from functions import predicate
 from collections import deque
 import discord
 import os

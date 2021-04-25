@@ -1,6 +1,5 @@
 from traceback import format_exception
 from discord.ext import commands
-from functions import predicate
 from datetime import datetime
 from dbfn import reactionbook
 import triggers as tr

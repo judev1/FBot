@@ -4,7 +4,6 @@ os.environ["MAGICK_OCL_DEVICE"] = "OFF"
 from wand.image import Image as wand_image
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
-from functions import predicate
 from discord import File
 import requests
 import re

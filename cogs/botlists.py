@@ -1,4 +1,3 @@
-from functions import predicate, fn
 from discord.ext import commands
 import economy as e
 import requests
