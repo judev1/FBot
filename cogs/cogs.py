@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from dbfn import reactionbook
 
 def formatunable(unable):
@@ -19,7 +18,6 @@ class cogs(commands.Cog):
 
     @commands.command(name="load")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _LoadCog(self, ctx, cog):
         fn = self.bot.fn
         if cog == "all":
@@ -41,7 +39,6 @@ class cogs(commands.Cog):
 
     @commands.command(name="unload")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _UnloadCog(self, ctx, cog):
         fn = self.bot.fn
         if cog == "all":
@@ -64,7 +61,6 @@ class cogs(commands.Cog):
 
     @commands.command(name="reload")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _ReloadCog(self, ctx, cog):
         fn = self.bot.fn
         if cog == "all":
@@ -89,7 +85,6 @@ class cogs(commands.Cog):
 
     @commands.command(name="cogs")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _Cogs(self, ctx):
         fn = self.bot.fn
         colour = self.bot.db.getcolour(ctx.author.id)

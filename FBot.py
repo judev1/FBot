@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sys.path.insert(0, "lib")
-from functions import fn, ftime, voting_handler
+from functions import fn, ftime, voting_handler, predicate
 from database import db
 from triggers import tr
 from commands import cmds
@@ -69,5 +69,5 @@ async def on_ready():
        
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="'FBot help'"))
-
+bot.add_check(predicate)
 bot.run(token)

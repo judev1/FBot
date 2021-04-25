@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 
 class modtoggle(commands.Cog):
     
@@ -7,7 +6,6 @@ class modtoggle(commands.Cog):
         self.bot = bot
         
     @commands.command(name="modtoggle")
-    @commands.check(predicate)
     async def _Modtoggle(self, ctx, arg):
         db = self.bot.db
         

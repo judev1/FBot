@@ -1,6 +1,5 @@
 from discord import AllowedMentions
 from discord.ext import commands
-from functions import predicate
 
 class say(commands.Cog):
     
@@ -8,7 +7,6 @@ class say(commands.Cog):
         self.bot = bot
         
     @commands.command(name="say")
-    @commands.check(predicate)
     async def _Say(self, ctx, *inp):
         inp = " ".join(inp)
         if not inp == "":

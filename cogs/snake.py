@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from collections import deque
 from random import randint, choice
 import asyncio
@@ -97,7 +96,6 @@ class snake(commands.Cog):
         self.games = {}
         
     @commands.command(name="snake", alliases=["snek"])
-    @commands.check(predicate)
     async def _Snake(self, ctx):
         
         def speed():

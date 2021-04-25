@@ -1,5 +1,4 @@
 from discord.ext import commands
-from functions import predicate
 from dbfn import reactionbook
 import commands as cm
 
@@ -54,7 +53,6 @@ class help(commands.Cog):
         return embed
         
     @commands.command(name="help")
-    @commands.check(predicate)
     async def _Help(self, ctx, *command):
 
         prefix = "fbot"
@@ -103,7 +101,6 @@ class help(commands.Cog):
             await ctx.send(f"No command called '{command}'")
 
     @commands.command(name="cmds", aliases=["commands"])
-    @commands.check(predicate)
     async def _Commands(self, ctx):
 
         prefix = "fbot"
@@ -164,7 +161,6 @@ class help(commands.Cog):
 
     @commands.command(name="devcmds")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _DevCommands(self, ctx):
         colour = self.bot.db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)

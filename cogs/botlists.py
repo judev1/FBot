@@ -1,4 +1,3 @@
-from functions import predicate, fn
 from discord.ext import commands
 import requests
 import random
@@ -23,7 +22,6 @@ class botlists(commands.Cog):
 
     @commands.command(name="scounts")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _SCOUNTS(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
@@ -79,7 +77,6 @@ class botlists(commands.Cog):
         await msg.edit(embed=embed)
 
     @commands.command(name="vote")
-    @commands.check(predicate)
     async def _Vote(self, ctx):
         fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author

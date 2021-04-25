@@ -1,6 +1,5 @@
 from discord.ext import commands
 from discord import AllowedMentions
-from functions import predicate
 
 class fcounter(commands.Cog):
 
@@ -73,7 +72,6 @@ class fcounter(commands.Cog):
 
     @commands.command("counting")
     @commands.guild_only()
-    @commands.check(predicate)
     async def set_counter_channel(self, ctx):
         if ctx.author.guild_permissions.administrator:
             self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
@@ -82,13 +80,11 @@ class fcounter(commands.Cog):
 
     @commands.command("devcounting")
     @commands.is_owner()
-    @commands.check(predicate)
     async def dev_set_counter_channel(self, ctx):
         self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
     @commands.command("number",  aliases=["last"])
-    @commands.check(predicate)
     async def get_guild_number(self, ctx):
         name = ctx.author.display_name
         last_number = self.bot.db.getnumber(ctx.guild.id)
@@ -103,13 +99,11 @@ class fcounter(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command("hs")
-    @commands.check(predicate)
     async def _leaderboard(self, ctx):
         await ctx.send("`fbot hs` has moved to `fbot top counting`")
 
     @commands.command("devnumber")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _setnumber(self, ctx, *, number):
         if not number.isdigit(): await ctx.send("Not a number")
         else:
