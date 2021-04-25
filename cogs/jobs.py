@@ -14,7 +14,6 @@ class economy(commands.Cog):
         self.bot = bot
 
     @commands.command(name="work")
-    @commands.check(predicate)
     async def _Work(self, ctx):
         user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -81,7 +80,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="jobs")
-    @commands.check(predicate)
     async def _Jobs(self, ctx):
         db = self.bot.db
 
@@ -107,7 +105,6 @@ class economy(commands.Cog):
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="job")
-    @commands.check(predicate)
     async def _Job(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -132,7 +129,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="apply")
-    @commands.check(predicate)
     async def _Apply(self, ctx, *, job):
         job = job.lower()
         if job == "unemployed":
@@ -157,7 +153,6 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="resign")
-    @commands.check(predicate)
     async def _Resign(self, ctx):
         db = self.bot.db
         job = db.getjob(ctx.author.id)

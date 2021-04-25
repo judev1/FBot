@@ -28,7 +28,6 @@ class economy(commands.Cog):
         self.bot = bot
 
     @commands.command(name="profile")
-    @commands.check(predicate)
     async def _Profile(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -51,14 +50,12 @@ class economy(commands.Cog):
 
     @commands.command(name="gift")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _Gift(self, ctx, amount, user: discord.User=None):
         if not user: user = ctx.author
         self.bot.db.updatebal(user.id, amount)
         await ctx.send("Lucky you")
 
     @commands.command(name="payoff")
-    @commands.check(predicate)
     async def _PayOff(self, ctx, amount):
         fn, db = self.bot.fn, self.bot.db
         bal, debt = db.getbal(ctx.author.id)
@@ -92,7 +89,6 @@ class economy(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command(name="bal")
-    @commands.check(predicate)
     async def _Balance(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -102,7 +98,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="multis")
-    @commands.check(predicate)
     async def _Multipliers(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db = self.bot.db
@@ -122,7 +117,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="top")
-    @commands.check(predicate)
     async def _Top(self, ctx, toptype):
 
         toptype = toptype.lower().replace("multis", "multi")

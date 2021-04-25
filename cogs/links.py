@@ -8,21 +8,18 @@ class links(commands.Cog):
         self.bot = bot
 
     @commands.command(name="invite")
-    @commands.check(predicate)
     async def _Invite(self, ctx):
         fn = self.bot.fn
         embed = fn.embed(ctx.author, "Invite FBot to your server!", url=fn.invite)
         await ctx.send(embed=embed)
 
     @commands.command(name="server")
-    @commands.check(predicate)
     async def _Server(self, ctx):
         fn = self.bot.fn
         embed = fn.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.server)
         await ctx.send(embed=embed)
 
     @commands.command(name="links")
-    @commands.check(predicate)
     async def _Links(self, ctx):
         fn = self.bot.fn
         embed = fn.embed(ctx.author, "FBot links")

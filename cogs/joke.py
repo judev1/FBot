@@ -15,7 +15,6 @@ class joke(commands.Cog):
         self.bot = bot
 
     @commands.command(name="joke")
-    @commands.check(predicate)
     async def tell_joke(self, ctx):
         
         if (ctx.channel.id in active_channels):
@@ -47,7 +46,6 @@ class joke(commands.Cog):
 
     @commands.command(name="jokeinfo")
     @commands.is_owner()
-    @commands.check(predicate)
     async def say_jokeinfo(self, ctx):
         await ctx.send("Active channels: " + str(active_channels))
     

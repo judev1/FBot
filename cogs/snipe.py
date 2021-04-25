@@ -16,7 +16,6 @@ class snipe(commands.Cog):
         self.bot = bot
 
     @commands.command(name="snipe")
-    @commands.check(predicate)
     async def _Snipe(self, ctx, number=10):
         user = ctx.author
         if ctx.message.channel.id not in snipes:

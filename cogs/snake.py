@@ -94,7 +94,6 @@ class snake(commands.Cog):
         self.games = {}
         
     @commands.command(name="snake", alliases=["snek"])
-    @commands.check(predicate)
     async def _Snake(self, ctx):
 
         user_id = ctx.author.id

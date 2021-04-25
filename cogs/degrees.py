@@ -14,7 +14,6 @@ class economy(commands.Cog):
         self.bot = bot
 
     @commands.command(name="study")
-    @commands.check(predicate)
     async def _Study(self, ctx):
         fn, db = self.bot.fn, self.bot.db
         user = ctx.author
@@ -87,7 +86,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="degrees")
-    @commands.check(predicate)
     async def _Degrees(self, ctx):
         db = self.bot.db
 
@@ -113,7 +111,6 @@ class economy(commands.Cog):
         await book.createbook(COLOUR=self.bot.db.getcolour(ctx.author.id))
 
     @commands.command(name="degree")
-    @commands.check(predicate)
     async def _Degree(self, ctx, user: discord.User=None):
         if not user: user = ctx.author
         db, fnum = self.bot.db, self.bot.fn.fnum
@@ -142,7 +139,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="take")
-    @commands.check(predicate)
     async def _Take(self, ctx, *, degree):
         degree = degree.lower()
         if degree in e.degreenames:
@@ -167,7 +163,6 @@ class economy(commands.Cog):
         await ctx.send(message)
 
     @commands.command(name="drop")
-    @commands.check(predicate)
     async def _Drop(self, ctx):
         db = self.bot.db
         degree = db.getdegree(ctx.author.id)

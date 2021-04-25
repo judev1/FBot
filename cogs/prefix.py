@@ -7,7 +7,6 @@ class prefix(commands.Cog):
         self.bot = bot
 
     @commands.command(name="prefix")
-    @commands.check(predicate)
     async def _ChangePrefix(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             fn, db = self.bot.fn, self.bot.db

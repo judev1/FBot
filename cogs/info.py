@@ -111,12 +111,10 @@ class info(commands.Cog):
                         f"Total count: `{total}`")
 
     @commands.command(name="stats")
-    @commands.check(predicate)
     async def _Stats(self, ctx):
         await ctx.send(embed=self.embed(ctx.author))
 
     @commands.command(name="info")
-    @commands.check(predicate)
     async def _Info(self, ctx):
 
         ftime = self.bot.ftime
@@ -136,7 +134,6 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
-    @commands.check(predicate)
     async def _ServInfo(self, ctx):
         guild = ctx.guild
 
@@ -166,7 +163,6 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="session", aliases=["uptime"])
-    @commands.check(predicate)
     async def _Session(self, ctx):
         ftime = self.bot.ftime
         embed = self.bot.fn.embed(ctx.author, "FBot's Session")
@@ -175,7 +171,6 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="ver")
-    @commands.check(predicate)
     async def _Version(self, ctx):
         fn = self.bot.fn
         ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
@@ -185,7 +180,6 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="premium")
-    @commands.check(predicate)
     async def _Premium(self, ctx):
         await ctx.send("https://fbot.breadhub.uk/premium")
 

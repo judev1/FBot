@@ -7,7 +7,6 @@ class priority(commands.Cog):
         self.bot = bot
         
     @commands.command(name="respond")
-    @commands.check(predicate)
     async def _Priority(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             db = self.bot.db

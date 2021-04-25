@@ -24,7 +24,6 @@ class economy(commands.Cog):
 
     @commands.command(name="scounts")
     @commands.is_owner()
-    @commands.check(predicate)
     async def _SCOUNTS(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
@@ -80,7 +79,6 @@ class economy(commands.Cog):
         await msg.edit(embed=embed)
 
     @commands.command(name="vote")
-    @commands.check(predicate)
     async def _Vote(self, ctx):
         fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
@@ -121,7 +119,6 @@ class economy(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="votehs")
-    @commands.check(predicate)
     async def _Votehs(self, ctx):
         await ctx.send("`fbot votehs` has moved to `fbot top votes`")
 

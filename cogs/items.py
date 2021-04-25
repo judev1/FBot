@@ -19,12 +19,10 @@ class items(commands.Cog):
         self.bot = bot
 
     @commands.command(name="buy")
-    @commands.check(predicate)
     async def _Buy(self, ctx, item, amount=1):
         await ctx.send("No items are purchaseable at the moment")
 
     @commands.command(name="sell")
-    @commands.check(predicate)
     async def _Sell(self, ctx, item, amount="1"):
         item = item.lower()
         if item in e.items:
@@ -56,7 +54,6 @@ class items(commands.Cog):
             await ctx.send("That item doesn't exist")
 
     @commands.command(name="use")
-    @commands.check(predicate)
     async def _Use(self, ctx, item, amount="1"):
         item = item.lower()
         if item in e.items:
@@ -137,7 +134,6 @@ class items(commands.Cog):
             await ctx.send("That item doesn't exist")
 
     @commands.command(name="inv")
-    @commands.check(predicate)
     async def _Inventory(self, ctx):
         fn = self.bot.fn
         inv = self.bot.db.getinventory(ctx.author.id)
@@ -199,7 +195,6 @@ class items(commands.Cog):
                 break
 
     @commands.command(name="store")
-    @commands.check(predicate)
     async def _Store(self, ctx):
         fn = self.bot.fn
         embeds = [fn.embed(ctx.author, "The store",
@@ -256,7 +251,6 @@ class items(commands.Cog):
                 break
 
     @commands.command(name="item")
-    @commands.check(predicate)
     async def _Item(self, ctx, item):
         item = item.lower()
         if item in e.items:

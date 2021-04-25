@@ -8,7 +8,6 @@ class status(commands.Cog):
         self.bot = bot
         
     @commands.command(name="status")
-    @commands.check(predicate)
     async def _Status(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -24,7 +23,6 @@ class status(commands.Cog):
         await ctx.send(embed=embed)
         
     @commands.command(name="servstatus")
-    @commands.check(predicate)
     async def _ServerStatus(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -45,7 +43,6 @@ class status(commands.Cog):
         await book.createbook(HEADER=header, COLOUR=colour)
         
     @commands.command(name="servstatusmod")
-    @commands.check(predicate)
     async def _ServerStatusMod(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -69,7 +66,6 @@ class status(commands.Cog):
         await book.createbook(HEADER=header, COLOUR=colour)
 
     @commands.command(name="on")
-    @commands.check(predicate)
     async def _On(self, ctx):
         if not ctx.guild:
             await ctx.send("**FBot is always on in DMs.**")
@@ -83,7 +79,6 @@ class status(commands.Cog):
         else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 
     @commands.command(name="off")
-    @commands.check(predicate)
     async def _Off(self, ctx):
         if not ctx.guild:
             await ctx.send("**You can never turn off FBot in DMs.**")

@@ -90,7 +90,6 @@ class bigpp(commands.Cog):
             await ctx.send("That image is too big to " + process)
 
     @commands.command(name="bigpp")
-    @commands.check(predicate)
     async def _Bigpp(self, ctx, *to_bigpp):
 
         async with ctx.channel.typing():
@@ -116,7 +115,6 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "bigpp", success)
 
     @commands.command(name="bonk")
-    @commands.check(predicate)
     async def _Bonk(self, ctx, *to_bonk):
 
         async with ctx.channel.typing():
@@ -143,7 +141,6 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "bonk", success)
 
     @commands.command(name="blur")
-    @commands.check(predicate)
     async def _Blur(self, ctx, amount: int=25, *to_blur):
 
         if type(amount) is not int:
@@ -176,7 +173,6 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "blur", success)
 
     @commands.command(name="trigger")
-    @commands.check(predicate)
     async def _Trigger(self, ctx, *to_trigger):
 
         async with ctx.channel.typing():
@@ -203,7 +199,6 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "trigger", success)
 
     @commands.command(name="sneak")
-    @commands.check(predicate)
     async def _Sneak(self, ctx, *to_sneak):
 
         async with ctx.channel.typing():
@@ -228,7 +223,6 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "sneak", success)
 
     @commands.command(name="god")
-    @commands.check(predicate)
     async def _God(self, ctx, *to_god):
 
         async with ctx.channel.typing():
