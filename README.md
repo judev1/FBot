@@ -3,8 +3,6 @@
 ### Features
  - **Message responses**
  	- FBot can be toggled to reply to a wide variety of messages making it fun to chat with, with friends, or even by yourself or in dms. FBot can also be used to redirect spam into spamming channels by rewarding its users for interacting with it, but also making spamming more interesting
- - **Economy**
- 	- FBot also has it's own economy system, you can work to get money from your job, you can study to finish degrees and unlock better jobs, all the while increasing your multiplier (XP) by interacting with FBot
  - **Counting**
  	- FBot encourages 1st grade counting with it's counting feature, it's great fun and gives something for your users to do
  - **Fun**
@@ -12,7 +10,7 @@
  - **Utility**
  	- FBot has a powerful snipe command, purge command and other utility commands to customise your FBot experience
 
-On top of all of this, FBot maintains 24/7 uptime with minimal errors, guarantees increased server activity by introducing it's economy as well as it's optional counting feature and response feature which give your members things to do
+On top of all of this, FBot maintains 24/7 uptime with minimal errors, guarantees increased server activity by introducing it's optional counting feature and response feature which give your members things to do
 
 ### **What our users think of FBot?**
  > *"Oh... this bot is just spam"*

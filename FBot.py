@@ -14,7 +14,6 @@ from functions import fn, ftime, voting_handler
 from database import db
 from triggers import tr
 from commands import cmds
-from economy import econ
 
 import commands as cm
 
@@ -37,7 +36,6 @@ bot.db = db()
 
 tr.load()
 cmds.load()
-econ.load()
 
 bot.ftime = ftime()
 

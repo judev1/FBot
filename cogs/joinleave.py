@@ -9,9 +9,6 @@ joinmsg = ["**Whoa new server, cooooool**",
            "", ":1234: **How can I set up a counting channel with FBot?**",
            "In the channel which you want to be your counting channel, use `fbot counting` and simply start counting! You can count on it!",
 
-           "", "<:fbag:814645386957291550> **I want to use the economy, how can I do that?**",
-           "While an in depth guide to our economy can be found using `fbot economy`, here are some pointers to get you started. You can use `fbot work` every hour to earn money from your job, you can get a better job by taking a degree (a list of jobs and degrees can be found using `fbot jobs/degrees`), similar to working, you can use `fbot study` once an hour to complete your degree, and you will unlock better degrees the more you use FBot, don't worry you'll get the hang of it!",
-
            "", ":sound: **I'm seeing too much FBot how can I calm it down?**",
            "If you want FBot to respond to less messages you can use `fbot respond few`, by default fbot respond is set to `all`, but you can change it to few, some or all, depending on what suits your server",
 

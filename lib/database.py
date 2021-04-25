@@ -195,7 +195,7 @@ class db:
         c.execute("SELECT cooldown FROM users WHERE user_id=?", t)
         return round(c.fetchone()[0] - time.time(), 2)
 
-    # Economy
+    # Users
 
     def register(self, user_id):
         c = conn.cursor()
@@ -221,12 +221,6 @@ class db:
         c.execute("SELECT fbux, netfbux, debt, netdebt, job, degree, degreeprogress FROM users WHERE user_id=?", t)
         return c.fetchone()
 
-    def getbal(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT fbux, debt FROM users WHERE user_id=?", t)
-        return c.fetchone()
-
     def getmultis(self, user_id, guild_id):
         usermulti = self.getusermulti(user_id)
         c = conn.cursor()
@@ -240,161 +234,14 @@ class db:
         c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
         return c.fetchone()[0]/(10**4)
 
-    def getjobmulti(self, user_id):
-        job = self.getjob(user_id)
-        return self.getjobs(user_id)[job] / 100
-
-    def getjobs(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT jobs FROM users WHERE user_id=?", t)
-        return eval(c.fetchone()[0])
-
-    def getjob(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT job FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
-
-    def changejob(self, user_id, job):
-        c = conn.cursor()
-        t = (job, user_id)
-        c.execute("UPDATE users SET job=? WHERE user_id=?", t)
-        conn.commit()
-
-    def getdegree(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT degree FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
-
-    def changedegree(self, user_id, degree):
-        c = conn.cursor()
-        t = (degree, user_id)
-        c.execute("UPDATE users SET degree=? WHERE user_id=?", t)
-        conn.commit()
-
-    def work(self, user_id, job, income):
-        c = conn.cursor()
-        balance = self.updatebal(user_id, income)
-        t = (user_id,)
-        c.execute("SELECT jobs FROM users WHERE user_id=?", t)
-        jobs = eval(c.fetchone()[0])
-        if job != "Unemployed": jobs[job] += 1
-        t = (str(jobs), user_id)
-        c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
-        conn.commit()
-        self.worked(user_id)
-        return balance
-
-    def study(self, user_id, debt):
-        c = conn.cursor()
-        debt = self.updatedebt(user_id, debt)
-        t = (user_id,)
-        c.execute("UPDATE users SET degreeprogress=degreeprogress+1 WHERE user_id=?", t)
-        conn.commit()
-        return (self.progress(user_id), debt)
-
-    def progress(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT degreeprogress FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
-
-    def worked(self, user_id):
-        c = conn.cursor()
-        t = (time.time() / 60 + 60, user_id)
-        c.execute("UPDATE users SET lastwork=? WHERE user_id=?", t)
-        conn.commit()
-
-    def studied(self, user_id):
-        c = conn.cursor()
-        t = (time.time() / 60 + 60, user_id)
-        c.execute("UPDATE users SET laststudy=? WHERE user_id=?", t)
-        conn.commit()
-
-    def resign(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("UPDATE users SET job='Unemployed' WHERE user_id=?", t)
-        conn.commit()
-
-    def drop(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("UPDATE users SET degree='None', degreeprogress=0 WHERE user_id=?", t)
-        conn.commit()
-
-    def setbal(self, user_id, bal):
-        c = conn.cursor()
-        if bal < 0: bal = 0
-        t = (bal, user_id)
-        c.execute("UPDATE users SET fbux=? WHERE user_id=?", t)
-        conn.commit()
-
-    def updatebal(self, user_id, income):
-        c = conn.cursor()
-        t = (income, income, user_id)
-        c.execute("UPDATE users SET fbux=fbux+?, netfbux=netfbux+? WHERE user_id=?", t)
-        conn.commit()
-        t = (user_id,)
-        c.execute("SELECT fbux FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
-
-    def updatedebt(self, user_id, debt):
-        c = conn.cursor()
-        t = (debt, debt, user_id)
-        c.execute("UPDATE users SET debt=debt+?, netdebt=netdebt+? WHERE user_id=?", t)
-        conn.commit()
-        t = (user_id,)
-        c.execute("SELECT debt FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]
-
-    def payoff(self, user_id, debt, loss):
-        c = conn.cursor()
-        t = (debt, loss, user_id)
-        c.execute("UPDATE users SET debt=debt-?, fbux=fbux-? WHERE user_id=?", t)
-        conn.commit()
-
-    def finishdegree(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("UPDATE users SET degree='None', degreeprogress=0 WHERE user_id=?", t)
-        conn.commit()
-
-    def startjob(self, user_id, job):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT jobs FROM users WHERE user_id=?", t)
-        jobs = eval(c.fetchone()[0])
-        jobs[job] = 100
-        t = (str(jobs), user_id)
-        c.execute("UPDATE users SET jobs=? WHERE user_id=?", t)
-        conn.commit()
-
     def gettop(self, toptype, amount, obj_id):
 
         if toptype == "votes":
             TABLE, DATA, ID = "votes", "total_topvotes, total_bfdvotes, total_dblvotes", "user_id"
         elif toptype == "counting":
-            TABLE, DATA, ID = "counter", "record", "guild_id"
-        elif toptype == "multi":
-            TABLE, DATA, ID = "users", "multiplier", "user_id"
-        elif toptype == "servmulti":
-            TABLE, DATA, ID = "guilds", "multiplier", "guild_id"
-        elif toptype == "bal":
-            TABLE, DATA, ID = "users", "fbux, debt", "user_id"
-        elif toptype == "netbal":
-            TABLE, DATA, ID = "users", "netfbux, netdebt", "user_id"
-        else:
-            TABLE, DATA, ID = "users", toptype, "user_id"
 
         if toptype == "votes":
             ORDER = "total_topvotes + total_bfdvotes + total_dblvotes"
-        elif toptype == "bal":
-            ORDER = "fbux - debt"
-        elif toptype == "netbal":
-            ORDER = "netfbux - netdebt"
         else:
             ORDER = DATA
 
@@ -408,10 +255,6 @@ class db:
                 selftop = data[1:]
                 if toptype == "votes":
                     selftop = sum(selftop)
-                elif toptype == "bal":
-                    selftop = selftop[0] - selftop[1]
-                elif toptype == "netbal":
-                    selftop = selftop[0] - selftop[1]
                 else:
                     selftop = selftop[0]
                 break
@@ -422,49 +265,15 @@ class db:
         elif rank.endswith("3") and not rank.endswith("13"): rank += "rd"
         else: rank += "th"
 
-        if toptype in ["votes", "bal", "netbal"]:
+        if toptype == "votes":
             newtop = []
             for data in top:
                 if toptype == "votes":
                     item = sum(data[1:])
-                elif toptype == "bal":
-                    item = data[1] - data[2]
-                elif toptype == "netbal":
-                    item = data[1] - data[2]
                 newtop.append([data[0], item])
             top = newtop
 
         return (top, selftop, rank)
-
-    def getinventory(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute(f"SELECT inventory FROM users where user_id=?", t)
-        return eval(c.fetchone()[0])
-
-    def getitem(self, user_id, item):
-        inv = self.getinventory(user_id)
-        if item in inv:
-            return inv[item]
-        return 0
-
-    def additem(self, user_id, item, amount):
-        items = self.getitem(user_id, item)
-        inv = self.getinventory(user_id)
-        inv[item] = items + amount
-        c = conn.cursor()
-        t = (str(inv), user_id)
-        c.execute(f"UPDATE users SET inventory=? WHERE user_id=?", t)
-        conn.commit()
-
-    def removeitem(self, user_id, item, amount):
-        items = self.getitem(user_id, item)
-        inv = self.getinventory(user_id)
-        inv[item] = items - amount
-        c = conn.cursor()
-        t = (str(inv), user_id)
-        c.execute(f"UPDATE users SET inventory=? WHERE user_id=?", t)
-        conn.commit()
 
     # Voting
 

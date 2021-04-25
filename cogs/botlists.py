@@ -1,6 +1,5 @@
 from functions import predicate, fn
 from discord.ext import commands
-import economy as e
 import requests
 import random
 import os
@@ -15,7 +14,7 @@ bfdapi = f"https://botsfordiscord.com/api/bot/{bot_id}"
 dbggapi = f"https://discord.bots.gg/api/v1/bots/{bot_id}/stats"
 dblapi = f"https://discordbotlist.com/api/v1/bots/{bot_id}/stats"
 
-class economy(commands.Cog):
+class botlists(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -85,17 +84,7 @@ class economy(commands.Cog):
         fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
 
-        job = db.getjob(user.id)
-        if job == "Unemployed": jobmulti = 1.0
-        else: jobmulti = db.getjobmulti(user.id)
-        salary = e.salaries[job] * jobmulti
-        salary *= db.getusermulti(user.id)
-
-        multi = 20
-        if ftime.isweekend(): multi *= 2
-
-        embed = fn.embed(user, "FBot Vote",
-                         "Each site has unique voting rewards")
+        embed = fn.embed(user, "FBot Vote")
 
         def getvalue(site):
             nextvote = db.nextvote(user.id, site)
@@ -106,45 +95,14 @@ class economy(commands.Cog):
                 else:
                     value = f"**{hours}h** and **{mins}m**"
             else:
-                if site == "top":
-                    value = "1x **Random FBox**"
-                elif site == "bfd":
-                    value = "15x **Spamables**"
-                elif site == "dbl":
-                    value = "10x **Spamables**"
+                value = "You can vote!"
             return value
 
         db.add_voter(user.id)
-        embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
+        embed.add_field(name="top.gg", value="[{getvalue('top')}]({fn.votetop} 'Vote here')")
         embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")
         embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
         await ctx.send(embed=embed)
-
-    @commands.command(name="votehs")
-    @commands.check(predicate)
-    async def _Votehs(self, ctx):
-        await ctx.send("`fbot votehs` has moved to `fbot top votes`")
-
-    def vote(self, user_id, site):
-        self.bot.db.vote(user_id, site)
-        if site == "top":
-            num = random.randint(1, 100)
-            if num <= 60:
-                item = "cfbox"
-            elif num <= 80:
-                item = "ufbox"
-            elif num <= 96:
-                item = "rfbox"
-            elif num <= 100:
-                item = "lfbox"
-            self.bot.db.additem(user_id, item, 1)
-        elif site == "bfd":
-            item = random.choice(e.spamables)
-            self.bot.db.additem(user_id, item, 15)
-        elif site == "dbl":
-            item = random.choice(e.spamables)
-            self.bot.db.additem(user_id, item, 10)
-        return item
 
     @commands.Cog.listener()
     async def on_vote(self, site, data):
@@ -156,18 +114,16 @@ class economy(commands.Cog):
         self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
+        else: name = f"{name.mention} (*{name.name}*)"
 
         if site == "discordbotlist.com":
-            reward = self.vote(user_id, "dbl")
-            embed = self.bot.fn.embed(user, site,
-                    f"{name} voted and gained `10x {reward}`")
+            self.bot.db.vote(user_id, "dbl")
+            embed = self.bot.fn.embed(user, site, f"{name} voted")
         elif data["type"] == "test":
-            embed = self.bot.fn.embed(user, site + " test",
-                    f"{name} tested out the webhook")
+            embed = self.bot.fn.embed(user, site + " test", f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
-            reward = self.vote(user_id, "bfd")
-            embed = self.bot.fn.embed(user, site,
-                    f"{name} voted and gained `15x {reward}`")
+            self.bot.db.vote(user_id, "bfd")
+            embed = self.bot.fn.embed(user, site, f"{name} voted")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
@@ -187,11 +143,11 @@ class economy(commands.Cog):
         self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
+        else: name = f"{name.mention} (*{name.name}*)"
 
-        reward = self.vote(user_id, "top")
-        embed = self.bot.fn.embed(user, "top.gg",
-                f"{name} voted and obtained `1x {reward}`")
+        self.bot.db.vote(user_id, "top")
+        embed = self.bot.fn.embed(user, "top.gg", f"{name} voted")
         await self.voteschannel(embed=embed)
 
 def setup(bot):
-    bot.add_cog(economy(bot))
+    bot.add_cog(botlists(bot))
