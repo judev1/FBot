@@ -4,7 +4,6 @@ from datetime import datetime
 from dbfn import reactionbook
 import triggers as tr
 import commands as cm
-import economy as e
 import discord
 import socket
 import time
@@ -23,11 +22,10 @@ class fbotdev(commands.Cog):
     @commands.is_owner()
     async def _CSVReload(self, ctx):
         
-        tms, cms, ems = load(tr.tr), load(cm.cmds), load(e.econ)
+        tms, cms = load(tr.tr), load(cm.cmds)
         embed = self.bot.fn.embed(ctx.author, "FBot csvreload",
                 f"`[dev] Reloaded Triggers.csv in {tms}ms`",
-                f"`[dev] Reloaded Commands.csv in {cms}ms`",
-                f"`[dev] Reloaded Economy.csv in {ems}ms`")
+                f"`[dev] Reloaded Commands.csv in {cms}ms`")
         await ctx.send(embed=embed)
 
     @commands.command(name="eval")

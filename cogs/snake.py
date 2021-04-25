@@ -1,13 +1,13 @@
 from discord.ext import commands
 from collections import deque
-from random import randint
+from random import randint, choice
 import asyncio
 
 emojis = ["⬆️", "⬇️", "⬅️", "➡️"]
 emojinames = ["up", "down", "left", "right"]
 
 class snakegame():
-    
+
     def __init__(self):
         self.alive = True
         self.score = 0
@@ -20,40 +20,42 @@ class snakegame():
         self.snake.appendleft((1, 4))
         self.snake.appendleft((2, 4))
 
+        self.food_emojis = [":peach:", ":mango:", ":apple:", ":watermelon:", ":tangerine:",
+                            ":banana:", ":pineapple:", ":pear:", ":blueberries:", ":eggplant:",
+                            ":grapes:"]
         self.food = self.create_food_coords()
 
     def board(self):
-        output = f"**Score:** {self.score}\n"
-        output += ":white_large_square:" * (self.width + 2) + "\n"
+        board = ":white_large_square:" * (self.width + 2) + "\n"
         for y in range(self.height):
-            output += ":white_large_square:"
+            board += ":white_large_square:"
             for x in range(self.width):
                 if (x, y) in self.snake:
                     if (x, y) == self.snake[0]:
                         if self.alive:
-                            output += ":flushed:"
+                            board += ":flushed:"
                         else:
-                            output += ":skull:"
+                            board += ":skull:"
                     elif (x, y) == self.snake[-1]:
                         if self.alive:
-                            output += ":yellow_circle:"
+                            board += ":yellow_circle:"
                         else:
-                            output += ":white_circle:"
+                            board += ":white_circle:"
                     else:
                         if self.alive:
-                            output += ":yellow_square:"
+                            board += ":yellow_square:"
                         else:
-                            output += ":white_large_square:"
+                            board += ":white_large_square:"
                 elif (x, y) == self.food:
                     if self.alive:
-                        output += ":apple:"
+                        board += self.food_emoji
                     else:
-                        output += ":radioactive:"
+                        board += ":radioactive:"
                 else:
-                    output += ":black_large_square:"
-            output += ":white_large_square:\n"
-        output += ":white_large_square:" * (self.width + 2)
-        return output
+                    board += ":black_large_square:"
+            board += ":white_large_square:\n"
+        board += ":white_large_square:" * (self.width + 2)
+        return board
 
     def move(self):
         x, y = self.snake[0]
@@ -66,13 +68,13 @@ class snakegame():
         if x < 0 or x > self.width-1 or y < 0 or y > self.height-1:
             self.alive = False
             return
-        
+
         if (x, y) in self.snake:
             self.alive = False
             return
-        
+
         self.snake.appendleft((x, y))
-        
+
         if (x, y) == self.food:
             self.food = self.create_food_coords()
             self.score += 1
@@ -80,6 +82,7 @@ class snakegame():
             self.snake.pop()
 
     def create_food_coords(self):
+        self.food_emoji = choice(self.food_emojis)
         x, y = randint(0, self.width-1), randint(0, self.height-1)
         while (x, y) in self.snake:
             x, y = randint(0, self.width-1), randint(0, self.height-1)
@@ -94,6 +97,14 @@ class snake(commands.Cog):
         
     @commands.command(name="snake", alliases=["snek"])
     async def _Snake(self, ctx):
+        
+        def speed():
+            return 0.8 #round(0.8 - (game.score/100)**0.5, 3) #round(0.8 - (game.score**2) / 5120, 3)
+
+        def snake_embed():
+            embed = self.bot.fn.embed(ctx.author, "Snake Game", game.board())
+            embed.set_author(name=f"{game.score} points | {game.direction.upper()}") # {str(speed())[1:]}fps
+            return embed
 
         user_id = ctx.author.id
         if user_id in self.games:
@@ -101,16 +112,15 @@ class snake(commands.Cog):
             return
 
         game = self.games[user_id] = snakegame()
-        msg = await ctx.send(game.board())
+        msg = await ctx.send(embed=snake_embed())
 
         for emoji in emojis:
             await msg.add_reaction(emoji)
 
-        while True:
-            await asyncio.sleep(0.8)
+        while game.alive:
+            await asyncio.sleep(speed())
             game.move()
-            await msg.edit(content=game.board())
-            if not game.alive: break
+            await msg.edit(embed=snake_embed())
         del self.games[user_id]
 
         fbux = game.score * 10

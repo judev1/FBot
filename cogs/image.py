@@ -13,10 +13,10 @@ white = (255, 255, 255)
 nogodfont = ImageFont.truetype("arial.ttf", 30)
 godfont = ImageFont.truetype("arial.ttf", 50)
 
-bigpp_img = wand_image(filename="data/bigpp.png")
-bonk_img = wand_image(filename="data/bonk.png")
-triggered_img = wand_image(filename="data/triggered.png")
-sneak_img = wand_image(filename="data/sneak.png")
+bigpp_img = wand_image(filename="data/imgs/bigpp.png")
+bonk_img = wand_image(filename="data/imgs/bonk.png")
+triggered_img = wand_image(filename="data/imgs/triggered.png")
+sneak_img = wand_image(filename="data/imgs/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 

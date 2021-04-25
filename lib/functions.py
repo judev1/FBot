@@ -101,11 +101,15 @@ class fn:
         return Embed(title=f"**Error:** `{error}`",
                description=f"```{info}```", colour=self.red)
 
-    def fnum(self, num, bold=True):
-        value = f"~~f~~ {round(float(num)):,}"#.replace(",", ", ")
-        if bold:
-            return "**" + value + "**"
-        return value
+    def formatname(name):
+    if not name:
+        name = "Deleted User"
+        else:
+            name = name.name.replace("*", "")
+            name = name.replace("`", "")
+            name = name.replace("_", "")
+            name = name.replace("||", "")
+        return name
 
     red = 0xF42F42
 

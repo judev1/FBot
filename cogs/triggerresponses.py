@@ -25,6 +25,8 @@ answers = ["Good question",
            "Why are you asking me?",
            "I don't think we'll ever know"]
 
+fbot = open("./data/imgs/FBot.png", "rb").read()
+
 class triggerresponses(commands.Cog):
     
     def __init__(self, bot):
@@ -39,6 +41,11 @@ class triggerresponses(commands.Cog):
         send = message.channel.send
         content = message.content
         db = self.bot.db
+
+        if db.isBanned(message.author.id):
+            return
+        if db.isTriggerBanned(message.author.id):
+            return
 
         if str(message.channel.type) != "private":
             if not message.channel.permissions_for(
