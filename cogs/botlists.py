@@ -1,7 +1,7 @@
 from discord.ext import commands
-import requests
-import random
+import aiohttp
 import os
+
 
 f = "~~f~~ "
 
@@ -26,55 +26,41 @@ class botlists(commands.Cog):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
-
+        session = aiohttp.ClientSession()
         # top.gg
         try:
             await self.dbl.post_guild_count()
             content = "**top.gg:** success"
-            embed.description = content
         except:
             content = "**tog.gg:** failed"
-            embed.description = content
+        embed.description = content
         await msg.edit(embed=embed)
 
         # botsfordiscord.com
         data = {"server_count": servers}
         headers = {"Authorization": os.getenv("BFD_TOKEN")}
-        res = requests.post(bfdapi, data=data, headers=headers)
-
-        if "200" in res.__str__():
-            content += "\n**botsfordiscord.com:** success"
-            embed.description = content
-        else:
-            content += "\n**botsfordiscord.com:** failed"
+        async with session.post(bfdapi, data=data, headers=headers) as res:
+            content += "\n**botsfordiscord.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
         # discord.bots.gg
         data = {"guildCount": servers}
         headers = {"Authorization": os.getenv("DBGG_TOKEN")}
-        res = requests.post(dbggapi, data=data, headers=headers)
-
-        if "200" in res.__str__():
-            content += "\n**discord.bots.gg:** success"
-            embed.description = content
-        else:
-            content += "\n**discord.bots.gg:** failed"
+        async with session.post(dbggapi, data=data, headers=headers) as res:
+            content += "\n**discord.bots.gg:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
         # discordbotlist.com
         data = {"guilds": servers}
         headers = {"Authorization": os.getenv("DBL_TOKEN")}
-        res = requests.post(dblapi, data=data, headers=headers)
-
-        if "200" in res.__str__():
-            content += "\n**discordbotlist.com:** success"
-            embed.description = content
-        else:
-            content += "\n**discordbotlist.com:** failed"
+        async with session.post(dblapi, data=data, headers=headers):
+            content += "\n**discordbotlist.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
+        
+        await session.close()
 
     @commands.command(name="vote")
     async def _Vote(self, ctx):
@@ -96,7 +82,7 @@ class botlists(commands.Cog):
             return value
 
         db.add_voter(user.id)
-        embed.add_field(name="top.gg", value="[{getvalue('top')}]({fn.votetop} 'Vote here')")
+        embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
         embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")
         embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
         await ctx.send(embed=embed)
