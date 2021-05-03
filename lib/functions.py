@@ -102,8 +102,8 @@ class fn:
                description=f"```{info}```", colour=self.red)
 
     def formatname(name):
-    if not name:
-        name = "Deleted User"
+        if not name:
+            name = "Deleted User"
         else:
             name = name.name.replace("*", "")
             name = name.replace("`", "")

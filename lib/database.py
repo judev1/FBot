@@ -239,7 +239,7 @@ class db:
         if toptype == "votes":
             TABLE, DATA, ID = "votes", "total_topvotes, total_bfdvotes, total_dblvotes", "user_id"
         elif toptype == "counting":
-
+            TABLE, DATA, ID = "counter", "record", "guild_id"
         if toptype == "votes":
             ORDER = "total_topvotes + total_bfdvotes + total_dblvotes"
         else:
@@ -376,13 +376,13 @@ class db:
     def usecommand(self, user_id):
         c = conn.cursor()
         t = (user_id,)
-        c.execute("UPDATE users SET commands=commands+? WHERE user_id=?", t)
+        c.execute("UPDATE users SET commands=commands+1 WHERE user_id=?", t)
         conn.commit()
     
     def usetrigger(self, user_id):
         c = conn.cursor()
         t = (user_id,)
-        c.execute("UPDATE users SET triggers=triggers+? WHERE user_id=?", t)
+        c.execute("UPDATE users SET triggers=triggers+1 WHERE user_id=?", t)
         conn.commit()
 
     # Counting

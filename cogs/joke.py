@@ -41,7 +41,9 @@ class joke(commands.Cog):
     async def stop_joke(self, ctx):
         if (ctx.channel.id in active_channels):
             active_channels.remove(ctx.channel.id)
-            await ctx.send("Ok, but I was just getting to the best part.")        
+            await ctx.send("Ok, but I was just getting to the best part")
+        else:
+            await ctx.send("You wish")
 
     @commands.command(name="jokeinfo")
     @commands.is_owner()
