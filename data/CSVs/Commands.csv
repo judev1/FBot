@@ -13,7 +13,7 @@ joke,,Fun,,8,2,Yes,send_messages,no extra,{prefix}joke,,FBot starts telling a jo
 shutup,,Fun,,8,2,Yes,send_messages,no extra,{prefix}shutup,,FBot stops telling the joke in progress
 say,<message>,Fun,,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}say Yes it is me, FBot",,Send a message as FBot
 dms,,Fun,,8,2,No,send_messages,no extra,{prefix}dms,,Talk to FBot in your dms
-premium,,Fun,,8,2,No,send_messages,no extra,{prefix}premium,,Get access to FBot's premium features
+premium,,Fun,,8,2,No,send_messages,no extra,{prefix}premium,"There is absolutely NO rick rolls here, what an outlandish statement! Making accusations like that could get people in trouble smh.  But for real, premium will be added shortly. We <3 anyone who will support FBot by buying premium!",Get access to FBot's premium features
 profile,(@member),Fun,,12,3,No,"send_messages, embed_links",no extra,{prefix}profile or {prefix}profile @justjude,,Gives an overview of a user
 top,[toptype],Fun,,40,10,No,"send_messages, embed_links",no extra,{prefix}top bal or {prefix}top multi,"Want to know who has the highest number of votes this month, or who has the highest debt? This command lets you see the highest users/servers of a type. The types are as follows (with more to be added): `votes`, `counting`, `bal`, `netbal`, `debt`, `netdebt`, `multis` and `servmultis`",Gets the top users/servers in a category
 bigpp,([@member | image url | attachment]),Fun,Images,20,5,No,"send_messages, attach_files",no extra,{prefix}bigpp or {prefix}bigpp @justjude,,Creates a bigpp image of a user
@@ -30,14 +30,14 @@ prefix,[<new prefix> | reset],Utility,,8,2,No,send_messages,administrator,prefix
 help,(command),Utility,,16,4,No,"send_messages, embed_links",no extra,{prefix}help or {prefix}help cmds,,Allows you to get specific information on individual commands
 cmds,,Utility,,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}cmds,,Gives you an overview of commands
 info,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}info,,Get information about FBot
-vote,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}vote,,Returns links to vote for FBot and earn rewards
-servinfo,,Information,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}servinfo,,Gets information about the server
+vote,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}vote,"Help us out mannn.. vote so FBot can inevitably take over the world. The best part is you were the cause for our world domination. We appreciate you! Available bot lists are: top.gg, botsfordiscord.com and discordbotlist.com. You get no rewards suck it NERDDD you trashcan, anyway, how bout you vote for FBot on all sites and flex on your noob friends!",Returns links to vote for FBot and earn rewards
+servinfo,,Information,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}servinfo,"Take a wild guess Einstein.. it gives you all the precious info about your little 7 member server that nobody cares about. Just kidding! We care about it.. only beacuse FBot is in it though.",Gets information about the server
 session,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}session,,Gives you information about FBot's current session
 ver,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ver,,Gives you information about Fbot's version
-ping,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ping,,Gets you FBot's ping
+ping,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ping,"Pong! No 999 ping here like you, peasant. FBot is smooooooth. Shows the current latency between the Disccord API and FBot.",Gets you FBot's ping
 stats,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}stats,,Gives message processing stats for a period
 links,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}links,,Gets all links affiliated with FBot
-invite,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}invite,,Gives you a link to invite FBot to your server
+invite,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}invite,"YES MY MINIONS! SPREAD THE WORD! This command gives a lil sweet invite link to add FBot into your own server!",Gives you a link to invite FBot to your server
 server,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}server,,Gives you a link to join FBot's server
 csvreload,,Dev,,0,0,No,send_messages,owner,,,
 eval,<content>,Dev,,0,0,No,send_messages,owner,,,
