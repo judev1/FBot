@@ -10,6 +10,7 @@ number,,Counting,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}number o
 ppsize,(@member),Fun,,8,2,No,send_messages,no extra,{prefix}ppsize or {prefix}ppsize @LinesGuy,,Gets the ppsize of a user
 fball,<question>,Fun,,8,2,No,send_messages,no extra,fball Is this a question? or {prefix}fball IS THIS A QUESTION!?!?,,FBot will answer a question
 joke,,Fun,,8,2,Yes,send_messages,no extra,{prefix}joke,,FBot starts telling a joke
+shutup,,Fun,,8,2,Yes,send_messages,no extra,{prefix}shutup,,FBot stops telling the joke in progress
 say,<message>,Fun,,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}say Yes it is me, FBot",,Send a message as FBot
 dms,,Fun,,8,2,No,send_messages,no extra,{prefix}dms,,Talk to FBot in your dms
 premium,,Fun,,8,2,No,send_messages,no extra,{prefix}premium,"There is absolutely NO rick rolls here, what an outlandish statement! Making accusations like that could get people in trouble smh.  But for real, premium will be added shortly. We <3 anyone who will support FBot by buying premium!",Get access to FBot's premium features
