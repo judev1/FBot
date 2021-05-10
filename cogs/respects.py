@@ -1,7 +1,8 @@
 from discord.ext import commands
 import asyncio
 
-ongoing_respects = set()
+F = "🇫"
+ongoing_respects = dict()
 
 class respects(commands.Cog):
 
@@ -11,41 +12,32 @@ class respects(commands.Cog):
     @commands.command(name="respects")
     async def respects(self, ctx, *args):
 
-        name = " ".join(args)
-
-        # Check there is not an ongoing respect in same channel
-        if ctx.channel.id in ongoing_respects:
-            msg = await ctx.send("**A respect is already in progress, take a chill pill, and pay your respects you pagan.**")
-            await asyncio.sleep(3)
-            try:
-                await msg.delete()
-            except: pass # message might have been deleted
-            return
+        text = " ".join(args)
         
-        if len(args) != 0:
-            ongoing_respects.add(ctx.channel.id)
-            m = await ctx.send(f"We gather here to pay respects to **{name}**")
-            await m.add_reaction("🇫")
-            self.respects_message_id = m.id
+        if text != "":
+            msg = await ctx.send(f"React with {F} to pay respects to **{text}**")
+            await msg.add_reaction(F)
+            ongoing_respects[msg.id] = (text, set())
+            
+            await asyncio.sleep(120)
+
+            del ongoing_respects[msg.id]
         else:
-            await ctx.reply("NONONO! Provide some text and try again, you silly sausage.")
+            await ctx.reply("You didn't mention paying respects to?")
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, payload):
-
-        emojis = ["🇫"]
-
-        if reaction.message.id != self.respects_message_id: #if a user reacts to any message that isn't the 'respects' message the bot sent above.
-            return
+    async def on_reaction_add(self, reaction, user):
         
-        if payload.bot: #if the reacting user is a bot
-            return
-
-        if reaction.emoji not in emojis: #if a user adds a reaction that isn't the 'F' emoji.
-            return
-
-        await reaction.message.channel.send(f"{payload.mention} has payed their respects!") #simply send a message recognising 
-            
+        msg = reaction.message
+        if user.id == self.bot.user.id: return
+        
+        if msg.id not in ongoing_respects: return
+        if reaction.emoji != F: return
+        
+        respects = ongoing_respects[msg.id]
+        if user.id in respects[1]: return
+        respects[1].add(user.id)
+        await msg.channel.send(f"{user.display_name} payed respects to {respects[0]}")
     
 def setup(bot):
     bot.add_cog(respects(bot))

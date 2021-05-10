@@ -169,9 +169,12 @@ from datetime import datetime, timezone
 class ftime:
 
     def __init__(self):
+        self.set()
+    
+    def set(self):
+
         time = datetime.now(tz=timezone.utc)
         self.min_start, self.hour_start, self.day_start, self.month_start = [int(i) for i in time.strftime("%M %H %d %m").split()]
-
         self.start = self.now()
 
     def now(self):

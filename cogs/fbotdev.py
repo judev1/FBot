@@ -6,6 +6,7 @@ import triggers as tr
 import commands as cm
 import discord
 import socket
+import modes
 import time
 
 def load(csv):

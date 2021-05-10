@@ -6,7 +6,7 @@ class status(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    @commands.command(name="status")
+    @commands.command(name="config")
     async def _Status(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -15,13 +15,13 @@ class status(commands.Cog):
             embed = self.bot.fn.embed(user, "FBot is always on in DMs")
         else:
             db.Add_Channel(ctx.channel.id, ctx.guild.id)
-            embed = self.bot.fn.embed(user, "FBot Status")
+            embed = self.bot.fn.embed(user, "FBot Config")
             embed.add_field(name="FBot Status", value=f"`{db.Get_Status(ctx.channel.id)}`")
             embed.add_field(name="Modtoggle", value=f"`{db.Get_Modtoggle(ctx.guild.id)}`")
             embed.add_field(name="Respond to", value=f"`{db.Get_Priority(ctx.guild.id)}`")
         await ctx.send(embed=embed)
         
-    @commands.command(name="servstatus")
+    @commands.command(name="status")
     async def _ServerStatus(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -36,12 +36,12 @@ class status(commands.Cog):
         empty2 = "```There are no public channels\nin our database toggled off```"
         colour = self.bot.db.getcolour(user.id)
 
-        book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
+        book = reactionbook(self.bot, ctx, TITLE="FBot Status")
         book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"), subcheck1=(view_channel, False))
         book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"), subcheck1=(view_channel, False))
         await book.createbook(HEADER=header, COLOUR=colour)
         
-    @commands.command(name="servstatusmod")
+    @commands.command(name="modstatus")
     async def _ServerStatusMod(self, ctx):
         db = self.bot.db
         user = ctx.author
@@ -59,7 +59,7 @@ class status(commands.Cog):
         empty2 = "```There are no channels in\nour database toggled off```"
         colour = self.bot.db.getcolour(user.id)
 
-        book = reactionbook(self.bot, ctx, TITLE="FBot Server Status")
+        book = reactionbook(self.bot, ctx, TITLE="FBot Mod Status")
         book.createpages(channels, "<#%0>", EMPTY=empty1, SUBHEADER="**ON:**", check1=("%1", "on"))
         book.createpages(channels, "<#%0>", EMPTY=empty2, SUBHEADER="**OFF:**", check1=("%1", "off"))
         await book.createbook(HEADER=header, COLOUR=colour)

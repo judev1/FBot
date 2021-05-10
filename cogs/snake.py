@@ -120,13 +120,11 @@ class snake(commands.Cog):
         while game.alive:
             await asyncio.sleep(speed())
             game.move()
-            await msg.edit(embed=snake_embed())
+            try: await msg.edit(embed=snake_embed())
+            except: break
         del self.games[user_id]
 
-        fbux = game.score * 10
-        self.bot.db.updatebal(ctx.author.id, fbux)
-        await ctx.send("**You died, game over!**\n"
-                       f"However you managed to earn **~~f~~ {fbux}**")
+        await ctx.send(f"**You died with a score of {game.score}!**")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

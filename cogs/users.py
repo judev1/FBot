@@ -1,5 +1,4 @@
 ﻿from discord.ext import commands
-from functions import predicate
 import discord
 
 LARROW_EMOJI = "⬅️"
@@ -12,12 +11,10 @@ class users(commands.Cog):
         self.bot = bot
 
     @commands.command(name="profile")
-    @commands.check(predicate)
     async def _Profile(self, ctx, user: discord.User=None):
         await ctx.send("This command is being reworked")
 
     @commands.command(name="top")
-    @commands.check(predicate)
     async def _Top(self, ctx, toptype):
 
         if toptype in toptypes:

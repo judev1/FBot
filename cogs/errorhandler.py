@@ -1,4 +1,6 @@
+from traceback import format_exception
 from discord.ext import commands
+from dbfn import reactionbook
 import discord
 
 class fakeuser: id = 0
@@ -26,6 +28,8 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.MissingPermissions:
             return
         elif type(error) is commands.NotOwner:
+            return
+        elif type(error) is commands.MessageNotFound:
             return
         elif type(error) is commands.DisabledCommand:
             await ctx.send("**This command is disabled**\n" +
@@ -71,6 +75,14 @@ class errorhandler(commands.Cog):
                         channel = await ctx.author.create_dm()
                         await channel.send(embed=embed)
                         return
+                elif type(error.original) is discord.errors.NotFound:
+                    if error.original.text == "Unknown User":
+                        await ctx.channel.send("Looks like that member doesn't exist")
+                        return
+                    #elif error.original.text == "Unknown Message":
+                    #    await ctx.channel.send("Looks like that member doesn't exist")
+                    #    return
+                    await ctx.channel.send(error.original.text)
             embed = fn.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"
                     "`@justjude#2296` or `@LinesGuy#9260`\n"
@@ -85,10 +97,22 @@ class errorhandler(commands.Cog):
                         await channel.send(embed=embed)
                     except: pass
 
-                embed = fn.embed(user, f"Error On Message `{ctx.message.content}`",
-                        f"```Ignoring exception in command: {ctx.command}```"
-                        f"```{error.original}``````{ctx.message}```")
-                await self.errorlogs.send(embed=embed)
+                ctx.channel = self.errorlogs
+                colour = self.bot.db.getcolour(ctx.author.id)
+                book = reactionbook(self.bot, ctx, TITLE="Error Log")
+                result = "".join(format_exception(error, error, error.__traceback__))
+
+                pages = []
+                content = f"Error on message:\n```{ctx.message.content}```\n"
+                for i in range(0, len(result), 2000):
+                    pages.append(f"```py\n{result[i : i + 2000]}\n```")
+                if len(content + pages[0]) > 2000:
+                    pages.insert(0, content)
+                else:
+                    pages[0] = content + pages[0]
+                book.createpages(pages, ITEM_PER_PAGE=True)
+
+                await book.createbook(MODE="arrows", COLOUR=fn.red, TIMEOUT=180)
             except: pass
 
 def setup(bot):

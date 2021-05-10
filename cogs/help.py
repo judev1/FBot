@@ -16,10 +16,11 @@ CONTENTS_EMOJI = "🔖"
 SPAM_EMOJI = "💬"
 COUNT_EMOJI = "🔢"
 FUN_EMOJI = "🤪"
+IMAGE_EMOJI = "🖼️"
 UTIL_EMOJI = "⚙️"
 INFO_EMOJI = "❔"
 emojis = [CONTENTS_EMOJI, SPAM_EMOJI, COUNT_EMOJI,
-          FUN_EMOJI, UTIL_EMOJI, INFO_EMOJI]
+          FUN_EMOJI, IMAGE_EMOJI, UTIL_EMOJI, INFO_EMOJI]
 
 class help(commands.Cog):
     

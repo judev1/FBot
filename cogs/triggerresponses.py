@@ -94,7 +94,7 @@ class triggerresponses(commands.Cog):
         else: priority, prefix = "all", "fbot"
         if prefix == "fbot": prefix = "fbot "
 
-        if content == f"<@!{self.bot.user.id}>":
+        if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
             await send(f"My prefix is `{prefix}`"
                        f"\nUse `{prefix}help` for more help")
         elif str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
