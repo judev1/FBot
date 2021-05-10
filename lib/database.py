@@ -25,8 +25,7 @@ class db:
                           guild_id integer NOT NULL,
                           modtoggle string NOT NULL,
                           prefix string NOT NULL,
-                          priority string NOT NULL,
-                          multiplier integer NOT NULL
+                          priority string NOT NULL
                           )""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS channels (
@@ -38,19 +37,6 @@ class db:
         c.execute("""CREATE TABLE IF NOT EXISTS users (
                           user_id integer NOT NULL,
                           ppsize integer NOT NULL,
-                          multiplier integer NOT NULL,
-                          fbux integer NOT NULL,
-                          debt integer NOT NULL,
-                          netfbux integer NOT NULL,
-                          netdebt integer NOT NULL,
-                          job string NOT NULL,
-                          jobs string NOT NULL,
-                          degree string NOT NULL,
-                          lastwork integer NOT NULL,
-                          laststudy integer NOT NULL,
-                          degreeprogress integer NOT NULL,
-                          cooldown integer NOT NULL,
-                          inventory string NOT NULL,
                           commands integer NOT NULL,
                           triggers integer NOT NULL
                           )""")
@@ -71,13 +57,6 @@ class db:
                           total_topvotes integer NOT NULL,
                           total_dblvotes integer NOT NULL,
                           total_bfdvotes integer NOT NULL
-                          )""")
-
-        c.execute("""CREATE TABLE IF NOT EXISTS bans (
-                          user_id integer NOT NULL,
-                          multis string NOT NULL,
-                          triggers string NOT NULL,
-                          bot string NOT NULL
                           )""")
 
         conn.commit()
@@ -207,32 +186,11 @@ class db:
             c.execute(f"INSERT INTO users VALUES({marks})", t)
             conn.commit()
 
-    def increasemultiplier(self, user_id, guild_id, number):
-        c = conn.cursor()
-        t = (number, user_id)
-        c.execute("UPDATE users SET multiplier=multiplier+? WHERE user_id=?;", t)
-        t = (number, guild_id)
-        c.execute("UPDATE guilds SET multiplier=multiplier+? WHERE guild_id=?", t)
-        conn.commit()
-
     def getprofile(self, user_id):
         c = conn.cursor()
         t = (user_id,)
         c.execute("SELECT fbux, netfbux, debt, netdebt, job, degree, degreeprogress FROM users WHERE user_id=?", t)
         return c.fetchone()
-
-    def getmultis(self, user_id, guild_id):
-        usermulti = self.getusermulti(user_id)
-        c = conn.cursor()
-        t = (guild_id,)
-        c.execute("SELECT multiplier FROM guilds WHERE guild_id=?", t)
-        return (usermulti, c.fetchone()[0]/(10**6))
-
-    def getusermulti(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT multiplier FROM users WHERE user_id=?", t)
-        return c.fetchone()[0]/(10**4)
 
     def gettop(self, toptype, amount, obj_id):
 
@@ -454,51 +412,3 @@ class db:
         t = (channel_id, guild_id)
         c.execute("UPDATE counter SET channel_id=? WHERE guild_id=?", t)
         conn.commit()
-
-    # Bans
-
-    def offender(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT user_id FROM bans WHERE user_id=?", t)
-        if c.fetchone() is None:
-            c.execute("INSERT INTO bans VALUES(?, false, false, false)", t)
-            conn.commit()
-
-    def multiBan(self, user_id, value):
-        self.offender(user_id)
-        c = conn.cursor()
-        t = (value, user_id)
-        c.execute("UPDATE bans SET multis=? where user_id=?", t)
-        conn.commit()
-    
-    def isMultiBanned(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT multis FROM bans WHERE user_id=?", t)
-        value = c.fetchone()
-        if value is None:
-            return False
-        if value[0] == "true":
-            return True
-    
-    def isTriggerBanned(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT triggers FROM bans WHERE user_id=?", t)
-        value = c.fetchone()
-        if value is None:
-            return False
-        if value[0] == "true":
-             return True
-    
-    def isBanned(self, user_id):
-        c = conn.cursor()
-        t = (user_id,)
-        c.execute("SELECT bot FROM bans WHERE user_id=?", t)
-        value = c.fetchone()
-        if value is None:
-            return False
-        if value[0] == "true":
-            return True
-

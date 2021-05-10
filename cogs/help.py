@@ -66,23 +66,21 @@ class help(commands.Cog):
             fn = self.bot.fn
             embed = fn.embed(ctx.author, "")
 
-            embed.add_field(name=f"{CMDS_EMOJI} **__Helpful Commands__**",
+            embed.add_field(name=f"{CMDS_EMOJI} **__HELPFUL COMMANDS__**",
             value="Good commands to get you started", inline=False)
             embed.add_field(name=f"**{prefix}on/off**",
             value="*Toggles response feature*")
             embed.add_field(name=f"**{prefix}cmds**",
             value="*Gives a list of commands*")
             embed.add_field(name=f"**{prefix}help <command>**",
-            value="*Gives some with a command*")
-            embed.add_field(name="**prefix**",
-            value="*Tells you the prefix for FBot on the server*")
+            value="*Provides help for a command*", inline=False)
 
-            embed.add_field(name=f"{LINK_EMOJI} **__Helpful Links__**",
-            value="Some useful links For reference", inline=False)
+            embed.add_field(name=f"{LINK_EMOJI} **__HELPFUL LINKS__**",
+            value="Some useful links for reference", inline=False)
             embed.add_field(name="**Invite FBot**",
-            value=f"*[Here!]({fn.invite} 'Custom invite link woooo')*")
+            value=f"*[You can also use `{prefix}invite`]({fn.invite} 'Custom invite link woooo')*")
             embed.add_field(name="**Our Support Server**",
-            value=f"*[Here!]({fn.server} 'Custom server invite link woooo')*")
+            value=f"*[You won't regret it...]({fn.server} 'Custom server invite link woooo')*")
             embed.set_image(url=self.bot.fn.banner)
 
             await ctx.send(embed=embed)

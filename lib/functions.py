@@ -47,7 +47,6 @@ class fn:
 
         bot.cache["Cooldowns"] = Cooldowns()
         bot.cache["Names"] = Names()
-        bot.cache["RateLimits"] = RateLimits()
 
     def getinfo(self, info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
@@ -81,8 +80,6 @@ class fn:
                 prefix = content[:6]
         if not message.author.bot:
             bot.db.register(message.author.id)
-        if bot.db.isBanned(message.author.id):
-            return False
         return prefix
 
     def checkchars(self, prefix):
@@ -115,12 +112,28 @@ class fn:
 
     top = "https://top.gg/bot/711934102906994699"
     dbl = "https://discordbotlist.com/bots/fbot"
+   
     bfd = "https://botsfordiscord.com/bot/711934102906994699"
     dbgg = "https://discord.bots.gg/bots/711934102906994699"
+    
+    lixyz = "https://listcord.xyz/bot/711934102906994699"
+    dbeu = "https://discord-botlist.eu/bots/711934102906994699"
+    
+    blsp = "https://botlist.space/bot/711934102906994699"
+    blme = "https://botlist.me/bots/711934102906994699"
+
+    # nope
+    yabl = "https://yabl.xyz/bot/711934102906994699"
+    bdcl = "https://bots.discordlabs.org/bot/711934102906994699"
 
     votetop = "https://top.gg/bot/711934102906994699/vote"
     votedbl = "https://discordbotlist.com/bots/fbot/upvote"
     votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
+    
+    votelixyz = "https://botsfordiscord.com/bot/711934102906994699/vote"
+    votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
+    voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
+    voteblme = "https://botlist.me/bots/711934102906994699/vote"
 
     site = "https://fbot.breadhub.uk"
     server = "https://fbot.breadhub.uk/server"

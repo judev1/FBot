@@ -20,16 +20,22 @@ class links(commands.Cog):
 
     @commands.command(name="links")
     async def _Links(self, ctx):
+        
         fn = self.bot.fn
-        embed = fn.embed(ctx.author, "FBot links")
-        embed.add_field(name="Support server", value=f"[click here]({fn.server})")
-        embed.add_field(name="Invite FBot", value=f"[click here]({fn.invite})")
-        embed.add_field(name="Our website", value=f"[click here]({fn.site})")
-        embed.add_field(name="Top.gg page", value=f"[click here]({fn.top})")
-        embed.add_field(name="Top.gg vote", value=f"[click here]({fn.votetop})")
-        embed.add_field(name="FBot's github", value=f"[click here]({fn.github})")
-        embed.add_field(name="discordbotlist page", value=f"[click here]({fn.dbl})")
-        embed.add_field(name="discordbotlist vote", value=f"[click here]({fn.votedbl})")
+        embed = fn.embed(ctx.author, "FBot links",)
+        
+        embed.add_field(name="General",
+        value=f"[Support server]({fn.server}) :small_blue_diamond: [Invite FBot]({fn.invite})")
+        embed.add_field(name="External",
+        value=f"[Our Website]({fn.site}) :small_blue_diamond: [FBot's Github]({fn.github})")
+
+        
+        embed.add_field(name="Botlists", inline=False,
+        value=f"[top.gg]({fn.top}) :small_blue_diamond: [discordbotlist.com]({fn.dbl}) :small_blue_diamond: " +
+        f"[botsfordiscord.com]({fn.bfd}) :small_blue_diamond: [discord.bots.gg]({fn.dbgg})\n" +
+        f"[listcord.xyz]({fn.lixyz}) :small_blue_diamond: [discord-botlist.eu]({fn.dbeu}) :small_blue_diamond:" +
+        f"[botlist.space]({fn.blsp}) :small_blue_diamond: [botlist.me]({fn.blme})")
+       
         await ctx.send(embed=embed)
 
 def setup(bot):

@@ -42,11 +42,6 @@ class triggerresponses(commands.Cog):
         content = message.content
         db = self.bot.db
 
-        if db.isBanned(message.author.id):
-            return
-        if db.isTriggerBanned(message.author.id):
-            return
-
         if str(message.channel.type) != "private":
             if not message.channel.permissions_for(
                 message.guild.get_member(self.bot.user.id)).send_messages:

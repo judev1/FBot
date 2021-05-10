@@ -5,17 +5,8 @@ from math import ceil
 from time import time
 
 
-class fakeuser:
-    id = 0
-
-
+class fakeuser: id = 0
 fakeuser = fakeuser()
-
-multi_ban = ("You're account has been flagged for high levels of spam, as such you have been banned from earning anymore multiplier. "
-             "If this does not concern you, please carry on spamming! "
-             "Otherwise if you think this is a mistake and would like to appeal your ban, "
-             "please visit our support server: https://fbot.breadhub.uk/server")
-
 
 class info(commands.Cog):
 
@@ -30,7 +21,6 @@ class info(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         user = message.author
-        cache = self.bot.cache["RateLimits"]
 
         if user.bot:
             return
@@ -42,14 +32,6 @@ class info(commands.Cog):
         else:
             guild_id = message.guild.id
 
-        multi = 1
-        if self.bot.ftime.isweekend():
-            multi = 2
-        fn, db = self.bot.fn, self.bot.db
-
-        if db.isBanned(user.id):
-            return
-
         fn, db = self.bot.fn, self.bot.db
         prefix = fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
@@ -58,14 +40,8 @@ class info(commands.Cog):
                 if db.Get_Cooldown(user.id) > 0:
                     self.commands_ignored += 1
                 else:
-                    if cache.check(user.id):
-                        self.commands_processed += 1
-                        db.usecommand(user.id)
-                        if not db.isMultiBanned(user.id):
-                            db.increasemultiplier(user.id, guild_id, multi * 2)
-                    else:
-                        db.multiBan(user.id, "true")
-                        await message.channel.send(multi_ban)
+                    self.commands_processed += 1
+                    db.usecommand(user.id)
                 return
 
         for command in cm.devcmds:
@@ -76,8 +52,6 @@ class info(commands.Cog):
                     self.commands_ignored += 1
                 return
 
-        if db.isTriggerBanned(user.id):
-            return
         priority, status = "all", "on"
         if str(message.channel.type) != "private":
             db.Add_Channel(message.channel.id, guild_id)
@@ -86,14 +60,8 @@ class info(commands.Cog):
         if status == "on":
             trigger_detected = tr.respond(message, priority)[0]
             if trigger_detected:
-                if cache.check(user.id):
-                    self.triggers_processed += 1
-                    db.usetrigger(user.id)
-                    if not db.isMultiBanned(user.id):
-                        db.increasemultiplier(user.id, guild_id, multi)
-                else:
-                    db.multiBan(user.id, "true")
-                    await message.channel.send(multi_ban)
+                self.triggers_processed += 1
+                db.usetrigger(user.id)
                 return
         self.other_messages_processed += 1
 
