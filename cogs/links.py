@@ -33,7 +33,7 @@ class links(commands.Cog):
         embed.add_field(name="Botlists", inline=False,
         value=f"[top.gg]({fn.top}) :small_blue_diamond: [discordbotlist.com]({fn.dbl}) :small_blue_diamond: " +
         f"[botsfordiscord.com]({fn.bfd}) :small_blue_diamond: [discord.bots.gg]({fn.dbgg})\n" +
-        f"[listcord.xyz]({fn.lixyz}) :small_blue_diamond: [discord-botlist.eu]({fn.dbeu}) :small_blue_diamond:" +
+        f"[listcord.gg]({fn.lixyz}) :small_blue_diamond: [discord-botlist.eu]({fn.dbeu}) :small_blue_diamond:" +
         f"[botlist.space]({fn.blsp}) :small_blue_diamond: [botlist.me]({fn.blme})")
        
         await ctx.send(embed=embed)
