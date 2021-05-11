@@ -116,7 +116,7 @@ class fn:
     bfd = "https://botsfordiscord.com/bot/711934102906994699"
     dbgg = "https://discord.bots.gg/bots/711934102906994699"
     
-    lixyz = "https://listcord.xyz/bot/711934102906994699"
+    ligg = "https://listcord.gg/bot/711934102906994699"
     dbeu = "https://discord-botlist.eu/bots/711934102906994699"
     
     blsp = "https://botlist.space/bot/711934102906994699"
