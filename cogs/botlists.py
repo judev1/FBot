@@ -88,7 +88,7 @@ class botlists(commands.Cog):
         embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
         
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
-        embed.add_field(name="listcord.xyz", value=f"[Vote here]({fn.votelixyz} 'Vote here')")
+        embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.votelixyz} 'Vote here')")
         embed.add_field(name="discord-botlist.eu", value=f"[Vote here]({fn.votedbeu} 'Vote here')")
         embed.add_field(name="botlist.space", value=f"[Vote here]({fn.voteblsp} 'Vote here')")
         embed.add_field(name="botlist.me", value=f"[Vote here]({fn.voteblme} 'Vote here')")
