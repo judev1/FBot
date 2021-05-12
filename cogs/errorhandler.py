@@ -103,9 +103,11 @@ class errorhandler(commands.Cog):
                 result = "".join(format_exception(error, error, error.__traceback__))
 
                 pages = []
-                content = f"Error on message:\n```{ctx.message.content}```\n"
+                content = f"Error on message:\n```{ctx.message.content}```"
+                content += f"```by {ctx.message.author.name} ({ctx.message.author.id})```"
+                content += f"```{ctx.message.channel.type} channel (server: {ctx.message.guild})```"
                 for i in range(0, len(result), 2000):
-                    pages.append(f"```py\n{result[i : i + 2000]}\n```")
+                    pages.append(f"```py\n{result[i : i + 1000]}\n```")
                 if len(content + pages[0]) > 2000:
                     pages.insert(0, content)
                 else:

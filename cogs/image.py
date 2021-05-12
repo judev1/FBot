@@ -60,9 +60,10 @@ class bigpp(commands.Cog):
             member = await self.bot.fetch_user(int(obj))
             if member: return member
 
-        # Checks if a user name was given
-        member = guild.get_member_named(obj)
-        if member: return member
+        # Checks if a user name was given in a guild
+        if guild:
+            member = guild.get_member_named(obj)
+            if member: return member
 
         # Checks if a user mention was given
         obj = obj.split("<@")[-1].split("!")[-1].split(">")[0]

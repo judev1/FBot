@@ -23,18 +23,24 @@ class links(commands.Cog):
         
         fn = self.bot.fn
         embed = fn.embed(ctx.author, "FBot links",)
-        
-        embed.add_field(name="General",
-        value=f"[Support server]({fn.server}) :small_blue_diamond: [Invite FBot]({fn.invite})")
-        embed.add_field(name="External",
-        value=f"[Our Website]({fn.site}) :small_blue_diamond: [FBot's Github]({fn.github})")
 
-        
-        embed.add_field(name="Botlists", inline=False,
-        value=f"[top.gg]({fn.top}) :small_blue_diamond: [discordbotlist.com]({fn.dbl}) :small_blue_diamond: " +
-        f"[botsfordiscord.com]({fn.bfd}) :small_blue_diamond: [discord.bots.gg]({fn.dbgg})\n" +
-        f"[listcord.gg]({fn.ligg}) :small_blue_diamond: [discord-botlist.eu]({fn.dbeu}) :small_blue_diamond:" +
-        f"[botlist.space]({fn.blsp}) :small_blue_diamond: [botlist.me]({fn.blme})")
+        embed.add_field(name=":closed_book: **__GENERAL LINKS__**", inline=False, value="The standard discord links for FBot")
+        embed.add_field(name="Support Server", value=f"[Click here]({fn.server})")
+        embed.add_field(name="Invite FBot", value=f"[Click here]({fn.invite})")
+
+        embed.add_field(name=":green_book: **__EXTERNAL LINKS__**", inline=False, value="Other non-discord FBot affliated sites")
+        embed.add_field(name="FBot's Website", value=f"[Click here]({fn.site})")
+        embed.add_field(name="FBot's Github", value=f"[Click here]({fn.github})")
+
+        embed.add_field(name=":blue_book: **__BOT LISTS__**", inline=False, value="All the bot lists which FBot is shown on")
+        embed.add_field(name="discordbotlist.com", value=f"[Click here]({fn.dbl})")
+        embed.add_field(name="top.gg", value=f"[Click here]({fn.top})")
+        embed.add_field(name="listcord.gg", value=f"[Click here]({fn.ligg})")
+        embed.add_field(name="botsfordiscord.com", value=f"[Click here]({fn.bfd})")
+        embed.add_field(name="botlist.me", value=f"[Click here]({fn.blme})")
+        embed.add_field(name="botlist.space", value=f"[Click here]({fn.blsp})")
+        embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.dbeu})")
+        embed.add_field(name="discord.bots.gg", value=f"[Click here]({fn.dbgg})")
        
         await ctx.send(embed=embed)
 

@@ -59,16 +59,6 @@ class triggerresponses(commands.Cog):
         if content.lower().startswith("fball"):
             return
 
-        if content.lower() == "prefix":
-            if not message.guild:
-                await send("The prefix for DMs is `FBot `")
-                return
-            prefix = db.Get_Prefix(message.guild.id)
-            if prefix == "fbot":
-                await send("The prefix for this server is `fbot ` (the default)")
-            else:
-                await send(f"The prefix for this server is `{prefix}`")
-
         elif content.lower() == "smol pp":
             await send("https://tenor.com/view/tiny-small-little-just-alittle-guy-inch-gif-5676598")
             return

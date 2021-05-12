@@ -35,8 +35,8 @@ class cmds:
                 row[C_PCOOL] = int(row[C_PCOOL])
 
                 row[C_GUILD] = "*" + row[C_GUILD] + "*"
-                row[C_BOT] = "*" + "*,\n*".join(row[C_BOT].split(", ")) + "*"
-                row[C_USER] = "*" + "*,\n*".join(row[C_USER].split(", ")) + "*"
+                row[C_BOT] = ",".join(row[C_BOT].split(", "))
+                row[C_USER] = "*,".join(row[C_USER].split(", "))
 
                 row[C_USAGE] = row[C_USAGE].replace(" or ", "``````")
                 row[C_USAGE] = "```" + row[C_USAGE] + "```"

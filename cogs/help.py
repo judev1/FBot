@@ -1,5 +1,6 @@
 from discord.ext import commands
 from dbfn import reactionbook
+from functions import format_perm 
 import commands as cm
 
 descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
@@ -38,16 +39,26 @@ class help(commands.Cog):
         usage = data[8].replace("{prefix}", prefix)
         
         embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
-                                  desc, f"\n**Cooldown:** `{data[3]}s`",
-                                  f"**Premium Cooldown:** `{data[4]}s`",
+                                  desc,  f"\n**Premium:** `{data[4]}s`",
+                                  f"**Cooldown:** `{data[3]}s`",
                                   "\n**Example usage:**", usage)
 
         cat = "Category: " + data[1] + data[2]
         embed.set_author(name=cat)
 
+        bot_perms = []
+        for perm in data[6].split(","):
+            bot_perms.append("*" + format_perm(perm) + "*")
+        bot_perms = ",\n".join(bot_perms)
+
+        user_perms = []
+        for perm in data[7].split(","):
+            user_perms.append("*" + format_perm(perm) + "*")
+        user_perms = ",\n".join(user_perms)
+
         embed.add_field(name="**Server only?**", value=data[5])
-        embed.add_field(name="**Bot perms**", value=data[6])
-        embed.add_field(name="**User perms**", value=data[7])
+        embed.add_field(name="**Bot perms**", value=bot_perms)
+        embed.add_field(name="**User perms**", value=user_perms)
 
         embed.set_image(url=self.bot.fn.banner)
 

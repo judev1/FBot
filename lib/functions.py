@@ -7,6 +7,17 @@ import os
 emojis = {True: "✅",
           False: "⛔"}
 
+def format_perm(perm):
+
+    text = []
+    perm = perm.lower()
+    for word in perm.split("_"):
+        if word.startswith("("):
+             text.append(word[0:2].upper() + word[2:])
+        else:
+            text.append(word[0].upper() + word[1:])
+    return " ".join(text)
+
 def predicate(ctx):
     if str(ctx.channel.type) != "private":
         bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
@@ -20,11 +31,11 @@ def predicate(ctx):
             perms[perm] = bot_perm
 
         if not all(valid):
-            page = "**Missing permissions to run this command**\n\n"
+            page = "**Missing Permissions**\n\n"
             for perm in perms:
                 if perm.startswith("("):
                     perms[perm] = getattr(bot_perms, perm[1:-1])
-                page += f"{emojis[perms[perm]]} ~ {perm.upper()}\n"
+                page += f"{emojis[perms[perm]]} ~ {format_perm(perm)}\n"
             raise commands.CheckFailure(message=page)
     else:
         if cm.commands[ctx.command.name][5] == "*Yes*":
