@@ -150,7 +150,7 @@ class fn:
     server = "https://fbot.breadhub.uk/server"
     invite = "https://fbot.breadhub.uk/invite"
     github = "https://github.com/judev1/FBot"
-    banner = "https://fbot.breadhub.uk/banner"
+    patreon = "https://www.patreon.com/fbotbot"
 
 from discord import Client
 from aiohttp import web

@@ -25,12 +25,13 @@ class links(commands.Cog):
         embed = fn.embed(ctx.author, "FBot links",)
 
         embed.add_field(name=":closed_book: **__GENERAL LINKS__**", inline=False, value="The standard discord links for FBot")
-        embed.add_field(name="Support Server", value=f"[Click here]({fn.server})")
         embed.add_field(name="Invite FBot", value=f"[Click here]({fn.invite})")
+        embed.add_field(name="Support Server", value=f"[Click here]({fn.server})")
 
         embed.add_field(name=":green_book: **__EXTERNAL LINKS__**", inline=False, value="Other non-discord FBot affliated sites")
-        embed.add_field(name="FBot's Website", value=f"[Click here]({fn.site})")
-        embed.add_field(name="FBot's Github", value=f"[Click here]({fn.github})")
+        embed.add_field(name="Our Patreon", value=f"[Click here]({fn.patreon})")
+        embed.add_field(name="Our Website", value=f"[Click here]({fn.site})")
+        embed.add_field(name="Our Github", value=f"[Click here]({fn.github})")
 
         embed.add_field(name=":blue_book: **__BOT LISTS__**", inline=False, value="All the bot lists which FBot is shown on")
         embed.add_field(name="discordbotlist.com", value=f"[Click here]({fn.dbl})")

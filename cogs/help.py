@@ -60,8 +60,6 @@ class help(commands.Cog):
         embed.add_field(name="**Bot perms**", value=bot_perms)
         embed.add_field(name="**User perms**", value=user_perms)
 
-        embed.set_image(url=self.bot.fn.banner)
-
         return embed
         
     @commands.command(name="help")
@@ -88,11 +86,9 @@ class help(commands.Cog):
 
             embed.add_field(name=f"{LINK_EMOJI} **__HELPFUL LINKS__**",
             value="Some useful links for reference", inline=False)
-            embed.add_field(name="**Invite FBot**",
-            value=f"*[You can also use `{prefix}invite`]({fn.invite} 'Custom invite link woooo')*")
-            embed.add_field(name="**Our Support Server**",
-            value=f"*[You won't regret it...]({fn.server} 'Custom server invite link woooo')*")
-            embed.set_image(url=self.bot.fn.banner)
+            embed.add_field(name="**Our Patreon**", value=f"[*Help support us!*]({fn.server})")
+            embed.add_field(name="**Invite FBot**", value=f"[*Or `{prefix}invite`*]({fn.invite})")
+            embed.add_field(name="**Our Support Server**", value=f"[*You won't regret it...*]({fn.server})")
 
             await ctx.send(embed=embed)
         else:
@@ -120,7 +116,6 @@ class help(commands.Cog):
         colour = self.bot.db.getcolour(ctx.author.id)
         
         embeds = [self.bot.fn.embed(ctx.author, "**__FBot commands__**")]
-        embeds[0].set_image(url=self.bot.fn.banner)
         for i, category in enumerate(cm.categories):
             if category == "temp": break
             embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
@@ -130,7 +125,6 @@ class help(commands.Cog):
             f"*Use* `{prefix}help <command>` *to find more about a command*")
             for cmd, args, desc in cm.categories[category]:
                 embed.add_field(name=f"**{prefix}{cmd}**", value=f"*{desc}*")
-            embed.set_image(url=self.bot.fn.banner)
             embeds.append(embed)
 
         page = 0
