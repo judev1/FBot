@@ -1,18 +1,28 @@
-# [**FBot**](https://fbot.breadhub.uk)
+# **FBot**
 ##### *The most annoying bot on discord*
-### Features
- - **Message responses**
- 	- FBot can be toggled to reply to a wide variety of messages making it fun to chat with, with friends, or even by yourself or in dms. FBot can also be used to redirect spam into spamming channels by rewarding its users for interacting with it, but also making spamming more interesting
- - **Counting**
- 	- FBot encourages 1st grade counting with it's counting feature, it's great fun and gives something for your users to do
- - **Fun**
- 	- Image processing commands to bonk yourself, bigpp your friends <br> and trigger your enemies. Also an epic untraceable say command, minigames, more!
- - **Utility**
- 	- FBot has a powerful snipe command, purge command and other utility commands to customise your FBot experience
 
-On top of all of this, FBot maintains 24/7 uptime with minimal errors, guarantees increased server activity by introducing it's optional counting feature and response feature which give your members things to do
+## Features
+- **Lots of fun stuff**
+ 	- ***Message responses***, sort of our main feature, no big deal. FBot can respond to a wide range of messages, this is also referred to as it's the spam feature, and can be used to encourage users to spam in specific channels while also giving everyone a bit of fun
+ 	- ***Counting*** (yay?). Yes we said it, counting. This allows your members to practise their first grade counting skills and compete against other servers on our global leaderboard
+ 	- ***Image processing*** commands to bonk yourself, bigpp your friends and trigger your enemies with more added regularly (sort of)
+ 	- ***Say commands***, which let you, get this, say things. But as FBot
+ 	- ***Minigames!!!*** FBot currently has two minigames built into the DUI (discord user interface?) with more planned, and we'd love to hear what you would like to see!
+- **Highly Customisable**
+  - The spam feature, I mean the highly sophisticated message response system, is set to off by default but can be toggled on individually in a channel when necessary (which is always, obviously)
+  - ***Modes*** (the speak feature) changes how FBot talks, experience the uwu mode which does exactly what you wouldn't want it to do, pirate talk (arr), f^^k mode which appropriately adds said word into a sentence as many times as is grammatically possible, and much more!
+  - ***Responds feature***, allows for less spam and use in more channels, by only responding to less common messages
+  - As always ***customisable prefixes***, but we don't think you'll need it (fbot is the best prefix)
+- **And more**
+ 	- FBot has a powerful snipe command (can retrieve up to 10 messages in a channel and hides messages deleted after say and purge)
+ 	- Lots of useful help, information and link commands
+ 	- Meta commands for version, uptime and usage stats to name a few
 
-### **What our users think of FBot?**
+Who would we be if we didn't say that we have 24/7 uptime (or 99.77% according to [discord.bots.gg](https://discord.bots.gg/bots/711934102906994699))
+You should also find comfort in knowing that you can share your annoyance of FBot with your members, even if you don't always see eye to eye
+
+## **Reviews**
+Don't just take our word for it, what do our users say?
  > *"Oh... this bot is just spam"*
  
  > *"How do you turn this thing off?"*
@@ -20,12 +30,24 @@ On top of all of this, FBot maintains 24/7 uptime with minimal errors, guarantee
  > *"8 minutes of my life I can never get back"*
  
  > *"Why is this thing a thing?"*
- 
- ## **Contact:**
-If you have any suggestions or feedback, find an error, or just wanna chat, please feel free to [join our server!](https://fbot.breadhub.uk/server) or DM us on discord `@justjude#2296` or `@LinesGuy#9260`
- 
- ### [**What are you waiting for? Invite FBot to your server today!**](https://fbot.breadhub.uk/invite)
 
+## **Screenshots**
+
+[![](https://cdn.discordapp.com/attachments/829402002991349781/843635450618576896/unknown.png)](https://github.com/judev1/FBot)
+[![](https://cdn.discordapp.com/attachments/829402002991349781/843634247565574144/unknown.png)](https://github.com/judev1/FBot)
+[![](https://cdn.discordapp.com/attachments/829402002991349781/843633872570417182/unknown.png)](https://github.com/judev1/FBot)
+[![](https://cdn.discordapp.com/attachments/829402002991349781/843632816503783514/unknown.png)](https://github.com/judev1/FBot)
+
+## **Invite**
+If you've read all that and for whatever reason feel the urge to use the bot, you can invite it [here](https://fbot.breadhub.uk/invite)
+ 
+## **Contact**
+If you have any suggestions or feedback, find an error of sorts, or just wanna chat, please feel free to [join our server!](https://fbot.breadhub.uk/server) or DM us on discord `@justjude#2296` or `@LinesGuy#9260`
+
+## **Support us**
+Like what we do? Support us on [Patreon](https://www.patreon.com/fbotbot) and enjoy the (admittedly few) benefits of FBot's premium feature!
+
+## **Bot list widgets**
 [![Discord Bots](https://top.gg/api/widget/711934102906994699.svg)](https://top.gg/bot/711934102906994699)
 [![Bots for Discord](https://botsfordiscord.com/api/bot/711934102906994699/widget)](https://botsfordiscord.com/bots/711934102906994699)
 [![Discord Bot List](https://discordbotlist.com/bots/fbot/widget)](https://discordbotlist.com/bots/fbot)
