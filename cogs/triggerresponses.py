@@ -3,6 +3,7 @@ from random import choice
 from triggers import tr
 import commands as cm
 import asyncio
+import modes
 
 tf = ["will", "will not"]
 responses = ["Someone has bad taste in photos",
@@ -59,33 +60,31 @@ class triggerresponses(commands.Cog):
         if content.lower().startswith("fball"):
             return
 
-        elif content.lower() == "smol pp":
-            await send("https://tenor.com/view/tiny-small-little-just-alittle-guy-inch-gif-5676598")
-            return
-        elif content.lower() == "micropenis":
-            await send("https://tenor.com/view/girl-talks-naughty-small-dick-micropenis-gif-11854548")
-            return
-
-        elif content.lower() == "feet pics":
-            msg = await send("FBot says:\n(Drum roll please)")
-            await asyncio.sleep(2)
-            await msg.edit(content=f"FBot says:\nFeet pics {choice(tf)} be granted!")
-            return
-
         if str(message.channel.type) != "private":
-            prefix = db.Get_Prefix(message.guild.id)
-            db.Add_Channel(message.channel.id, message.guild.id)
-            priority = db.Get_Priority(message.guild.id)
-        else: priority, prefix = "all", "fbot"
-        if prefix == "fbot": prefix = "fbot "
+            prefix = db.getprefix(message.guild.id)
+            db.addchannel(message.channel.id, message.guild.id)
+            priority = db.getpriority(message.guild.id)
+            mode = db.getmode(message.guild.id)
+        else:
+            priority = "all"
+            prefix = "fbot "
+            mode = "default"
+
+        if prefix == "fbot":
+            prefix = "fbot "
 
         if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
             await send(f"My prefix is `{prefix}`"
                        f"\nUse `{prefix}help` for more help")
-        elif str(message.channel.type) == "private" or db.Get_Status(message.channel.id) == "on":
+        
+        elif str(message.channel.type) == "private" or db.getstatus(message.channel.id) == "on":
 
             if message.attachments:
-                await send(choice(responses))
+                response = choice(responses)
+                if mode != "default":
+                    response = eval(f"modes.{mode}(response)")
+                response = modes.capitalise(response)
+                await send(response)
                 return
             
             trigger_detected, response = tr.respond(message, priority)
@@ -93,8 +92,14 @@ class triggerresponses(commands.Cog):
                 response = response.replace("{username}", name)
                 response = response.replace("{answer}", choice(answers))
                 response = response.replace("{funny}", choice(funny))
+                response = modes.sanitise_text(response)
+
+                if mode != "default":
+                    response = eval(f"modes.{mode}(response)")
+                modes.capitalise(response)
+
                 if len(response) > 2000:
-                    response = response[:2000]
+                    response = response[:1997] + "..."
                 await send(response)
 
 def setup(bot):

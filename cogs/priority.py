@@ -10,13 +10,13 @@ class priority(commands.Cog):
         if ctx.author.guild_permissions.administrator:
             db = self.bot.db
             if arg == "few":
-                db.Change_Priority(ctx.guild.id, arg)
+                db.changepriority(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             elif arg == "some":
-                db.Change_Priority(ctx.guild.id, arg)
+                db.changepriority(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             elif arg == "all":
-                db.Change_Priority(ctx.guild.id, arg)
+                db.changepriority(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
                 embed = self.bot.fn.errorembed("Invalid Argument",

@@ -26,7 +26,7 @@ class joinleave(commands.Cog):
         
     @commands.Cog.listener()
     async def on_guild_join(self, newguild):
-        self.bot.db.Add_Guild(newguild.id)
+        self.bot.db.addguild(newguild.id)
 
         try:
             try:
@@ -49,7 +49,7 @@ class joinleave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, oldguild):
-        self.bot.db.Remove_Guild(oldguild.id)
+        self.bot.db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count
         embed = self.bot.fn.embed(user, f"**Removed** from `{oldguild}`",

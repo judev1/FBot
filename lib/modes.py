@@ -3,11 +3,23 @@ import spacy
 
 nlp = spacy.load("en_core_web_sm")
 
-def punctuate(text):
+def capitalise(text):
 
-    for word in text:
-        continue
-        # gonna do some stuffs
+    new_text = ""
+    new_sentence = True
+    for char in text:
+        if new_sentence:
+            if char.isalpha():
+                char = char.upper()
+                new_sentence = False
+        elif char == ".":
+            new_sentence = True
+        elif char == "'":
+            if new_text[-1] == "i":
+                new_text = new_text[:-1] + "I"
+        new_text += char
+    
+    return new_text
 
 def sanitise_text(text):
     
@@ -40,9 +52,11 @@ def santitise_word(word):
 
     return word, start, end
 
-def uwu(text):
+def word_type(word):
+    try: return nlp(word)[0].pos_
+    except: return None
 
-    text = sanitise_text(text)
+def uwu(text):
 
     uwus = ["owo", "uwu", ">w<", "XD"]
     
@@ -66,7 +80,6 @@ def uwu(text):
 
 def confused(text):
 
-    text = sanitise_text(text)
     if text.endswith("?"):
         text += "??"
     else:
@@ -76,7 +89,6 @@ def confused(text):
 
 def pirate(text):
 
-    text = sanitise_text(text)
     text = text.replace("you", "ye")
     text = text.replace("ing", "in'")
     text = text.replace("and", "an'")
@@ -100,14 +112,11 @@ def pirate(text):
 
 def triggered(text):
 
-    text = sanitise_text(text)
     text = text.upper()
 
     return "**__" + text + "__**"
 
 def italian(text):
-
-    text = sanitise_text(text)
 
     temp = []
     for word in text.split():
@@ -121,12 +130,10 @@ def italian(text):
 
 def fuck(text):
 
-    text = sanitise_text(text)
-
     temp = []
     for word in text.split():
         word, start, end = santitise_word(word)
-        if nlp(word)[0].pos_ in ["NOUN", "ADJ", "VERB"]:
+        if word_type(word) in ["NOUN", "ADJ", "VERB"]:
             word = "fucking " + word
         temp.append(start + word + end)
     text = " ".join(temp)
@@ -134,8 +141,6 @@ def fuck(text):
     return text
 
 def ironic(text):
-
-    text = sanitise_text(text)
 
     temp = text
     text = ""
@@ -146,14 +151,11 @@ def ironic(text):
 
 def patronise(text):
 
-    text = sanitise_text(text)
     text = " ".join(list(text))
     
     return text
 
 def colonial(text):
-
-    text = sanitise_text(text)
 
     temp = []
     for word in text.split():
@@ -168,7 +170,7 @@ def colonial(text):
     text = text.replace("t", "'")
     text = text.replace("ing", "in'")
 
-    return text + " init fam"
+    return text
 
 def safe(text):
 
@@ -193,16 +195,12 @@ def safe(text):
         "wanker": "winker",
     }
 
-    text = sanitise_text(text)
-
     for word in words:
         text = text.replace(word, words[word])
 
     return text
 
 def biblical(text):
-
-    text = sanitise_text(text)
 
     temp = []
     for word in text.split():

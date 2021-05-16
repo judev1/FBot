@@ -81,7 +81,7 @@ class botlists(commands.Cog):
                 value = "You can vote!"
             return value
 
-        db.add_voter(user.id)
+        db.addvoter(user.id)
         embed.add_field(name=":mailbox_with_mail:  **__SAVED__**", inline=False, value="Your votes appear in your profile and on leaderboards")
         embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
         embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")

@@ -84,15 +84,15 @@ class fbotdev(commands.Cog):
     @commands.command(name="devon")
     @commands.is_owner()
     async def _FBotDevOn(self, ctx):
-        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        self.bot.db.Change_Status(ctx.channel.id, "on")
+        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.changestatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devoff")
     @commands.is_owner()
     async def _FBotDevOff(self, ctx):
-        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
-        self.bot.db.Change_Status(ctx.channel.id, "off")
+        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.changestatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devrespond")
@@ -100,7 +100,7 @@ class fbotdev(commands.Cog):
     @commands.guild_only()
     async def _Dev_Priority(self, ctx, *, arg):
         if arg in {"few", "some", "all"}:
-            self.bot.db.Change_Priority(ctx.guild.id, arg)
+            self.bot.db.changepriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.send("`Must be 'few', 'some', or 'all'`")
@@ -108,12 +108,12 @@ class fbotdev(commands.Cog):
     @commands.command(name="devmodtoggle")
     @commands.is_owner()
     async def _Modtoggle(self, ctx, arg):
-        self.bot.db.Add_Channel(ctx.channel.id, ctx.guild.id)
+        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
-            self.bot.db.Change_Modtoggle(ctx.guild.id, arg)
+            self.bot.db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         elif arg == "off":
-            self.bot.db.Change_Modtoggle(ctx.guild.id, arg)
+            self.bot.db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="presence")

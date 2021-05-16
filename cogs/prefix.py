@@ -10,7 +10,7 @@ class prefix(commands.Cog):
         if ctx.author.guild_permissions.administrator:
             fn, db = self.bot.fn, self.bot.db
             if arg == "reset":
-                db.Change_Prefix(ctx.guild.id, "fbot")
+                db.changeprefix(ctx.guild.id, "fbot")
                 await ctx.message.add_reaction("✅")
             else:
                 name = ctx.author.display_name
@@ -26,7 +26,7 @@ class prefix(commands.Cog):
                             f"The character ' {char} ' is not allowed")
                     await ctx.send(embed=embed)
                 else:
-                    db.Change_Prefix(ctx.guild.id, arg)
+                    db.changeprefix(ctx.guild.id, arg)
                     await ctx.message.add_reaction("✅")
         else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
 

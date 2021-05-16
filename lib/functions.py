@@ -20,7 +20,7 @@ def format_perm(perm):
 
 def predicate(ctx):
     if str(ctx.channel.type) != "private":
-        bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot_id))
+        bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot.user.id))
 
         valid, perms = [], {}
         for perm in cm.perms[ctx.command.name]:
@@ -41,23 +41,25 @@ def predicate(ctx):
         if cm.commands[ctx.command.name][5] == "*Yes*":
             raise commands.NoPrivateMessage()
 
-    cooldown = cache["Cooldowns"].cooldown(ctx)
+    cooldown = bot.cache["Cooldowns"].cooldown(ctx)
     if cooldown:
+        bot.stats.commands_ignored += 1
         raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
+    bot.stats.commands_processed += 1
     return True
 
 class fn:
 
-    def setbot(self, bot):
-        self.bot = bot
+    def setbot(self, client):
 
-        global cache, bot_id
-        bot_id = bot.user.id
+        global bot
+        bot = client
         bot.cache = dict()
-        cache = bot.cache
 
         bot.cache["Cooldowns"] = Cooldowns()
         bot.cache["Names"] = Names()
+        
+        self.bot = bot
 
     def getinfo(self, info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
@@ -82,7 +84,7 @@ class fn:
     def getprefix(self, bot, message):
         prefix = "fbot"
         if str(message.channel.type) != "private":
-            prefix = bot.db.Get_Prefix(message.guild.id)
+            prefix = bot.db.getprefix(message.guild.id)
         if prefix == "fbot":
             content = message.content
             if content[:5].lower() == "fbot ": prefix = content[:5]

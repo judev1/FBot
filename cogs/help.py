@@ -29,19 +29,22 @@ class help(commands.Cog):
         self.bot = bot
 
     def cmdembed(self, user, cmd, prefix):
+
         try: data = cm.commands[cmd]
         except: data = cm.devcmds[cmd]
 
         desc = data[9]
         # Temporary while not all commands have long descriptions
         if desc == "": desc = data[10]
+        server = "*Something not making sense? Spot a mistake?*"
+        server += f"\n*Join our [support server]({self.bot.fn.server}) and let us know!*"
 
         usage = data[8].replace("{prefix}", prefix)
         
         embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
                                   desc,  f"\n**Premium:** `{data[4]}s`",
                                   f"**Cooldown:** `{data[3]}s`",
-                                  "\n**Example usage:**", usage)
+                                  "\n**Example usage:**", usage, server)
 
         cat = "Category: " + data[1] + data[2]
         embed.set_author(name=cat)
@@ -67,7 +70,7 @@ class help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = self.bot.db.Get_Prefix(ctx.guild.id)
+            prefix = self.bot.db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
 
         command = " ".join(command).lower()
@@ -86,7 +89,7 @@ class help(commands.Cog):
 
             embed.add_field(name=f"{LINK_EMOJI} **__HELPFUL LINKS__**",
             value="Some useful links for reference", inline=False)
-            embed.add_field(name="**Our Patreon**", value=f"[*Help support us!*]({fn.server})")
+            embed.add_field(name="**Our Patreon**", value=f"[*Help support us!*]({fn.patreon})")
             embed.add_field(name="**Invite FBot**", value=f"[*Or `{prefix}invite`*]({fn.invite})")
             embed.add_field(name="**Our Support Server**", value=f"[*You won't regret it...*]({fn.server})")
 
@@ -111,7 +114,7 @@ class help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = self.bot.db.Get_Prefix(ctx.guild.id)
+            prefix = self.bot.db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
         colour = self.bot.db.getcolour(ctx.author.id)
         

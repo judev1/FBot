@@ -11,7 +11,7 @@ class modtoggle(commands.Cog):
         
         if ctx.author.guild_permissions.administrator:
             if arg in {"on", "off"}:
-                db.Change_Modtoggle(ctx.guild.id, arg)
+                db.changemodtoggle(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
                 embed = self.bot.fn.errorembed("Invalid Argument",
