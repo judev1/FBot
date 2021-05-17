@@ -20,7 +20,7 @@ class approve(commands.Cog):
             else:
                 msg = None
         
-        await ctx.send("I'm FBot and I approve of this message", reference=msg) # Doesn't work for some reason
+        await ctx.send("I'm FBot and I approve of this message")#, reference=msg) # Doesn't work for some reason
           
 def setup(bot):
     bot.add_cog(approve(bot))

@@ -94,10 +94,6 @@ class fcounter(commands.Cog):
                 f"\nLast sender is `{last_sender}`")
         await ctx.send(embed=embed)
 
-    @commands.command("hs")
-    async def _leaderboard(self, ctx):
-        await ctx.send("`fbot hs` has moved to `fbot top counting`")
-
     @commands.command("devnumber")
     @commands.is_owner()
     async def _setnumber(self, ctx, *, number):

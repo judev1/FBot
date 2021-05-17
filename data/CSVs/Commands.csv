@@ -77,5 +77,6 @@ gift,,Dev,,0,0,No,send_messages,owner,,,
 scounts,,Dev,,0,0,No,send_messages,owner,,,
 jokeinfo,,Dev,,0,0,No,send_messages,owner,,,
 montly,,Dev,,0,0,No,send_messages,owner,,,
-hs,,temp,,8,2,Yes,send_messages,no extra,{prefix}hs,,temp
-votehs,,temp,,8,2,Yes,send_messages,no extra,{prefix}hs,,temp
+getnotice,,Dev,,0,0,No,send_messages,owner,,,
+notice,<title> && <message>,Dev,,0,0,No,send_messages,owner,,,
+editnotice,<title> && <message>,Dev,,0,0,No,send_messages,owner,,,

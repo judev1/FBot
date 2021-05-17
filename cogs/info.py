@@ -96,7 +96,7 @@ class info(commands.Cog):
         embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(name="Last Updated", value=fn.getinfo("lastupdated"))
         embed.add_field(name="Uptime", value=ftime.uptime())
-        embed.add_field(name="Members", value=totalmembers)
+        embed.add_field(name="Users", value=totalmembers)
         embed.add_field(name="Version", value=fn.getinfo("ver"))
         await ctx.send(embed=embed)
 
@@ -105,10 +105,6 @@ class info(commands.Cog):
         guild = ctx.guild
 
         memcount = guild.member_count
-        #memcount, botcount = 0, 0
-        # for member in guild.members:
-        #    if not member.bot:memcount += 1
-        #    else: botcount += 1
 
         created = guild.created_at
         d = created.strftime("%d")
@@ -116,14 +112,11 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(ctx.author, guild.name)  # guild.description
-        embed.add_field(name="Members", value=memcount)  # + botcount)
-        #embed.add_field(name="Users", value=memcount)
-        #embed.add_field(name="Bots", value=botcount)
+        embed = self.bot.fn.embed(ctx.author, guild.name)
+        embed.add_field(name="Members", value=memcount)
         embed.add_field(name="Voice channels", value=len(guild.voice_channels))
         embed.add_field(name="Text channels", value=len(guild.text_channels))
         embed.add_field(name="Roles", value=len(guild.roles))
-        #embed.add_field(name="Owner", value=guild.owner)
         embed.add_field(name="Language", value=guild.preferred_locale)
         embed.add_field(name="Created", value=created)
         embed.set_thumbnail(url=guild.icon_url)

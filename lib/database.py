@@ -66,7 +66,7 @@ class db:
                         );""")
 
         c.execute("""CREATE TABLE IF NOT EXISTS notices (
-                            data integer NOT NULL,
+                            date integer NOT NULL,
                             title string NOT NULL,
                             message string NOT NULL
                         );""")
@@ -215,14 +215,14 @@ class db:
 
     def addguild(self, guild_id):
         c = conn.cursor()
-        t = (guild_id,)
+        t = (guild_id, time.time())
         c.execute("""INSERT INTO guilds (
                             guild_id, notice,
                             prefix, modtoggle, priority, mode, language,
                             name, picture, triggers
                         )
                         VALUES (
-                            ?, 0,
+                            ?, ?,
                             'fbot', 'off', 'all', 'default', 'english',
                             '', '', '{}'
                         );""", t)
@@ -310,6 +310,42 @@ class db:
         for channel in c.fetchall():
             newdata.append((channel[0], channel[1]))
         return newdata
+    
+    # Notices
+
+    def addnotice(self, date, title, message):
+        c = conn.cursor()
+        t = (date, title, message)
+        c.execute("""INSERT INTO notices (
+                        date, title, message
+                    )
+                    VALUES (
+                        ?, ?, ?
+                    );""", t)
+        conn.commit()
+    
+    def editnotice(self, title, message):
+        c = conn.cursor()
+        t = (title, message, self.getlastnotice()[0])
+        c.execute(f"UPDATE notices SET title=?, message=? WHERE date=?;", t)
+        return c.fetchone()
+
+    def getlastnotice(self):
+        c = conn.cursor()
+        c.execute(f"SELECT * FROM notices ORDER BY date DESC LIMIT 1;")
+        return c.fetchone()
+    
+    def getservernotice(self, guild_id):
+        c = conn.cursor()
+        t = (guild_id,)
+        c.execute(f"SELECT notice FROM guilds WHERE guild_id=?;", t)
+        return c.fetchone()[0]
+    
+    def updateservernotice(self, guild_id):
+        c = conn.cursor()
+        t = (time.time(), guild_id)
+        c.execute(f"UPDATE guilds SET notice=? WHERE guild_id=?;", t)
+        conn.commit()
 
     # Users
 
