@@ -33,7 +33,6 @@ class FBot(commands.Bot):
 
         self.fn = fn
         self.db = db()
-        self.db.update() # Should be removed immediately after use
         self.ftime = ftime()
         self.dbl = dbl.DBLClient(self, os.getenv("TOPGG_TOKEN"), webhook_path="/dblwebhook",
             webhook_auth=os.getenv("WEBHOOK_AUTH"), webhook_port=6000)
@@ -73,4 +72,4 @@ bot = FBot()
 voting_handler(bot)
 
 bot.add_check(predicate)
-bot.run(os.getenv("JUDE_TOKEN"))
+bot.run(os.getenv("FBOT_TOKEN"))

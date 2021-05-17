@@ -94,75 +94,6 @@ class db:
 
         conn.commit()
         if verbose: print(" > Connected to FBot.db")
-    
-    def update(self):
-        c = conn.cursor()
-
-        old_conn = sqlite3.connect(path.replace("FBot", "old"))
-        old_c = old_conn.cursor()
-
-        old_c.execute("SELECT guild_id, prefix, modtoggle, priority FROM guilds;")
-        for data in old_c.fetchall():
-            c.execute("""INSERT INTO guilds (
-                                guild_id, notice,
-                                prefix, modtoggle, priority, mode, language,
-                                name, picture, triggers
-                            )
-                            VALUES (
-                                ?, 0,
-                                ?, ?, ?, 'default', 'english',
-                                '', '', '{}'
-                            );""", data)
-        
-        old_c.execute("SELECT guild_id, channel_id, status FROM channels;")
-        for data in old_c.fetchall():
-            c.execute("""INSERT INTO channels (
-                                guild_id, channel_id, status,
-                                shout
-                            )
-                            VALUES (
-                                ?, ?, ?,
-                                'no'
-                            );""", data)
-        
-        old_c.execute("SELECT * FROM counter;")
-        for data in old_c.fetchall():
-            c.execute("""INSERT INTO counting (
-                                guild_id, channel_id, number, user_id, record
-                            )
-                            VALUES (
-                                ?, ?, ?, ?, ?
-                            );""", data)
-        
-        old_c.execute("SELECT * FROM votes;")
-        for data in old_c.fetchall():
-            c.execute("""INSERT INTO votes (
-                                user_id,
-                                topvotes, dblvotes, bfdvotes,
-                                total_topvotes, total_dblvotes, total_bfdvotes,
-                                last_topvote, last_dblvote, last_bfdvote
-                            )
-                            VALUES (
-                                ?,
-                                ?, ?, ?,
-                                ?, ?, ?,
-                                ?, ?, ?
-                            );""", data)
-        
-        old_c.execute("SELECT user_id, ppsize, commands, triggers FROM users;")
-        for data in old_c.fetchall():
-            c.execute(f"""INSERT INTO users (
-                            user_id, ppsize,
-                            commands, triggers,
-                            title, colour, emoji, say, delete_say, claims
-                        )
-                        VALUES (
-                            ?, ?,
-                            ?, ?,
-                            '', {0xf42f42}, '', 'fbot', 'yes', 0
-                            );""", data)
-
-        conn.commit()
 
     def checkguilds(self, guilds):
         c = conn.cursor()
@@ -226,6 +157,7 @@ class db:
                             'fbot', 'off', 'all', 'default', 'english',
                             '', '', '{}'
                         );""", t)
+        t = (guild_id,)
         c.execute("""INSERT INTO counting (
                             guild_id, channel_id, number, user_id, record
                         )
