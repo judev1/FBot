@@ -26,6 +26,8 @@ class image(commands.Cog):
         self.bot = bot
 
     async def save_image(self, path, member, attachments, to_process, author):
+        if not os.path.exists("data/Temp/"):
+            os.makedirs("data/Temp/")
         if member:
             await member.avatar_url_as(format="png", static_format="png", size=512).save(path)
         elif attachments:
