@@ -49,6 +49,8 @@ class triggerresponses(commands.Cog):
                 return
 
         prefix = self.bot.fn.getprefix(self.bot, message)
+        if not message.content.startswith(prefix):
+            return
         commandcheck = content[len(prefix):]
         for command in cm.commands:
             if commandcheck.startswith(command):

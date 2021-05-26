@@ -20,7 +20,7 @@ sneak_img = wand_image(filename="data/imgs/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 
-class bigpp(commands.Cog):
+class image(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -281,4 +281,4 @@ class bigpp(commands.Cog):
         await self.cleanup(ctx, path, "god", success)
 
 def setup(bot):
-    bot.add_cog(bigpp(bot))
+    bot.add_cog(image(bot))

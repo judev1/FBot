@@ -11,7 +11,7 @@ class stats:
 
     def set(self):
         self.commands_processed = 0
-        self.commands_ignored = 0
+        self.commands_ratelimited = 0
         self.triggers_processed = 0
         self.other_messages_processed = 0
 
@@ -68,11 +68,11 @@ class info(commands.Cog):
         fn = self.bot.fn
         stats = self.bot.stats
         hours = ceil((time() - self.time_start) / 3600)
-        total = (stats.commands_processed + stats.commands_ignored +
+        total = (stats.commands_processed + stats.commands_ratelimited +
                  stats.triggers_processed + stats.other_messages_processed)
         return fn.embed(user, f"FBot stats for the past {hours} hours:",
                         f"Commands processed: `{stats.commands_processed}`",
-                        f"Commands ignored: `{stats.commands_ignored}`",
+                        f"Commands ratelimited: `{stats.commands_ratelimited}`",
                         f"Triggers responded: `{stats.triggers_processed}`",
                         f"Messages ignored: `{stats.other_messages_processed}`",
                         f"Total count: `{total}`")

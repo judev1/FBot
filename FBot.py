@@ -52,7 +52,7 @@ class FBot(commands.Bot):
 
         self.remove_command("help")
         for cog in self.fn.getcogs():
-            if cog not in ["image.py"]: # Cogs not to load
+            if cog not in []: # Cogs not to load
                 print(f"Loading {cog}...", end="")
                 try: self.reload_extension("cogs." + cog[:-3])
                 except: self.load_extension("cogs." + cog[:-3])

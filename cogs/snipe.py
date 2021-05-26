@@ -71,6 +71,8 @@ class snipe(commands.Cog):
         if not message.guild: return
 
         prefix = self.bot.fn.getprefix(self.bot, message)
+        if not message.content.startswith(prefix):
+            return
         commandcheck = message.content[len(prefix):]
         if commandcheck.startswith("say "):
             if not message.author.bot:

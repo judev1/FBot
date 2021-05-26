@@ -15,6 +15,8 @@ class notices(commands.Cog):
         if message.author.bot: return
 
         prefix = self.bot.fn.getprefix(self.bot, message)
+        if not message.content.startswith(prefix):
+            return
         commandcheck = message.content[len(prefix):]
         command_used = False
         for command in cm.commands:
@@ -27,11 +29,12 @@ class notices(commands.Cog):
 
         if str(message.channel.type) != "private":
             notice = self.bot.db.getlastnotice()
-            last_notice = self.bot.db.getservernotice(message.guild.id)
-            if last_notice < notice[0]:
-                embed = self.notice(message, *notice)
-                await message.channel.send(embed=embed)
-                self.bot.db.updateservernotice(message.guild.id)
+            if notice:
+                last_notice = self.bot.db.getservernotice(message.guild.id)
+                if last_notice < notice[0]:
+                    embed = self.notice(message, *notice)
+                    await message.channel.send(embed=embed)
+                    self.bot.db.updateservernotice(message.guild.id)
     
     def notice(self, ctx, date, title, message):
         

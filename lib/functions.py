@@ -43,7 +43,7 @@ def predicate(ctx):
 
     cooldown = bot.cache["Cooldowns"].cooldown(ctx)
     if cooldown:
-        bot.stats.commands_ignored += 1
+        bot.stats.commands_ratelimited += 1
         raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
     bot.stats.commands_processed += 1
     return True
@@ -169,7 +169,7 @@ class voting_handler:
             runner = web.AppRunner(app)
             await runner.setup()
 
-            server = web.TCPSite(runner, '0.0.0.0', 2296)
+            server = web.TCPSite(runner, "0.0.0.0", 2296)
             await server.start()
 
         self.bot = bot
@@ -179,9 +179,9 @@ class voting_handler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + os.getenv("DBL_TOKEN") == auth:
+        if "dbl_" + os.getenv("WEBHOOK_AUTH") == auth:
             site = "discordbotlist.com"
-        elif "bfd_" + os.getenv("BFD_TOKEN") == auth:
+        elif "bfd_" + os.getenv("WEBHOOK_AUTH") == auth:
             site = "botsfordiscord.com"
         else:
             return web.Response(status=401)
