@@ -23,7 +23,7 @@ class FBot(commands.Bot):
     
     def __init__(self):
 
-        owners =  [671791003065384987, 216260005827969024, 311178459919417344]
+        owners =  [671791003065384987, 216260005827969024, 311178459919417344, 668423998777982997]
         
         intents = discord.Intents.default()
         intents.typing = False
