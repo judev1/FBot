@@ -42,7 +42,7 @@ Don't just take our word for it, what do our users say?
 If you've read all that and for whatever reason feel the urge to use the bot, you can invite it [here](https://fbot.breadhub.uk/invite)
  
 ## **Contact**
-If you have any suggestions or feedback, find an error of sorts, or just wanna chat, please feel free to [join our server!](https://fbot.breadhub.uk/server) or DM us on discord `@justjude#2296` or `@LinesGuy#9260`
+If you have any suggestions or feedback, find an error of sorts, or just wanna chat, please feel free to [join our server!](https://fbot.breadhub.uk/server) or DM us on discord `@justjude#2296` or `@Lines#9260`
 
 ## **Support us**
 Like what we do? Support us on [Patreon](https://www.patreon.com/fbotbot) and enjoy the (admittedly few) benefits of FBot's premium feature!

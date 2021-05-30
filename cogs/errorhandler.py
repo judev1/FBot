@@ -85,7 +85,7 @@ class errorhandler(commands.Cog):
                     await ctx.channel.send(error.original.text)
             embed = fn.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"
-                    "`@justjude#2296` or `@LinesGuy#9260`\n"
+                    "`@justjude#2296` or `@Lines#9260`\n"
                     f"OR join our [support server]({fn.server}) "
                     "and give us a ping")
             try:

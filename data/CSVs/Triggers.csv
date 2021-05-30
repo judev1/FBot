@@ -5,7 +5,7 @@ FBot\F Bot\<@!711934102906994699>,whole,anycase,"...Yes, {username}?",1
 FBot\F Bot\ <@!711934102906994699>,replace,anycase,{username},1
 Fuck FBot\Fuck F Bot\Fuck <@!711934102906994699>,whole,anycase,"No, fuck *you*",1
 Fuck me FBot\Fuck me F Bot\Fuck me <@!711934102906994699>,start,anycase,Hard pass,1
-Fuck me,start,anycase,"I'll fuck {username}{after}, if you want…",1
+Fuck me,start,anycase,"I'll fuck {username}{after}, if you want...",1
 Fuck you FBot\Fuck you F Bot\Fuck you <@!711934102906994699>,whole,anycase,"No, *fuck you*",1
 Fuck you\Fuck u,whole,anycase,No fuck you,1
 Fuck ,start,anycase,"Yeah, fuck {after}",1
@@ -111,7 +111,7 @@ Dang it,whole,anycase,Hot diggity darn,1
 Hot diggity darn,whole,anycase,"That's pretty gay, just saying",1
 Pog\Poggers,whole,anycase,Get away from me anime weeb,1
 Danganronpa,whole,anycase,"No, you spelt that wrong",1
-Suck ,start,anycase,"I'll suck {after}, if you want…",1
+Suck ,start,anycase,"I'll suck {after}, if you want...",1
 Shit\Crap\Poop\Poo\Poopy\Stinky\Penis\Cock\Dick,whole,anycase,"Hehehe, {message} funny",1
 TRUE,start,anycase,FALSE,1
 FALSE,start,anycase,TRUE,1
