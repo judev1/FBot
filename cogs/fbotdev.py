@@ -225,9 +225,12 @@ class fbotdev(commands.Cog):
     @commands.command(name="leave")
     @commands.is_owner()
     async def _Leave(self, ctx, id: int):
-        server = self.bot.get_guild(id)
-        await server.leave()
-        await ctx.message.add_reaction('✅')
+        try:
+            server = self.bot.get_guild(id)
+            await server.leave()
+            await ctx.message.add_reaction('✅')
+        except Exception as e:
+            await ctx.send("Hmm, something went wrong. It's likely the guild can't be found.")
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))
