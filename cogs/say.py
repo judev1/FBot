@@ -1,6 +1,6 @@
 from discord import AllowedMentions
 from discord.ext import commands
-import modes
+from modes import *
 
 class say(commands.Cog):
     
@@ -8,18 +8,11 @@ class say(commands.Cog):
         self.bot = bot
     
     async def say(self, ctx, text, filter=None, delete=False):
-        
-        text = " ".join(text)
-        if not text == "":
-            if delete:
-                try: await ctx.message.delete()
-                except: pass
-        else:
-            text = "What do you want me to say!?"
-        
+
         if filter:
+            text = sanitise_text(text)
             text = filter(text)
-        text = modes.capitalise(text)
+        text = capitalise(text)
         
         try:
             await ctx.send(text, allowed_mentions=AllowedMentions.none())
@@ -27,56 +20,56 @@ class say(commands.Cog):
             text = "Text is too long to send"
             if filter:
                 text = filter(text)
-            text = modes.capitalise(text)
+                text = capitalise(text)
             await ctx.send(text)
         
     @commands.command(name="say")
-    async def _Say(self, ctx, *text):
+    async def _Say(self, ctx, *, text):
         await self.say(ctx, text, delete=True)
         
     @commands.command(name="uwu")
-    async def _UWU(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.uwu)
+    async def _UWU(self, ctx, *, text):
+        await self.say(ctx, text, filter=uwu)
         
     @commands.command(name="confused")
-    async def _Confused(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.confused)
+    async def _Confused(self, ctx, *, text):
+        await self.say(ctx, text, filter=confused)
         
     @commands.command(name="pirate")
-    async def _Pirate(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.pirate)
+    async def _Pirate(self, ctx, *, text):
+        await self.say(ctx, text, filter=pirate)
         
     @commands.command(name="triggered")
-    async def _Triggered(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.triggered)
+    async def _Triggered(self, ctx, *, text):
+        await self.say(ctx, text, filter=triggered)
         
     @commands.command(name="italian")
-    async def _Italian(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.italian)
+    async def _Italian(self, ctx, *, text):
+        await self.say(ctx, text, filter=italian)
         
     @commands.command(name="fuck")
-    async def _Fuck(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.fuck)
+    async def _Fuck(self, ctx, *, text):
+        await self.say(ctx, text, filter=fuck)
         
     @commands.command(name="ironic")
-    async def _Ironic(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.ironic)
+    async def _Ironic(self, ctx, *, text):
+        await self.say(ctx, text, filter=ironic)
         
     @commands.command(name="patronise")
-    async def _Patronise(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.patronise)
+    async def _Patronise(self, ctx, *, text):
+        await self.say(ctx, text, filter=patronise)
         
     @commands.command(name="colonial")
-    async def _Colonial(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.colonial)
+    async def _Colonial(self, ctx, *, text):
+        await self.say(ctx, text, filter=colonial)
         
     @commands.command(name="safe")
-    async def _Safe(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.safe)
+    async def _Safe(self, ctx, *, text):
+        await self.say(ctx, text, filter=safe)
         
     @commands.command(name="biblical")
-    async def _Biblical(self, ctx, *text):
-        await self.say(ctx, text, filter=modes.biblical)
+    async def _Biblical(self, ctx, *, text):
+        await self.say(ctx, text, filter=biblical)
 
 def setup(bot):
     bot.add_cog(say(bot))
