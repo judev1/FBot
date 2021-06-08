@@ -222,5 +222,12 @@ class fbotdev(commands.Cog):
     async def _Host(self, ctx):
         await ctx.send("This instance is running on: " + socket.gethostname())
 
+    @commands.command(name="leave")
+    @commands.is_owner()
+    async def _Leave(self, ctx, id: int):
+        server = self.bot.get_guild(id)
+        await server.leave()
+        await ctx.message.add_reaction('✅')
+
 def setup(bot):
     bot.add_cog(fbotdev(bot))
