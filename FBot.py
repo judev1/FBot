@@ -2,6 +2,7 @@ import nest_asyncio
 nest_asyncio.apply()
 
 from discord.ext import commands
+from discord_components import DiscordComponents
 import discord
 import dbl
 import sys
@@ -20,15 +21,15 @@ import commands as cm
 fn = fn()
 
 class FBot(commands.Bot):
-    
+
     def __init__(self):
 
         owners =  [671791003065384987, 216260005827969024, 311178459919417344, 668423998777982997]
-        
+
         intents = discord.Intents.default()
         intents.typing = False
         intents.presences = False
-        
+
         super().__init__(command_prefix=fn.getprefix, owner_ids=owners, intents=intents)
 
         self.fn = fn
@@ -46,6 +47,7 @@ class FBot(commands.Bot):
     async def on_ready(self):
         print(f" > Finished signing into Discord as {self.user}\n")
         self.db.checkguilds(self.guilds)
+        DiscordComponents(bot)
         fn.setbot(self)
         self.ftime.set()
         print(f" > Session started at {bot.ftime.start}\n")
@@ -64,7 +66,7 @@ class FBot(commands.Bot):
         for command in cm.devcmds:
             self.cache["Cooldowns"].add_command(command, (0, 0))
         print(" > Finished setting up cooldowns\n")
-        
+
         await self.change_presence(status=discord.Status.online,
                                 activity=discord.Game(name="'FBot help'"))
 
