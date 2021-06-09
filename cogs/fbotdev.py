@@ -224,15 +224,12 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="leave")
     @commands.is_owner()
-    async def _Leave(self, ctx, id: int):
-        if ctx.guild.id == id: 
-            return await ctx.reply("You can't leave server you are invoking this command in!")
-        try:
-            server = self.bot.get_guild(id)
-            await server.leave()
-            await ctx.message.add_reaction('✅')
-        except Exception as e:
-            await ctx.reply("Hmm, something went wrong. It's likely the guild can't be found.")
+    async def _Leave(self, ctx, guild: discord.Guild):
+        if ctx.guild.id == guild.id:
+            await ctx.send("Can't leave the server you are invoking this command in")
+        else:
+            await guild.leave()
+            await ctx.message.add_reaction("✅")
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))
