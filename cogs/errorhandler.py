@@ -65,6 +65,12 @@ class errorhandler(commands.Cog):
                         await channel.send(embed=embed)
                     except: await channel.send(error)
                 except: pass
+        elif type(error) is commands.UserNotFound:
+            await ctx.send("User not found")
+        elif type(error) is commands.ChannelNotFound:
+            await ctx.send("Channel not found")
+        elif type(error) is commands.GuildNotFound:
+            await ctx.send("Guild not found")
         else:
             if type(error) is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:
