@@ -1,7 +1,7 @@
 from discord.ext import commands
 from dbfn import reactionbook
-from functions import format_perm
-import commands as cm
+from lib.functions import format_perm 
+import lib.commands as cm
 
 descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
 "All the commands you need to start making FBux... and debt!",

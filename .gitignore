@@ -11,3 +11,4 @@ Temp/
 *.xml
 *.iml
 .env
+Pipfile.lock

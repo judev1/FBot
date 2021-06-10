@@ -1,4 +1,3 @@
-from database import db
 import csv
 
 T_MESSAGE = 0

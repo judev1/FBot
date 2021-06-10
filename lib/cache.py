@@ -1,4 +1,4 @@
-from database import db
+from .database import db
 from time import time
 
 db = db(verbose=False)

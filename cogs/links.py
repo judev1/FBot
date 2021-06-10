@@ -1,5 +1,4 @@
 from discord.ext import commands
-from discord import Embed
 
 class links(commands.Cog):
 

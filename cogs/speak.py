@@ -1,6 +1,4 @@
-from discord import AllowedMentions
 from discord.ext import commands
-import modes
 
 options = ["default", "uwu", "confused", "pirate", "triggered", "italian", "fuck", "ironic", "patronise", "colonial", "safe", "biblical"]
 
