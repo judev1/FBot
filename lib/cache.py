@@ -17,10 +17,10 @@ class Cooldowns:
 
         command = ctx.command.name
         user = ctx.author
-        
+
         premium = int(db.premium(user))
         user = user.id
-        
+
         command_cooldowns = self._commands[command]
         cooldowns = getattr(self, command)
         now = time()

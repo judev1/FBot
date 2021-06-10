@@ -11,20 +11,18 @@ class purge(commands.Cog):
     @commands.command(name="purge", aliases=["thanos"])
     async def do_purge(self, ctx, *args):
 
-        # Check sender has permission        
         if not ctx.message.author.guild_permissions.manage_messages:
             await ctx.send("**`You do not have the manage_messages permissions.`**")
             return
 
-        # Check there is not an ongoing purge in same channel
         if ctx.channel.id in ongoing_purges:
             msg = await ctx.send("**A purge is already in progress, calm yoself.**")
             await asyncio.sleep(1)
             try:
                 await msg.delete()
-            except: pass # message might have been deleted
+            except: pass
             return
-        
+
         if len(args) != 0:
             limit = "".join(args)
             if limit.isdigit():
@@ -42,6 +40,6 @@ class purge(commands.Cog):
                 await ctx.send("You must specify how many messages to purge!")
         else:
             await ctx.send("You must specify how many messages to purge!")
-    
+
 def setup(bot):
     bot.add_cog(purge(bot))

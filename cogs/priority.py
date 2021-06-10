@@ -1,10 +1,10 @@
 from discord.ext import commands
 
 class priority(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-        
+
     @commands.command(name="respond")
     async def _Priority(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:

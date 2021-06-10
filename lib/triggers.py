@@ -8,7 +8,7 @@ T_RESPONSE = 3
 T_PRIORITY = 4
 
 class tr:
-    
+
     def load():
 
         global triggers, all_aliases
@@ -27,7 +27,7 @@ class tr:
 
     def respond(message, priority):
         content = message.content
-        
+
         if priority == "all":
             priority = 3
         elif priority == "some":
@@ -36,13 +36,13 @@ class tr:
             priority = 1
 
         debug_mode = False
-        
+
         for trigger in triggers:
             if trigger[T_CASE] == "anycase":
                 message_check = content.lower()
             else:
                 message_check = content
-            
+
             type_check = False
             trigger_aliases = trigger[T_MESSAGE].split("\\")
             alias_used = ""
@@ -88,5 +88,5 @@ class tr:
                 if trigger[T_TYPE] == "replace":
                     response = content.lower().replace(alias, response)
                 return True, response
-            
+
         return False, ""

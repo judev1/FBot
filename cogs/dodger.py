@@ -81,7 +81,7 @@ class dodgergame():
 
 class dodger(commands.Cog):
     game = dodgergame()
-    
+
     def __init__(self, bot):
         self.bot = bot
         self.games = {}
@@ -119,7 +119,7 @@ class dodger(commands.Cog):
         if user.id not in self.games: return
         emoji = reaction.emoji
         if emoji in emojis:
-            self.games[user.id].direction = emojinames[emojis.index(emoji)]        
+            self.games[user.id].direction = emojinames[emojis.index(emoji)]
         await reaction.message.remove_reaction(reaction, user)
 
 def setup(bot):

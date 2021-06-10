@@ -5,10 +5,10 @@ import datetime
 import time
 
 class notices(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-    
+
     @commands.Cog.listener()
     async def on_message(self, message):
 
@@ -23,7 +23,7 @@ class notices(commands.Cog):
             if commandcheck.startswith(command):
                 command_used = True
                 break
-        
+
         if not command_used:
             return
 
@@ -35,17 +35,17 @@ class notices(commands.Cog):
                     embed = self.notice(message, *notice)
                     await message.channel.send(embed=embed)
                     self.bot.db.updateservernotice(message.guild.id)
-    
+
     def notice(self, ctx, date, title, message):
-        
+
         fn, db = self.bot.fn, self.bot.db
         prefix = db.getprefix(ctx.guild.id)
         message = eval(f'f"""{message}"""')
-        
+
         date = datetime.datetime.fromtimestamp(date)
         embed = self.bot.fn.embed(ctx.author, title, message)
         embed.set_author(name=date.strftime("%H:%M, %d/%m/%y UTC"))
-        
+
         return embed
 
     @commands.command(name="getnotice")

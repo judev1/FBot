@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord import Embed
 
 class links(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -20,7 +20,7 @@ class links(commands.Cog):
 
     @commands.command(name="links")
     async def _Links(self, ctx):
-        
+
         fn = self.bot.fn
         embed = fn.embed(ctx.author, "FBot links",)
 
@@ -42,7 +42,7 @@ class links(commands.Cog):
         embed.add_field(name="botlist.space", value=f"[Click here]({fn.blsp})")
         embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.dbeu})")
         embed.add_field(name="discord.bots.gg", value=f"[Click here]({fn.dbgg})")
-       
+
         await ctx.send(embed=embed)
 
 def setup(bot):

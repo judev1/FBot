@@ -14,7 +14,7 @@ C_LDESC = 10 # Command Long Description
 C_SDESC = 11 # Command Short Description
 
 class cmds:
-    
+
     def load():
 
         global commands, devcmds, categories, perms, devcmdlist
@@ -49,7 +49,7 @@ class cmds:
                 else:
                     devcmds[row[C_NAME]] = row[1:]
                     devcmdlist.append(row)
-                
+
         print(" > Loaded Commands.csv")
 
     def search(query, dev=False):

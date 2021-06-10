@@ -15,7 +15,6 @@ class stats:
         self.triggers_processed = 0
         self.other_messages_processed = 0
 
-
 class fakeuser: id = 0
 fakeuser = fakeuser()
 
@@ -120,6 +119,7 @@ class info(commands.Cog):
         embed.add_field(name="Language", value=guild.preferred_locale)
         embed.add_field(name="Created", value=created)
         embed.set_thumbnail(url=guild.icon_url)
+
         await ctx.send(embed=embed)
 
     @commands.command(name="session", aliases=["uptime"])
@@ -130,7 +130,7 @@ class info(commands.Cog):
         embed.add_field(name="Uptime", value=ftime.uptime())
         await ctx.send(embed=embed)
 
-    @commands.command(name="ver")
+    @commands.command(name="ver", aliases=["version"])
     async def _Version(self, ctx):
         fn = self.bot.fn
         ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
@@ -142,7 +142,6 @@ class info(commands.Cog):
     @commands.command(name="premium")
     async def _Premium(self, ctx):
         await ctx.send("https://fbot.breadhub.uk/premium")
-
 
 def setup(bot):
     bot.add_cog(info(bot))

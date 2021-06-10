@@ -2,7 +2,6 @@ from discord.ext import commands
 import aiohttp
 import os
 
-
 f = "~~f~~ "
 
 class fakeuser: id = 0
@@ -59,7 +58,7 @@ class botlists(commands.Cog):
             content += "\n**discordbotlist.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
-        
+
         await session.close()
 
     @commands.command(name="vote")
@@ -86,7 +85,7 @@ class botlists(commands.Cog):
         embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
         embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")
         embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
-        
+
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
         embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.votelixyz} 'Vote here')")
         embed.add_field(name="discord-botlist.eu", value=f"[Vote here]({fn.votedbeu} 'Vote here')")

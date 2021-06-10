@@ -87,23 +87,22 @@ class snakegame():
         while (x, y) in self.snake:
             x, y = randint(0, self.width-1), randint(0, self.height-1)
         return (x, y)
-    
 
 class snake(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
         self.games = {}
-        
+
     @commands.command(name="snake", alliases=["snek"])
     async def _Snake(self, ctx):
-        
+
         def speed():
-            return 0.8 #round(0.8 - (game.score/100)**0.5, 3) #round(0.8 - (game.score**2) / 5120, 3)
+            return 0.8
 
         def snake_embed():
             embed = self.bot.fn.embed(ctx.author, "Snake Game", game.board())
-            embed.set_author(name=f"{game.score} points | {game.direction.upper()}") # {str(speed())[1:]}fps
+            embed.set_author(name=f"{game.score} points | {game.direction.upper()}")
             return embed
 
         user_id = ctx.author.id
@@ -131,8 +130,8 @@ class snake(commands.Cog):
         if user.id not in self.games: return
         emoji = reaction.emoji
         if emoji in emojis:
-            self.games[user.id].direction = emojinames[emojis.index(emoji)]        
+            self.games[user.id].direction = emojinames[emojis.index(emoji)]
         await reaction.message.remove_reaction(reaction, user)
-        
+
 def setup(bot):
     bot.add_cog(snake(bot))

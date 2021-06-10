@@ -6,7 +6,7 @@ import os
 import io
 
 snipes = dict()
-max_snipes = 10 # max snipes per channel
+max_snipes = 10
 message_delete = AuditLogAction.message_delete
 
 class snipe(commands.Cog):
@@ -22,7 +22,7 @@ class snipe(commands.Cog):
                     "```No recently deleted/edited messages to snipe```")
             await ctx.send(embed=embed)
             return
-        
+
         if number < 1 or number > 10:
             await ctx.send("`Number of snipes must be between 1 and 10`")
             return
@@ -55,7 +55,7 @@ class snipe(commands.Cog):
             i += 1
             if i == number: break
 
-        if len(msg) > 1900:  # 2048 char limit minus embed overhead
+        if len(msg) > 1900:
             with io.open("fbot_snipe.txt", "w+", encoding="utf8") as file:
                 file.write(msg)
             await ctx.send(
@@ -85,7 +85,7 @@ class snipe(commands.Cog):
                                  oldest_first=False, action=message_delete):
                 deleter = deleted.user.mention
         except: pass
-        
+
         if message.channel.id not in snipes:
             snipes[message.channel.id] = deque(maxlen=max_snipes)
         data = {"action": "deleted",
@@ -100,7 +100,7 @@ class snipe(commands.Cog):
         if before.content == after.content: return
         if not before.guild: return
         if after.author.id == self.bot.user.id: return
-        
+
         if before.channel.id not in snipes:
             snipes[before.channel.id] = deque(maxlen=max_snipes)
         data = {"action": "edited",

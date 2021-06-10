@@ -29,7 +29,7 @@ answers = ["Good question",
 fbot = open("./data/imgs/FBot.png", "rb").read()
 
 class triggerresponses(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -76,7 +76,7 @@ class triggerresponses(commands.Cog):
         if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
             await send(f"My prefix is `{prefix}`"
                        f"\nUse `{prefix}help` for more help")
-        
+
         elif str(message.channel.type) == "private" or db.getstatus(message.channel.id) == "on":
 
             if message.attachments:
@@ -86,7 +86,7 @@ class triggerresponses(commands.Cog):
                 response = modes.capitalise(response)
                 await send(response)
                 return
-            
+
             trigger_detected, response = tr.respond(message, priority)
             if trigger_detected:
                 response = response.replace("{username}", name)

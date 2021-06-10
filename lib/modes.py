@@ -18,11 +18,11 @@ def capitalise(text):
             if new_text[-1] == "i":
                 new_text = new_text[:-1] + "I"
         new_text += char
-    
+
     return new_text
 
 def sanitise_text(text):
-    
+
     text = text.lower()
     text = text.replace("*", "")
     text = text.replace("~", "")
@@ -32,7 +32,7 @@ def sanitise_text(text):
 
     text = text.replace('“', '"')
     text = text.replace("’", "'")
-    
+
     return text
 
 def santitise_word(word):
@@ -44,7 +44,7 @@ def santitise_word(word):
             word = word[1:]
             continue
         break
-    
+
     end = ""
     for char in word[::-1]:
         if not char.isalpha():
@@ -62,17 +62,17 @@ def word_type(word):
 def uwu(text):
 
     uwus = ["owo", "uwu", ">w<", "XD"]
-    
+
     text = text.replace("er", "uw")
     text = text.replace("r", "w")
     text = text.replace("l", "w")
-    
+
     text = text.replace("ith", "iv")
     text = text.replace("f", "v")
     text = text.replace("ove", "uv")
     text = text.replace("th", "d")
     text = text.replace("is", "iws")
-    
+
     text = text.replace("na", "nya")
     text = text.replace("ne", "nye")
     text = text.replace("ni", "nyi")
@@ -112,7 +112,6 @@ def pirate(text):
 
     return text + " arr"
 
-
 def triggered(text):
 
     text = text.upper()
@@ -149,13 +148,13 @@ def ironic(text):
     text = ""
     for char in temp:
         text += random.choice([char.lower(), char.upper()])
-    
+
     return text
 
 def patronise(text):
 
     text = " ".join(list(text))
-    
+
     return text
 
 def colonial(text):
@@ -209,7 +208,7 @@ def biblical(text):
     for word in text.split():
 
         word, start, end = santitise_word(word)
-        
+
         if word == "are":
             word = "art"
         elif word == "am":

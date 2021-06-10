@@ -85,9 +85,6 @@ class errorhandler(commands.Cog):
                     if error.original.text == "Unknown User":
                         await ctx.channel.send("Looks like that member doesn't exist")
                         return
-                    #elif error.original.text == "Unknown Message":
-                    #    await ctx.channel.send("Looks like that member doesn't exist")
-                    #    return
                     await ctx.channel.send(error.original.text)
             embed = fn.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"

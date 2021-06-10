@@ -15,28 +15,27 @@ class joke(commands.Cog):
 
     @commands.command(name="joke")
     async def tell_joke(self, ctx):
-        
+
         if (ctx.channel.id in active_channels):
             await ctx.send("I'm already telling a joke, do `fbot shutup` to cancel")
             return
 
         await ctx.send("Ok, I've got a joke.\nDo `fbot shutup` to cancel")
-        
+
         active_channels.add(ctx.channel.id)
         the_joke = choice([snake_joke, pingpong_joke])
-        
+
         for line in the_joke:
             async with ctx.channel.typing():
                 for i in range(0, len(line)):
-                    sleep_seconds = 1 / 15 # Typing at 15 chars per second
+                    sleep_seconds = 1 / 15
                     await asyncio.sleep(sleep_seconds)
                     if (not ctx.channel.id in active_channels):
                         return
                 await ctx.send(line)
 
-        # Joke is finished, so we remove it from active channels
         active_channels.remove(ctx.channel.id)
-                
+
     @commands.command(name="shutup")
     async def stop_joke(self, ctx):
         if (ctx.channel.id in active_channels):
@@ -49,6 +48,6 @@ class joke(commands.Cog):
     @commands.is_owner()
     async def say_jokeinfo(self, ctx):
         await ctx.send("Active channels: " + str(active_channels))
-    
+
 def setup(bot):
     bot.add_cog(joke(bot))

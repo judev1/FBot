@@ -19,11 +19,11 @@ class fakeuser: id = 0
 user = fakeuser()
 
 class joinleave(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
         self.serverlogs = self.bot.get_channel(720923733132312587)
-        
+
     @commands.Cog.listener()
     async def on_guild_join(self, newguild):
         self.bot.db.addguild(newguild.id)
@@ -38,9 +38,8 @@ class joinleave(commands.Cog):
             except:
                 await newguild.system_channel.send("\n".join(joinmsg))
         except: pass
-                
 
-        memcount = newguild.member_count        
+        memcount = newguild.member_count
         embed = self.bot.fn.embed(user, f"**Added** to `{newguild}`",
                                   str(newguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")

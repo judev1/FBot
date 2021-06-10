@@ -1,14 +1,14 @@
 from discord.ext import commands
 
 class modtoggle(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-        
+
     @commands.command(name="modtoggle")
     async def _Modtoggle(self, ctx, arg):
         db = self.bot.db
-        
+
         if ctx.author.guild_permissions.administrator:
             if arg in {"on", "off"}:
                 db.changemodtoggle(ctx.guild.id, arg)

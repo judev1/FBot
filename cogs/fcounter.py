@@ -47,7 +47,6 @@ class fcounter(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
         if payload is None: return
-        # Alert if last number was deleted
         message = payload.cached_message
         if message is None: return
         if message.content.isnumeric():
@@ -58,7 +57,6 @@ class fcounter(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
         if payload is None: return
-        # Alert if last number was edited
         message = payload.cached_message
         if message is None: return
         if message.content.isnumeric():
@@ -86,7 +84,6 @@ class fcounter(commands.Cog):
         last_number = self.bot.db.getnumber(ctx.guild.id)
         try:
             user_id = self.bot.db.getuser(ctx.guild.id)
-            #last_sender = ctx.guild.get_member(user_id).display_name
             last_sender = self.bot.get_user(user_id).name
         except: last_sender = "Nobody"
         embed = self.bot.fn.embed(ctx.author, "FBot counter",

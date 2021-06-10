@@ -52,25 +52,18 @@ class image(commands.Cog):
                             pixels[x, y] = (255, 255, 255, 255)
             resized_img.convert("RGB").save(resized_path, "JPEG")
 
-    # Is only async because we lack intents
-    #def get_member(guild, obj):
     async def get_member(self, guild, obj):
 
-        # Checks if a user id was given
         if obj.isdigit():
-            #member = guild.get_member(int(obj))
             member = await self.bot.fetch_user(int(obj))
             if member: return member
 
-        # Checks if a user name was given in a guild
         if guild:
             member = guild.get_member_named(obj)
             if member: return member
 
-        # Checks if a user mention was given
         obj = obj.split("<@")[-1].split("!")[-1].split(">")[0]
         if obj.isdigit():
-            #member = guild.get_member(int(obj))
             member = await self.bot.fetch_user(int(obj))
             if member: return member
         return None
@@ -82,7 +75,7 @@ class image(commands.Cog):
 
             file = File(fp=path + filename)
             await ctx.send(file=file)
-            
+
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
             try: os.remove(path + "zoom_to_" + process)
@@ -98,9 +91,8 @@ class image(commands.Cog):
 
             to_bigpp = " ".join(to_bigpp)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_bigpp)
             member = await self.get_member(ctx.guild, to_bigpp)
-            
+
             try:
                 await self.save_image(path + "to_bigpp", member,
                                       ctx.message.attachments,
@@ -123,9 +115,8 @@ class image(commands.Cog):
 
             to_bonk = " ".join(to_bonk)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_bonk)
             member = await self.get_member(ctx.guild, to_bonk)
-            
+
             try:
                 await self.save_image(path + "to_bonk", member,
                                       ctx.message.attachments,
@@ -156,9 +147,8 @@ class image(commands.Cog):
 
             to_blur = " ".join(to_blur)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_blur)
             member = await self.get_member(ctx.guild, to_blur)
-            
+
             try:
                 await self.save_image(path + "to_blur", member,
                                       ctx.message.attachments,
@@ -181,9 +171,8 @@ class image(commands.Cog):
 
             to_trigger = " ".join(to_trigger)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_trigger)
             member = await self.get_member(ctx.guild, to_trigger)
-            
+
             try:
                 await self.save_image(path + "to_trigger", member,
                                       ctx.message.attachments,
@@ -207,9 +196,8 @@ class image(commands.Cog):
 
             to_sneak = " ".join(to_sneak)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_sneak)
             member = await self.get_member(ctx.guild, to_sneak)
-            
+
             try:
                 await self.save_image(path + "to_sneak", member,
                                       ctx.message.attachments,
@@ -231,9 +219,8 @@ class image(commands.Cog):
 
             to_god = " ".join(to_god)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            #member = self.get_member(ctx.guild, to_god)
             member = await self.get_member(ctx.guild, to_god)
-            
+
             try:
                 await self.save_image(path + "to_god", member,
                                       ctx.message.attachments,
@@ -269,7 +256,7 @@ class image(commands.Cog):
                 text = "OTHER THAN ME"
                 for i in [(2, 2), (2, -2), (-2, -2), (-2, 2)]:
                     coords = (x + i[0], y + i[1])
-                    draw.text(coords, text, font=godfont, fill=black)   
+                    draw.text(coords, text, font=godfont, fill=black)
                 draw.text((x, y), text, font=godfont, fill=white)
 
                 back.save(path + "goded.jpg")
@@ -279,7 +266,7 @@ class image(commands.Cog):
                 back.close()
 
                 success = True
-        
+
         await self.cleanup(ctx, path, "god", success)
 
 def setup(bot):

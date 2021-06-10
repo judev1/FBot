@@ -1,6 +1,6 @@
 from discord.ext import commands
 from dbfn import reactionbook
-from functions import format_perm 
+from functions import format_perm
 import commands as cm
 
 descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
@@ -24,7 +24,7 @@ emojis = [CONTENTS_EMOJI, SPAM_EMOJI, COUNT_EMOJI,
           FUN_EMOJI, IMAGE_EMOJI, UTIL_EMOJI, INFO_EMOJI]
 
 class help(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -34,13 +34,12 @@ class help(commands.Cog):
         except: data = cm.devcmds[cmd]
 
         desc = data[9]
-        # Temporary while not all commands have long descriptions
         if desc == "": desc = data[10]
         server = "*Something not making sense? Spot a mistake?*"
         server += f"\n*Join our [support server]({self.bot.fn.server}) and let us know!*"
 
         usage = data[8].replace("{prefix}", prefix)
-        
+
         embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
                                   desc,  f"\n**Premium:** `{data[4]}s`",
                                   f"**Cooldown:** `{data[3]}s`",
@@ -64,7 +63,7 @@ class help(commands.Cog):
         embed.add_field(name="**User perms**", value=user_perms)
 
         return embed
-        
+
     @commands.command(name="help")
     async def _Help(self, ctx, *command):
 
@@ -117,7 +116,7 @@ class help(commands.Cog):
             prefix = self.bot.db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
         colour = self.bot.db.getcolour(ctx.author.id)
-        
+
         embeds = [self.bot.fn.embed(ctx.author, "**__FBot commands__**")]
         for i, category in enumerate(cm.categories):
             if category == "temp": break
@@ -151,7 +150,7 @@ class help(commands.Cog):
         wait = self.bot.wait_for
         async def forreaction():
             return await wait("reaction_add", timeout=60, check=check)
-        
+
         while True:
             try:
                 reaction, user = await forreaction()

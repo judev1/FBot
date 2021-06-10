@@ -16,13 +16,11 @@ class ppsize(commands.Cog):
     async def ppsize(self, ctx, user_mention=None):
         async with ctx.channel.typing():
             if (user_mention is None):
-                # No user mention defaults to sender
                 member = ctx.author
             elif (is_mention.match(user_mention)):
                 converter = MemberConverter()
                 member = await converter.convert(ctx, user_mention)
             else:
-                # `user_mention` is not member, send command help
                 member = None
                 message = ppsize_help
 
@@ -38,17 +36,14 @@ class ppsize(commands.Cog):
                             ppsize = random.randint(0, 16)
                             self.bot.db.updateppsize(member.id, ppsize)
                     except:
-                        # Register user and give them a ppsize
                         self.bot.db.register(member.id)
                         ppsize = random.randint(0, 16)
                         self.bot.db.updateppsize(member.id, ppsize)
-                            
+
                     if (ppsize is not None):
                         pp = "8" + "=" * ppsize + "D"
                         message = f"{member.mention}'s ppsize: `{pp}`"
         await ctx.send(message, allowed_mentions=AllowedMentions.all())
-
-             
 
     @commands.command(name="devsetppsize")
     @commands.is_owner()

@@ -12,7 +12,7 @@ def formatunable(unable):
     return formatedunable
 
 class cogs(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
 
@@ -73,7 +73,7 @@ class cogs(commands.Cog):
                 except: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
                              "Reloaded all cogs" + formatunable(unable))
-        else: 
+        else:
             try:
                 self.bot.unload_extension("cogs." + cog)
                 self.bot.load_extension("cogs." + cog)

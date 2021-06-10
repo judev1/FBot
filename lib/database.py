@@ -18,19 +18,19 @@ class db:
 
     def __init__(self, verbose=True):
 
-        self.conn = conn # For sharing with other cogs/files
+        self.conn = conn
         c = conn.cursor()
 
         c.execute("""CREATE TABLE IF NOT EXISTS guilds (
                             guild_id integer NOT NULL,
                             notice string NOT NULL,
-                          
+
                             prefix string NOT NULL,
                             modtoggle string NOT NULL,
                             priority string NOT NULL,
                             mode string NOT NULL,
                             language string NOT NULL,
-                          
+
                             name string NOT NULL,
                             picture string NOT NULL,
                             triggers string NOT NULL
@@ -40,7 +40,7 @@ class db:
                             guild_id integer NOT NULL,
                             channel_id integer NOT NULL,
                             status string NOT NULL,
-                          
+
                             shout string NOT NULL
                         );""")
 
@@ -114,7 +114,7 @@ class db:
                 count[0] += 1
                 c.execute("DELETE FROM guilds WHERE guild_id=?;", guild_id)
             else:
-                channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]                
+                channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
                 c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
                 channels = c.fetchall()
                 for channel_id in channels:
@@ -242,7 +242,7 @@ class db:
         for channel in c.fetchall():
             newdata.append((channel[0], channel[1]))
         return newdata
-    
+
     # Notices
 
     def addnotice(self, date, title, message):
@@ -255,7 +255,7 @@ class db:
                         ?, ?, ?
                     );""", t)
         conn.commit()
-    
+
     def editnotice(self, title, message):
         c = conn.cursor()
         t = (title, message, self.getlastnotice()[0])
@@ -266,13 +266,13 @@ class db:
         c = conn.cursor()
         c.execute(f"SELECT * FROM notices ORDER BY date DESC LIMIT 1;")
         return c.fetchone()
-    
+
     def getservernotice(self, guild_id):
         c = conn.cursor()
         t = (guild_id,)
         c.execute(f"SELECT notice FROM guilds WHERE guild_id=?;", t)
         return c.fetchone()[0]
-    
+
     def updateservernotice(self, guild_id):
         c = conn.cursor()
         t = (time.time(), guild_id)
@@ -443,7 +443,7 @@ class db:
         t = (size, user_id)
         c.execute("UPDATE users SET ppsize=? WHERE user_id=?;", t)
         conn.commit()
-    
+
     # Stats
 
     def usecommand(self, user_id):
@@ -451,7 +451,7 @@ class db:
         t = (user_id,)
         c.execute("UPDATE users SET commands=commands+1 WHERE user_id=?;", t)
         conn.commit()
-    
+
     def usetrigger(self, user_id):
         c = conn.cursor()
         t = (user_id,)
