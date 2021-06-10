@@ -1,15 +1,17 @@
 from discord.ext import commands
 
 class approve(commands.Cog):
-    
+
     def __init__(self, bot):
         self.bot = bot
-        
+
     @commands.command(name="approve")
     async def _Approve(self, ctx, *args):
 
+        content = "I'm FBot and I approve of this message"
+
         if args:
-            msg = ctx.message
+            await ctx.reply(content, mention_author=False)
         else:
             try: await ctx.message.delete()
             except: pass
@@ -17,10 +19,9 @@ class approve(commands.Cog):
             reference = ctx.message.reference
             if reference:
                 msg = await ctx.fetch_message(id=reference.message_id)
+                await msg.reply(content, mention_author=False)
             else:
-                msg = None
-        
-        await ctx.send("I'm FBot and I approve of this message")#, reference=msg) # Doesn't work for some reason
-          
+                await ctx.send(content)
+
 def setup(bot):
     bot.add_cog(approve(bot))
