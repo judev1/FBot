@@ -161,15 +161,15 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="send")
     @commands.is_owner()
-    async def _Send(self, ctx, channel: discord.TextChannel, *, message):
-        await channel.send(message)
+    async def _Send(self, ctx, channel: discord.TextChannel, *, content):
+        await channel.send(content)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="userdm")
     @commands.is_owner()
-    async def _UserDM(self, ctx, user: discord.User, *, message):
+    async def _UserDM(self, ctx, user: discord.User, *, content):
         dm = await user.create_dm()
-        await dm.send(message)
+        await dm.send(content)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="newinvite")

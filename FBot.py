@@ -70,4 +70,4 @@ bot = FBot()
 voting_handler(bot)
 
 bot.add_check(predicate)
-bot.run(os.getenv("JUDE_TOKEN"))
+bot.run(os.getenv("FBOT_TOKEN"))

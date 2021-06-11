@@ -59,6 +59,10 @@ class triggerresponses(commands.Cog):
         if content.lower().startswith("fball"):
             return
 
+        for user in self.bot.userdms:
+            if message.author.id == user:
+                return
+
         if str(message.channel.type) != "private":
             prefix = db.getprefix(message.guild.id)
             db.addchannel(message.channel.id, message.guild.id)
