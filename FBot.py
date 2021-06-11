@@ -4,18 +4,16 @@ nest_asyncio.apply()
 from discord.ext import commands
 import discord
 import dbl
-import sys
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-sys.path.insert(0, "lib")
-from functions import fn, ftime, voting_handler, predicate
-from database import db
-from triggers import tr
-from commands import cmds
+from lib.functions import fn, ftime, voting_handler, predicate
+from lib.database import db
+from lib.triggers import tr
+from lib.commands import cmds
 
-import commands as cm
+import lib.commands as cm
 
 fn = fn()
 

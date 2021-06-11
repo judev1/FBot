@@ -1,0 +1,9 @@
+discord.py
+dblpy
+python-dotenv
+nest-asyncio
+spacy
+dbfn
+wand
+pillow
+discord-components

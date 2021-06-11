@@ -1,6 +1,5 @@
 from discord.ext import commands
-from discord import Embed
-import commands as cm
+import lib.commands as cm
 import datetime
 import time
 

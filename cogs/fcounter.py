@@ -103,4 +103,4 @@ def setup(bot):
     bot.add_cog(fcounter(bot))
 
 def teardown(bot):
-    self.bot.remove_listener(fcounter, "on_message")
+    bot.remove_listener(fcounter, "on_message")

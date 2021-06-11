@@ -2,11 +2,10 @@ from traceback import format_exception
 from discord.ext import commands
 from datetime import datetime
 from dbfn import reactionbook
-import triggers as tr
-import commands as cm
+import lib.triggers as tr
+import lib.commands as cm
 import discord
 import socket
-import modes
 import time
 
 def load(csv):

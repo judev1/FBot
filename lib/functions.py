@@ -1,7 +1,7 @@
 from discord.ext import commands
 from discord import Embed
-import commands as cm
-from cache import *
+import lib.commands as cm
+from .cache import Cooldowns, Names
 import os
 
 emojis = {True: "✅",

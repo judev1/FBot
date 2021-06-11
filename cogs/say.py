@@ -1,6 +1,6 @@
 from discord import AllowedMentions
 from discord.ext import commands
-from modes import *
+from lib.modes import *
 
 class say(commands.Cog):
 

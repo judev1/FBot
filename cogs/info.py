@@ -1,6 +1,6 @@
 from discord.ext import commands
-from triggers import tr
-import commands as cm
+from lib.triggers import tr
+import lib.commands as cm
 from math import ceil
 from time import time
 

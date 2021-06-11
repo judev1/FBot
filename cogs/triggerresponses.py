@@ -1,9 +1,8 @@
 from discord.ext import commands
 from random import choice
-from triggers import tr
-import commands as cm
-import asyncio
-import modes
+from lib.triggers import tr
+import lib.commands as cm
+import lib.modes as modes
 
 tf = ["will", "will not"]
 responses = ["Someone has bad taste in photos",
