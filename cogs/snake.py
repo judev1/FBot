@@ -107,7 +107,7 @@ class snake(commands.Cog):
 
         user_id = ctx.author.id
         if user_id in self.games:
-            ctx.send("You are already in a game!")
+            await ctx.send("You are already in a game!")
             return
 
         game = self.games[user_id] = snakegame()
