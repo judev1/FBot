@@ -18,8 +18,8 @@ class approve(commands.Cog):
 
             reference = ctx.message.reference
             if reference:
-                msg = await ctx.fetch_message(id=reference.message_id)
-                await msg.reply(content, mention_author=False)
+                message = await ctx.fetch_message(id=reference.message_id)
+                await message.reply(content, mention_author=False)
             else:
                 await ctx.send(content)
 
