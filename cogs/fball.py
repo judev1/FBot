@@ -34,7 +34,7 @@ class fball(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         content = message.content.lower()
-        if content.startswith("fball ") or content.startswith("8ball "):
+        if content.startswith("fball "):
             await message.channel.send(choice(responses))
 
     @commands.command(name="fball")
