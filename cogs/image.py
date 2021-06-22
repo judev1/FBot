@@ -68,7 +68,7 @@ class image(commands.Cog):
             if member: return member
         return None
 
-    async def cleanup(self, ctx, path, process, success):
+    async def clean_up(self, ctx, path, process, success):
         if success:
             if process in ["blur"]: filename = process + "red.jpg"
             else: filename = process + "ed.jpg"
@@ -85,7 +85,7 @@ class image(commands.Cog):
             await ctx.send("That image is too big to " + process)
 
     @commands.command(name="bigpp")
-    async def _Bigpp(self, ctx, *to_bigpp):
+    async def _BigPP(self, ctx, *to_bigpp):
 
         async with ctx.channel.typing():
 
@@ -106,7 +106,7 @@ class image(commands.Cog):
                     img.save(filename=path + "bigpped.jpg")
                 success = True
 
-        await self.cleanup(ctx, path, "bigpp", success)
+        await self.clean_up(ctx, path, "bigpp", success)
 
     @commands.command(name="bonk")
     async def _Bonk(self, ctx, *to_bonk):
@@ -131,7 +131,7 @@ class image(commands.Cog):
                     img.save(filename=path + "bonked.jpg")
                 success = True
 
-        await self.cleanup(ctx, path, "bonk", success)
+        await self.clean_up(ctx, path, "bonk", success)
 
     @commands.command(name="blur")
     async def _Blur(self, ctx, amount: int=25, *to_blur):
@@ -162,7 +162,7 @@ class image(commands.Cog):
                     img.save(filename=path + "blurred.jpg")
                 success = True
 
-        await self.cleanup(ctx, path, "blur", success)
+        await self.clean_up(ctx, path, "blur", success)
 
     @commands.command(name="trigger")
     async def _Trigger(self, ctx, *to_trigger):
@@ -187,7 +187,7 @@ class image(commands.Cog):
                     img.save(filename=path + "triggered.jpg")
                 success = True
 
-        await self.cleanup(ctx, path, "trigger", success)
+        await self.clean_up(ctx, path, "trigger", success)
 
     @commands.command(name="sneak")
     async def _Sneak(self, ctx, *to_sneak):
@@ -210,7 +210,7 @@ class image(commands.Cog):
                     img.save(filename=path + "sneaked.jpg")
                 success = True
 
-        await self.cleanup(ctx, path, "sneak", success)
+        await self.clean_up(ctx, path, "sneak", success)
 
     @commands.command(name="god")
     async def _God(self, ctx, *to_god):
@@ -267,7 +267,7 @@ class image(commands.Cog):
 
                 success = True
 
-        await self.cleanup(ctx, path, "god", success)
+        await self.clean_up(ctx, path, "god", success)
 
 def setup(bot):
     bot.add_cog(image(bot))

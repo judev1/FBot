@@ -142,7 +142,7 @@ class fn:
     votedbl = "https://discordbotlist.com/bots/fbot/upvote"
     votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
 
-    votelixyz = "https://botsfordiscord.com/bot/711934102906994699/vote"
+    voteligg = "https://listcord.gg/bot/711934102906994699?message=Please sign in and vote on this page"
     votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
     voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
     voteblme = "https://botlist.me/bots/711934102906994699/vote"

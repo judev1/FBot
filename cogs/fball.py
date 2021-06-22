@@ -31,19 +31,15 @@ class fball(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        @self.bot.event
-        async def _FBall(message):
-            content = message.content.lower()
-            if content.startswith("fball ") or content.startswith("8ball "):
-                await message.channel.send(choice(responses))
-        self.bot.add_listener(_FBall, "on_message")
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        content = message.content.lower()
+        if content.startswith("fball ") or content.startswith("8ball "):
+            await message.channel.send(choice(responses))
 
     @commands.command(name="fball")
-    async def _FBot_FBall(self, ctx):
+    async def _FBall(self, ctx):
         await ctx.send(choice(responses))
 
 def setup(bot):
     bot.add_cog(fball(bot))
-
-def teardown(bot):
-    bot.remove_listener(fball, "on_message")

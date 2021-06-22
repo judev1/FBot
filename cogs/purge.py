@@ -9,7 +9,7 @@ class purge(commands.Cog):
         self.bot = bot
 
     @commands.command(name="purge", aliases=["thanos"])
-    async def do_purge(self, ctx, *args):
+    async def _Purge(self, ctx, *args):
 
         if not ctx.message.author.guild_permissions.manage_messages:
             await ctx.send("**`You do not have the manage_messages permissions.`**")

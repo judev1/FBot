@@ -21,11 +21,12 @@ class botlists(commands.Cog):
 
     @commands.command(name="scounts")
     @commands.is_owner()
-    async def _SCOUNTS(self, ctx):
+    async def _SCounts(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
         session = aiohttp.ClientSession()
+
         # top.gg
         try:
             await self.dbl.post_guild_count()
@@ -68,7 +69,7 @@ class botlists(commands.Cog):
 
         embed = fn.embed(user, "FBot Vote")
 
-        def getvalue(site):
+        def get_value(site):
             nextvote = db.nextvote(user.id, site)
             if nextvote:
                 mins, hours = nextvote
@@ -82,12 +83,12 @@ class botlists(commands.Cog):
 
         db.addvoter(user.id)
         embed.add_field(name=":mailbox_with_mail:  **__SAVED__**", inline=False, value="Your votes appear in your profile and on leaderboards")
-        embed.add_field(name="top.gg", value=f"[{getvalue('top')}]({fn.votetop} 'Vote here')")
-        embed.add_field(name="botsfordiscord", value=f"[{getvalue('bfd')}]({fn.votebfd} 'Vote here')")
-        embed.add_field(name="discordbotlist", value=f"[{getvalue('dbl')}]({fn.votedbl} 'Vote here')")
+        embed.add_field(name="top.gg", value=f"[{get_value('top')}]({fn.votetop} 'Vote here')")
+        embed.add_field(name="botsfordiscord", value=f"[{get_value('bfd')}]({fn.votebfd} 'Vote here')")
+        embed.add_field(name="discordbotlist", value=f"[{get_value('dbl')}]({fn.votedbl} 'Vote here')")
 
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
-        embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.votelixyz} 'Vote here')")
+        embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.voteligg} 'Vote here')")
         embed.add_field(name="discord-botlist.eu", value=f"[Vote here]({fn.votedbeu} 'Vote here')")
         embed.add_field(name="botlist.space", value=f"[Vote here]({fn.voteblsp} 'Vote here')")
         embed.add_field(name="botlist.me", value=f"[Vote here]({fn.voteblme} 'Vote here')")

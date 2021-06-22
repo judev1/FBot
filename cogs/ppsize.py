@@ -13,7 +13,7 @@ class ppsize(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ppsize")
-    async def ppsize(self, ctx, user_mention=None):
+    async def _GetPP(self, ctx, user_mention=None):
         async with ctx.channel.typing():
             if (user_mention is None):
                 member = ctx.author
@@ -47,7 +47,7 @@ class ppsize(commands.Cog):
 
     @commands.command(name="devsetppsize")
     @commands.is_owner()
-    async def setppsize(self, ctx, user_mention, ppsize: int):
+    async def _SetPP(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
             await ctx.send("Too big: ppsize exceeds max message length")
         elif (user_mention is None):

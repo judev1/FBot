@@ -100,7 +100,7 @@ class info(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
-    async def _ServInfo(self, ctx):
+    async def _ServerInfo(self, ctx):
         guild = ctx.guild
 
         memcount = guild.member_count

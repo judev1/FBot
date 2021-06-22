@@ -28,7 +28,7 @@ class help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    def cmdembed(self, user, cmd, prefix):
+    def command_embed(self, user, cmd, prefix):
 
         try: data = cm.commands[cmd]
         except: data = cm.devcmds[cmd]
@@ -97,13 +97,13 @@ class help(commands.Cog):
             user = ctx.author
             for cmd in cm.commands:
                 if command == cmd:
-                    await ctx.send(embed=self.cmdembed(user, cmd, prefix))
+                    await ctx.send(embed=self.command_embed(user, cmd, prefix))
                     return
 
             if ctx.author.id in self.bot.owner_ids:
                 for cmd in cm.devcmds:
                     if command.startswith(cmd):
-                        await ctx.send(embed=self.cmdembed(user, cmd, prefix))
+                        await ctx.send(embed=self.command_embed(user, cmd, prefix))
                         return
 
             await ctx.send(f"No command called '{command}'")
@@ -148,12 +148,12 @@ class help(commands.Cog):
             return emoji and author and message
 
         wait = self.bot.wait_for
-        async def forreaction():
+        async def for_reaction():
             return await wait("reaction_add", timeout=60, check=check)
 
         while True:
             try:
-                reaction, user = await forreaction()
+                reaction, user = await for_reaction()
                 try: await msg.remove_reaction(reaction, user)
                 except: pass
                 page = emojis.index(str(reaction.emoji))

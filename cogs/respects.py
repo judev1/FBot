@@ -10,7 +10,7 @@ class respects(commands.Cog):
         self.bot = bot
 
     @commands.command(name="respects")
-    async def respects(self, ctx, *args):
+    async def _Respects(self, ctx, *args):
 
         text = " ".join(args)
 

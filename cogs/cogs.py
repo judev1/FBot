@@ -1,7 +1,7 @@
 from discord.ext import commands
 from dbfn import reactionbook
 
-def formatunable(unable):
+def format_unable(unable):
     first = True
     formatedunable = ""
     for cog in unable:
@@ -27,7 +27,7 @@ class cogs(commands.Cog):
                 try: self.bot.load_extension("cogs." + cog)
                 except Exception as e: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
-                             "Loaded all cogs" + formatunable(unable))
+                             "Loaded all cogs" + format_unable(unable))
         else:
             try:
                 self.bot.load_extension("cogs." + cog)
