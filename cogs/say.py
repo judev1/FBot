@@ -15,30 +15,30 @@ class say(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = len(self.bot, ctx.message)
-            command = len(ctx.message.command)
+            prefix = len(self.bot.fn.getprefix(self.bot, ctx.message))
+            command = len(ctx.command.name)
             text = text[prefix + command + 1:]
 
-        if not text:
-            text = "You didn't include or reference any text!"
+        if text:
+            if filter:
+                text = sanitise_text(text)
+                text = filter(text)
+            text = capitalise(text)
+
+            try:
+                await ctx.send(text, allowed_mentions=AllowedMentions.none())
+            except:
+                text = "Text is too long to send"
+                if filter:
+                    text = filter(text)
+                    text = capitalise(text)
+                await ctx.send(text)
+        else:
+            text = "You didn't include or reference any text to say!"
             if filter:
                 text = filter(text)
                 text = capitalise(text)
-            await ctx.send(text)
-
-        if filter:
-            text = sanitise_text(text)
-            text = filter(text)
-        text = capitalise(text)
-
-        try:
-            await ctx.send(text, allowed_mentions=AllowedMentions.none())
-        except:
-            text = "Text is too long to send"
-            if filter:
-                text = filter(text)
-                text = capitalise(text)
-            await ctx.send(text)
+            await ctx.reply(text)
 
     @commands.command(name="say")
     async def _Say(self, ctx):
