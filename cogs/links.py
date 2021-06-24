@@ -17,6 +17,12 @@ class links(commands.Cog):
         embed = fn.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.server)
         await ctx.send(embed=embed)
 
+    @commands.command(name="github")
+    async def _Server(self, ctx):
+        fn = self.bot.fn
+        embed = fn.embed(ctx.author, "All FBot's code is on github, take a look and give it a star!", url=fn.github)
+        await ctx.send(embed=embed)
+
     @commands.command(name="links")
     async def _Links(self, ctx):
 
