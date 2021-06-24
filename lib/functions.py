@@ -156,6 +156,9 @@ class fn:
 from discord import Client
 from aiohttp import web
 import asyncio
+import logging
+
+logging.getLogger("aiohttp.server").setLevel(logging.CRITICAL)
 
 class voting_handler:
 

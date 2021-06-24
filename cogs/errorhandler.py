@@ -76,10 +76,11 @@ class errorhandler(commands.Cog):
                 if type(error.original) is discord.Forbidden:
                     error = error.original
                     if error.text == "Missing Permissions":
-                        embed = fn.errorembed(error.text,
-                        f"FBot doesn't have permissions to send a message in that channel")
-                        channel = await ctx.author.create_dm()
-                        await channel.send(embed=embed)
+                        try:
+                            await ctx.send("FBot is missing permissions to complete this action")
+                        except:
+                            channel = await ctx.author.create_dm()
+                            await channel.send(f"FBot doesn't have permissions to send messages in <#{ctx.message.id}>")
                         return
                 elif type(error.original) is discord.errors.NotFound:
                     if error.original.text == "Unknown User":
