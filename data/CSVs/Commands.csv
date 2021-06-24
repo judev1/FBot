@@ -53,6 +53,7 @@ stats,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}stats,,
 links,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}links,,Gets all links affiliated with FBot
 invite,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}invite,"YES MY MINIONS! SPREAD THE WORD! This command gives a lil sweet invite link to add FBot into your own server!",Gives you a link to invite FBot to your server
 server,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}server,,Gives you a link to join FBot's server
+github,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}server,,Gives you a link to FBot's github repo
 devcmds,,Dev,,0,0,No,send_messages,owner,,,
 cmdlist,,Dev,,0,0,No,send_messages,owner,,,
 cogs,,Dev,,0,0,No,send_messages,owner,,,
