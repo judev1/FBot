@@ -26,7 +26,7 @@ class respects(commands.Cog):
             text = capitalise(sanitise_text(text))
             message = await ctx.send(f"React with {F} to pay respects to **{text}**")
             await message.add_reaction(F)
-            ongoing_respects[message.channel.id] = (message.id, text, set())
+            ongoing_respects[message.id] = (text, set())
         else:
             await ctx.reply("You didn't include or reference anything to pay respects to!")
 
@@ -37,15 +37,14 @@ class respects(commands.Cog):
         channel = message.channel
         if user.bot: return
 
-        if channel.id not in ongoing_respects: return
         if reaction.emoji != F: return
 
-        respects = ongoing_respects[channel.id]
-        if message.id != respects[0]: return
-        if user.id in respects[2]: return
+        if message.id not in ongoing_respects: return
+        respects = ongoing_respects[message.id]
+        if user.id in respects[1]: return
 
-        respects[2].add(user.id)
-        await channel.send(f"{user.mention} payed respects to **{respects[1]}**", allowed_mentions=AllowedMentions.none())
+        respects[1].add(user.id)
+        await channel.send(f"{user.mention} payed respects to **{respects[0]}**", allowed_mentions=AllowedMentions.none())
 
 def setup(bot):
     bot.add_cog(respects(bot))
