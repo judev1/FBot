@@ -1,12 +1,13 @@
 from discord.ext import commands
 from random import choice
 import asyncio
+import os
 
+jokes = []
+for joke in os.listdir("data/Jokes"):
+    with open("data/Jokes/" + joke, "r") as file:
+        jokes.append(file.read().split("\n"))
 active_channels = set()
-with open("data/Jokes/joke.txt", "r") as file:
-    pingpong_joke = file.read().split("\n")
-with open("data/Jokes/snakejoke.txt", "r") as file:
-    snake_joke = file.read().split("\n")
 
 class joke(commands.Cog):
 
@@ -18,12 +19,12 @@ class joke(commands.Cog):
 
         if (ctx.channel.id in active_channels):
             await ctx.send("I'm already telling a joke, do `fbot shutup` to cancel")
-            return
+            return 
 
         await ctx.send("Ok, I've got a joke.\nDo `fbot shutup` to cancel")
 
         active_channels.add(ctx.channel.id)
-        the_joke = choice([snake_joke, pingpong_joke])
+        the_joke = choice(jokes)
 
         for line in the_joke:
             async with ctx.channel.typing():

@@ -74,13 +74,6 @@ class fn:
                 cogs.append(cog)
         return cogs
 
-    def getvers(self):
-        vers = []
-        for ver in os.listdir("data/Change_Logs"):
-            if os.path.isfile(os.path.join("data/Change_Logs", ver)):
-                vers.append(ver[:-4])
-        return sorted(vers, reverse=True)
-
     def getprefix(self, bot, message):
         prefix = "fbot"
         if str(message.channel.type) != "private":
