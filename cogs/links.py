@@ -18,9 +18,9 @@ class links(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="github")
-    async def _Server(self, ctx):
+    async def _Github(self, ctx):
         fn = self.bot.fn
-        embed = fn.embed(ctx.author, "All FBot's code is on github, take a look and give it a star!", url=fn.github)
+        embed = fn.embed(ctx.author, "All FBot's code is on github, give it a star!", url=fn.github)
         await ctx.send(embed=embed)
 
     @commands.command(name="links")
