@@ -133,7 +133,6 @@ class fbotdev(commands.Cog):
 
     @commands.command(name="devrespond")
     @commands.is_owner()
-    @commands.guild_only()
     async def _DevPriority(self, ctx, *, arg):
         if arg in {"few", "some", "all"}:
             self.bot.db.changepriority(ctx.guild.id, arg)
