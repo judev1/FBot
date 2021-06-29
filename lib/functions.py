@@ -88,13 +88,6 @@ class fn:
             bot.db.register(message.author.id)
         return prefix
 
-    def checkchars(self, prefix):
-        bannedchars = list("{}()[]\"'`")
-        for char in prefix:
-            for bannedchar in bannedchars:
-                if bannedchar == char: return char
-            return None
-
     def embed(self, user, title, *desc, url=""):
         colour = self.bot.db.getcolour(user.id)
         desc = "\n".join(desc)

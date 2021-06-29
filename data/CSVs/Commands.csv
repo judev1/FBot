@@ -40,7 +40,7 @@ counting,,Counting,,8,2,Yes,send_messages,administrator,{prefix}counting,,Sets t
 number,,Counting,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}number or {prefix}last,,Gets information about the last number,
 snipe,(1-10),Utility,,8,2,No,"send_messages, embed_links, (view_audit_log)",no extra,{prefix}snipe or {prefix}snipe 9,,Gets the last number of deleted and editted messages,
 purge,number,Utility,,8,2,Yes,"send_messages, manage_messages",manage_messages,{prefix}purge 10 or {prefix}thanos 11,,Purges a certain number of messages,
-prefix,[prefix | reset],Utility,,8,2,No,send_messages,administrator,prefix or {prefix}prefix f! or {prefix}prefix reset,,Changes the prefix for the server,
+prefix,[prefix | reset],Utility,,8,2,No,send_messages,administrator,"{prefix}prefix f! or {prefix}prefix ""dumb bot "" or {prefix}prefix reset",,Changes the prefix for the server,
 help,(command),Utility,,16,4,No,"send_messages, embed_links",no extra,{prefix}help or {prefix}help cmds,,Allows you to get specific information on individual commands,
 cmds,,Utility,,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}cmds,,Gives you an overview of commands,
 info,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}info,,Get information about FBot,
