@@ -56,7 +56,7 @@ class fbotdev(commands.Cog):
         pages = []
         content = f"Input:\n```py\n{content}```\n"
         for i in range(0, len(result), 2000):
-            pages.append(f"Output:\n```py\n{result[i : i + 2000]}\n```")
+            pages.append(f"Output:\n```py\n{result[i:i + 2000]}\n```")
         if len(content + pages[0]) > 2000:
             pages.insert(0, content)
         else:
@@ -85,7 +85,7 @@ class fbotdev(commands.Cog):
 
         if result:
             for i in range(0, len(result), 2000):
-                pages.append(f"Output:\n```py\n{result[i : i + 2000]}\n```")
+                pages.append(f"Output:\n```py\n{result[i:i + 2000]}\n```")
             if len(content + pages[0]) > 2000:
                 pages.insert(0, content)
             else:

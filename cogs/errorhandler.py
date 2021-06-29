@@ -55,14 +55,12 @@ class errorhandler(commands.Cog):
             errorlines = error.split("\n")
             embed = fn.embed(user, errorlines[0], *errorlines[2:])
             try:
-                try:
-                    await ctx.send(embed=embed)
+                try: await ctx.send(embed=embed)
                 except: await ctx.send(error)
             except:
                 try:
                     channel = await ctx.author.create_dm()
-                    try:
-                        await channel.send(embed=embed)
+                    try: await channel.send(embed=embed)
                     except: await channel.send(error)
                 except: pass
         elif type(error) is commands.UserNotFound:
@@ -111,7 +109,7 @@ class errorhandler(commands.Cog):
                 content += f"```by {ctx.message.author.name} ({ctx.message.author.id})```"
                 content += f"```{ctx.message.channel.type} channel (server: {ctx.message.guild})```"
                 for i in range(0, len(result), 2000):
-                    pages.append(f"```py\n{result[i : i + 1000]}\n```")
+                    pages.append(f"```py\n{result[i:i + 1000]}\n```")
                 if len(content + pages[0]) > 2000:
                     pages.insert(0, content)
                 else:
