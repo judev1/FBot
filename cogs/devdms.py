@@ -12,11 +12,11 @@ class devdms(commands.Cog):
     @commands.command(name="opendm")
     async def _OpenDMs(self, ctx, user: discord.User, *, content):
         if ctx.channel.id in self.bot.dms:
-            await ctx.send("DM already open in this channel")
+            await ctx.reply("DM already open in this channel")
         else:
             for user in self.bot.userdms:
                 if ctx.author.id == user:
-                    await ctx.send("DM already open with this user")
+                    await ctx.reply("DM already open with this user")
             try:
                 channel = await user.create_dm()
                 author = f"`{ctx.author}` "
@@ -45,7 +45,7 @@ class devdms(commands.Cog):
     @commands.command(name="closedm")
     async def _CloseDMs(self, ctx):
         if ctx.channel.id not in self.bot.dms:
-            await ctx.send("No DM open in this channel")
+            await ctx.reply("No DM open in this channel")
         else:
             user = self.bot.dms[ctx.channel.id]
             del self.bot.dms[ctx.channel.id]

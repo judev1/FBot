@@ -107,7 +107,7 @@ class snake(commands.Cog):
 
         user_id = ctx.author.id
         if user_id in self.games:
-            await ctx.send("You are already in a game!")
+            await ctx.reply("You are already in a game!")
             return
 
         game = self.games[user_id] = snakegame()
@@ -123,7 +123,7 @@ class snake(commands.Cog):
             except: break
         del self.games[user_id]
 
-        await ctx.send(f"**You died with a score of {game.score}!**")
+        await ctx.reply(f"**You died with a score of {game.score}!**")
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):

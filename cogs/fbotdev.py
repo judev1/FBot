@@ -134,11 +134,11 @@ class fbotdev(commands.Cog):
     @commands.command(name="devrespond")
     @commands.is_owner()
     async def _DevPriority(self, ctx, *, arg):
-        if arg in {"few", "some", "all"}:
+        if arg in ("few", "some", "all"):
             self.bot.db.changepriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
-            await ctx.send("`Must be 'few', 'some', or 'all'`")
+            await ctx.reply("Must be `few`, `some`, or `all`")
 
     @commands.command(name="devmodtoggle")
     @commands.is_owner()
@@ -186,7 +186,7 @@ class fbotdev(commands.Cog):
     @commands.is_owner()
     async def _Leave(self, ctx, guild: discord.Guild):
         if ctx.guild.id == guild.id:
-            await ctx.send("Can't leave the server you are invoking this command in")
+            await ctx.reply("Can't leave the server you are invoking this command in")
         else:
             await guild.leave()
             await ctx.message.add_reaction("✅")
@@ -262,7 +262,7 @@ class fbotdev(commands.Cog):
     @commands.command(name="host")
     @commands.is_owner()
     async def _Host(self, ctx):
-        await ctx.send("This instance is running on: " + socket.gethostname())
+        await ctx.reply("This instance is running on: " + socket.gethostname())
 
 def setup(bot):
     bot.add_cog(fbotdev(bot))

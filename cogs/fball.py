@@ -35,11 +35,11 @@ class fball(commands.Cog):
     async def on_message(self, message):
         content = message.content.lower()
         if content.startswith("fball "):
-            await message.channel.send(choice(responses))
+            await message.reply(choice(responses))
 
     @commands.command(name="fball")
     async def _FBall(self, ctx):
-        await ctx.send(choice(responses))
+        await ctx.reply(choice(responses))
 
 def setup(bot):
     bot.add_cog(fball(bot))

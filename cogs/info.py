@@ -141,7 +141,7 @@ class info(commands.Cog):
 
     @commands.command(name="premium")
     async def _Premium(self, ctx):
-        await ctx.send("https://fbot.breadhub.uk/premium")
+        await ctx.reply("https://fbot.breadhub.uk/premium")
 
 def setup(bot):
     bot.add_cog(info(bot))

@@ -32,23 +32,23 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.MessageNotFound:
             return
         elif type(error) is commands.DisabledCommand:
-            await ctx.send("**This command is disabled**\n" +
+            await ctx.reply("**This command is disabled**\n" +
                   "If you'd like to find out more join our support server")
         elif type(error) is commands.BadArgument:
-            await ctx.send("**Bad argument**\n" +
+            await ctx.reply("**Bad argument**\n" +
                   "Whoops! Looks like one of the arguments you entered is a bit off...")
         elif type(error) is commands.MissingRequiredArgument:
-            await ctx.send("**Command missing an argument**\n" +
+            await ctx.reply("**Command missing an argument**\n" +
                   "Whoops! You've missed an argument for this command")
         elif type(error) is commands.NoPrivateMessage:
-            await ctx.send("**Server only command**\n" +
+            await ctx.reply("**Server only command**\n" +
                   "This command can only be used in a server")
         elif type(error) is commands.UserNotFound:
-            await ctx.send("**No user found**\n" +
+            await ctx.reply("**No user found**\n" +
                   "Hmm we couldn't find that user, maybe try something else")
         elif type(error) is commands.CommandOnCooldown:
             retry = round(error.retry_after, 2)
-            await ctx.send("**You're on cooldown!**\n" +
+            await ctx.reply("**You're on cooldown!**\n" +
                   f"Please wait `{retry}s` to use this command")
         elif type(error) is commands.CheckFailure:
             error = str(error)
@@ -56,35 +56,35 @@ class errorhandler(commands.Cog):
             embed = fn.embed(user, errorlines[0], *errorlines[2:])
             try:
                 try: await ctx.send(embed=embed)
-                except: await ctx.send(error)
+                except: await ctx.reply(error)
             except:
                 try:
                     channel = await ctx.author.create_dm()
                     try: await channel.send(embed=embed)
-                    except: await channel.send(error)
+                    except: await channel.reply(error)
                 except: pass
         elif type(error) is commands.UserNotFound:
-            await ctx.send("User not found")
+            await ctx.reply("User not found")
         elif type(error) is commands.ChannelNotFound:
-            await ctx.send("Channel not found")
+            await ctx.reply("Channel not found")
         elif type(error) is commands.GuildNotFound:
-            await ctx.send("Guild not found")
+            await ctx.reply("Guild not found")
         else:
             if type(error) is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:
                     error = error.original
                     if error.text == "Missing Permissions":
                         try:
-                            await ctx.send("FBot is missing permissions to complete this action")
+                            await ctx.reply("FBot is missing permissions to complete this action")
                         except:
                             channel = await ctx.author.create_dm()
                             await channel.send(f"FBot doesn't have permissions to send messages in <#{ctx.message.id}>")
                         return
                 elif type(error.original) is discord.errors.NotFound:
                     if error.original.text == "Unknown User":
-                        await ctx.channel.send("Looks like that member doesn't exist")
+                        await ctx.reply("Looks like that member doesn't exist")
                         return
-                    await ctx.channel.send(error.original.text)
+                    await ctx.reply(error.original.text)
             embed = fn.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"
                     "`@justjude#2296` or `@Lines#9260`\n"
@@ -92,7 +92,7 @@ class errorhandler(commands.Cog):
                     "and give us a ping")
             try:
                 try:
-                    await ctx.channel.send(embed=embed)
+                    await ctx.send(embed=embed)
                 except:
                     try:
                         channel = await ctx.author.create_dm()
@@ -100,7 +100,6 @@ class errorhandler(commands.Cog):
                     except: pass
 
                 ctx.channel = self.errorlogs
-                colour = self.bot.db.getcolour(ctx.author.id)
                 book = reactionbook(self.bot, ctx, TITLE="Error Log")
                 result = "".join(format_exception(error, error, error.__traceback__))
 

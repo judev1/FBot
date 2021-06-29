@@ -18,7 +18,7 @@ class modtoggle(commands.Cog):
                         f"Modtoggle only accepts 'on' and 'off'")
                 await ctx.send(embed=embed)
         else:
-            await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+            await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
     bot.add_cog(modtoggle(bot))

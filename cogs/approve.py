@@ -8,7 +8,7 @@ class approve(commands.Cog):
     @commands.command(name="approve")
     async def _Approve(self, ctx, *args):
 
-        content = "I'm FBot and I approve of this message"
+        content = "Hello I'm FBot and I approve of this message"
 
         if args:
             await ctx.reply(content, mention_author=False)

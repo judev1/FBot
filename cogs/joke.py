@@ -18,10 +18,10 @@ class joke(commands.Cog):
     async def _Joke(self, ctx):
 
         if (ctx.channel.id in active_channels):
-            await ctx.send("I'm already telling a joke, do `fbot shutup` to cancel")
-            return 
+            await ctx.reply("I'm already telling a joke, do `fbot shutup` to cancel")
+            return
 
-        await ctx.send("Ok, I've got a joke.\nDo `fbot shutup` to cancel")
+        await ctx.reply("Ok, I've got a joke.\nDo `fbot shutup` to cancel")
 
         active_channels.add(ctx.channel.id)
         the_joke = choice(jokes)
@@ -41,14 +41,14 @@ class joke(commands.Cog):
     async def _ShutUp(self, ctx):
         if (ctx.channel.id in active_channels):
             active_channels.remove(ctx.channel.id)
-            await ctx.send("Ok, but I was just getting to the best part")
+            await ctx.reply("Ok, but I was just getting to the best part")
         else:
-            await ctx.send("You wish")
+            await ctx.reply("You wish")
 
     @commands.command(name="jokeinfo")
     @commands.is_owner()
     async def _JokeInfo(self, ctx):
-        await ctx.send("Active channels: " + str(active_channels))
+        await ctx.reply("Active channels: " + str(active_channels))
 
 def setup(bot):
     bot.add_cog(joke(bot))

@@ -12,7 +12,7 @@ class users(commands.Cog):
 
     @commands.command(name="profile")
     async def _Profile(self, ctx, user: discord.User=None):
-        await ctx.send("This command is being reworked")
+        await ctx.reply("This command is being reworked")
 
     @commands.command(name="top")
     async def _Top(self, ctx, toptype):
@@ -20,7 +20,7 @@ class users(commands.Cog):
         if toptype in toptypes:
             if toptype == "counting":
                 if str(ctx.channel.type) == "private":
-                    await ctx.send(f"Top {toptype} can only be used in a server")
+                    await ctx.reply(f"Top {toptype} can only be used in a server")
                     return
                 obj_id = ctx.guild.id
             else:
@@ -70,7 +70,7 @@ class users(commands.Cog):
             await ctx.send(embed=embed)
 
         else:
-            await ctx.send("We don't have a leaderboard for that...")
+            await ctx.reply("We don't have a leaderboard for that")
 
 def setup(bot):
     bot.add_cog(users(bot))

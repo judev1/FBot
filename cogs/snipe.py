@@ -20,11 +20,11 @@ class snipe(commands.Cog):
         if ctx.message.channel.id not in snipes:
             embed = self.bot.fn.embed(user, "FBot Snipe",
                     "```No recently deleted/edited messages to snipe```")
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
             return
 
         if number < 1 or number > 10:
-            await ctx.send("`Number of snipes must be between 1 and 10`")
+            await ctx.reply("`Number of snipes must be between 1 and 10`")
             return
 
         msg = ""
@@ -58,7 +58,7 @@ class snipe(commands.Cog):
         if len(msg) > 1900:
             with io.open("fbot_snipe.txt", "w+", encoding="utf8") as file:
                 file.write(msg)
-            await ctx.send(
+            await ctx.reply(
                 "`Sniped messages were longer than 2000 chars, sending as file:`",
                 file=discord.File(r"fbot_snipe.txt"))
             os.remove("fbot_snipe.txt")

@@ -22,7 +22,7 @@ class priority(commands.Cog):
                 embed = self.bot.fn.errorembed("Invalid Argument",
                         "Respond only takes `few`, `some` and `all`")
                 await ctx.send(embed=embed)
-        else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+        else: await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
     bot.add_cog(priority(bot))

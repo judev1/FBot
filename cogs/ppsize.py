@@ -22,13 +22,13 @@ class ppsize(commands.Cog):
                 member = await converter.convert(ctx, user_mention)
             else:
                 member = None
-                message = ppsize_help
+                text = ppsize_help
 
             if (member is not None):
                 ppsize = None
 
                 if member.bot:
-                    message = "Bots don't have pps, you do know that?"
+                    text = "Bots don't have pps, you do know that?"
                 else:
                     try:
                         ppsize = self.bot.db.getppsize(member.id)
@@ -42,16 +42,16 @@ class ppsize(commands.Cog):
 
                     if (ppsize is not None):
                         pp = "8" + "=" * ppsize + "D"
-                        message = f"{member.mention}'s ppsize: `{pp}`"
-        await ctx.send(message, allowed_mentions=AllowedMentions.all())
+                        text = f"{member.mention}'s ppsize: `{pp}`"
+        await ctx.send(text, allowed_mentions=AllowedMentions.all())
 
     @commands.command(name="devsetppsize")
     @commands.is_owner()
     async def _SetPP(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
-            await ctx.send("Too big: ppsize exceeds max message length")
+            await ctx.reply("Too big: ppsize exceeds max message length")
         elif (user_mention is None):
-            await ctx.send("baka")
+            await ctx.reply("baka")
         else:
             converter = MemberConverter()
             member = await converter.convert(ctx, user_mention)

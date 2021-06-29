@@ -82,7 +82,7 @@ class image(commands.Cog):
             except: pass
             os.remove(path + filename)
         else:
-            await ctx.send("That image is too big to " + process)
+            await ctx.reply("That image is too big to " + process)
 
     @commands.command(name="bigpp")
     async def _BigPP(self, ctx, *to_bigpp):
@@ -137,10 +137,10 @@ class image(commands.Cog):
     async def _Blur(self, ctx, amount: int=25, *to_blur):
 
         if type(amount) is not int:
-            await ctx.send("Amount must be a number")
+            await ctx.reply("Amount must be a number")
             return
-        elif amount > 200:
-            await ctx.send("Whoa! That number is like, bigger than 200 bro")
+        elif amount < -200 or amount > 200:
+            await ctx.reply("Please pick a number between -200 and 200")
             return
 
         async with ctx.channel.typing():

@@ -38,7 +38,7 @@ class triggerresponses(commands.Cog):
         if message.author.bot: return
 
         name = message.author.display_name
-        send = message.channel.send
+        channel = message.channel
         content = message.content
         db = self.bot.db
 
@@ -77,8 +77,8 @@ class triggerresponses(commands.Cog):
             prefix = "fbot "
 
         if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
-            await send(f"My prefix is `{prefix}`"
-                       f"\nUse `{prefix}help` for more help")
+            await message.reply(f"My prefix is `{prefix}`"
+                                f"\nUse `{prefix}help` for more help")
 
         elif str(message.channel.type) == "private" or db.getstatus(message.channel.id) == "on":
 
@@ -87,7 +87,7 @@ class triggerresponses(commands.Cog):
                 if mode != "default":
                     response = eval(f"modes.{mode}(response)")
                 response = modes.capitalise(response)
-                await send(response)
+                await channel.send(response)
                 return
 
             trigger_detected, response = tr.respond(message, priority)
@@ -103,7 +103,7 @@ class triggerresponses(commands.Cog):
 
                 if len(response) > 2000:
                     response = response[:1997] + "..."
-                await send(response)
+                await channel.send(response)
 
 def setup(bot):
     bot.add_cog(triggerresponses(bot))

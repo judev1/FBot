@@ -34,7 +34,7 @@ class cogs(commands.Cog):
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Loaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"failed to load cog: {cog}", str(e))
+                embed = fn.errorembed(f"Failed to load cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="unload")
@@ -49,14 +49,14 @@ class cogs(commands.Cog):
                     try: self.bot.unload_extension("cogs." + cog)
                     except: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
-                             "Unloaded all cogs" + formatunable(unable))
+                             "Unloaded all cogs" + format_unable(unable))
         else:
             try:
                 self.bot.unload_extension("cogs." + cog)
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Unloaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"failed to unload cog: {cog}", str(e))
+                embed = fn.errorembed(f"Failed to unload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="reload")
@@ -72,7 +72,7 @@ class cogs(commands.Cog):
                     self.bot.load_extension("cogs." + cog)
                 except: unable.append(cog)
             embed = fn.embed(ctx.author, "FBot cogs",
-                             "Reloaded all cogs" + formatunable(unable))
+                             "Reloaded all cogs" + format_unable(unable))
         else:
             try:
                 self.bot.unload_extension("cogs." + cog)
@@ -80,7 +80,7 @@ class cogs(commands.Cog):
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Reloaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"failed to reload cog: {cog}", str(e))
+                embed = fn.errorembed(f"Failed to reload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="cogs")

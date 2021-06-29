@@ -67,7 +67,7 @@ class status(commands.Cog):
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if not ctx.author.guild_permissions.administrator:
-            await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+            await ctx.reply("Only members with administrator privileges can toggle this")
             return
 
         guild = ctx.guild
@@ -86,7 +86,7 @@ class status(commands.Cog):
     @commands.command(name="on")
     async def _On(self, ctx):
         if not ctx.guild:
-            await ctx.send("**FBot is always on in DMs.**")
+            await ctx.reply("**FBot is always on in DMs**")
             return
         db = self.bot.db
         db.addchannel(ctx.channel.id, ctx.guild.id)
@@ -94,12 +94,12 @@ class status(commands.Cog):
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
             db.changestatus(ctx.channel.id, "on")
             await ctx.message.add_reaction("✅")
-        else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+        else: await ctx.reply("Only members with administrator privileges can toggle this")
 
     @commands.command(name="off")
     async def _Off(self, ctx):
         if not ctx.guild:
-            await ctx.send("**You can never turn off FBot in DMs.**")
+            await ctx.reply("**You can never turn off FBot in DMs**")
             return
         db = self.bot.db
         db.addchannel(ctx.channel.id, ctx.guild.id)
@@ -107,7 +107,7 @@ class status(commands.Cog):
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
             db.changestatus(ctx.channel.id, "off")
             await ctx.message.add_reaction("✅")
-        else: await ctx.send("NO. NO YOU MAY NOT TOGGLE THAT NON-ADMIN, SHOO")
+        else: await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
     bot.add_cog(status(bot))

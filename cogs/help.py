@@ -106,7 +106,7 @@ class help(commands.Cog):
                         await ctx.send(embed=self.command_embed(user, cmd, prefix))
                         return
 
-            await ctx.send(f"No command called '{command}'")
+            await ctx.reply(f"No command called `{command}`")
 
     @commands.command(name="cmds", aliases=["commands"])
     async def _Commands(self, ctx):
