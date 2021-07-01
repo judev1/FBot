@@ -51,7 +51,7 @@ class status(commands.Cog):
         modtoggle = db.getmodtoggle(ctx.guild.id)
         priority = db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
-        colour = self.bot.db.getcolour(user.id)
+        colour = db.getcolour(user.id)
 
         book = reactionbook(self.bot, ctx, TITLE="FBot Status")
         book.createpages(channels, "<#%0>", EMPTY=emptyon, SUBHEADER=on, check1=("%1", "on"), subcheck1=(view_channel, False))
@@ -73,7 +73,7 @@ class status(commands.Cog):
         modtoggle = db.getmodtoggle(ctx.guild.id)
         priority = db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
-        colour = self.bot.db.getcolour(user.id)
+        colour = db.getcolour(user.id)
 
         book = reactionbook(self.bot, ctx, TITLE="FBot Mod Status")
         book.createpages(channels, "<#%0>", EMPTY=emptyon, SUBHEADER=on, check1=("%1", "on"))
