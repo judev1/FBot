@@ -1,7 +1,8 @@
 from traceback import format_exception
 from discord.ext import commands
-from datetime import datetime
 from dbfn import reactionbook
+import lib.functions as fn
+import lib.database as db
 import lib.triggers as tr
 import lib.commands as cm
 import discord
@@ -23,7 +24,7 @@ class fbotdev(commands.Cog):
     async def _CSVReload(self, ctx):
 
         tms, cms = load(tr.tr), load(cm.cmds)
-        embed = self.bot.fn.embed(ctx.author, "FBot csvreload",
+        embed = fn.embed(ctx.author, "FBot csvreload",
                 f"`[dev] Reloaded Triggers.csv in {tms}ms`",
                 f"`[dev] Reloaded Commands.csv in {cms}ms`")
         await ctx.send(embed=embed)
@@ -33,8 +34,6 @@ class fbotdev(commands.Cog):
     async def _Eval(self, ctx, *, content):
 
         bot = self.bot
-        fn = bot.fn
-        db = bot.db
         ftime = bot.ftime
         cache = bot.cache
 
@@ -45,7 +44,7 @@ class fbotdev(commands.Cog):
         if str(channel.type) != "private":
             guild = ctx.guild
 
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -72,7 +71,7 @@ class fbotdev(commands.Cog):
         bot, ctx = self.bot, CTX
         exec(f"global function\nasync def function():\n    result = await {content}\n    if result: return result")
 
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -120,22 +119,22 @@ class fbotdev(commands.Cog):
     @commands.command(name="devon")
     @commands.is_owner()
     async def _FBotDevOn(self, ctx):
-        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
-        self.bot.db.changestatus(ctx.channel.id, "on")
+        db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.changestatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devoff")
     @commands.is_owner()
     async def _FBotDevOff(self, ctx):
-        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
-        self.bot.db.changestatus(ctx.channel.id, "off")
+        db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.changestatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="devrespond")
     @commands.is_owner()
     async def _DevPriority(self, ctx, *, arg):
         if arg in ("few", "some", "all"):
-            self.bot.db.changepriority(ctx.guild.id, arg)
+            db.changepriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("Must be `few`, `some`, or `all`")
@@ -143,12 +142,12 @@ class fbotdev(commands.Cog):
     @commands.command(name="devmodtoggle")
     @commands.is_owner()
     async def _Modtoggle(self, ctx, arg):
-        self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.addchannel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
-            self.bot.db.changemodtoggle(ctx.guild.id, arg)
+            db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         elif arg == "off":
-            self.bot.db.changemodtoggle(ctx.guild.id, arg)
+            db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="presence")
@@ -202,7 +201,7 @@ class fbotdev(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(ctx.author, guild.name)
+        embed = fn.embed(ctx.author, guild.name)
         embed.add_field(name="Members", value=memcount)
         embed.add_field(name="Voice channels", value=len(guild.voice_channels))
         embed.add_field(name="Text channels", value=len(guild.text_channels))
@@ -224,7 +223,7 @@ class fbotdev(commands.Cog):
             members += guild.member_count
         guilds.sort(reverse=True)
 
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Servers")
         book.createpages(guilds, f"`%1`: **%0**")
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
@@ -241,21 +240,21 @@ class fbotdev(commands.Cog):
                 matches.append(to_append)
 
         if matches:
-            colour = self.bot.db.getcolour(ctx.author.id)
+            colour = db.getcolour(ctx.author.id)
             book = reactionbook(self.bot, ctx, TITLE="FBot Search")
 
             matches.sort()
             book.createpages(matches, "`%0` - `%1`")
             await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
         else:
-            embed = self.bot.fn.embed(ctx.author, "FBot Search", f"No matches found for `{query}`")
+            embed = fn.embed(ctx.author, "FBot Search", f"No matches found for `{query}`")
             await ctx.send(embed=embed)
 
     @commands.command(name="cmdlist")
     @commands.is_owner()
     async def _CommandList(self, ctx):
         commands = [i.name for i in self.bot.walk_commands()]
-        embed = self.bot.fn.embed(ctx.author, "FBot Commands",
+        embed = fn.embed(ctx.author, "FBot Commands",
                                   f" ```python\n{commands}```")
         await ctx.send(embed=embed)
 

@@ -1,5 +1,6 @@
 from discord import AllowedMentions
 from discord.ext import commands
+import lib.functions as fn
 from lib.modes import *
 
 class say(commands.Cog):
@@ -15,7 +16,7 @@ class say(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = len(self.bot.fn.getprefix(self.bot, ctx.message))
+            prefix = len(fn.getprefix(self.bot, ctx.message))
             command = len(ctx.command.name)
             text = text[prefix + command + 1:]
 

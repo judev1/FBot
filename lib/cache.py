@@ -1,7 +1,5 @@
-from .database import db
+import lib.database as db
 from time import time
-
-db = db(verbose=False)
 
 class Cooldowns:
 

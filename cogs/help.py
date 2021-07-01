@@ -1,7 +1,9 @@
+from lib.functions import formatperm
 from discord.ext import commands
 from dbfn import reactionbook
-from lib.functions import format_perm 
+import lib.functions as fn
 import lib.commands as cm
+import lib.database as db
 
 descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
 "All the commands you need to start making FBux... and debt!",
@@ -36,11 +38,11 @@ class help(commands.Cog):
         desc = data[9]
         if desc == "": desc = data[10]
         server = "*Something not making sense? Spot a mistake?*"
-        server += f"\n*Join our [support server]({self.bot.fn.server}) and let us know!*"
+        server += f"\n*Join our [support server]({fn.server}) and let us know!*"
 
         usage = data[8].replace("{prefix}", prefix)
 
-        embed = self.bot.fn.embed(user, "**FBot " + cmd + data[0] + "**",
+        embed = fn.embed(user, "**FBot " + cmd + data[0] + "**",
                                   desc,  f"\n**Premium:** `{data[4]}s`",
                                   f"**Cooldown:** `{data[3]}s`",
                                   "\n**Example usage:**", usage, server)
@@ -50,12 +52,12 @@ class help(commands.Cog):
 
         bot_perms = []
         for perm in data[6].split(","):
-            bot_perms.append("*" + format_perm(perm) + "*")
+            bot_perms.append("*" + formatperm(perm) + "*")
         bot_perms = ",\n".join(bot_perms)
 
         user_perms = []
         for perm in data[7].split(","):
-            user_perms.append("*" + format_perm(perm) + "*")
+            user_perms.append("*" + formatperm(perm) + "*")
         user_perms = ",\n".join(user_perms)
 
         embed.add_field(name="**Server only?**", value=data[5])
@@ -69,12 +71,11 @@ class help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = self.bot.db.getprefix(ctx.guild.id)
+            prefix = db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
 
         command = " ".join(command).lower()
         if command == "":
-            fn = self.bot.fn
             embed = fn.embed(ctx.author, "")
 
             embed.add_field(name=f"{CMDS_EMOJI} **__HELPFUL COMMANDS__**",
@@ -113,16 +114,16 @@ class help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = self.bot.db.getprefix(ctx.guild.id)
+            prefix = db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
 
-        embeds = [self.bot.fn.embed(ctx.author, "**__FBot commands__**")]
+        embeds = [fn.embed(ctx.author, "**__FBot commands__**")]
         for i, category in enumerate(cm.categories):
             if category == "temp": break
             embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
-            value=f"[Hover for more]({self.bot.fn.votetop} '{descriptions[i]}')")
-            embed = self.bot.fn.embed(ctx.author,
+            value=f"[Hover for more]({fn.votetop} '{descriptions[i]}')")
+            embed = fn.embed(ctx.author,
             f"{emojis[i+1]} **__{category} Commands__**",
             f"*Use* `{prefix}help <command>` *to find more about a command*")
             for cmd, args, desc in cm.categories[category]:
@@ -168,7 +169,7 @@ class help(commands.Cog):
     @commands.command(name="devcmds")
     @commands.is_owner()
     async def _DevCommands(self, ctx):
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)
         book.createpages(cm.devcmdlist, LINE="`%0`",
                          SUBHEADER="**__FBot Dev Commands__**\n")

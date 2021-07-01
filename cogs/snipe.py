@@ -1,6 +1,7 @@
 from discord import AuditLogAction
 from discord.ext import commands
 from collections import deque
+import lib.functions as fn
 import discord
 import os
 import io
@@ -18,7 +19,7 @@ class snipe(commands.Cog):
     async def _Snipe(self, ctx, number=10):
         user = ctx.author
         if ctx.message.channel.id not in snipes:
-            embed = self.bot.fn.embed(user, "FBot Snipe",
+            embed = fn.embed(user, "FBot Snipe",
                     "```No recently deleted/edited messages to snipe```")
             await ctx.reply(embed=embed)
             return
@@ -63,14 +64,14 @@ class snipe(commands.Cog):
                 file=discord.File(r"fbot_snipe.txt"))
             os.remove("fbot_snipe.txt")
         else:
-            embed = self.bot.fn.embed(user, "FBot snipe", msg)
+            embed = fn.embed(user, "FBot snipe", msg)
             await ctx.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
         if not message.guild: return
 
-        prefix = self.bot.fn.getprefix(self.bot, message)
+        prefix = fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
         say_commands = tuple([command.name + " " for command in self.bot.commands if command.cog.qualified_name == "say"])
         if commandcheck.startswith(say_commands):

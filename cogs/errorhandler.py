@@ -1,6 +1,7 @@
 from traceback import format_exception
 from discord.ext import commands
 from dbfn import reactionbook
+import lib.functions as fn
 import discord
 
 class fakeuser: id = 0
@@ -22,7 +23,6 @@ class errorhandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        fn = self.bot.fn
         if type(error) is commands.CommandNotFound:
             return
         elif type(error) is commands.MissingPermissions:

@@ -1,14 +1,40 @@
-from discord.ext import commands
+red = 0xF42F42
+
+top = "https://top.gg/bot/711934102906994699"
+dbl = "https://discordbotlist.com/bots/fbot"
+
+bfd = "https://botsfordiscord.com/bot/711934102906994699"
+dbgg = "https://discord.bots.gg/bots/711934102906994699"
+
+ligg = "https://listcord.gg/bot/711934102906994699"
+dbeu = "https://discord-botlist.eu/bots/711934102906994699"
+
+blsp = "https://botlist.space/bot/711934102906994699"
+blme = "https://botlist.me/bots/711934102906994699"
+
+yabl = "https://yabl.xyz/bot/711934102906994699"
+bdcl = "https://bots.discordlabs.org/bot/711934102906994699"
+
+votetop = "https://top.gg/bot/711934102906994699/vote"
+votedbl = "https://discordbotlist.com/bots/fbot/upvote"
+votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
+
+voteligg = "https://listcord.gg/bot/711934102906994699?message=Please sign in and vote on this page"
+votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
+voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
+voteblme = "https://botlist.me/bots/711934102906994699/vote"
+
+site = "https://fbot.breadhub.uk"
+server = "https://fbot.breadhub.uk/server"
+invite = "https://fbot.breadhub.uk/invite"
+github = "https://github.com/judev1/FBot"
+patreon = "https://www.patreon.com/fbotbot"
+
 from discord import Embed
-import lib.commands as cm
-from .cache import Cooldowns, Names
+import lib.database as db
 import os
 
-emojis = {True: "✅",
-          False: "⛔"}
-
-def format_perm(perm):
-
+def formatperm(perm):
     text = []
     perm = perm.lower()
     for word in perm.split("_"):
@@ -18,126 +44,31 @@ def format_perm(perm):
             text.append(word[0].upper() + word[1:])
     return " ".join(text)
 
-def predicate(ctx):
-    if str(ctx.channel.type) != "private":
-        bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot.user.id))
+def getprefix(bot, message):
+    prefix = "fbot"
+    if str(message.channel.type) != "private":
+        prefix = db.getprefix(message.guild.id)
+    if prefix == "fbot":
+        content = message.content
+        if content[:5].lower() == "fbot ": prefix = content[:5]
+        elif content[:6].lower() == "f bot ": prefix = content[:6]
+        elif content[:23].lower() == "<@!711934102906994699> ":
+            prefix = content[:6]
+    if not message.author.bot:
+        db.register(message.author.id)
+    return prefix
 
-        valid, perms = [], {}
-        for perm in cm.perms[ctx.command.name]:
-            if not perm.startswith("("):
-                bot_perm = getattr(bot_perms, perm)
-            else: bot_perm = True
-            valid.append(bot_perm)
-            perms[perm] = bot_perm
+def getcogs():
+    cogs = []
+    for cog in os.listdir("cogs"):
+        if os.path.isfile(os.path.join("cogs", cog)):
+            cogs.append(cog)
+    return cogs
 
-        if not all(valid):
-            page = "**Missing Permissions**\n\n"
-            for perm in perms:
-                if perm.startswith("("):
-                    perms[perm] = getattr(bot_perms, perm[1:-1])
-                page += f"{emojis[perms[perm]]} ~ {format_perm(perm)}\n"
-            raise commands.CheckFailure(message=page)
-    else:
-        if cm.commands[ctx.command.name][5] == "*Yes*":
-            raise commands.NoPrivateMessage()
-
-    cooldown = bot.cache["Cooldowns"].cooldown(ctx)
-    if cooldown:
-        bot.stats.commands_ratelimited += 1
-        raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
-    bot.stats.commands_processed += 1
-    return True
-
-class fn:
-
-    def setbot(self, client):
-
-        global bot
-        bot = client
-        bot.cache = dict()
-
-        bot.cache["Cooldowns"] = Cooldowns()
-        bot.cache["Names"] = Names()
-
-        self.bot = bot
-
-    def getinfo(self, info):
-        with open("./data/Info.txt", "r") as file: data = file.readlines()
-        if info == "lastupdated": return data[0][:-1]
-        elif info == "ver": return data[1][:-1]
-        else: raise NameError(f"No variable called '{info}'")
-
-    def getcogs(self):
-        cogs = []
-        for cog in os.listdir("cogs"):
-            if os.path.isfile(os.path.join("cogs", cog)):
-                cogs.append(cog)
-        return cogs
-
-    def getprefix(self, bot, message):
-        prefix = "fbot"
-        if str(message.channel.type) != "private":
-            prefix = bot.db.getprefix(message.guild.id)
-        if prefix == "fbot":
-            content = message.content
-            if content[:5].lower() == "fbot ": prefix = content[:5]
-            elif content[:6].lower() == "f bot ": prefix = content[:6]
-            elif content[:23].lower() == "<@!711934102906994699> ":
-                prefix = content[:6]
-        if not message.author.bot:
-            bot.db.register(message.author.id)
-        return prefix
-
-    def embed(self, user, title, *desc, url=""):
-        colour = self.bot.db.getcolour(user.id)
-        desc = "\n".join(desc)
-        return Embed(title=title, description=desc, colour=colour, url=url)
-
-    def errorembed(self, error, info):
-        return Embed(title=f"**Error:** `{error}`",
-               description=f"```{info}```", colour=self.red)
-
-    def formatname(name):
-        if not name:
-            name = "Deleted User"
-        else:
-            name = name.name.replace("*", "")
-            name = name.replace("`", "")
-            name = name.replace("_", "")
-            name = name.replace("||", "")
-        return name
-
-    red = 0xF42F42
-
-    top = "https://top.gg/bot/711934102906994699"
-    dbl = "https://discordbotlist.com/bots/fbot"
-
-    bfd = "https://botsfordiscord.com/bot/711934102906994699"
-    dbgg = "https://discord.bots.gg/bots/711934102906994699"
-
-    ligg = "https://listcord.gg/bot/711934102906994699"
-    dbeu = "https://discord-botlist.eu/bots/711934102906994699"
-
-    blsp = "https://botlist.space/bot/711934102906994699"
-    blme = "https://botlist.me/bots/711934102906994699"
-
-    yabl = "https://yabl.xyz/bot/711934102906994699"
-    bdcl = "https://bots.discordlabs.org/bot/711934102906994699"
-
-    votetop = "https://top.gg/bot/711934102906994699/vote"
-    votedbl = "https://discordbotlist.com/bots/fbot/upvote"
-    votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
-
-    voteligg = "https://listcord.gg/bot/711934102906994699?message=Please sign in and vote on this page"
-    votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
-    voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
-    voteblme = "https://botlist.me/bots/711934102906994699/vote"
-
-    site = "https://fbot.breadhub.uk"
-    server = "https://fbot.breadhub.uk/server"
-    invite = "https://fbot.breadhub.uk/invite"
-    github = "https://github.com/judev1/FBot"
-    patreon = "https://www.patreon.com/fbotbot"
+def embed(user, title, *desc, url=""):
+    colour = db.getcolour(user.id)
+    desc = "\n".join(desc)
+    return Embed(title=title, description=desc, colour=colour, url=url)
 
 from discord import Client
 from aiohttp import web
@@ -146,7 +77,7 @@ import logging
 
 logging.getLogger("aiohttp.server").setLevel(logging.CRITICAL)
 
-class voting_handler:
+class VotingHandler:
 
     def __init__(self, bot: Client):
 

@@ -1,4 +1,5 @@
 from discord.ext import commands
+import lib.functions as fn
 
 class links(commands.Cog):
 
@@ -7,26 +8,22 @@ class links(commands.Cog):
 
     @commands.command(name="invite")
     async def _Invite(self, ctx):
-        fn = self.bot.fn
         embed = fn.embed(ctx.author, "Invite FBot to your server!", url=fn.invite)
         await ctx.send(embed=embed)
 
     @commands.command(name="server")
     async def _Server(self, ctx):
-        fn = self.bot.fn
         embed = fn.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.server)
         await ctx.send(embed=embed)
 
     @commands.command(name="github")
     async def _Github(self, ctx):
-        fn = self.bot.fn
         embed = fn.embed(ctx.author, "All FBot's code is on github, give it a star!", url=fn.github)
         await ctx.send(embed=embed)
 
     @commands.command(name="links")
     async def _Links(self, ctx):
 
-        fn = self.bot.fn
         embed = fn.embed(ctx.author, "FBot links",)
 
         embed.add_field(name=":closed_book: **__GENERAL LINKS__**", inline=False, value="The standard discord links for FBot")

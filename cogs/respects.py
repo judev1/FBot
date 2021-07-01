@@ -1,5 +1,6 @@
-from discord.ext import commands
 from discord import AllowedMentions
+from discord.ext import commands
+import lib.functions as fn
 from lib.modes import *
 
 F = "🇫"
@@ -19,7 +20,7 @@ class respects(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = len(self.bot.fn.getprefix(self.bot, ctx.message))
+            prefix = len(fn.getprefix(self.bot, ctx.message))
             text = text[prefix + 9:]
 
         if text:

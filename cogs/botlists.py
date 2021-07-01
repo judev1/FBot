@@ -1,8 +1,8 @@
 from discord.ext import commands
+import lib.functions as fn
+import lib.database as db
 import aiohttp
 import os
-
-f = "~~f~~ "
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -23,7 +23,7 @@ class botlists(commands.Cog):
     @commands.is_owner()
     async def _SCounts(self, ctx):
         servers = len(self.bot.guilds)
-        embed = self.bot.fn.embed(ctx.author, f"Server Counts `{servers}`")
+        embed = fn.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
         session = aiohttp.ClientSession()
 
@@ -64,9 +64,7 @@ class botlists(commands.Cog):
 
     @commands.command(name="vote")
     async def _Vote(self, ctx):
-        fn, db, ftime = self.bot.fn, self.bot.db, self.bot.ftime
         user = ctx.author
-
         embed = fn.embed(user, "FBot Vote")
 
         def get_value(site):
@@ -101,42 +99,42 @@ class botlists(commands.Cog):
             user_id = int(data["user"])
         else: user_id = int(data["id"])
 
-        self.bot.db.register(user_id)
+        db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
         else: name = f"{name.mention} (*{name.name}*)"
 
         if site == "discordbotlist.com":
-            self.bot.db.vote(user_id, "dbl")
-            embed = self.bot.fn.embed(user, site, f"{name} voted")
+            db.vote(user_id, "dbl")
+            embed = fn.embed(user, site, f"{name} voted")
         elif data["type"] == "test":
-            embed = self.bot.fn.embed(user, site + " test", f"{name} tested out the webhook")
+            embed = fn.embed(user, site + " test", f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
-            self.bot.db.vote(user_id, "bfd")
-            embed = self.bot.fn.embed(user, site, f"{name} voted")
+            db.vote(user_id, "bfd")
+            embed = fn.embed(user, site, f"{name} voted")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
         user_id = data["user"]
-        self.bot.db.register(user_id)
+        db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
 
-        embed = self.bot.fn.embed(user, "top test",
+        embed = fn.embed(user, "top test",
                 f"{name} tested out the webhook")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         user_id = data["user"]
-        self.bot.db.register(user_id)
+        db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
         else: name = f"{name.mention} (*{name.name}*)"
 
-        self.bot.db.vote(user_id, "top")
-        embed = self.bot.fn.embed(user, "top.gg", f"{name} voted")
+        db.vote(user_id, "top")
+        embed = fn.embed(user, "top.gg", f"{name} voted")
         await self.voteschannel(embed=embed)
 
 def setup(bot):

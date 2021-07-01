@@ -1,6 +1,7 @@
 from discord.ext import commands
+import lib.functions as fn
 import asyncio
-from random import randint
+import random
 
 emojis = ["⬆️", "⬇️"]
 emojinames = ["forward-up", "forward-down"]
@@ -76,7 +77,7 @@ class dodgergame():
                           obstacles_to_remove]
 
     def create_obstacle(self):
-        obstacle = [self.width - 1, randint(0, self.height - 1)]
+        obstacle = [self.width - 1, random.randint(0, self.height - 1)]
         self.obstacles.append(obstacle)
 
 class dodger(commands.Cog):
@@ -90,7 +91,7 @@ class dodger(commands.Cog):
     async def _Dodger(self, ctx):
 
         def dodger_embed():
-            embed = self.bot.fn.embed(ctx.author, "Dodger Game", game.board())
+            embed = fn.embed(ctx.author, "Dodger Game", game.board())
             embed.set_author(name=f"{game.score} points | {game.direction.upper()}")
             return embed
 

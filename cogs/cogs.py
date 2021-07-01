@@ -1,5 +1,8 @@
 from discord.ext import commands
 from dbfn import reactionbook
+import lib.functions as fn
+import lib.database as db
+from discord import Embed
 
 def format_unable(unable):
     first = True
@@ -11,6 +14,10 @@ def format_unable(unable):
         else: formatedunable += f", `{cog}`"
     return formatedunable
 
+def errorembed(self, error, info):
+    return Embed(title=f"**Error:** `{error}`",
+            description=f"```{info}```", colour=fn.red)
+
 class cogs(commands.Cog):
 
     def __init__(self, bot):
@@ -19,7 +26,6 @@ class cogs(commands.Cog):
     @commands.command(name="load")
     @commands.is_owner()
     async def _LoadCog(self, ctx, cog):
-        fn = self.bot.fn
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -40,7 +46,6 @@ class cogs(commands.Cog):
     @commands.command(name="unload")
     @commands.is_owner()
     async def _UnloadCog(self, ctx, cog):
-        fn = self.bot.fn
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -62,7 +67,6 @@ class cogs(commands.Cog):
     @commands.command(name="reload")
     @commands.is_owner()
     async def _ReloadCog(self, ctx, cog):
-        fn = self.bot.fn
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -86,14 +90,13 @@ class cogs(commands.Cog):
     @commands.command(name="cogs")
     @commands.is_owner()
     async def _Cogs(self, ctx):
-        fn = self.bot.fn
-        colour = self.bot.db.getcolour(ctx.author.id)
+        colour = db.getcolour(ctx.author.id)
         check = "'%l'[:-3] in self.bot.cogs"
         empty = "All cogs loaded"
         book = reactionbook(self.bot, ctx, TITLE="FBot Cogs")
-        book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
+        book.createpages(fn.getcogs(), EMPTY=empty,
                          SUBHEADER="**Loaded:**", check1=(check, True))
-        book.createpages(self.bot.fn.getcogs(), EMPTY=empty,
+        book.createpages(fn.getcogs(), EMPTY=empty,
                          SUBHEADER="**Not Loaded:**", check1=(check, False))
         await book.createbook(MODE="numbers", COLOUR=colour)
 

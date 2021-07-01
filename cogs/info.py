@@ -1,6 +1,8 @@
 from discord.ext import commands
 from lib.triggers import tr
+import lib.functions as fn
 import lib.commands as cm
+import lib.database as db
 from math import ceil
 from time import time
 
@@ -14,6 +16,12 @@ class stats:
         self.commands_ratelimited = 0
         self.triggers_processed = 0
         self.other_messages_processed = 0
+
+def getinfo(self, info):
+        with open("./data/Info.txt", "r") as file: data = file.readlines()
+        if info == "lastupdated": return data[0][:-1]
+        elif info == "ver": return data[1][:-1]
+        else: raise NameError(f"No variable called '{info}'")
 
 class fakeuser: id = 0
 fakeuser = fakeuser()
@@ -40,7 +48,6 @@ class info(commands.Cog):
         else:
             guild_id = message.guild.id
 
-        fn, db = self.bot.fn, self.bot.db
         prefix = fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
         for command in cm.commands:
@@ -64,7 +71,6 @@ class info(commands.Cog):
         stats.other_messages_processed += 1
 
     def embed(self, user):
-        fn = self.bot.fn
         stats = self.bot.stats
         hours = ceil((time() - self.time_start) / 3600)
         total = (stats.commands_processed + stats.commands_ratelimited +
@@ -84,19 +90,18 @@ class info(commands.Cog):
     async def _Info(self, ctx):
 
         ftime = self.bot.ftime
-        fn = self.bot.fn
 
         totalmembers = 0
         for servers in self.bot.guilds:
             totalmembers += servers.member_count
 
-        embed = self.bot.fn.embed(ctx.author, "FBot Info")
+        embed = fn.embed(ctx.author, "FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
-        embed.add_field(name="Last Updated", value=fn.getinfo("lastupdated"))
+        embed.add_field(name="Last Updated", value=getinfo("lastupdated"))
         embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Users", value=totalmembers)
-        embed.add_field(name="Version", value=fn.getinfo("ver"))
+        embed.add_field(name="Version", value=getinfo("ver"))
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
@@ -111,7 +116,7 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = self.bot.fn.embed(ctx.author, guild.name)
+        embed = fn.embed(ctx.author, guild.name)
         embed.add_field(name="Members", value=memcount)
         embed.add_field(name="Voice channels", value=len(guild.voice_channels))
         embed.add_field(name="Text channels", value=len(guild.text_channels))
@@ -125,14 +130,13 @@ class info(commands.Cog):
     @commands.command(name="session", aliases=["uptime"])
     async def _Session(self, ctx):
         ftime = self.bot.ftime
-        embed = self.bot.fn.embed(ctx.author, "FBot's Session")
+        embed = fn.embed(ctx.author, "FBot's Session")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Uptime", value=ftime.uptime())
         await ctx.send(embed=embed)
 
     @commands.command(name="ver", aliases=["version"])
     async def _Version(self, ctx):
-        fn = self.bot.fn
         ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
         embed = fn.embed(ctx.author, "FBot's Version")
         embed.add_field(name="Version", value=f"`{ver}`")

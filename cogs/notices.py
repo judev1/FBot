@@ -1,5 +1,7 @@
 from discord.ext import commands
+import lib.functions as fn
 import lib.commands as cm
+import lib.database as db
 import datetime
 import time
 
@@ -13,7 +15,7 @@ class notices(commands.Cog):
 
         if message.author.bot: return
 
-        prefix = self.bot.fn.getprefix(self.bot, message)
+        prefix = fn.getprefix(self.bot, message)
         if not message.content.startswith(prefix):
             return
         commandcheck = message.content[len(prefix):]
@@ -27,22 +29,19 @@ class notices(commands.Cog):
             return
 
         if str(message.channel.type) != "private":
-            notice = self.bot.db.getlastnotice()
+            notice = db.getlastnotice()
             if notice:
-                last_notice = self.bot.db.getservernotice(message.guild.id)
+                last_notice = db.getservernotice(message.guild.id)
                 if last_notice < notice[0]:
                     embed = self.notice(message, *notice)
                     await message.channel.send(embed=embed)
-                    self.bot.db.updateservernotice(message.guild.id)
+                    db.updateservernotice(message.guild.id)
 
     def notice(self, ctx, date, title, message):
-
-        fn, db = self.bot.fn, self.bot.db
-        prefix = db.getprefix(ctx.guild.id)
         message = eval(f'f"""{message}"""')
 
         date = datetime.datetime.fromtimestamp(date)
-        embed = self.bot.fn.embed(ctx.author, title, message)
+        embed = fn.embed(ctx.author, title, message)
         embed.set_author(name=date.strftime("%H:%M, %d/%m/%y UTC"))
 
         return embed
@@ -50,14 +49,14 @@ class notices(commands.Cog):
     @commands.command(name="getnotice")
     @commands.is_owner()
     async def _GetNotice(self, ctx):
-        embed = self.notice(ctx, *self.bot.db.getlastnotice())
+        embed = self.notice(ctx, *db.getlastnotice())
         await ctx.send(embed=embed)
 
     @commands.command(name="editnotice")
     @commands.is_owner()
     async def _EditNotice(self, ctx, *, text):
         title, message = text.split(" && ")
-        self.bot.db.editnotice(title, message)
+        db.editnotice(title, message)
         await ctx.message.add_reaction("✅")
 
     @commands.command(name="notice")
@@ -65,7 +64,7 @@ class notices(commands.Cog):
     async def _Notice(self, ctx, *, text):
         title, message = text.split(" && ")
         date = time.time()
-        self.bot.db.addnotice(date, title, message)
+        db.addnotice(date, title, message)
         await ctx.message.add_reaction("✅")
 
 def setup(bot):

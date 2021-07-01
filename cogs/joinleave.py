@@ -1,4 +1,6 @@
 from discord.ext import commands
+import lib.functions as fn
+import lib.database as db
 
 joinmsg = ["**Whoa new server, cooooool**",
            "Thanks for choosing FBot, here are some helpful tips and tricks to get you started",
@@ -26,11 +28,11 @@ class joinleave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, newguild):
-        self.bot.db.addguild(newguild.id)
+        db.addguild(newguild.id)
 
         try:
             try:
-                embed = self.bot.fn.embed(user, joinmsg[0], joinmsg[1])
+                embed = fn.embed(user, joinmsg[0], joinmsg[1])
                 for i in range(3, 16, 3):
                     embed.add_field(name=joinmsg[i], value=joinmsg[i+1],
                                     inline=False)
@@ -40,7 +42,7 @@ class joinleave(commands.Cog):
         except: pass
 
         memcount = newguild.member_count
-        embed = self.bot.fn.embed(user, f"**Added** to `{newguild}`",
+        embed = fn.embed(user, f"**Added** to `{newguild}`",
                                   str(newguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")
@@ -48,10 +50,10 @@ class joinleave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, oldguild):
-        self.bot.db.removeguild(oldguild.id)
+        db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count
-        embed = self.bot.fn.embed(user, f"**Removed** from `{oldguild}`",
+        embed = fn.embed(user, f"**Removed** from `{oldguild}`",
                                   str(oldguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")

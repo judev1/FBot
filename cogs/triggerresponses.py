@@ -1,8 +1,10 @@
 from discord.ext import commands
-from random import choice
 from lib.triggers import tr
+import lib.functions as fn
 import lib.commands as cm
+import lib.database as db
 import lib.modes as modes
+from random import choice
 
 tf = ["will", "will not"]
 responses = ["Someone has bad taste in photos",
@@ -40,14 +42,13 @@ class triggerresponses(commands.Cog):
         name = message.author.display_name
         channel = message.channel
         content = message.content
-        db = self.bot.db
 
         if str(message.channel.type) != "private":
             if not message.channel.permissions_for(
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        prefix = self.bot.fn.getprefix(self.bot, message)
+        prefix = fn.getprefix(self.bot, message)
         commandcheck = content[len(prefix):]
         for command in cm.commands:
             if commandcheck.startswith(command):

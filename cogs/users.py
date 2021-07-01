@@ -1,9 +1,21 @@
 ﻿from discord.ext import commands
+import lib.functions as fn
+import lib.database as db
 import discord
 
 LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 toptypes = ["votes", "counting"]
+
+def formatname(name):
+    if not name:
+        name = "Deleted User"
+    else:
+        name = name.name.replace("*", "")
+        name = name.replace("`", "")
+        name = name.replace("_", "")
+        name = name.replace("||", "")
+    return name
 
 class users(commands.Cog):
 
@@ -27,7 +39,6 @@ class users(commands.Cog):
                 obj_id = ctx.author.id
 
             async with ctx.channel.typing():
-                fn, db = self.bot.fn, self.bot.db
                 top, selftop, rank = db.gettop(toptype, 12, obj_id)
                 if toptype == "vote":
                     selftop = f"with `{selftop}` vote(s) this month"

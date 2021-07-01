@@ -1,5 +1,7 @@
 from discord.ext import commands
 from dbfn import reactionbook
+import lib.functions as fn
+import lib.database as db
 
 circle = {"off": ":red_circle:", "on": ":green_circle:"}
 volume = {"few": ":mute:", "some": ":sound:", "all": ":loud_sound:"}
@@ -15,11 +17,10 @@ class status(commands.Cog):
 
     @commands.command(name="config")
     async def _Config(self, ctx):
-        db = self.bot.db
         user = ctx.author
 
         if str(ctx.channel.type) == "private":
-            embed = self.bot.fn.embed(user, "FBot is always on in DMs")
+            embed = fn.embed(user, "FBot is always on in DMs")
         else:
             db.addchannel(ctx.channel.id, ctx.guild.id)
 
@@ -29,7 +30,7 @@ class status(commands.Cog):
             mode = db.getmode(ctx.guild.id)
             language = db.getlang(ctx.guild.id)
 
-            embed = self.bot.fn.embed(user, "FBot Config",
+            embed = fn.embed(user, "FBot Config",
                     f"{circle[status]} FBot is `{status}`",
                     f"{circle[modtoggle]} Modtoggle is `{modtoggle}`",
                     f"{volume[priority]} Responds to `{priority}`")
@@ -40,9 +41,7 @@ class status(commands.Cog):
 
     @commands.command(name="status")
     async def _Status(self, ctx):
-        db = self.bot.db
         user = ctx.author
-
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         guild_id = ctx.guild.id
@@ -61,9 +60,7 @@ class status(commands.Cog):
 
     @commands.command(name="modstatus")
     async def _ModStatus(self, ctx):
-        db = self.bot.db
         user = ctx.author
-
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if not ctx.author.guild_permissions.administrator:
@@ -88,7 +85,6 @@ class status(commands.Cog):
         if not ctx.guild:
             await ctx.reply("**FBot is always on in DMs**")
             return
-        db = self.bot.db
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
@@ -101,7 +97,6 @@ class status(commands.Cog):
         if not ctx.guild:
             await ctx.reply("**You can never turn off FBot in DMs**")
             return
-        db = self.bot.db
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
