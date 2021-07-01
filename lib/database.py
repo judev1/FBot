@@ -460,13 +460,6 @@ class db:
 
     # Counting
 
-    def ignorechannel(self, guild_id, channel_id):
-        c = conn.cursor()
-        t = (guild_id,)
-        c.execute("SELECT channel_id FROM counting WHERE guild_id=?;", t)
-        if channel_id != c.fetchone()[0]: return True
-        return False
-
     def checkdouble(self, guild_id, user_id):
         c = conn.cursor()
         t = (guild_id,)
@@ -490,6 +483,24 @@ class db:
         c.execute("SELECT user_id FROM counting WHERE guild_id=?;", t)
         return int(c.fetchone()[0])
 
+    def resetnumber(self, guild_id):
+        c = conn.cursor()
+        t = (guild_id,)
+        c.execute("UPDATE counting SET number=0, user_id=0 WHERE guild_id=?;", t)
+        conn.commit()
+
+    def updatenumber(self, number, author_id, guild_id):
+        c = conn.cursor()
+        t = (number, author_id, guild_id,)
+        c.execute("UPDATE counting SET number=?, user_id=? WHERE guild_id=?;", t)
+
+        t = (guild_id,)
+        c.execute("SELECT record FROM counting WHERE guild_id=?;", t)
+        if number > c.fetchone()[0]:
+            t = (number, guild_id,)
+            c.execute("UPDATE counting SET record=? WHERE guild_id=?;", t)
+            conn.commit()
+
     def gethighscore(self, guild_id):
         c = conn.cursor()
         t = (guild_id,)
@@ -501,29 +512,20 @@ class db:
         c.execute("SELECT guild_id, record FROM counting ORDER BY record DESC LIMIT 5;")
         return c.fetchall()
 
-    def resetnumber(self, guild_id):
-        c = conn.cursor()
-        t = (guild_id,)
-        c.execute("UPDATE counting SET number=0, user_id=0 WHERE guild_id=?;", t)
-        conn.commit()
-
-    def updatenumber(self, number, author_id, guild_id):
-        c = conn.cursor()
-        t = (number, author_id, guild_id,)
-        c.execute("UPDATE counting SET number=?, user_id=? WHERE guild_id=?;", t)
-        conn.commit()
-
-    def highscore(self, number, guild_id):
-        c = conn.cursor()
-        t = (guild_id,)
-        c.execute("SELECT record FROM counting WHERE guild_id=?;", t)
-        if number > c.fetchone()[0]:
-            t = (number, guild_id,)
-            c.execute("UPDATE counting SET record=? WHERE guild_id=?;", t)
-            conn.commit()
-
     def setcountingchannel(self, channel_id, guild_id):
         c = conn.cursor()
         t = (channel_id, guild_id)
         c.execute("UPDATE counting SET channel_id=? WHERE guild_id=?;", t)
         conn.commit()
+
+    def removecountingchannel(self, guild_id):
+        c = conn.cursor()
+        t = (guild_id,)
+        c.execute("UPDATE counting SET channel_id=0 WHERE guild_id=?;", t)
+        conn.commit()
+
+    def getcountingchannel(self, guild_id):
+        c = conn.cursor()
+        t = (guild_id,)
+        c.execute("SELECT channel_id FROM counting WHERE guild_id=?;", t)
+        return c.fetchone()[0]
