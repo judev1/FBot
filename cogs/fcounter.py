@@ -1,5 +1,19 @@
 from discord.ext import commands
-from discord import AllowedMentions
+import lib.functions as fn
+import lib.database as db
+
+cares = (" ✅ When a message is deleted\n"
+         " ✅ When a message is editted\n"
+         " ✅ When a fake reaction is added\n"
+         " ❌ Non-counting messages\n"
+         " ❌ Trailing text after numbers")
+
+def clean(content):
+    number = ""
+    for char in content:
+        if char.isdigit(): number += char
+        else: break
+    return int(number)
 
 class fcounter(commands.Cog):
 
@@ -9,93 +23,157 @@ class fcounter(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         try:
-            db = self.bot.db
             guild_id = message.guild.id
-            if db.ignorechannel(guild_id, message.channel.id): return
-            if not message.content[0].isdigit(): return
-            elif message.author.bot:
-                await message.delete()
-                await message.channel.send("Numbers from bot accounts are not counted")
-            elif message.author == self.bot.user: return
-            elif message.content == "": return
-            elif db.checkdouble(guild_id, message.author.id):
-                text = f"{message.author.mention} ruined it!\nYou can't do two numbers in a row."
-                await message.channel.send(text)
-                await message.add_reaction("❌")
-            else:
-                guilds_number = db.getnumber(guild_id)
 
-                users_number = ""
-                for char in message.content:
-                    if char.isdigit(): users_number += char
-                    else: break
-                users_number = int(users_number)
+            if message.channel.id != db.getcountingchannel(guild_id):
+                return
+            elif not message.content[0].isdigit():
+                return
+            elif message.content == "":
+                return
+
+            guilds_number = db.getnumber(guild_id)
+
+            if message.author.bot:
+                await message.channel.send(f"Numbers from bot accounts are not counted. The next number is `{guilds_number+1}`")
+            elif message.author.id == db.getuser(guild_id):
+                db.resetnumber(guild_id)
+                await message.add_reaction("❌")
+                await message.channel.send(f"{message.author.mention} ruined it! You can't do two numbers in a row")
+            else:
+                users_number = clean(message.content)
 
                 if users_number != guilds_number + 1:
                     db.resetnumber(guild_id)
-                    await message.channel.send(f"{message.author.mention} ruined it!")
                     await message.add_reaction("❌")
+                    await message.channel.send(f"{message.author.mention} ruined it!")
                 else:
                     db.updatenumber(users_number, message.author.id, guild_id)
-                    db.highscore(users_number, guild_id)
-
                     await message.add_reaction("✅")
         except: pass
 
+    @commands.command("set")
+    async def _Set(self, ctx):
+        if ctx.author.guild_permissions.administrator:
+            db.setcountingchannel(ctx.channel.id, ctx.guild.id)
+            await ctx.reply("Set the current channel to counting channel")
+        else:
+            await ctx.reply("Only administrators can set the counting channel")
+
+    @commands.command("remove")
+    async def _Remove(self, ctx):
+        if ctx.author.guild_permissions.administrator:
+            db.removecountingchannel(ctx.guild.id)
+            await ctx.reply("Removed the counting channel")
+        else:
+            await ctx.reply("Only administrators can remove the counting channel")
+
+    @commands.command("devset")
+    @commands.is_owner()
+    async def _DevSet(self, ctx):
+        db.setcountingchannel(ctx.channel.id, ctx.guild.id)
+        await ctx.send("Set current channel to counting channel")
+
+    @commands.command("devremove")
+    @commands.is_owner()
+    async def _DevRemove(self, ctx):
+        db.removecountingchannel(ctx.guild.id)
+        await ctx.send("Removed the counting channel")
+
+    @commands.command("counting")
+    async def _Counting(self, ctx):
+
+        embed = fn.embed(ctx.author, "FBot counting")
+
+        last_number = db.getnumber(ctx.guild.id)
+        embed.add_field(name="Last number", value=last_number)
+
+        user_id = db.getuser(ctx.guild.id)
+        try: last_counter = (await self.bot.fetch_user(user_id)).mention
+        except: last_counter = "Nobody"
+        embed.add_field(name="Last counter", value=last_counter)
+
+        embed.add_field(name="Anti-sabotage detects...", value=cares, inline=False)
+
+        channel_id = db.getcountingchannel(ctx.guild.id)
+        try: channel = f"<#{(await self.bot.fetch_channel(channel_id)).id}>"
+        except: channel = "None"
+        embed.add_field(name="Channel", value=channel)
+
+        highscore = db.gethighscore(ctx.guild.id)
+        embed.add_field(name="Highscore", value=highscore)
+
+        await ctx.send(embed=embed)
+
+    @commands.command("setnumber")
+    @commands.is_owner()
+    async def _SetNumber(self, ctx, *, number):
+        if not number.isdigit():
+            await ctx.send("Not a number")
+        else:
+            db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
+            await ctx.message.add_reaction("✅")
+
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
-        if payload is None: return
+
+        if not payload.guild_id:
+            return
+        if payload.channel_id != db.getcountingchannel(payload.guild_id):
+            return
+
         message = payload.cached_message
-        if message is None: return
-        if message.content.isnumeric():
-            last_number = self.bot.db.getnumber(message.guild.id)
-            if message.content.startswith(str(last_number)):
-                await message.channel.send(f"**The last number in this channel was deleted **\nThe next number is `{last_number+1}`")
+        if not message.content: return
+
+        if message.content[0].isdigit():
+            number = clean(message.content)
+            last_number = db.getnumber(message.guild.id)
+            if number == last_number:
+                await message.channel.send(f"The last number was deleted. The next number is `{last_number+1}`")
 
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
-        if payload is None: return
+
+        if not payload.guild_id:
+            return
+        if payload.channel_id != db.getcountingchannel(payload.guild_id):
+            return
+
         message = payload.cached_message
-        if message is None: return
-        if message.content.isnumeric():
-            last_number = self.bot.db.getnumber(message.guild.id)
-            if message.content.startswith(str(last_number)):
-                await message.channel.send(f"**The last number in this channel was edited**\nThe next number is `{last_number+1}`")
+        if not message: return
+        if not message.content: return
 
-    @commands.command("counting")
-    @commands.guild_only()
-    async def _Counting(self, ctx):
-        if ctx.author.guild_permissions.administrator:
-            self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
-            await ctx.send("Set the current channel to counting channel")
-        else: await ctx.send("Only administrators can set the counting channel")
+        if message.content[0].isdigit():
+            number = clean(message.content)
+            last_number = db.getnumber(message.guild.id)
+            if number == last_number:
+                await message.channel.send(f"The last number was edited. The next number is `{last_number+1}`")
 
-    @commands.command("devcounting")
-    @commands.is_owner()
-    async def _DevCounting(self, ctx):
-        self.bot.db.setcountingchannel(ctx.channel.id, ctx.guild.id)
-        await ctx.send("Set current channel to counting channel")
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
 
-    @commands.command("number",  aliases=["last"])
-    async def _Number(self, ctx):
-        name = ctx.author.display_name
-        last_number = self.bot.db.getnumber(ctx.guild.id)
-        try:
-            user_id = self.bot.db.getuser(ctx.guild.id)
-            last_sender = self.bot.get_user(user_id).name
-        except: last_sender = "Nobody"
-        embed = self.bot.fn.embed(ctx.author, "FBot counter",
-                f"The current number is `{last_number}`, the next is `{last_number + 1}`"
-                f"\nLast sender is `{last_sender}`")
-        await ctx.send(embed=embed)
+        if not payload.guild_id:
+            return
+        if payload.channel_id != db.getcountingchannel(payload.guild_id):
+            return
+        if payload.user_id == self.bot.user.id:
+            return
+        if not payload.emoji.is_unicode_emoji():
+            return
+        if payload.emoji.name not in ["✅", "☑️", "✔️"]:
+            return
 
-    @commands.command("devnumber")
-    @commands.is_owner()
-    async def _SetNumber(self, ctx, *, number):
-        if not number.isdigit(): await ctx.send("Not a number")
-        else:
-            self.bot.db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
-            await ctx.message.add_reaction("✅")
+        channel = await self.bot.fetch_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+
+        count = 0
+        for reaction in message.reactions:
+            if reaction.emoji in ["✅", "☑️", "✔️"]:
+                count += reaction.count
+
+        if count == 1:
+            last_number = db.getnumber(payload.guild_id)
+            await channel.send(f"A message was given a fake check. The next number is `{last_number+1}`")
 
 def setup(bot):
     bot.add_cog(fcounter(bot))
