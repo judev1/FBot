@@ -3,18 +3,18 @@ import sqlite3
 import time
 import os
 
-path = "./data/FBot.db"
-conn = sqlite3.connect(path)
-
-with open(path, "rb") as file:
-    now = datetime.now()
-    filename = now.strftime("%y-%m-%d %H%M")
-    if not os.path.exists(os.path.join("data", "db_backups")):
-        os.makedirs(os.path.join("data", "db_backups"))
-    with open(f"./data/db_backups/{filename}.db", "wb+") as newfile:
-        newfile.writelines(file.readlines())
-
 def setup():
+    global conn
+    path = "./data/FBot.db"
+    conn = sqlite3.connect(path)
+
+    with open(path, "rb") as file:
+        filename = datetime.now().strftime("%y-%m-%d %H%M")
+        if not os.path.exists(os.path.join("data", "db_backups")):
+            os.makedirs(os.path.join("data", "db_backups"))
+        with open(f"./data/db_backups/{filename}.db", "wb+") as newfile:
+            newfile.writelines(file.readlines())
+
     c = conn.cursor()
 
     c.execute("""CREATE TABLE IF NOT EXISTS guilds (
