@@ -30,6 +30,7 @@ patronise,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no ex
 colonial,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}colonial Please sir, can I have some more",,Send a message in mish mash bri'ish,
 safe,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}safe Cock O'Clock,,Appropriates swear words,
 biblical,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}biblical And then the lord said, have some cheese",,Speak like the kids in the 1600s,
+av,([@member | image url | attachment]),Images,,20,5,No,"send_messages, attach_files",no extra,{prefix}avatar or {prefix}av @Lines,,,
 bigpp,([@member | image url | attachment]),Images,,20,5,No,"send_messages, attach_files",no extra,{prefix}bigpp or {prefix}bigpp @justjude,,Creates a bigpp image of a user,
 bonk,([@member | image url | attachment]),Images,,20,5,No,"send_messages, attach_files",no extra,{prefix}bonk or {prefix}bonk @Lines,,Creates a bonked image of a user,
 blur,percentage ([@member | image url | attachment]),Images,,20,5,No,"send_messages, attach_files",no extra,{prefix}blur 100 or {prefix}blur 100 @justjude,,Creates a blurred image of a user,

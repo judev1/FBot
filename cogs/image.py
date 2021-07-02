@@ -4,6 +4,7 @@ os.environ["MAGICK_OCL_DEVICE"] = "OFF"
 from wand.image import Image as wand_image
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
+import lib.functions as fn
 from discord import File
 import requests
 import re
@@ -47,7 +48,7 @@ class image(commands.Cog):
 
             if len(pixels[0, 0]) == 4:
                 for y in range(512):
-                    for x in range(512): 
+                    for x in range(512):
                         if pixels[x, y][3] < 255:
                             pixels[x, y] = (255, 255, 255, 255)
             resized_img.convert("RGB").save(resized_path, "JPEG")
@@ -68,13 +69,20 @@ class image(commands.Cog):
             if member: return member
         return None
 
-    async def clean_up(self, ctx, path, process, success):
+    async def clean_up(self, ctx, process, success):
         if success:
             if process in ["blur"]: filename = process + "red.jpg"
             else: filename = process + "ed.jpg"
 
+            path = "data/Temp/" + str(ctx.author.id) + "_"
             file = File(fp=path + filename)
-            await ctx.send(file=file)
+            message = await ctx.send(file=file)
+
+            embed = fn.embed(ctx.author, "FBot " + process.capitalize())
+            embed.set_image(url=message.attachments[0].url)
+
+            await ctx.send(embed=embed)
+            await message.delete()
 
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
@@ -83,6 +91,28 @@ class image(commands.Cog):
             os.remove(path + filename)
         else:
             await ctx.reply("That image is too big to " + process)
+
+    @commands.command(name="av", aliases=["avatar", "pfp"])
+    async def _Avatar(self, ctx, *to_av):
+
+        async with ctx.channel.typing():
+
+            to_av = " ".join(to_av)
+            path = "data/Temp/" + str(ctx.author.id) + "_"
+            member = await self.get_member(ctx.guild, to_av)
+
+            try:
+                await self.save_image(path + "to_avatar", member,
+                                      ctx.message.attachments,
+                                      to_av, ctx.author)
+            except:
+                success = False
+            else:
+                with wand_image(filename=path + "resized_to_avatar") as img:
+                    img.save(filename=path + "avatared.jpg")
+                success = True
+
+        await self.clean_up(ctx, "avatar", success)
 
     @commands.command(name="bigpp")
     async def _BigPP(self, ctx, *to_bigpp):
@@ -106,7 +136,7 @@ class image(commands.Cog):
                     img.save(filename=path + "bigpped.jpg")
                 success = True
 
-        await self.clean_up(ctx, path, "bigpp", success)
+        await self.clean_up(ctx, "bigpp", success)
 
     @commands.command(name="bonk")
     async def _Bonk(self, ctx, *to_bonk):
@@ -131,7 +161,7 @@ class image(commands.Cog):
                     img.save(filename=path + "bonked.jpg")
                 success = True
 
-        await self.clean_up(ctx, path, "bonk", success)
+        await self.clean_up(ctx, "bonk", success)
 
     @commands.command(name="blur")
     async def _Blur(self, ctx, amount: int=25, *to_blur):
@@ -162,7 +192,7 @@ class image(commands.Cog):
                     img.save(filename=path + "blurred.jpg")
                 success = True
 
-        await self.clean_up(ctx, path, "blur", success)
+        await self.clean_up(ctx, "blur", success)
 
     @commands.command(name="trigger")
     async def _Trigger(self, ctx, *to_trigger):
@@ -187,7 +217,7 @@ class image(commands.Cog):
                     img.save(filename=path + "triggered.jpg")
                 success = True
 
-        await self.clean_up(ctx, path, "trigger", success)
+        await self.clean_up(ctx, "trigger", success)
 
     @commands.command(name="sneak")
     async def _Sneak(self, ctx, *to_sneak):
@@ -210,7 +240,7 @@ class image(commands.Cog):
                     img.save(filename=path + "sneaked.jpg")
                 success = True
 
-        await self.clean_up(ctx, path, "sneak", success)
+        await self.clean_up(ctx, "sneak", success)
 
     @commands.command(name="god")
     async def _God(self, ctx, *to_god):
@@ -267,7 +297,7 @@ class image(commands.Cog):
 
                 success = True
 
-        await self.clean_up(ctx, path, "god", success)
+        await self.clean_up(ctx, "god", success)
 
 def setup(bot):
     bot.add_cog(image(bot))
