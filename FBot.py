@@ -15,7 +15,7 @@ import os
 
 emojis = {True: "✅", False: "⛔"}
 
-class FBot(commands.Bot):
+class FBot(commands.AutoShardedBot):
 
     def __init__(self):
 
@@ -25,7 +25,8 @@ class FBot(commands.Bot):
         intents.typing = False
         intents.presences = False
 
-        super().__init__(command_prefix=fn.getprefix, owner_ids=owners, intents=intents)
+        super().__init__(command_prefix=fn.getprefix, owner_ids=owners, intents=intents,
+                         shard_count=3)
 
         db.setup()
         print(" > Setup FBot.db")
@@ -43,11 +44,12 @@ class FBot(commands.Bot):
         cmds.load()
 
     async def on_connect(self):
-        print(f"\n > Began signing into Discord as {self.user}")
+        print(f"\n > Shard {len(self.shards)}/3 connected", end="")
 
     async def on_ready(self):
-        print(f" > Finished signing into Discord as {self.user}\n")
+        print(f"\n > All shards connected, {self.user} is ready\n")
         db.checkguilds(self.guilds)
+
         self.ftime.set()
         print(f" > Session started at {bot.ftime.start}\n")
 
