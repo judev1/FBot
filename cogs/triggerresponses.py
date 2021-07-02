@@ -78,8 +78,7 @@ class triggerresponses(commands.Cog):
             prefix = "fbot "
 
         if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
-            await message.reply(f"My prefix is `{prefix}`"
-                                f"\nUse `{prefix}help` for more help")
+            await message.reply(f"My prefix is `{prefix}`. Use `{prefix}help` for more help")
 
         elif str(message.channel.type) == "private" or db.getstatus(message.channel.id) == "on":
 

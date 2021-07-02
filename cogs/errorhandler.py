@@ -32,24 +32,18 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.MessageNotFound:
             return
         elif type(error) is commands.DisabledCommand:
-            await ctx.reply("**This command is disabled**\n" +
-                  "If you'd like to find out more join our support server")
+            await ctx.reply("**This command is disabled.** If you'd like to find out more join our support server")
         elif type(error) is commands.BadArgument:
-            await ctx.reply("**Bad argument**\n" +
-                  "Whoops! Looks like one of the arguments you entered is a bit off...")
+            await ctx.reply("**Bad argument.** Whoops! Looks like one of the arguments you entered is a bit off...")
         elif type(error) is commands.MissingRequiredArgument:
-            await ctx.reply("**Command missing an argument**\n" +
-                  "Whoops! You've missed an argument for this command")
+            await ctx.reply("**Command missing an argument.** Whoops! You've missed an argument for this command")
         elif type(error) is commands.NoPrivateMessage:
-            await ctx.reply("**Server only command**\n" +
-                  "This command can only be used in a server")
+            await ctx.reply("**Server only command.** This command can only be used in a server")
         elif type(error) is commands.UserNotFound:
-            await ctx.reply("**No user found**\n" +
-                  "Hmm we couldn't find that user, maybe try something else")
+            await ctx.reply("**No user found.** Hmm we couldn't find that user, maybe try something else")
         elif type(error) is commands.CommandOnCooldown:
             retry = round(error.retry_after, 2)
-            await ctx.reply("**You're on cooldown!**\n" +
-                  f"Please wait `{retry}s` to use this command")
+            await ctx.reply(f"**You're on cooldown!.** Please wait `{retry}s` to use this command")
         elif type(error) is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
