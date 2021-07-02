@@ -14,7 +14,7 @@ def format_unable(unable):
         else: formatedunable += f", `{cog}`"
     return formatedunable
 
-def errorembed(self, error, info):
+def errorembed(error, info):
     return Embed(title=f"**Error:** `{error}`",
             description=f"```{info}```", colour=fn.red)
 
@@ -40,7 +40,7 @@ class cogs(commands.Cog):
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Loaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"Failed to load cog: {cog}", str(e))
+                embed = errorembed(f"Failed to load cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="unload")
@@ -61,7 +61,7 @@ class cogs(commands.Cog):
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Unloaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"Failed to unload cog: {cog}", str(e))
+                embed = errorembed(f"Failed to unload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="reload")
@@ -84,7 +84,7 @@ class cogs(commands.Cog):
                 embed = fn.embed(ctx.author, "FBot cogs",
                                  f"Reloaded cog: `{cog}`")
             except Exception as e:
-                embed = fn.errorembed(f"Failed to reload cog: {cog}", str(e))
+                embed = errorembed(f"Failed to reload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
     @commands.command(name="cogs")
