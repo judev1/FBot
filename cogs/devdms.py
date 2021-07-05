@@ -38,9 +38,8 @@ class devdms(commands.Cog):
                 await user.dm_channel.send(author + message.content)
         elif message.author.id in self.bot.userdms:
             channel = self.bot.userdms[message.author.id]
-            if channel.id == message.channel.id:
-                author = f"`{message.author}` "
-                await channel.send(author + message.content)
+            author = f"`{message.author}` "
+            await channel.send(author + message.content)
 
     @commands.command(name="closedm")
     async def _CloseDMs(self, ctx):
