@@ -45,6 +45,8 @@ def formatperm(perm):
     return " ".join(text)
 
 def getprefix(bot, message):
+    if not bot.is_ready():
+        return False
     prefix = "fbot"
     if str(message.channel.type) != "private":
         prefix = db.getprefix(message.guild.id)
