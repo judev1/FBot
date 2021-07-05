@@ -18,7 +18,7 @@ class speak(commands.Cog):
 
     @commands.command(name="devspeak")
     @commands.is_owner()
-    async def _Speak(self, ctx, arg):
+    async def _DevSpeak(self, ctx, arg):
         if arg in options:
             db.changemode(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
