@@ -3,7 +3,7 @@ import lib.functions as fn
 import lib.database as db
 
 cares = (" ✅ When a message is deleted\n"
-         " ✅ When a message is editted\n"
+         " ✅ When a message is edited\n"
          " ✅ When a fake reaction is added\n"
          " ❌ Non-counting messages\n"
          " ❌ Trailing text after numbers")
