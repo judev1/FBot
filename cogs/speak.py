@@ -10,6 +10,7 @@ class speak(commands.Cog):
 
     @commands.command(name="speak")
     async def _Speak(self, ctx, arg):
+        if arg == "normal": arg = "default"
         if arg in options:
             db.changemode(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
