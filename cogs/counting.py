@@ -52,6 +52,8 @@ class fcounter(commands.Cog):
                     await message.add_reaction("✅")
                     if str(users_number).endswith("69"):
                         await message.add_reaction("👌")
+                    elif users_number == 100:
+                        await message.add_reaction("💯")
         except: pass
 
     @commands.command("set")
