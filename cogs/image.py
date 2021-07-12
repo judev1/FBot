@@ -15,6 +15,7 @@ nogodfont = ImageFont.truetype("arial.ttf", 30)
 godfont = ImageFont.truetype("arial.ttf", 50)
 
 bigpp_img = wand_image(filename="data/imgs/bigpp.png")
+smolpp_img = wand_image(filename="data/imgs/smolpp.png")
 bonk_img = wand_image(filename="data/imgs/bonk.png")
 triggered_img = wand_image(filename="data/imgs/triggered.png")
 sneak_img = wand_image(filename="data/imgs/sneak.png")
@@ -137,6 +138,30 @@ class image(commands.Cog):
                 success = True
 
         await self.clean_up(ctx, "bigpp", success)
+
+    @commands.command(name="smolpp", aliases=["smallpp", "smollpp"])
+    async def _SmolPP(self, ctx, *to_smolpp):
+
+        async with ctx.channel.typing():
+
+            to_smolpp = " ".join(to_smolpp)
+            path = "data/Temp/" + str(ctx.author.id) + "_"
+            member = await self.get_member(ctx.guild, to_smolpp)
+
+            try:
+                await self.save_image(path + "to_smolpp", member,
+                                      ctx.message.attachments,
+                                      to_smolpp, ctx.author)
+            except:
+                success = False
+            else:
+                with wand_image(filename=path + "resized_to_smolpp") as img:
+                    img.implode(amount=0.5)
+                    img.composite(smolpp_img)
+                    img.save(filename=path + "smolpped.jpg")
+                success = True
+
+        await self.clean_up(ctx, "smolpp", success)
 
     @commands.command(name="bonk")
     async def _Bonk(self, ctx, *to_bonk):
