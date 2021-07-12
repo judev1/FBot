@@ -12,3 +12,4 @@ Temp/
 *.iml
 .env
 Pipfile.lock
+*.db-journal
