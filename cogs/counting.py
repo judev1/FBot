@@ -50,6 +50,8 @@ class fcounter(commands.Cog):
                 else:
                     db.updatenumber(users_number, message.author.id, guild_id)
                     await message.add_reaction("✅")
+                    if str(users_number).endswith("69"):
+                        await message.add_reaction("👌")
         except: pass
 
     @commands.command("set")
