@@ -7,8 +7,6 @@ from discord.ext import commands
 import lib.functions as fn
 from discord import File
 import requests
-import numpy as np
-import subprocess
 import re
 
 black = (0, 0, 0)
@@ -22,14 +20,6 @@ triggered_img = wand_image(filename="data/imgs/triggered.png")
 sneak_img = wand_image(filename="data/imgs/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
-
-# For sussy:
-twerk_frames = []
-twerk_frames_data = []
-for i in range(6):
-    img = Image.open(f"data/imgs/twerk_imgs/{i}.png").convert("RGBA")
-    twerk_frames.append(img)
-    twerk_frames_data.append(np.array(img))
 
 class image(commands.Cog):
 
@@ -81,8 +71,7 @@ class image(commands.Cog):
 
     async def clean_up(self, ctx, process, success):
         if success:
-            if process in {"blur"}: filename = process + "red.jpg"
-            elif process in {"sussy"}: filename = process + "ed.gif"
+            if process in ["blur"]: filename = process + "red.jpg"
             else: filename = process + "ed.jpg"
 
             path = "data/Temp/" + str(ctx.author.id) + "_"
@@ -309,57 +298,6 @@ class image(commands.Cog):
                 success = True
 
         await self.clean_up(ctx, "god", success)
-
-    @commands.command(name="sussy")
-    async def _Sussy(self, ctx, output_width: int=21, *to_sussy):
-
-        if type(output_width) is not int:
-            await ctx.send("Width must be a number")
-            return
-        elif output_width > 40:
-            await ctx.send("Max width must be 40")
-            return
-
-        async with ctx.channel.typing():
-
-            to_sussy = " ".join(to_sussy)
-            path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_sussy)
-            
-            try:
-                await self.save_image(path + "to_sussy", member,
-                                      ctx.message.attachments,
-                                      to_sussy, ctx.author)
-            except:
-                success = False
-            else:
-                with Image.open(path + "resized_to_sussy") as img:
-                    input_image = img.convert("RGB")
-                    input_width, input_height = input_image.size
-                    output_height = int(output_width * (input_height / input_width) * (75 / 65))
-                    for frame_number in range(6):
-                        print("frame=",frame_number)
-                        background = Image.new(mode="RGBA", size=(output_width*75, output_height*65))
-                        for y in range(output_height):
-                            for x in range(output_width):
-                                r, g, b = input_image.getpixel((int(x / output_width * input_width), int(y / output_height * input_height)))
-                                sussified_frame_data = np.copy(twerk_frames_data[(x - y + frame_number) % len(twerk_frames)])
-                                red, green, blue, alpha = sussified_frame_data.T
-                                color_1 = (red == 214) & (green == 224) & (blue == 240)
-                                sussified_frame_data[..., :-1][color_1.T] = (r, g, b)
-                                color_2 = (red == 131) & (green == 148) & (blue == 191)
-                                sussified_frame_data[..., :-1][color_2.T] = (int(r*2/3), int(g*2/3), int(b*2/3))
-                                sussified_frame = Image.fromarray(sussified_frame_data)
-                                background.paste(sussified_frame, (x * 75, y * 65))
-                        background.save(f"{path}sussified_{frame_number}.png")
-                    print("ff")
-                    subprocess.call(f'ffmpeg -f image2 -i {path}sussified_%d.png -filter_complex "[0:v] scale=sws_dither=none:,split [a][b];[a] palettegen=max_colors=255:stats_mode=single [p];[b][p] paletteuse=dither=none" -r 20 -y -hide_banner -loglevel error {path}sussyed.gif')
-                    print("c")
-                    for frame_number in range(6):
-                        os.remove(f"{path}sussified_{frame_number}.png")
-                success = True
-        
-        await self.cleanup(ctx, path, "sussy", success)
 
 def setup(bot):
     bot.add_cog(image(bot))

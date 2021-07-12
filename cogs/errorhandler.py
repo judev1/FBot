@@ -11,7 +11,7 @@ class errorhandler(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.errorlogs = bot.get_channel(727320090483359844)
+        self.errorlogs = bot.get_channel(743392645228920882)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
