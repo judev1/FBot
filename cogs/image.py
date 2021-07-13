@@ -82,7 +82,7 @@ class image(commands.Cog):
             embed = fn.embed(ctx.author, "FBot " + process.capitalize())
             embed.set_image(url=message.attachments[0].url)
 
-            await ctx.send(embed=embed)
+            await ctx.reply(embed=embed)
             await message.delete()
 
             os.remove(path + "to_" + process)

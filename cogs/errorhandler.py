@@ -43,7 +43,7 @@ class errorhandler(commands.Cog):
             await ctx.reply("**No user found.** Hmm we couldn't find that user, maybe try something else")
         elif type(error) is commands.CommandOnCooldown:
             retry = round(error.retry_after, 2)
-            await ctx.reply(f"**You're on cooldown!.** Please wait `{retry}s` to use this command")
+            await ctx.reply(f"**You're on cooldown!.** Please wait `{retry}s` to use this command", delete_after=5)
         elif type(error) is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
