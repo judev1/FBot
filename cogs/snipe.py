@@ -46,7 +46,10 @@ class snipe(commands.Cog):
                 msg += f"\n{sender} edited their [message]({message}) at `{time}`"
             elif action == "deleted":
                 deleter = snipe["deleter"]
-                msg += f"\n{deleter} deleted {sender}'s message at `{time}`"
+                if deleter == sender:
+                    msg += f"\n{sender} deleted their own message at `{time}`"
+                else:
+                    msg += f"\n{deleter} deleted {sender}'s message at `{time}`"
 
             content = snipe["content"]
             if content == "":
@@ -71,21 +74,22 @@ class snipe(commands.Cog):
     async def on_message_delete(self, message):
         if not message.guild: return
 
+        bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
+
         prefix = fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
         say_commands = tuple([command.name + " " for command in self.bot.commands if command.cog.qualified_name == "say"])
         if commandcheck.startswith(say_commands):
             if not message.author.bot:
-                bot_id = self.bot.user.id
-                if  message.channel.permissions_for(
-                    message.guild.get_member(bot_id)).send_messages:
+                if  bot_perms.send_messages:
                     return
+
         deleter = "User"
-        try:
-            async for deleted in message.guild.audit_logs(limit=1,
-                                 oldest_first=False, action=message_delete):
-                deleter = deleted.user.mention
-        except: pass
+        if bot_perms.view_audit_log:
+            async for deleted in message.guild.audit_logs(limit=1, oldest_first=False, action=message_delete):
+                if deleted.target.id == message.author.id:
+                    deleter = deleted.user.mention
+                else: deleter = message.author.mention
 
         if message.channel.id not in snipes:
             snipes[message.channel.id] = deque(maxlen=max_snipes)
