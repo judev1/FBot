@@ -6,16 +6,16 @@ joinmsg = ["**Whoa new server, cooooool**",
            "Thanks for choosing FBot, here are some helpful tips and tricks to get you started",
 
            "", ":speech_balloon: **How do I turn on FBot's spamming/message response feature?**",
-           "You can turn this on by using the command `fbot on` (don't worry about the case) in the desired channel and FBot will begin replying to your messages. If only want admin to be able to toggle FBot, you can use `fbot modtoggle on` to do this",
+           "You can turn this on by using the command `fbot on` (it's case insensitive) in the desired channel and FBot will begin replying to your messages. If only want admins to be able to toggle FBot, you can use `fbot modtoggle on` to do this",
 
            "", ":1234: **How can I set up a counting channel with FBot?**",
-           "In the channel which you want to be your counting channel, use `fbot counting` and simply start counting! You can count on it!",
+           "In the channel which you want to be your counting channel, use `fbot counting` and simply start counting! You can count on it! Try get the highest number (you can check your status by using `fbot top counting`) and you'll be successfully after completeing kindergarten!",
 
            "", ":sound: **I'm seeing too much FBot how can I calm it down?**",
            "If you want FBot to respond to less messages you can use `fbot respond few`, by default fbot respond is set to `all`, but you can change it to few, some or all, depending on what suits your server",
 
            "", ":safety_pin: **Anything else?**",
-           "Well if you need anything else use `fbot help`, where you can find a list of commands, an invite to our support server, and more!"]
+           "Well if you need anything else use `fbot help` & `fbot cmds`, where you can find a list of commands, and if you are after finding a bug, have a suggestion or just a general question about FBot, use `fbot server` to get a *fresh* invite to our support server!"]
 
 class fakeuser: id = 0
 user = fakeuser()
