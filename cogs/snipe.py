@@ -73,6 +73,7 @@ class snipe(commands.Cog):
     @commands.Cog.listener()
     async def on_message_delete(self, message):
         if not message.guild: return
+        if message.author.bot: return
 
         bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
 
@@ -104,7 +105,7 @@ class snipe(commands.Cog):
     async def on_message_edit(self, before, after):
         if before.content == after.content: return
         if not before.guild: return
-        if after.author.id == self.bot.user.id: return
+        if after.author.bot: return
 
         if before.channel.id not in snipes:
             snipes[before.channel.id] = deque(maxlen=max_snipes)
