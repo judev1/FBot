@@ -25,8 +25,10 @@ class FBot(commands.AutoShardedBot):
         intents.typing = False
         intents.presences = False
 
+        shard_count = 3
+
         super().__init__(command_prefix=fn.getprefix, owner_ids=owners, intents=intents,
-                         shard_count=3)
+                         shard_count=shard_count)
 
         db.setup()
         print(" > Setup FBot.db")
@@ -43,33 +45,33 @@ class FBot(commands.AutoShardedBot):
         tr.load()
         cmds.load()
 
-    async def on_connect(self):
-        print(f"\n > Shard {len(self.shards)}/3 connected", end="")
+    async def on_shard_ready(self, shard_id):
+        print(f"\n > Shard {shard_id} ready", end="")
 
-    async def on_ready(self):
-        print(f"\n > All shards connected, {self.user} is ready\n")
-        db.checkguilds(self.guilds)
+        if shard_id == self.shard_count - 1:
+            print(f"\n > All shards ready, {self.user} is ready\n")
+            db.checkguilds(self.guilds)
 
-        self.ftime.set()
-        print(f" > Session started at {bot.ftime.start}\n")
+            self.ftime.set()
+            print(f" > Session started at {bot.ftime.start}\n")
 
-        self.remove_command("help")
-        for cog in fn.getcogs():
-            if cog not in []:
-                print(f"Loading {cog}...", end="")
-                try: self.reload_extension("cogs." + cog[:-3])
-                except: self.load_extension("cogs." + cog[:-3])
-                finally: print("Done")
-        print("\n > Finished loading cogs")
+            self.remove_command("help")
+            for cog in fn.getcogs():
+                if cog not in []:
+                    print(f"Loading {cog}...", end="")
+                    try: self.reload_extension("cogs." + cog[:-3])
+                    except: self.load_extension("cogs." + cog[:-3])
+                    finally: print("Done")
+            print("\n > Finished loading cogs")
 
-        for command in cm.commands:
-            self.cache["Cooldowns"].add_command(command, tuple(cm.commands[command][3:5]))
-        for command in cm.devcmds:
-            self.cache["Cooldowns"].add_command(command, (0, 0))
-        print(" > Finished setting up cooldowns\n")
+            for command in cm.commands:
+                self.cache["Cooldowns"].add_command(command, tuple(cm.commands[command][3:5]))
+            for command in cm.devcmds:
+                self.cache["Cooldowns"].add_command(command, (0, 0))
+            print(" > Finished setting up cooldowns\n")
 
-        await self.change_presence(status=discord.Status.online,
-                                activity=discord.Game(name="'FBot help'"))
+            await self.change_presence(status=discord.Status.online,
+                                    activity=discord.Game(name="'FBot help'"))
 
 def predicate(ctx):
     if str(ctx.channel.type) != "private":
