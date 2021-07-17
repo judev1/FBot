@@ -41,7 +41,6 @@ god,([@member | image url | attachment]),Images,,20,5,No,"send_messages, attach_
 set,,Counting,,8,2,Yes,send_messages,administrator,{prefix}set,,Sets the current channel as the counting channel,
 remove,,Counting,,8,2,Yes,send_messages,administrator,{prefix}remove,,Removes the counting channel,
 counting,,Counting,,8,2,Yes,send_messages,no extra,{prefix}counting,,Shows information about counting within the server,
-cantcount,[on | off],Counting,,8,2,Yes,"send_messages, manage_roles",no extra,{prefix}counting,,Shows information about counting within the server,
 snipe,(1-10),Utility,,8,2,No,"send_messages, embed_links, (view_audit_log)",no extra,{prefix}snipe or {prefix}snipe 9,,Gets the last number of deleted and editted messages,
 purge,number,Utility,,8,2,Yes,"send_messages, manage_messages",manage_messages,{prefix}purge 10 or {prefix}thanos 11,,Purges a certain number of messages,
 prefix,[prefix | reset],Utility,,8,2,No,send_messages,administrator,"{prefix}prefix f! or {prefix}prefix ""dumb bot "" or {prefix}prefix reset",,Changes the prefix for the server,
