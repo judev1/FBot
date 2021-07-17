@@ -135,14 +135,6 @@ class info(commands.Cog):
         embed.add_field(name="Uptime", value=ftime.uptime())
         await ctx.send(embed=embed)
 
-    @commands.command(name="ver", aliases=["version"])
-    async def _Version(self, ctx):
-        ver, updated = fn.getinfo("ver"), fn.getinfo("lastupdated")
-        embed = fn.embed(ctx.author, "FBot's Version")
-        embed.add_field(name="Version", value=f"`{ver}`")
-        embed.add_field(name="Released", value=f"`{updated}`")
-        await ctx.send(embed=embed)
-
     @commands.command(name="premium")
     async def _Premium(self, ctx):
         await ctx.reply("https://fbot.breadhub.uk/premium")

@@ -2,7 +2,7 @@
 import lib.functions as fn
 import lib.database as db
 import discord
-
+        
 LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 toptypes = ["votes", "counting"]
@@ -24,7 +24,8 @@ class users(commands.Cog):
 
     @commands.command(name="profile")
     async def _Profile(self, ctx, user: discord.User=None):
-        await ctx.reply("This command is being reworked")
+        await ctx.reply("This command is being reworked. Stay updated by clicking the link in the next embed!")
+        await ctx.invoke(self.bot.get_command("server"))
 
     @commands.command(name="top")
     async def _Top(self, ctx, toptype):
