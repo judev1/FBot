@@ -116,7 +116,7 @@ class help(commands.Cog):
         if str(ctx.channel.type) != "private":
             prefix = db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
 
         embeds = [self.bot.embed(ctx.author, "**__FBot commands__**")]
         for i, category in enumerate(cm.categories):
@@ -169,7 +169,7 @@ class help(commands.Cog):
     @commands.command(name="devcmds")
     @commands.is_owner()
     async def _DevCommands(self, ctx):
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)
         book.createpages(cm.devcmdlist, LINE="`%0`",
                          SUBHEADER="**__FBot Dev Commands__**\n")

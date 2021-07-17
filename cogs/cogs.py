@@ -89,7 +89,7 @@ class cogs(commands.Cog):
     @commands.command(name="cogs")
     @commands.is_owner()
     async def _Cogs(self, ctx):
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
         check = "'%l'[:-3] in self.bot.cogs"
         empty = "All cogs loaded"
         book = reactionbook(self.bot, ctx, TITLE="FBot Cogs")

@@ -43,7 +43,7 @@ class fbotdev(commands.Cog):
         if str(channel.type) != "private":
             guild = ctx.guild
 
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -70,7 +70,7 @@ class fbotdev(commands.Cog):
         bot, ctx = self.bot, CTX
         exec(f"global function\nasync def function():\n    result = await {content}\n    if result: return result")
 
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -227,7 +227,7 @@ class fbotdev(commands.Cog):
             members += guild.member_count
         guilds.sort(reverse=True)
 
-        colour = self.get_colour(ctx.author.id)
+        colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Servers")
         book.createpages(guilds, f"`%1`: **%0**")
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
@@ -244,7 +244,7 @@ class fbotdev(commands.Cog):
                 matches.append(to_append)
 
         if matches:
-            colour = self.get_colour(ctx.author.id)
+            colour = self.bot.get_colour(ctx.author.id)
             book = reactionbook(self.bot, ctx, TITLE="FBot Search")
 
             matches.sort()
