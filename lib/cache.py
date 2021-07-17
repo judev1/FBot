@@ -6,18 +6,19 @@ class Cooldowns:
     _commands = dict()
     _cooldowns = dict()
 
-    def add_command(self, command, cooldowns):
+    def __init__(self, devs, premium):
+        self._devs = devs
+        self._premium = premium
+
+    def add(self, command, cooldowns):
 
         self._commands[command] = cooldowns
         setattr(self, command, dict())
 
-    def cooldown(self, ctx):
+    def get(self, user, command):
 
-        command = ctx.command.name
-        user = ctx.author
-
-        premium = int(db.premium(user))
-        user = user.id
+        if user in self._devs:
+            return 0
 
         command_cooldowns = self._commands[command]
         cooldowns = getattr(self, command)
@@ -37,6 +38,7 @@ class Cooldowns:
                 cooldown = cooldowns[user] - now
 
         if not cooldown:
+            premium = int(user in self._premium)
             if premium:
                 self._cooldowns[user] = now + 2
             else:
@@ -79,3 +81,10 @@ class Names:
         now = time()
         self._names[obj_id] = name
         self._expiries[obj_id] = now + 10*60
+
+class Cache:
+
+    def __init__(self, devs, premium):
+
+        self.cooldowns = Cooldowns(devs, premium)
+        self.names = Names()

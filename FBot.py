@@ -19,41 +19,55 @@ class FBot(commands.AutoShardedBot):
 
     def __init__(self):
 
-        owners =  [671791003065384987, 216260005827969024, 311178459919417344, 668423998777982997]
+        self.SERVER_ID = 717735765936701450
+        self.PREMIUM_ID = 815555688520613919
 
-        intents = discord.Intents.default()
-        intents.typing = False
-        intents.presences = False
+        self.devs = [671791003065384987, 216260005827969024, 311178459919417344, 668423998777982997]
 
-        shard_count = 3
+        intents = discord.Intents.none()
+        intents.guilds = True
+        intents.messages = True
+        intents.reactions = True
+        #intents.members = True # missing intents
 
-        super().__init__(command_prefix=fn.getprefix, owner_ids=owners, intents=intents,
-                         shard_count=shard_count)
+        SHARD_COUNT = 3
 
-        db.setup()
-        print(" > Setup FBot.db")
-
-        self.cache = dict()
-        self.cache["Cooldowns"] = cache.Cooldowns()
-        self.cache["Names"] = cache.Names()
+        super().__init__(command_prefix=fn.getprefix, owner_ids=self.devs, intents=intents,
+                         shard_count=SHARD_COUNT)
 
         self.ftime = fn.ftime()
 
         self.dbl = dbl.DBLClient(self, os.getenv("TOPGG_TOKEN"), webhook_path="/dblwebhook",
             webhook_auth=os.getenv("WEBHOOK_AUTH"), webhook_port=6000)
 
-        tr.load()
-        cmds.load()
+        fn.VotingHandler(self)
+        self.add_check(self.predicate)
+
+        print("Connecting...\n")
 
     async def on_shard_ready(self, shard_id):
-        print(f"\n > Shard {shard_id} ready", end="")
+        print(f" > Shard {shard_id} is ready")
 
         if shard_id == self.shard_count - 1:
-            print(f"\n > All shards ready, {self.user} is ready\n")
-            db.checkguilds(self.guilds)
+            print(f"\n > All shards ready, {self.user} is ready")
 
             self.ftime.set()
             print(f" > Session started at {bot.ftime.start}\n")
+
+            db.setup()
+            db.checkguilds(self.guilds)
+            print(" > Setup FBot.db")
+
+            self.premium = await self.get_premium()
+            self.cache = cache.Cache(self.devs, self.premium)
+            for csv in [tr, cmds]:
+                csv.load()
+
+            for command in cm.commands:
+                self.cache.cooldowns.add(command, tuple(cm.commands[command][3:5]))
+            for command in cm.devcmds:
+                self.cache.cooldowns.add(command, (0, 0))
+            print(" > Finished setting up cooldowns\n")
 
             self.remove_command("help")
             for cog in fn.getcogs():
@@ -64,48 +78,65 @@ class FBot(commands.AutoShardedBot):
                     finally: print("Done")
             print("\n > Finished loading cogs")
 
-            for command in cm.commands:
-                self.cache["Cooldowns"].add_command(command, tuple(cm.commands[command][3:5]))
-            for command in cm.devcmds:
-                self.cache["Cooldowns"].add_command(command, (0, 0))
-            print(" > Finished setting up cooldowns\n")
-
             await self.change_presence(status=discord.Status.online,
                                     activity=discord.Game(name="'FBot help'"))
 
-def predicate(ctx):
-    if str(ctx.channel.type) != "private":
-        bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(bot.user.id))
+    async def get_premium(self):
 
-        valid, perms = [], {}
-        for perm in cm.perms[ctx.command.name]:
-            if not perm.startswith("("):
-                bot_perm = getattr(bot_perms, perm)
-            else: bot_perm = True
-            valid.append(bot_perm)
-            perms[perm] = bot_perm
+        guild = self.get_guild(self.SERVER_ID)
+        role = guild.get_role(self.PREMIUM_ID)
 
-        if not all(valid):
-            page = "**Missing Permissions**\n\n"
-            for perm in perms:
-                if perm.startswith("("):
-                    perms[perm] = getattr(bot_perms, perm[1:-1])
-                page += f"{emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
-            raise commands.CheckFailure(message=page)
-    else:
-        if cm.commands[ctx.command.name][5] == "*Yes*":
-            raise commands.NoPrivateMessage()
+        premium = set()
+        for member in role.members:
+            premium.add(member.id)
 
-    cooldown = bot.cache["Cooldowns"].cooldown(ctx)
-    if cooldown:
-        bot.stats.commands_ratelimited += 1
-        raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
-    bot.stats.commands_processed += 1
-    return True
+        return premium
+
+    #async def on_member_update(self, before, after):
+
+    #    if before.roles == after.roles:
+    #        return
+
+    #    for role in after.roles:
+    #        if role.id == self.PREMIUM_ID:
+    #            self.premium.add(after.id)
+    #            return
+
+    #    self.premium.remove(after.id)
+
+    def predicate(self, ctx):
+
+        user = ctx.author.id
+        command = ctx.command.name
+        if str(ctx.channel.type) != "private":
+            bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))
+
+            valid, perms = [], {}
+            for perm in cm.perms[command]:
+                if not perm.startswith("("):
+                    bot_perm = getattr(bot_perms, perm)
+                else: bot_perm = True
+                valid.append(bot_perm)
+                perms[perm] = bot_perm
+
+            if not all(valid):
+                page = "**Missing Permissions**\n\n"
+                for perm in perms:
+                    if perm.startswith("("):
+                        perms[perm] = getattr(bot_perms, perm[1:-1])
+                    page += f"{emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
+                raise commands.CheckFailure(message=page)
+        else:
+            if cm.commands[command][5] == "*Yes*":
+                raise commands.NoPrivateMessage()
+
+        cooldown = self.cache.cooldowns.get(user, command)
+        if cooldown:
+            self.stats.commands_ratelimited += 1
+            raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
+        self.stats.commands_processed += 1
+        return True
 
 load_dotenv()
-
 bot = FBot()
-fn.VotingHandler(bot)
-bot.add_check(predicate)
 bot.run(os.getenv("FBOT_TOKEN"))

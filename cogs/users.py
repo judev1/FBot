@@ -48,7 +48,7 @@ class users(commands.Cog):
                 embed = fn.embed(ctx.author, f"FBot Top {toptype}",
                                  f"Ranked `{rank}` " + selftop)
 
-                cache = self.bot.cache["Names"]
+                cache = self.bot.cache.names
                 for rank, row in enumerate(top):
                     ID, typeitem = row
                     name = cache.get(ID)

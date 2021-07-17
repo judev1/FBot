@@ -387,18 +387,6 @@ def nextvote(user_id, site):
         return None
     return (mins, hours)
 
-# Premium
-
-def premium(user):
-    premium_role_id = 815555688520613919
-    role_ids = [role.id for role in user.roles]
-    if premium_role_id in role_ids:
-        return True
-    return False
-
-def getcolour(user_id):
-    return 0xf42f42
-
 # Prefix
 
 def changeprefix(guild_id, prefix):
