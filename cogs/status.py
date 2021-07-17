@@ -1,6 +1,5 @@
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.functions as fn
 import lib.database as db
 
 circle = {"off": ":red_circle:", "on": ":green_circle:"}
@@ -20,7 +19,7 @@ class status(commands.Cog):
         user = ctx.author
 
         if str(ctx.channel.type) == "private":
-            embed = fn.embed(user, "FBot is always on in DMs")
+            embed = self.bot.embed(user, "FBot is always on in DMs")
         else:
             db.addchannel(ctx.channel.id, ctx.guild.id)
 
@@ -30,7 +29,7 @@ class status(commands.Cog):
             mode = db.getmode(ctx.guild.id)
             language = db.getlang(ctx.guild.id)
 
-            embed = fn.embed(user, "FBot Config",
+            embed = self.bot.embed(user, "FBot Config",
                     f"{circle[status]} FBot is `{status}`",
                     f"{circle[modtoggle]} Modtoggle is `{modtoggle}`",
                     f"{volume[priority]} Responds to `{priority}`")
@@ -51,7 +50,7 @@ class status(commands.Cog):
         modtoggle = db.getmodtoggle(ctx.guild.id)
         priority = db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
-        colour = db.getcolour(user.id)
+        colour = self.get_colour(user.id)
 
         book = reactionbook(self.bot, ctx, TITLE="FBot Status")
         book.createpages(channels, "<#%0>", EMPTY=emptyon, SUBHEADER=on, check1=("%1", "on"), subcheck1=(view_channel, False))
@@ -73,7 +72,7 @@ class status(commands.Cog):
         modtoggle = db.getmodtoggle(ctx.guild.id)
         priority = db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
-        colour = db.getcolour(user.id)
+        colour = self.get_colour(user.id)
 
         book = reactionbook(self.bot, ctx, TITLE="FBot Mod Status")
         book.createpages(channels, "<#%0>", EMPTY=emptyon, SUBHEADER=on, check1=("%1", "on"))

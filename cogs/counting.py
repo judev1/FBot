@@ -1,5 +1,4 @@
 from discord.ext import commands
-import lib.functions as fn
 import lib.database as db
 
 cares = (" ✅ When a message is deleted\n"
@@ -87,7 +86,7 @@ class fcounter(commands.Cog):
     @commands.command("counting")
     async def _Counting(self, ctx):
 
-        embed = fn.embed(ctx.author, "FBot counting")
+        embed = self.bot.embed(ctx.author, "FBot counting")
 
         last_number = db.getnumber(ctx.guild.id)
         embed.add_field(name="Last number", value=last_number)

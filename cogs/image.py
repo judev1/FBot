@@ -4,7 +4,6 @@ os.environ["MAGICK_OCL_DEVICE"] = "OFF"
 from wand.image import Image as wand_image
 from PIL import Image, ImageDraw, ImageFont
 from discord.ext import commands
-import lib.functions as fn
 from discord import File
 import requests
 import re
@@ -79,7 +78,7 @@ class image(commands.Cog):
             file = File(fp=path + filename)
             message = await ctx.send(file=file)
 
-            embed = fn.embed(ctx.author, "FBot " + process.capitalize())
+            embed = self.bot.embed(ctx.author, "FBot " + process.capitalize())
             embed.set_image(url=message.attachments[0].url)
 
             await ctx.reply(embed=embed)

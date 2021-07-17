@@ -69,16 +69,16 @@ class info(commands.Cog):
         hours = ceil((time() - self.time_start) / 3600)
         total = (stats.commands_processed + stats.commands_ratelimited +
                  stats.triggers_processed + stats.other_messages_processed)
-        return fn.embed(user, f"FBot stats for the past {hours} hours:",
-                        f"Commands processed: `{stats.commands_processed}`",
-                        f"Commands ratelimited: `{stats.commands_ratelimited}`",
-                        f"Triggers responded: `{stats.triggers_processed}`",
-                        f"Messages ignored: `{stats.other_messages_processed}`",
-                        f"Total count: `{total}`")
+        return self.bot.embed(user, f"FBot stats for the past {hours} hours:",
+                          f"Commands processed: `{stats.commands_processed}`",
+                          f"Commands ratelimited: `{stats.commands_ratelimited}`",
+                          f"Triggers responded: `{stats.triggers_processed}`",
+                          f"Messages ignored: `{stats.other_messages_processed}`",
+                          f"Total count: `{total}`")
 
     @commands.command(name="stats")
     async def _Stats(self, ctx):
-        await ctx.send(embed=self.embed(ctx.author))
+        await ctx.send(embed=self.bot.embed(ctx.author))
 
     @commands.command(name="info")
     async def _Info(self, ctx):
@@ -89,7 +89,7 @@ class info(commands.Cog):
         for servers in self.bot.guilds:
             totalmembers += servers.member_count
 
-        embed = fn.embed(ctx.author, "FBot Info")
+        embed = self.bot.embed(ctx.author, "FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
         embed.add_field(name="Uptime", value=ftime.uptime())
@@ -109,7 +109,7 @@ class info(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = fn.embed(ctx.author, guild.name)
+        embed = self.bot.embed(ctx.author, guild.name)
         embed.add_field(name="Members", value=memcount)
         embed.add_field(name="Voice channels", value=len(guild.voice_channels))
         embed.add_field(name="Text channels", value=len(guild.text_channels))
@@ -123,7 +123,7 @@ class info(commands.Cog):
     @commands.command(name="session", aliases=["uptime"])
     async def _Session(self, ctx):
         ftime = self.bot.ftime
-        embed = fn.embed(ctx.author, "FBot's Session")
+        embed = self.bot.embed(ctx.author, "FBot's Session")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Uptime", value=ftime.uptime())
         await ctx.send(embed=embed)
@@ -134,7 +134,7 @@ class info(commands.Cog):
 
     @commands.command(name="devs")
     async def _Devs(self, ctx):
-        embed=fn.embed(ctx.author, title="This is the team that makes FBot great!")
+        embed=self.bot.embed(ctx.author, title="This is the team that makes FBot great!")
         embed.add_field(name="Developers", value="justjude#2296 (<@!671791003065384987>)\nLines#9260 (<@!216260005827969024>)\nCodeize#6946 (<@!668423998777982997>)\nScreaMyCZE#0016 (<@!311178459919417344>)\n\nIf you have any questions or concerns, or just want to hang out, click the link in the next embed to join the support server!")
         await ctx.reply(embed=embed)
         await ctx.invoke(self.bot.get_command("server"))

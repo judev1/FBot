@@ -32,7 +32,7 @@ class joinleave(commands.Cog):
 
         try:
             try:
-                embed = fn.embed(user, joinmsg[0], joinmsg[1])
+                embed = self.bot.embed(user, joinmsg[0], joinmsg[1])
                 for i in range(3, 16, 3):
                     embed.add_field(name=joinmsg[i], value=joinmsg[i+1],
                                     inline=False)
@@ -42,7 +42,7 @@ class joinleave(commands.Cog):
         except: pass
 
         memcount = newguild.member_count
-        embed = fn.embed(user, f"**Added** to `{newguild}`",
+        embed = self.bot.embed(user, f"**Added** to `{newguild}`",
                                   str(newguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")
@@ -53,7 +53,7 @@ class joinleave(commands.Cog):
         db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count
-        embed = fn.embed(user, f"**Removed** from `{oldguild}`",
+        embed = self.bot.embed(user, f"**Removed** from `{oldguild}`",
                                   str(oldguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")

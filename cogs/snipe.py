@@ -19,7 +19,7 @@ class snipe(commands.Cog):
     async def _Snipe(self, ctx, number=10):
         user = ctx.author
         if ctx.message.channel.id not in snipes:
-            embed = fn.embed(user, "FBot Snipe",
+            embed = self.bot.embed(user, "FBot Snipe",
                     "```No recently deleted/edited messages to snipe```")
             await ctx.reply(embed=embed)
             return
@@ -67,7 +67,7 @@ class snipe(commands.Cog):
                 file=discord.File(r"fbot_snipe.txt"))
             os.remove("fbot_snipe.txt")
         else:
-            embed = fn.embed(user, "FBot snipe", msg)
+            embed = self.bot.embed(user, "FBot snipe", msg)
             await ctx.send(embed=embed)
 
     @commands.Cog.listener()

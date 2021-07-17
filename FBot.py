@@ -104,6 +104,16 @@ class FBot(commands.AutoShardedBot):
 
     #    self.premium.remove(after.id)
 
+    def get_colour(self, user_id):
+        if user_id in self.premium:
+            pass
+        return 0xf42f42
+
+    def embed(self, user, title, *desc, url=""):
+        colour = self.get_colour(user.id)
+        desc = "\n".join(desc)
+        return discord.Embed(title=title, description=desc, colour=colour, url=url)
+
     def predicate(self, ctx):
 
         user = ctx.author.id

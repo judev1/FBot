@@ -1,5 +1,4 @@
 from discord.ext import commands
-import lib.functions as fn
 import asyncio
 import random
 
@@ -91,7 +90,7 @@ class dodger(commands.Cog):
     async def _Dodger(self, ctx):
 
         def dodger_embed():
-            embed = fn.embed(ctx.author, "Dodger Game", game.board())
+            embed = self.bot.embed(ctx.author, "Dodger Game", game.board())
             embed.set_author(name=f"{game.score} points | {game.direction.upper()}")
             return embed
 

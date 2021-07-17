@@ -41,7 +41,7 @@ class notices(commands.Cog):
         message = eval(f'f"""{message}"""')
 
         date = datetime.datetime.fromtimestamp(date)
-        embed = fn.embed(ctx.author, title, message)
+        embed = self.bot.embed(ctx.author, title, message)
         embed.set_author(name=date.strftime("%H:%M, %d/%m/%y UTC"))
 
         return embed

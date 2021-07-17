@@ -47,7 +47,7 @@ class errorhandler(commands.Cog):
         elif type(error) is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
-            embed = fn.embed(user, errorlines[0], *errorlines[2:])
+            embed = self.bot.embed(user, errorlines[0], *errorlines[2:])
             try:
                 try: await ctx.send(embed=embed)
                 except: await ctx.reply(error)
@@ -79,7 +79,7 @@ class errorhandler(commands.Cog):
                         await ctx.reply("Looks like that member doesn't exist")
                         return
                     await ctx.reply(error.original.text)
-            embed = fn.embed(ctx.author, "An unusual error has occurred",
+            embed = self.bot.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"
                     "`@justjude#2296` or `@Lines#9260`\n"
                     f"OR join our [support server]({fn.server}) "

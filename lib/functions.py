@@ -30,7 +30,6 @@ invite = "https://fbot.breadhub.uk/invite"
 github = "https://github.com/judev1/FBot"
 patreon = "https://www.patreon.com/fbotbot"
 
-from discord import Embed
 import lib.database as db
 import os
 
@@ -66,11 +65,6 @@ def getcogs():
         if os.path.isfile(os.path.join("cogs", cog)):
             cogs.append(cog)
     return cogs
-
-def embed(user, title, *desc, url=""):
-    colour = db.getcolour(user.id)
-    desc = "\n".join(desc)
-    return Embed(title=title, description=desc, colour=colour, url=url)
 
 from discord import Client
 from aiohttp import web

@@ -42,7 +42,7 @@ class help(commands.Cog):
 
         usage = data[8].replace("{prefix}", prefix)
 
-        embed = fn.embed(user, "**FBot " + cmd + data[0] + "**",
+        embed = self.bot.embed(user, "**FBot " + cmd + data[0] + "**",
                                   desc,  f"\n**Premium:** `{data[4]}s`",
                                   f"**Cooldown:** `{data[3]}s`",
                                   "\n**Example usage:**", usage, server)
@@ -76,7 +76,7 @@ class help(commands.Cog):
 
         command = " ".join(command).lower()
         if command == "":
-            embed = fn.embed(ctx.author, "")
+            embed = self.bot.embed(ctx.author, "")
 
             embed.add_field(name=f"{CMDS_EMOJI} **__HELPFUL COMMANDS__**",
             value="Good commands to get you started", inline=False)
@@ -116,14 +116,14 @@ class help(commands.Cog):
         if str(ctx.channel.type) != "private":
             prefix = db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
-        colour = db.getcolour(ctx.author.id)
+        colour = self.get_colour(ctx.author.id)
 
-        embeds = [fn.embed(ctx.author, "**__FBot commands__**")]
+        embeds = [self.bot.embed(ctx.author, "**__FBot commands__**")]
         for i, category in enumerate(cm.categories):
             if category == "temp": break
             embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
             value=f"[Hover for more]({fn.votetop} '{descriptions[i]}')")
-            embed = fn.embed(ctx.author,
+            embed = self.bot.embed(ctx.author,
             f"{emojis[i+1]} **__{category} Commands__**",
             f"*Use* `{prefix}help <command>` *to find more about a command*")
             for cmd, args, desc in cm.categories[category]:
@@ -169,7 +169,7 @@ class help(commands.Cog):
     @commands.command(name="devcmds")
     @commands.is_owner()
     async def _DevCommands(self, ctx):
-        colour = db.getcolour(ctx.author.id)
+        colour = self.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)
         book.createpages(cm.devcmdlist, LINE="`%0`",
                          SUBHEADER="**__FBot Dev Commands__**\n")

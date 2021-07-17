@@ -1,7 +1,6 @@
 from traceback import format_exception
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.functions as fn
 import lib.database as db
 import lib.triggers as tr
 import lib.commands as cm
@@ -24,7 +23,7 @@ class fbotdev(commands.Cog):
     async def _CSVReload(self, ctx):
 
         tms, cms = load(tr.tr), load(cm.cmds)
-        embed = fn.embed(ctx.author, "FBot csvreload",
+        embed = self.bot.embed(ctx.author, "FBot csvreload",
                 f"`[dev] Reloaded Triggers.csv in {tms}ms`",
                 f"`[dev] Reloaded Commands.csv in {cms}ms`")
         await ctx.send(embed=embed)
@@ -44,7 +43,7 @@ class fbotdev(commands.Cog):
         if str(channel.type) != "private":
             guild = ctx.guild
 
-        colour = db.getcolour(ctx.author.id)
+        colour = self.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -71,7 +70,7 @@ class fbotdev(commands.Cog):
         bot, ctx = self.bot, CTX
         exec(f"global function\nasync def function():\n    result = await {content}\n    if result: return result")
 
-        colour = db.getcolour(ctx.author.id)
+        colour = self.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Eval")
 
         try:
@@ -201,7 +200,7 @@ class fbotdev(commands.Cog):
         y = created.strftime("%y")
         created = f"{d}/{mo}/{y}"
 
-        embed = fn.embed(ctx.author, guild.name)
+        embed = self.bot.embed(ctx.author, guild.name)
         embed.add_field(name="Members", value=memcount)
         embed.add_field(name="Voice channels", value=len(guild.voice_channels))
         embed.add_field(name="Text channels", value=len(guild.text_channels))
@@ -223,7 +222,7 @@ class fbotdev(commands.Cog):
             members += guild.member_count
         guilds.sort(reverse=True)
 
-        colour = db.getcolour(ctx.author.id)
+        colour = self.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, TITLE="FBot Servers")
         book.createpages(guilds, f"`%1`: **%0**")
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
@@ -240,21 +239,21 @@ class fbotdev(commands.Cog):
                 matches.append(to_append)
 
         if matches:
-            colour = db.getcolour(ctx.author.id)
+            colour = self.get_colour(ctx.author.id)
             book = reactionbook(self.bot, ctx, TITLE="FBot Search")
 
             matches.sort()
             book.createpages(matches, "`%0` - `%1`")
             await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
         else:
-            embed = fn.embed(ctx.author, "FBot Search", f"No matches found for `{query}`")
+            embed = self.bot.embed(ctx.author, "FBot Search", f"No matches found for `{query}`")
             await ctx.send(embed=embed)
 
     @commands.command(name="cmdlist")
     @commands.is_owner()
     async def _CommandList(self, ctx):
         commands = [i.name for i in self.bot.walk_commands()]
-        embed = fn.embed(ctx.author, "FBot Commands",
+        embed = self.bot.embed(ctx.author, "FBot Commands",
                                   f" ```python\n{commands}```")
         await ctx.send(embed=embed)
 

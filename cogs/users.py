@@ -2,7 +2,7 @@
 import lib.functions as fn
 import lib.database as db
 import discord
-        
+
 LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 toptypes = ["votes", "counting"]
@@ -45,8 +45,8 @@ class users(commands.Cog):
                     selftop = f"with `{selftop}` vote(s) this month"
                 elif toptype == "counting":
                     selftop = f"with a highscore of `{selftop}`"
-                embed = fn.embed(ctx.author, f"FBot Top {toptype}",
-                                 f"Ranked `{rank}` " + selftop)
+                embed = self.bot.embed(ctx.author, f"FBot Top {toptype}",
+                                   f"Ranked `{rank}` " + selftop)
 
                 cache = self.bot.cache.names
                 for rank, row in enumerate(top):

@@ -23,7 +23,7 @@ class botlists(commands.Cog):
     @commands.is_owner()
     async def _SCounts(self, ctx):
         servers = len(self.bot.guilds)
-        embed = fn.embed(ctx.author, f"Server Counts `{servers}`")
+        embed = self.bot.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
         session = aiohttp.ClientSession()
 
@@ -65,7 +65,7 @@ class botlists(commands.Cog):
     @commands.command(name="vote")
     async def _Vote(self, ctx):
         user = ctx.author
-        embed = fn.embed(user, "FBot Vote")
+        embed = self.bot.embed(user, "FBot Vote")
 
         def get_value(site):
             nextvote = db.nextvote(user.id, site)
@@ -106,12 +106,12 @@ class botlists(commands.Cog):
 
         if site == "discordbotlist.com":
             db.vote(user_id, "dbl")
-            embed = fn.embed(user, site, f"{name} voted")
+            embed = self.bot.embed(user, site, f"{name} voted")
         elif data["type"] == "test":
-            embed = fn.embed(user, site + " test", f"{name} tested out the webhook")
+            embed = self.bot.embed(user, site + " test", f"{name} tested out the webhook")
         elif site == "botsfordiscord.com":
             db.vote(user_id, "bfd")
-            embed = fn.embed(user, site, f"{name} voted")
+            embed = self.bot.embed(user, site, f"{name} voted")
         await self.voteschannel(embed=embed)
 
     @commands.Cog.listener()
@@ -121,7 +121,7 @@ class botlists(commands.Cog):
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
 
-        embed = fn.embed(user, "top test",
+        embed = self.bot.embed(user, "top test",
                 f"{name} tested out the webhook")
         await self.voteschannel(embed=embed)
 
@@ -134,7 +134,7 @@ class botlists(commands.Cog):
         else: name = f"{name.mention} (*{name.name}*)"
 
         db.vote(user_id, "top")
-        embed = fn.embed(user, "top.gg", f"{name} voted")
+        embed = self.bot.embed(user, "top.gg", f"{name} voted")
         await self.voteschannel(embed=embed)
 
 def setup(bot):
