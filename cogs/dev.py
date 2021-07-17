@@ -169,6 +169,11 @@ class fbotdev(commands.Cog):
         await dm.send(content)
         await ctx.message.add_reaction("✅")
 
+    @commands.command(name="dev")
+    @commands.is_owner()
+    async def _Dev(self, ctx):
+        await ctx.reply(f"Yeah {ctx.author.mention} is a dev, that's why he can use this command")
+
     @commands.command(name="newinvite")
     @commands.is_owner()
     async def _CreateInvite(self, ctx, guild: discord.Guild):
