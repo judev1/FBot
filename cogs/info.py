@@ -17,10 +17,11 @@ class stats:
         self.triggers_processed = 0
         self.other_messages_processed = 0
 
-def getinfo(self, info):
+def getinfo(info):
         with open("./data/Info.txt", "r") as file: data = file.readlines()
         if info == "lastupdated": return data[0][:-1]
         elif info == "ver": return data[1][:-1]
+        elif info == "shards": return data[2][:-1]
         else: raise NameError(f"No variable called '{info}'")
 
 class fakeuser: id = 0
@@ -102,6 +103,7 @@ class info(commands.Cog):
         embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Users", value=totalmembers)
         embed.add_field(name="Version", value=getinfo("ver"))
+        embed.add_field(name="Shards", value=getinfo("shards"))
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
