@@ -17,13 +17,6 @@ class stats:
         self.triggers_processed = 0
         self.other_messages_processed = 0
 
-def getinfo(info):
-        with open("./data/Info.txt", "r") as file: data = file.readlines()
-        if info == "lastupdated": return data[0][:-1]
-        elif info == "ver": return data[1][:-1]
-        elif info == "shards": return data[2][:-1]
-        else: raise NameError(f"No variable called '{info}'")
-
 class fakeuser: id = 0
 fakeuser = fakeuser()
 
@@ -99,11 +92,9 @@ class info(commands.Cog):
         embed = fn.embed(ctx.author, "FBot Info")
         embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
-        embed.add_field(name="Last Updated", value=getinfo("lastupdated"))
         embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Users", value=totalmembers)
-        embed.add_field(name="Version", value=getinfo("ver"))
-        embed.add_field(name="Shards", value=getinfo("shards"))
+        embed.add_field(name="Shards", value=self.bot.shard_count)
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
