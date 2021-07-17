@@ -90,11 +90,11 @@ class info(commands.Cog):
             totalmembers += servers.member_count
 
         embed = self.bot.embed(ctx.author, "FBot Info")
-        embed.add_field(name="Session start", value=ftime.start)
         embed.add_field(name="Servers", value=len(self.bot.guilds))
-        embed.add_field(name="Uptime", value=ftime.uptime())
         embed.add_field(name="Users", value=totalmembers)
         embed.add_field(name="Shards", value=self.bot.shard_count)
+        embed.add_field(name="Session start", value=ftime.start)
+        embed.add_field(name="Uptime", value=ftime.uptime())
         await ctx.send(embed=embed)
 
     @commands.command(name="servinfo")
