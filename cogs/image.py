@@ -324,4 +324,4 @@ class Image(commands.Cog):
         await self.clean_up(ctx, "god", success)
 
 def setup(bot):
-    bot.add_cog(image(bot))
+    bot.add_cog(Image(bot))

@@ -78,7 +78,7 @@ class Info(commands.Cog):
 
     @commands.command(name="stats")
     async def _Stats(self, ctx):
-        await ctx.send(embed=self.bot.embed(ctx.author))
+        await ctx.send(embed=self.embed(ctx.author))
 
     @commands.command(name="info")
     async def _Info(self, ctx):

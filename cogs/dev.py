@@ -63,9 +63,9 @@ class Dev(commands.Cog):
 
         await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
-    @commands.command()
+    @commands.command(name="await")
     @commands.is_owner()
-    async def await(self, CTX, *, content):
+    async def _await(self, CTX, *, content):
         global bot, ctx
         bot, ctx = self.bot, CTX
         exec(f"global function\nasync def function():\n    result = await {content}\n    if result: return result")

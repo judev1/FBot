@@ -81,7 +81,7 @@ class Say(commands.Cog):
     async def colonial(self, ctx):
         await self.send(ctx, filter=colonial)
 
-    @commands.command())
+    @commands.command()
     async def safe(self, ctx):
         await self.send(ctx, filter=safe)
 

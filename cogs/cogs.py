@@ -63,7 +63,7 @@ class Cogs(commands.Cog):
                 embed = errorembed(f"Failed to unload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
-    @commands.command(
+    @commands.command()
     @commands.is_owner()
     async def reload(self, ctx, cog):
         if cog == "all":
