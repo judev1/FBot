@@ -51,7 +51,6 @@ class FBot(commands.AutoShardedBot):
         print(f" > Shard {shard_id} is ready")
 
         self.shards_ready += 1
-        self.ready = False
 
         if self.shards_ready == self.shard_count:
             print(f"\n > All shards ready, {self.user} is ready")
