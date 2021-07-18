@@ -126,6 +126,7 @@ class fcounter(commands.Cog):
             return
 
         message = payload.cached_message
+        if not message: return
         if not message.content: return
 
         if message.content[0].isdigit():
