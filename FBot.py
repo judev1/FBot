@@ -32,6 +32,7 @@ class FBot(commands.AutoShardedBot):
 
         SHARD_COUNT = 3
         self.shards_ready = 0
+        self.ready = False
 
         super().__init__(command_prefix=fn.getprefix, owner_ids=self.devs, intents=intents,
                          shard_count=SHARD_COUNT)
@@ -50,6 +51,7 @@ class FBot(commands.AutoShardedBot):
         print(f" > Shard {shard_id} is ready")
 
         self.shards_ready += 1
+        self.ready = False
 
         if self.shards_ready == self.shard_count:
             print(f"\n > All shards ready, {self.user} is ready")
@@ -84,6 +86,7 @@ class FBot(commands.AutoShardedBot):
             await self.change_presence(status=discord.Status.online,
                                     activity=discord.Game(name="'FBot help'"))
 
+            self.ready = True
             self.shards_ready = 0
 
     async def get_premium(self):
