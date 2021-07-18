@@ -15,6 +15,13 @@ class notices(commands.Cog):
 
         if message.author.bot: return
 
+        if str(message.channel.type) == "private":
+            return
+
+        bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
+        if not bot_perms.send_messages:
+            return
+
         prefix = fn.getprefix(self.bot, message)
         if not message.content.startswith(prefix):
             return
@@ -28,14 +35,13 @@ class notices(commands.Cog):
         if not command_used:
             return
 
-        if str(message.channel.type) != "private":
-            notice = db.getlastnotice()
-            if notice:
-                last_notice = db.getservernotice(message.guild.id)
-                if last_notice < notice[0]:
-                    embed = self.notice(message, *notice)
-                    await message.channel.send(embed=embed)
-                    db.updateservernotice(message.guild.id)
+        notice = db.getlastnotice()
+        if notice:
+            last_notice = db.getservernotice(message.guild.id)
+            if last_notice < notice[0]:
+                embed = self.notice(message, *notice)
+                await message.channel.send(embed=embed)
+                db.updateservernotice(message.guild.id)
 
     def notice(self, ctx, date, title, message):
         message = eval(f'f"""{message}"""')
