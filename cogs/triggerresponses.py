@@ -29,7 +29,7 @@ answers = ["Good question",
 
 fbot = open("./data/imgs/FBot.png", "rb").read()
 
-class triggerresponses(commands.Cog):
+class TriggerResponses(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -106,4 +106,4 @@ class triggerresponses(commands.Cog):
                 await channel.send(response)
 
 def setup(bot):
-    bot.add_cog(triggerresponses(bot))
+    bot.add_cog(TriggerResponses(bot))

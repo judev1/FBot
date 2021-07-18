@@ -17,18 +17,18 @@ def formatname(name):
         name = name.replace("||", "")
     return name
 
-class users(commands.Cog):
+class Users(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="profile")
-    async def _Profile(self, ctx, user: discord.User=None):
+    @commands.command()
+    async def profile(self, ctx, user: discord.User=None):
         await ctx.reply("This command is being reworked. Stay updated by clicking the link in the next embed!")
         await ctx.invoke(self.bot.get_command("server"))
 
-    @commands.command(name="top")
-    async def _Top(self, ctx, toptype):
+    @commands.command()
+    async def top(self, ctx, toptype):
 
         if toptype in toptypes:
             if toptype == "counting":
@@ -85,4 +85,4 @@ class users(commands.Cog):
             await ctx.reply("We don't have a leaderboard for that")
 
 def setup(bot):
-    bot.add_cog(users(bot))
+    bot.add_cog(Users(bot))

@@ -10,13 +10,13 @@ snipes = dict()
 max_snipes = 10
 message_delete = AuditLogAction.message_delete
 
-class snipe(commands.Cog):
+class Snipe(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="snipe")
-    async def _Snipe(self, ctx, number=10):
+    @commands.command()
+    async def snipe(self, ctx, number=10):
         user = ctx.author
         if ctx.message.channel.id not in snipes:
             embed = self.bot.embed(user, "FBot Snipe",
@@ -117,4 +117,4 @@ class snipe(commands.Cog):
         snipes[before.channel.id].appendleft(data)
 
 def setup(bot):
-    bot.add_cog(snipe(bot))
+    bot.add_cog(Snipe(bot))

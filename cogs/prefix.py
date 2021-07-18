@@ -1,13 +1,13 @@
 from discord.ext import commands
 import lib.database as db
 
-class prefix(commands.Cog):
+class Prefix(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="prefix")
-    async def _ChangePrefix(self, ctx, *, arg):
+    @commands.command()
+    async def prefix(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             if arg == "reset":
                 db.changeprefix(ctx.guild.id, "fbot")
@@ -26,4 +26,4 @@ class prefix(commands.Cog):
         await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
-    bot.add_cog(prefix(bot))
+    bot.add_cog(Prefix(bot))

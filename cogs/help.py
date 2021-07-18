@@ -25,7 +25,7 @@ INFO_EMOJI = "❔"
 emojis = [CONTENTS_EMOJI, SPAM_EMOJI, FUN_EMOJI,
           IMAGE_EMOJI, COUNT_EMOJI, UTIL_EMOJI, INFO_EMOJI]
 
-class help(commands.Cog):
+class Help(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -66,8 +66,8 @@ class help(commands.Cog):
 
         return embed
 
-    @commands.command(name="help")
-    async def _Help(self, ctx, *command):
+    @commands.command()
+    async def help(self, ctx, *command):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
@@ -109,8 +109,8 @@ class help(commands.Cog):
 
             await ctx.reply(f"No command called `{command}`")
 
-    @commands.command(name="cmds", aliases=["commands"])
-    async def _Commands(self, ctx):
+    @commands.command(aliases=["commands"])
+    async def cmds(self, ctx):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
@@ -166,14 +166,22 @@ class help(commands.Cog):
                 except: pass
                 break
 
-    @commands.command(name="devcmds")
+    @commands.command()
     @commands.is_owner()
-    async def _DevCommands(self, ctx):
+    async def devcmds(self, ctx):
         colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)
         book.createpages(cm.devcmdlist, LINE="`%0`",
                          SUBHEADER="**__FBot Dev Commands__**\n")
         await book.createbook(MODE="numbers", COLOUR=colour)
 
+    @commands.command()
+    @commands.is_owner()
+    async def cmdlist(self, ctx):
+        commands = [i.name for i in self.bot.walk_commands()]
+        embed = self.bot.embed(ctx.author, "FBot Commands",
+                                  f" ```python\n{commands}```")
+        await ctx.send(embed=embed)
+
 def setup(bot):
-    bot.add_cog(help(bot))
+    bot.add_cog(Help(bot))

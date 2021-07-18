@@ -5,7 +5,7 @@ import random
 emojis = ["⬆️", "⬇️"]
 emojinames = ["forward-up", "forward-down"]
 
-class dodgergame():
+class Game():
 
     def __init__(self):
         self.alive = True
@@ -79,15 +79,14 @@ class dodgergame():
         obstacle = [self.width - 1, random.randint(0, self.height - 1)]
         self.obstacles.append(obstacle)
 
-class dodger(commands.Cog):
-    game = dodgergame()
+class Dodger(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.games = {}
 
-    @commands.command(name="dodger")
-    async def _Dodger(self, ctx):
+    @commands.command()
+    async def dodger(self, ctx):
 
         def dodger_embed():
             embed = self.bot.embed(ctx.author, "Dodger Game", game.board())
@@ -99,7 +98,7 @@ class dodger(commands.Cog):
             ctx.reply("You are already in a game!")
             return
 
-        game = self.games[user_id] = dodgergame()
+        game = self.games[user_id] = Game()
         msg = await ctx.send(embed=dodger_embed())
 
         for emoji in emojis:
@@ -123,4 +122,4 @@ class dodger(commands.Cog):
         await reaction.message.remove_reaction(reaction, user)
 
 def setup(bot):
-    bot.add_cog(dodger(bot))
+    bot.add_cog(Dodger(bot))

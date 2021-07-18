@@ -1,28 +1,29 @@
 from discord.ext import commands
 import lib.functions as fn
+import discord
 
-class links(commands.Cog):
+class Links(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="invite")
-    async def _Invite(self, ctx):
+    @commands.command()
+    async def invite(self, ctx):
         embed = self.bot.embed(ctx.author, "Invite FBot to your server!", url=fn.invite)
         await ctx.send(embed=embed)
 
-    @commands.command(name="server")
-    async def _Server(self, ctx):
+    @commands.command()
+    async def server(self, ctx):
         embed = self.bot.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.server)
         await ctx.send(embed=embed)
 
-    @commands.command(name="github")
-    async def _Github(self, ctx):
+    @commands.command()
+    async def github(self, ctx):
         embed = self.bot.embed(ctx.author, "All FBot's code is on github, give it a star!", url=fn.github)
         await ctx.send(embed=embed)
 
-    @commands.command(name="links")
-    async def _Links(self, ctx):
+    @commands.command()
+    async def links(self, ctx):
 
         embed = self.bot.embed(ctx.author, "FBot links",)
 
@@ -47,5 +48,16 @@ class links(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command()
+    @commands.is_owner()
+    async def newinvite(self, ctx, guild: discord.Guild):
+        try:
+            invite = await guild.system_channel.create_invite(
+                max_age=120 * 60, temporary=True)
+        except:
+            invite = "error resolving invite"
+        await ctx.send(f"Created a temporary invite for `{guild}`\n"
+                f"`{invite}`, will expire after 2 hours")
+
 def setup(bot):
-    bot.add_cog(links(bot))
+    bot.add_cog(Links(bot))

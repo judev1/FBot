@@ -21,7 +21,7 @@ sneak_img = wand_image(filename="data/imgs/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 
-class image(commands.Cog):
+class Image(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -92,8 +92,8 @@ class image(commands.Cog):
         else:
             await ctx.reply("That image is too big to " + process)
 
-    @commands.command(name="av", aliases=["avatar", "pfp"])
-    async def _Avatar(self, ctx, *to_av):
+    @commands.command(aliases=["av", "pfp"])
+    async def avatar(self, ctx, *to_av):
 
         async with ctx.channel.typing():
 
@@ -114,8 +114,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "avatar", success)
 
-    @commands.command(name="bigpp")
-    async def _BigPP(self, ctx, *to_bigpp):
+    @commands.command()
+    async def bigpp(self, ctx, *to_bigpp):
 
         async with ctx.channel.typing():
 
@@ -138,8 +138,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "bigpp", success)
 
-    @commands.command(name="smolpp", aliases=["smallpp", "smollpp"])
-    async def _SmolPP(self, ctx, *to_smolpp):
+    @commands.command(aliases=["smallpp", "smollpp"])
+    async def smolpp(self, ctx, *to_smolpp):
 
         async with ctx.channel.typing():
 
@@ -162,8 +162,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "smolpp", success)
 
-    @commands.command(name="bonk")
-    async def _Bonk(self, ctx, *to_bonk):
+    @commands.command()
+    async def bonk(self, ctx, *to_bonk):
 
         async with ctx.channel.typing():
 
@@ -187,8 +187,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "bonk", success)
 
-    @commands.command(name="blur")
-    async def _Blur(self, ctx, amount: int=25, *to_blur):
+    @commands.command()
+    async def blur(self, ctx, amount: int=25, *to_blur):
 
         if type(amount) is not int:
             await ctx.reply("Amount must be a number")
@@ -218,8 +218,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "blur", success)
 
-    @commands.command(name="trigger")
-    async def _Trigger(self, ctx, *to_trigger):
+    @commands.command()
+    async def trigger(self, ctx, *to_trigger):
 
         async with ctx.channel.typing():
 
@@ -243,8 +243,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "trigger", success)
 
-    @commands.command(name="sneak")
-    async def _Sneak(self, ctx, *to_sneak):
+    @commands.command()
+    async def sneak(self, ctx, *to_sneak):
 
         async with ctx.channel.typing():
 
@@ -266,8 +266,8 @@ class image(commands.Cog):
 
         await self.clean_up(ctx, "sneak", success)
 
-    @commands.command(name="god")
-    async def _God(self, ctx, *to_god):
+    @commands.command()
+    async def god(self, ctx, *to_god):
 
         async with ctx.channel.typing():
 

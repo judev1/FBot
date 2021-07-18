@@ -6,13 +6,13 @@ from lib.modes import *
 F = "🇫"
 ongoing_respects = dict()
 
-class respects(commands.Cog):
+class Respects(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="respects")
-    async def _Respects(self, ctx):
+    @commands.command()
+    async def respects(self, ctx):
 
         reference = ctx.message.reference
         if reference:
@@ -48,4 +48,4 @@ class respects(commands.Cog):
         await channel.send(f"{user.mention} payed respects to **{respects[0]}**", allowed_mentions=AllowedMentions.none())
 
 def setup(bot):
-    bot.add_cog(respects(bot))
+    bot.add_cog(Respects(bot))

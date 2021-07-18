@@ -5,7 +5,7 @@ import lib.database as db
 import datetime
 import time
 
-class notices(commands.Cog):
+class Notices(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -52,26 +52,26 @@ class notices(commands.Cog):
 
         return embed
 
-    @commands.command(name="getnotice")
+    @commands.command()
     @commands.is_owner()
-    async def _GetNotice(self, ctx):
+    async def getnotice(self, ctx):
         embed = self.notice(ctx, *db.getlastnotice())
         await ctx.send(embed=embed)
 
-    @commands.command(name="editnotice")
+    @commands.command()
     @commands.is_owner()
-    async def _EditNotice(self, ctx, *, text):
+    async def editnotice(self, ctx, *, text):
         title, message = text.split(" && ")
         db.editnotice(title, message)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="notice")
+    @commands.command()
     @commands.is_owner()
-    async def _Notice(self, ctx, *, text):
+    async def notice(self, ctx, *, text):
         title, message = text.split(" && ")
         date = time.time()
         db.addnotice(date, title, message)
         await ctx.message.add_reaction("✅")
 
 def setup(bot):
-    bot.add_cog(notices(bot))
+    bot.add_cog(Notices(bot))

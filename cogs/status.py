@@ -9,13 +9,13 @@ off = circle["off"] + " **OFF:**"
 emptyon = "```There are no channels in\nour database toggled on```"
 emptyoff = emptyon.replace("on", "off")
 
-class status(commands.Cog):
+class Status(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="config")
-    async def _Config(self, ctx):
+    @commands.command()
+    async def config(self, ctx):
         user = ctx.author
 
         if str(ctx.channel.type) == "private":
@@ -38,8 +38,8 @@ class status(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="status")
-    async def _Status(self, ctx):
+    @commands.command()
+    async def status(self, ctx):
         user = ctx.author
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
@@ -57,8 +57,8 @@ class status(commands.Cog):
         book.createpages(channels, "<#%0>", EMPTY=emptyoff, SUBHEADER=off, check1=("%1", "off"), subcheck1=(view_channel, False))
         await book.createbook(HEADER=header, COLOUR=colour)
 
-    @commands.command(name="modstatus")
-    async def _ModStatus(self, ctx):
+    @commands.command()
+    async def modstatus(self, ctx):
         user = ctx.author
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
@@ -79,8 +79,8 @@ class status(commands.Cog):
         book.createpages(channels, "<#%0>", EMPTY=emptyoff, SUBHEADER=off, check1=("%1", "off"))
         await book.createbook(HEADER=header, COLOUR=colour)
 
-    @commands.command(name="on")
-    async def _On(self, ctx):
+    @commands.command()
+    async def on(self, ctx):
         if not ctx.guild:
             await ctx.reply("**FBot is always on in DMs**")
             return
@@ -91,8 +91,8 @@ class status(commands.Cog):
             await ctx.message.add_reaction("✅")
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 
-    @commands.command(name="off")
-    async def _Off(self, ctx):
+    @commands.command()
+    async def off(self, ctx):
         if not ctx.guild:
             await ctx.reply("**You can never turn off FBot in DMs**")
             return
@@ -104,4 +104,4 @@ class status(commands.Cog):
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
-    bot.add_cog(status(bot))
+    bot.add_cog(Status(bot))

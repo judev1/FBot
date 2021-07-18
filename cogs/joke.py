@@ -9,13 +9,13 @@ for joke in os.listdir("data/Jokes"):
         jokes.append(file.read().split("\n"))
 active_channels = set()
 
-class joke(commands.Cog):
+class Joke(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="joke")
-    async def _Joke(self, ctx):
+    @commands.command()
+    async def joke(self, ctx):
 
         if (ctx.channel.id in active_channels):
             await ctx.reply("I'm already telling a joke, do `fbot shutup` to cancel")
@@ -37,18 +37,18 @@ class joke(commands.Cog):
 
         active_channels.remove(ctx.channel.id)
 
-    @commands.command(name="shutup")
-    async def _ShutUp(self, ctx):
+    @commands.command()
+    async def shutup(self, ctx):
         if (ctx.channel.id in active_channels):
             active_channels.remove(ctx.channel.id)
             await ctx.reply("Ok, but I was just getting to the best part")
         else:
             await ctx.reply("You wish")
 
-    @commands.command(name="jokeinfo")
+    @commands.command()
     @commands.is_owner()
-    async def _JokeInfo(self, ctx):
+    async def jokeinfo(self, ctx):
         await ctx.reply("Active channels: " + str(active_channels))
 
 def setup(bot):
-    bot.add_cog(joke(bot))
+    bot.add_cog(Joke(bot))

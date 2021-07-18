@@ -3,12 +3,12 @@ from discord.ext import commands
 import lib.functions as fn
 from lib.modes import *
 
-class say(commands.Cog):
+class Say(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    async def say(self, ctx, filter=None, delete=False):
+    async def send(self, ctx, filter=None, delete=False):
 
         reference = ctx.message.reference
         if reference:
@@ -41,53 +41,53 @@ class say(commands.Cog):
                 text = capitalise(text)
             await ctx.reply(text)
 
-    @commands.command(name="say")
-    async def _Say(self, ctx):
-        await self.say(ctx, delete=True)
+    @commands.command()
+    async def say(self, ctx):
+        await self.send(ctx, delete=True)
 
-    @commands.command(name="uwu")
-    async def _UWU(self, ctx):
-        await self.say(ctx, filter=uwu)
+    @commands.command()
+    async def uwu(self, ctx):
+        await self.send(ctx, filter=uwu)
 
-    @commands.command(name="confused")
-    async def _Confused(self, ctx):
-        await self.say(ctx, filter=confused)
+    @commands.command()
+    async def confused(self, ctx):
+        await self.send(ctx, filter=confused)
 
-    @commands.command(name="pirate")
-    async def _Pirate(self, ctx):
-        await self.say(ctx, filter=pirate)
+    @commands.command()
+    async def pirate(self, ctx):
+        await self.send(ctx, filter=pirate)
 
-    @commands.command(name="triggered")
-    async def _Triggered(self, ctx):
-        await self.say(ctx, filter=triggered)
+    @commands.command()
+    async def triggered(self, ctx):
+        await self.send(ctx, filter=triggered)
 
-    @commands.command(name="italian")
-    async def _Italian(self, ctx):
-        await self.say(ctx, filter=italian)
+    @commands.command()
+    async def italian(self, ctx):
+        await self.send(ctx, filter=italian)
 
-    @commands.command(name="fuck")
-    async def _Fuck(self, ctx):
-        await self.say(ctx, filter=fuck)
+    @commands.command()
+    async def fuck(self, ctx):
+        await self.send(ctx, filter=fuck)
 
-    @commands.command(name="ironic")
-    async def _Ironic(self, ctx):
-        await self.say(ctx, filter=ironic)
+    @commands.command()
+    async def ironic(self, ctx):
+        await self.send(ctx, filter=ironic)
 
-    @commands.command(name="patronise")
-    async def _Patronise(self, ctx):
-        await self.say(ctx, filter=patronise)
+    @commands.command()
+    async def patronise(self, ctx):
+        await self.send(ctx, filter=patronise)
 
-    @commands.command(name="colonial")
-    async def _Colonial(self, ctx):
-        await self.say(ctx, filter=colonial)
+    @commands.command()
+    async def colonial(self, ctx):
+        await self.send(ctx, filter=colonial)
 
-    @commands.command(name="safe")
-    async def _Safe(self, ctx):
-        await self.say(ctx, filter=safe)
+    @commands.command())
+    async def safe(self, ctx):
+        await self.send(ctx, filter=safe)
 
-    @commands.command(name="biblical")
-    async def _Biblical(self, ctx):
-        await self.say(ctx, filter=biblical)
+    @commands.command()
+    async def biblical(self, ctx):
+        await self.send(ctx, filter=biblical)
 
 def setup(bot):
-    bot.add_cog(say(bot))
+    bot.add_cog(Say(bot))

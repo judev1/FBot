@@ -20,7 +20,7 @@ class stats:
 class fakeuser: id = 0
 fakeuser = fakeuser()
 
-class info(commands.Cog):
+class Info(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -132,12 +132,17 @@ class info(commands.Cog):
     async def _Premium(self, ctx):
         await ctx.reply("https://fbot.breadhub.uk/premium")
 
-    @commands.command(name="devs")
-    async def _Devs(self, ctx):
+    @commands.command()
+    async def devs(self, ctx):
         embed = self.bot.embed(ctx.author, title="This is the team that makes FBot great!")
         embed.add_field(name="Developers", value="justjude#2296 (<@!671791003065384987>)\nLines#9260 (<@!216260005827969024>)\nCodeize#6946 (<@!668423998777982997>)\nScreaMyCZE#0016 (<@!311178459919417344>)\n\nIf you have any questions or concerns, or just want to hang out, click the link in the next embed to join the support server!")
         await ctx.reply(embed=embed)
         await ctx.invoke(self.bot.get_command("server"))
 
+    @commands.command()
+    @commands.is_owner()
+    async def dev(self, ctx):
+        await ctx.reply(f"Yeah {ctx.author.mention} is a dev, that's why he can use this command")
+
 def setup(bot):
-    bot.add_cog(info(bot))
+    bot.add_cog(Info(bot))

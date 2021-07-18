@@ -7,7 +7,7 @@ import discord
 class fakeuser: id = 0
 user = fakeuser()
 
-class errorhandler(commands.Cog):
+class Errorhandler(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -113,4 +113,4 @@ class errorhandler(commands.Cog):
             except: pass
 
 def setup(bot):
-    bot.add_cog(errorhandler(bot))
+    bot.add_cog(Errorhandler(bot))

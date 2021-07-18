@@ -3,13 +3,13 @@ import asyncio
 
 ongoing_purges = set()
 
-class purge(commands.Cog):
+class Purge(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="purge", aliases=["thanos", "zahando"])
-    async def _Purge(self, ctx, *args):
+    @commands.command(aliases=["thanos", "zahando"])
+    async def purge(self, ctx, *args):
 
         if not ctx.message.author.guild_permissions.manage_messages:
             await ctx.reply("You do not have the `manage_messages` permissions")
@@ -40,4 +40,4 @@ class purge(commands.Cog):
         await ctx.reply("You must specify how many messages to purge!")
 
 def setup(bot):
-    bot.add_cog(purge(bot))
+    bot.add_cog(Purge(bot))

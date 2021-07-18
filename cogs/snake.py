@@ -6,7 +6,7 @@ import asyncio
 emojis = ["⬆️", "⬇️", "⬅️", "➡️"]
 emojinames = ["up", "down", "left", "right"]
 
-class snakegame():
+class Game():
 
     def __init__(self):
         self.alive = True
@@ -88,14 +88,14 @@ class snakegame():
             x, y = randint(0, self.width-1), randint(0, self.height-1)
         return (x, y)
 
-class snake(commands.Cog):
+class Snake(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.games = {}
 
-    @commands.command(name="snake", alliases=["snek"])
-    async def _Snake(self, ctx):
+    @commands.command(alliases=["snek"])
+    async def snake(self, ctx):
 
         def speed():
             return 0.8
@@ -110,7 +110,7 @@ class snake(commands.Cog):
             await ctx.reply("You are already in a game!")
             return
 
-        game = self.games[user_id] = snakegame()
+        game = self.games[user_id] = Game()
         msg = await ctx.send(embed=snake_embed())
 
         for emoji in emojis:
@@ -134,4 +134,4 @@ class snake(commands.Cog):
         await reaction.message.remove_reaction(reaction, user)
 
 def setup(bot):
-    bot.add_cog(snake(bot))
+    bot.add_cog(Snake(bot))

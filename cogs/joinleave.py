@@ -22,7 +22,7 @@ joinmsg = ["**Whoa new server, cooooool!**",
 class fakeuser: id = 0
 user = fakeuser()
 
-class joinleave(commands.Cog):
+class JoinLeave(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -62,4 +62,4 @@ class joinleave(commands.Cog):
         await self.serverlogs.send(embed=embed)
 
 def setup(bot):
-    bot.add_cog(joinleave(bot))
+    bot.add_cog(JoinLeave(bot))

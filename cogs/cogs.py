@@ -17,14 +17,14 @@ def errorembed(error, info):
     return Embed(title=f"**Error:** `{error}`",
             description=f"```{info}```", colour=fn.red)
 
-class cogs(commands.Cog):
+class Cogs(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="load")
+    @commands.command()
     @commands.is_owner()
-    async def _LoadCog(self, ctx, cog):
+    async def load(self, ctx, cog):
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -42,9 +42,9 @@ class cogs(commands.Cog):
                 embed = errorembed(f"Failed to load cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
-    @commands.command(name="unload")
+    @commands.command()
     @commands.is_owner()
-    async def _UnloadCog(self, ctx, cog):
+    async def unload(self, ctx, cog):
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -63,9 +63,9 @@ class cogs(commands.Cog):
                 embed = errorembed(f"Failed to unload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
-    @commands.command(name="reload")
+    @commands.command(
     @commands.is_owner()
-    async def _ReloadCog(self, ctx, cog):
+    async def reload(self, ctx, cog):
         if cog == "all":
             unable = []
             for cog in fn.getcogs():
@@ -86,9 +86,9 @@ class cogs(commands.Cog):
                 embed = errorembed(f"Failed to reload cog: {cog}", str(e))
         await ctx.send(embed=embed)
 
-    @commands.command(name="cogs")
+    @commands.command()
     @commands.is_owner()
-    async def _Cogs(self, ctx):
+    async def cogs(self, ctx):
         colour = self.bot.get_colour(ctx.author.id)
         check = "'%l'[:-3] in self.bot.cogs"
         empty = "All cogs loaded"
@@ -100,4 +100,4 @@ class cogs(commands.Cog):
         await book.createbook(MODE="numbers", COLOUR=colour)
 
 def setup(bot):
-    bot.add_cog(cogs(bot))
+    bot.add_cog(Cogs(bot))

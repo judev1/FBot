@@ -12,16 +12,16 @@ bfdapi = f"https://botsfordiscord.com/api/bot/{bot_id}"
 dbggapi = f"https://discord.bots.gg/api/v1/bots/{bot_id}/stats"
 dblapi = f"https://discordbotlist.com/api/v1/bots/{bot_id}/stats"
 
-class botlists(commands.Cog):
+class Botlists(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.dbl = bot.dbl
         self.voteschannel = self.bot.get_channel(757722305395949572).send
 
-    @commands.command(name="scounts")
+    @commands.command()
     @commands.is_owner()
-    async def _SCounts(self, ctx):
+    async def scounts(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
@@ -62,8 +62,8 @@ class botlists(commands.Cog):
 
         await session.close()
 
-    @commands.command(name="vote")
-    async def _Vote(self, ctx):
+    @commands.command()
+    async def vote(self, ctx):
         user = ctx.author
         embed = self.bot.embed(user, "FBot Vote")
 
@@ -138,4 +138,4 @@ class botlists(commands.Cog):
         await self.voteschannel(embed=embed)
 
 def setup(bot):
-    bot.add_cog(botlists(bot))
+    bot.add_cog(Botlists(bot))

@@ -1,13 +1,13 @@
 from discord.ext import commands
 import lib.database as db
 
-class modtoggle(commands.Cog):
+class Modtoggle(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="modtoggle")
-    async def _Modtoggle(self, ctx, arg):
+    @commands.command()
+    async def modtoggle(self, ctx, arg):
         if ctx.author.guild_permissions.administrator:
             if arg in {"on", "off"}:
                 db.changemodtoggle(ctx.guild.id, arg)
@@ -18,4 +18,4 @@ class modtoggle(commands.Cog):
             await ctx.reply("Only members with administrator privileges can toggle this")
 
 def setup(bot):
-    bot.add_cog(modtoggle(bot))
+    bot.add_cog(Modtoggle(bot))

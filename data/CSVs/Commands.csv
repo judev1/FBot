@@ -92,3 +92,4 @@ devspeak,[mode],Dev,Override,0,0,Yes,send_messages,owner,{prefix}speak uwu or {p
 devset,,Dev,Counting,0,0,Yes,send_messages,owner,{prefix}devset,"Sets the counting channel",,
 devremove,,Dev,Counting,0,0,Yes,send_messages,owner,{prefix}devremove,"Removes the counting channel",,
 setnumber,number,Dev,Counting,0,0,Yes,send_messages,owner,{prefix}setnumber 69,"Sets the number",,
+setppsize,number,Dev,Counting,0,0,Yes,send_messages,owner,{prefix}setppsize 0,"Sets a users ppsize",,

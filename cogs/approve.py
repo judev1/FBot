@@ -1,12 +1,12 @@
 from discord.ext import commands
 
-class approve(commands.Cog):
+class Approve(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="approve")
-    async def _Approve(self, ctx, *args):
+    @commands.command()
+    async def approve(self, ctx, *args):
 
         content = "Hello I'm FBot and I approve of this message"
 
@@ -24,4 +24,4 @@ class approve(commands.Cog):
                 await ctx.send(content)
 
 def setup(bot):
-    bot.add_cog(approve(bot))
+    bot.add_cog(Approve(bot))

@@ -14,7 +14,7 @@ def clean(content):
         else: break
     return int(number)
 
-class fcounter(commands.Cog):
+class Counting(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -55,36 +55,36 @@ class fcounter(commands.Cog):
                         await message.add_reaction("💯")
         except: pass
 
-    @commands.command("set")
-    async def _Set(self, ctx):
+    @commands.command()
+    async def set(self, ctx):
         if ctx.author.guild_permissions.administrator:
             db.setcountingchannel(ctx.channel.id, ctx.guild.id)
             await ctx.reply("Set the current channel to counting channel")
         else:
             await ctx.reply("Only administrators can set the counting channel")
 
-    @commands.command("remove")
-    async def _Remove(self, ctx):
+    @commands.command()
+    async def remove(self, ctx):
         if ctx.author.guild_permissions.administrator:
             db.removecountingchannel(ctx.guild.id)
             await ctx.reply("Removed the counting channel")
         else:
             await ctx.reply("Only administrators can remove the counting channel")
 
-    @commands.command("devset")
+    @commands.command()
     @commands.is_owner()
-    async def _DevSet(self, ctx):
+    async def devset(self, ctx):
         db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
-    @commands.command("devremove")
+    @commands.command()
     @commands.is_owner()
-    async def _DevRemove(self, ctx):
+    async def devremove(self, ctx):
         db.removecountingchannel(ctx.guild.id)
         await ctx.send("Removed the counting channel")
 
-    @commands.command("counting")
-    async def _Counting(self, ctx):
+    @commands.command()
+    async def counting(self, ctx):
 
         embed = self.bot.embed(ctx.author, "FBot counting")
 
@@ -108,9 +108,9 @@ class fcounter(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command("setnumber")
+    @commands.command()
     @commands.is_owner()
-    async def _SetNumber(self, ctx, *, number):
+    async def setnumber(self, ctx, *, number):
         if not number.isdigit():
             await ctx.send("Not a number")
         else:
@@ -180,4 +180,4 @@ class fcounter(commands.Cog):
             await channel.send(f"A message was given a fake check. The next number is `{last_number+1}`")
 
 def setup(bot):
-    bot.add_cog(fcounter(bot))
+    bot.add_cog(Counting(bot))

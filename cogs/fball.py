@@ -26,7 +26,7 @@ responses = ["Without a doubt... yes.",
              "Who knows! I don't!",
              "m y  s e r v i c e s  a r e n ' t  f r e e  y e  k n o w"]
 
-class fball(commands.Cog):
+class FBall(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -37,9 +37,9 @@ class fball(commands.Cog):
         if content.startswith("fball "):
             await message.reply(choice(responses))
 
-    @commands.command(name="fball")
-    async def _FBall(self, ctx):
+    @commands.command()
+    async def fball(self, ctx):
         await ctx.reply(choice(responses))
 
 def setup(bot):
-    bot.add_cog(fball(bot))
+    bot.add_cog(FBall(bot))

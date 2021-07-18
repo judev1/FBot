@@ -6,15 +6,14 @@ import random
 import re
 
 is_mention = re.compile("<@!?[0-9]{18}>")
-ppsize_help = "Command usage: `fbot ppsize` or `fbot ppsize <@mention>`"
 
-class ppsize(commands.Cog):
+class PPSize(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="ppsize")
-    async def _GetPP(self, ctx, user_mention=None):
+    @commands.command()
+    async def ppsize(self, ctx, user_mention=None):
         async with ctx.channel.typing():
             if (user_mention is None):
                 member = ctx.author
@@ -23,7 +22,7 @@ class ppsize(commands.Cog):
                 member = await converter.convert(ctx, user_mention)
             else:
                 member = None
-                text = ppsize_help
+                text = "Command usage: `fbot ppsize` or `fbot ppsize <@mention>`"
 
             if (member is not None):
                 ppsize = None
@@ -46,9 +45,9 @@ class ppsize(commands.Cog):
                         text = f"{member.mention}'s ppsize: `{pp}`"
         await ctx.send(text, allowed_mentions=AllowedMentions.all())
 
-    @commands.command(name="devsetppsize")
+    @commands.command()
     @commands.is_owner()
-    async def _SetPP(self, ctx, user_mention, ppsize: int):
+    async def setppsize(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
             await ctx.reply("Too big: ppsize exceeds max message length")
         elif (user_mention is None):
@@ -61,4 +60,4 @@ class ppsize(commands.Cog):
             db.updateppsize(user_id, ppsize)
 
 def setup(bot):
-    bot.add_cog(ppsize(bot))
+    bot.add_cog(PPSize(bot))
