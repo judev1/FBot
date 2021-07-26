@@ -3,7 +3,7 @@ red = 0xF42F42
 top = "https://top.gg/bot/711934102906994699"
 dbl = "https://discordbotlist.com/bots/fbot"
 
-bfd = "https://botsfordiscord.com/bot/711934102906994699"
+bfd = "https://discords.com/bots/bot/711934102906994699"
 dbgg = "https://discord.bots.gg/bots/711934102906994699"
 
 ligg = "https://listcord.gg/bot/711934102906994699"
@@ -17,9 +17,9 @@ bdcl = "https://bots.discordlabs.org/bot/711934102906994699"
 
 votetop = "https://top.gg/bot/711934102906994699/vote"
 votedbl = "https://discordbotlist.com/bots/fbot/upvote"
-votebfd = "https://botsfordiscord.com/bot/711934102906994699/vote"
+votebfd = "https://discords.com/bots/bot/711934102906994699/vote"
 
-voteligg = "https://listcord.gg/bot/711934102906994699?message="
+voteligg = "https://listcord.gg/bot/711934102906994699"
 votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
 voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
 voteblme = "https://botlist.me/bots/711934102906994699/vote"

@@ -8,7 +8,7 @@ class fakeuser: id = 0
 user = fakeuser()
 
 bot_id = "711934102906994699"
-bfdapi = f"https://botsfordiscord.com/api/bot/{bot_id}"
+bfdapi = f"https://discords.com/bots/api/bot/{bot_id}"
 dbggapi = f"https://discord.bots.gg/api/v1/bots/{bot_id}/stats"
 dblapi = f"https://discordbotlist.com/api/v1/bots/{bot_id}/stats"
 
@@ -40,7 +40,7 @@ class Botlists(commands.Cog):
         data = {"server_count": servers}
         headers = {"Authorization": os.getenv("BFD_TOKEN")}
         async with session.post(bfdapi, data=data, headers=headers) as res:
-            content += "\n**botsfordiscord.com:** " + ("success" if res.status == 200 else "failed")
+            content += "\n**discords.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
