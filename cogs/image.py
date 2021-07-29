@@ -21,7 +21,7 @@ sneak_img = wand_image(filename="data/imgs/sneak.png")
 url = "https://cdn.filestackcontent.com/AWM47Q1KrQqWAvDUZduCYz/resize=width:512,height:512,fit:scale/"
 is_img_url = re.compile("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png))(?:\?([^#]*))?(?:#(.*))?")
 
-class Image(commands.Cog):
+class ImageCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -79,7 +79,7 @@ class Image(commands.Cog):
             message = await ctx.send(file=file)
 
             embed = self.bot.embed(ctx.author, "FBot " + process.capitalize())
-            embed.set_image(url=message.attachments[0].url)
+            embed.set_image(url=message.attachments[0].proxy_url)
 
             await ctx.reply(embed=embed)
             await message.delete()
@@ -93,7 +93,7 @@ class Image(commands.Cog):
             await ctx.reply("That image is too big to " + process)
 
     @commands.command(aliases=["av", "pfp"])
-    async def avatar(self, ctx, *to_av):
+    async def av(self, ctx, *to_av):
 
         async with ctx.channel.typing():
 
@@ -324,4 +324,4 @@ class Image(commands.Cog):
         await self.clean_up(ctx, "god", success)
 
 def setup(bot):
-    bot.add_cog(Image(bot))
+    bot.add_cog(ImageCog(bot))
