@@ -20,6 +20,8 @@ class Bot(commands.AutoShardedBot):
 
     def __init__(self):
 
+        print(" > Preparing the bot")
+
         with open("settings.json", "r") as file:
             self.settings = fn.Classify(json.load(file))
 
@@ -29,13 +31,12 @@ class Bot(commands.AutoShardedBot):
         intents.reactions = True
         #intents.members = True # missing intents
 
-        print(" > Preparing the bot")
+        self.shards_ready = 0
 
         super().__init__(command_prefix=fn.getprefix, owner_ids=self.settings.devs, intents=intents,
                          shard_count=self.settings.shards)
 
         self.ftime = fn.ftime()
-
 
         self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
             webhook_auth=self.settings.tokens.auth, webhook_port=self.settings.port)
@@ -71,7 +72,7 @@ class Bot(commands.AutoShardedBot):
         await serverlogs.send(embed=embed)
 
     def ready(self):
-        if self.shard_count == len(self.shards):
+        if self.shard_count == self.shards_ready:
             if self.is_ready():
                 return True
         return False
@@ -102,14 +103,18 @@ class Bot(commands.AutoShardedBot):
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
         await self.shard_embed("connected", shard_id)
+        self.shards_ready += 1
+
+        if self.ready():
+            self.shards_ready = self.shard_count
+            await self.prep()
 
     async def on_shard_disconnect(self, shard_id):
         print(f"\n > Shard {shard_id} disconnected", end="")
         await self.shard_embed("disconnected", shard_id)
+        self.shards_ready -= 1
 
     async def on_ready(self):
-        if self.ready():
-            await self.prep()
         await self.bot_embed("connected")
 
     async def on_disconnect(self):
