@@ -2,7 +2,6 @@ import nest_asyncio
 nest_asyncio.apply()
 
 from discord.ext import commands
-from dotenv import load_dotenv
 from lib.commands import cmds
 from lib.triggers import tr
 import lib.functions as fn
@@ -10,19 +9,19 @@ import lib.commands as cm
 import lib.database as db
 import lib.cache as cache
 import discord
+import json
 import dbl
-import os
 
 emojis = {True: "✅", False: "⛔"}
 
-class FBot(commands.AutoShardedBot):
+class Bot(commands.AutoShardedBot):
+
+    premium = list()
 
     def __init__(self):
 
-        self.SERVER_ID = 717735765936701450
-        self.PREMIUM_ID = 815555688520613919
-
-        self.devs = [671791003065384987, 216260005827969024, 311178459919417344, 668423998777982997]
+        with open("settings.json", "r") as file:
+            self.settings = fn.Classify(json.load(file))
 
         intents = discord.Intents.none()
         intents.guilds = True
@@ -30,17 +29,16 @@ class FBot(commands.AutoShardedBot):
         intents.reactions = True
         #intents.members = True # missing intents
 
-        SHARD_COUNT = 3 # 1k servers per shard, rounded up
-
         print(" > Preparing the bot")
 
-        super().__init__(command_prefix=fn.getprefix, owner_ids=self.devs, intents=intents,
-                         shard_count=SHARD_COUNT)
+        super().__init__(command_prefix=fn.getprefix, owner_ids=self.settings.devs, intents=intents,
+                         shard_count=self.settings.shards)
 
         self.ftime = fn.ftime()
 
-        self.dbl = dbl.DBLClient(self, os.getenv("TOPGG_TOKEN"), webhook_path="/dblwebhook",
-            webhook_auth=os.getenv("WEBHOOK_AUTH"), webhook_port=6000)
+
+        self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
+            webhook_auth=self.settings.tokens.auth, webhook_port=self.settings.port)
 
         fn.VotingHandler(self)
         self.add_check(self.predicate)
@@ -59,6 +57,12 @@ class FBot(commands.AutoShardedBot):
                 except: self.load_extension("cogs." + cog[:-3])
                 finally: print("Done", end="")
         print("\n\n > Loaded cogs\n")
+
+    async def shard_embed(self, status, shard_id):
+        serverlogs = self.settings.channels.shards
+        serverlogs = self.get_channel(serverlogs)
+        embed = self.embed(fn.user, f"Shard `{shard_id}` **{status}**")
+        await serverlogs.send(embed=embed)
 
     def ready(self):
         if self.shard_count == len(self.shards):
@@ -91,17 +95,19 @@ class FBot(commands.AutoShardedBot):
 
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
+        await self.shard_embed("connected", shard_id)
 
         if self.ready():
             await self.prep()
 
     async def on_shard_disconnect(self, shard_id):
         print(f"\n > Shard {shard_id} disconnected", end="")
+        await self.shard_embed("disconnected", shard_id)
 
     async def get_premium(self):
 
-        guild = self.get_guild(self.SERVER_ID)
-        role = guild.get_role(self.PREMIUM_ID)
+        guild = self.get_guild(self.settings.server)
+        role = guild.get_role(self.settings.roles.premium)
 
         premium = set()
         for member in role.members:
@@ -115,7 +121,7 @@ class FBot(commands.AutoShardedBot):
     #        return
 
     #    for role in after.roles:
-    #        if role.id == self.PREMIUM_ID:
+    #        if role.id == self.settings.roles.premium:
     #            self.premium.add(after.id)
     #            return
 
@@ -172,6 +178,5 @@ class FBot(commands.AutoShardedBot):
         self.stats.commands_processed += 1
         return True
 
-load_dotenv()
-bot = FBot()
-bot.run(os.getenv("JUDE_TOKEN"))
+bot = Bot()
+bot.run(bot.settings.tokens.jude)

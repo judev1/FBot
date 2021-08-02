@@ -2,7 +2,6 @@ from discord.ext import commands
 import lib.functions as fn
 import lib.database as db
 import aiohttp
-import os
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -20,10 +19,12 @@ class Botlists(commands.Cog):
 
     @commands.Cog.listener()
     async def on_bot_ready(self):
-        self.voteschannel = self.bot.get_channel(757722305395949572).send
+        voteschannel = self.bot.settings.channels.votes
+        self.voteschannel = self.bot.get_channel(voteschannel)
 
     @commands.command()
     async def scounts(self, ctx):
+        tokens = self.bot.settings.tokens
         servers = len(self.bot.guilds)
         embed = self.bot.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
@@ -40,7 +41,7 @@ class Botlists(commands.Cog):
 
         # botsfordiscord.com
         data = {"server_count": servers}
-        headers = {"Authorization": os.getenv("BFD_TOKEN")}
+        headers = {"Authorization": tokens.bfd}
         async with session.post(bfdapi, data=data, headers=headers) as res:
             content += "\n**discords.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
@@ -48,7 +49,7 @@ class Botlists(commands.Cog):
 
         # discord.bots.gg
         data = {"guildCount": servers}
-        headers = {"Authorization": os.getenv("DBGG_TOKEN")}
+        headers = {"Authorization": tokens.dbgg}
         async with session.post(dbggapi, data=data, headers=headers) as res:
             content += "\n**discord.bots.gg:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
@@ -56,7 +57,7 @@ class Botlists(commands.Cog):
 
         # discordbotlist.com
         data = {"guilds": servers}
-        headers = {"Authorization": os.getenv("DBL_TOKEN")}
+        headers = {"Authorization": tokens.dbl}
         async with session.post(dblapi, data=data, headers=headers):
             content += "\n**discordbotlist.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
@@ -114,7 +115,7 @@ class Botlists(commands.Cog):
         elif site == "botsfordiscord.com":
             db.vote(user_id, "bfd")
             embed = self.bot.embed(user, site, f"{name} voted")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
@@ -125,7 +126,7 @@ class Botlists(commands.Cog):
 
         embed = self.bot.embed(user, "top test",
                 f"{name} tested out the webhook")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
@@ -137,7 +138,7 @@ class Botlists(commands.Cog):
 
         db.vote(user_id, "top")
         embed = self.bot.embed(user, "top.gg", f"{name} voted")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Botlists(bot))

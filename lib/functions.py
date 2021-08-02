@@ -33,6 +33,25 @@ patreon = "https://www.patreon.com/fbotbot"
 import lib.database as db
 import os
 
+class Classify:
+
+    def __init__(self, dictionary: dict):
+        for name in dictionary:
+            value = dictionary[name]
+            if type(value) is dict:
+                value = Classify(value)
+            setattr(self, name, value)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def get(self, attribute):
+        if attribute in self.__dict__:
+            return getattr(self, attribute)
+
+class fakeuser: id = 0
+user = fakeuser()
+
 def formatperm(perm):
     text = []
     perm = perm.lower()
@@ -94,9 +113,9 @@ class VotingHandler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + os.getenv("WEBHOOK_AUTH") == auth:
+        if "dbl_" + self.bot.settings.tokens.auth == auth:
             site = "discordbotlist.com"
-        elif "bfd_" + os.getenv("WEBHOOK_AUTH") == auth:
+        elif "bfd_" + self.bot.settings.tokens.auth == auth:
             site = "botsfordiscord.com"
         else:
             return web.Response(status=401)

@@ -1,0 +1,32 @@
+
+{
+    "tokens": {
+        "bot": "bot_token",
+
+        "topgg": "api_key",
+        "discords": "api_key",
+        "dbgg": "api_key",
+        "dbl": "api_key",
+        "fates": "api_key",
+
+        "auth": "webhook_auth"
+    },
+    "channels": {
+        "shards": channel_id,
+        "servers": channel_id,
+        "votes": channel_id,
+        "errors": channel_id
+    },
+    "roles": {
+        "premium": channel_id
+    },
+    "shards": shard_count,
+    "server": server_id,
+    "devs": [
+        user_id,
+        user_id,
+        user_id,
+        user_id
+    ],
+    "port": port_number
+}
