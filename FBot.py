@@ -59,18 +59,6 @@ class Bot(commands.AutoShardedBot):
                 finally: print("Done", end="")
         print("\n\n > Loaded cogs\n")
 
-    async def shard_embed(self, status, shard_id):
-        serverlogs = self.settings.channels.shards
-        serverlogs = self.get_channel(serverlogs)
-        embed = self.embed(fn.user, f"Shard `{shard_id}` **{status}**")
-        await serverlogs.send(embed=embed)
-
-    async def bot_embed(self, status):
-        serverlogs = self.settings.channels.shards
-        serverlogs = self.get_channel(serverlogs)
-        embed = self.embed(fn.user, f"Bot is **{status}**")
-        await serverlogs.send(embed=embed)
-
     def ready(self):
         if self.shard_count == self.shards_ready:
             if self.is_ready():
@@ -102,23 +90,15 @@ class Bot(commands.AutoShardedBot):
 
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
-        await self.shard_embed("connected", shard_id)
+        serverlogs = self.settings.channels.shards
+        serverlogs = self.get_channel(serverlogs)
+        embed = self.embed(fn.user, f"Shard `{shard_id}` connected")
+        await serverlogs.send(embed=embed)
         self.shards_ready += 1
 
         if self.ready():
             self.shards_ready = self.shard_count
             await self.prep()
-
-    async def on_shard_disconnect(self, shard_id):
-        print(f"\n > Shard {shard_id} disconnected", end="")
-        await self.shard_embed("disconnected", shard_id)
-        self.shards_ready -= 1
-
-    async def on_ready(self):
-        await self.bot_embed("connected")
-
-    async def on_disconnect(self):
-        await self.bot_embed("disconnected")
 
     async def get_premium(self):
 
