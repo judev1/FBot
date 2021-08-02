@@ -5,7 +5,8 @@ import lib.functions as fn
 import lib.commands as cm
 import lib.database as db
 
-descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
+descriptions = ["All of the commands for our special premium users",
+"Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
 "All the commands you need to start making FBux... and debt!",
 "Commands to set up counting, show the last number, and highscores",
 "Image processing, say command, mingames and more!",
@@ -16,13 +17,14 @@ CMDS_EMOJI = "📃"
 LINK_EMOJI = "🔗"
 
 CONTENTS_EMOJI = "🔖"
+PREMIUM_EMOJI = "✨"
 SPAM_EMOJI = "💬"
 FUN_EMOJI = "🤪"
 IMAGE_EMOJI = "🖼️"
 COUNT_EMOJI = "🔢"
 UTIL_EMOJI = "⚙️"
 INFO_EMOJI = "❔"
-emojis = [CONTENTS_EMOJI, SPAM_EMOJI, FUN_EMOJI,
+emojis = [CONTENTS_EMOJI, PREMIUM_EMOJI, SPAM_EMOJI, FUN_EMOJI,
           IMAGE_EMOJI, COUNT_EMOJI, UTIL_EMOJI, INFO_EMOJI]
 
 class Help(commands.Cog):
@@ -116,7 +118,6 @@ class Help(commands.Cog):
         if str(ctx.channel.type) != "private":
             prefix = db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
-        colour = self.bot.get_colour(ctx.author.id)
 
         embeds = [self.bot.embed(ctx.author, "**__FBot commands__**")]
         for i, category in enumerate(cm.categories):

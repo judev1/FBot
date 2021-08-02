@@ -11,7 +11,8 @@ class Prefix(commands.Cog):
         if ctx.author.guild_permissions.administrator:
             if arg == "reset":
                 db.changeprefix(ctx.guild.id, "fbot")
-                await ctx.message.add_reaction("✅")
+                emoji = self.bot.get_emoji(ctx.author.id)
+                await ctx.message.add_reaction(emoji)
             else:
                 if arg.startswith(("'", '"')) or arg.endswith(("'", '"')):
                     arg = arg[1:-1]
@@ -19,7 +20,8 @@ class Prefix(commands.Cog):
                     await ctx.reply("Prefixes cannot be longer than 10 characters")
                 else:
                     db.changeprefix(ctx.guild.id, arg)
-                    await ctx.message.add_reaction("✅")
+                    emoji = self.bot.get_emoji(ctx.author.id)
+                    await ctx.message.add_reaction(emoji)
                     await ctx.reply(f"Use `{arg}help` or {self.bot.user.mention} if you get stuck")
             return
 

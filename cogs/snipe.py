@@ -77,10 +77,7 @@ class Snipe(commands.Cog):
 
         bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
 
-        prefix = fn.getprefix(self.bot, message)
-        commandcheck = message.content[len(prefix):]
-        say_commands = tuple([command.name + " " for command in self.bot.commands if command.cog.qualified_name == "say"])
-        if commandcheck.startswith(say_commands):
+        if self.bot.command_invoked(message, cogs=["say"]):
             if not message.author.bot:
                 if  bot_perms.send_messages:
                     return

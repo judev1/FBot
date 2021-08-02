@@ -22,17 +22,7 @@ class Notices(commands.Cog):
         if not bot_perms.send_messages:
             return
 
-        prefix = fn.getprefix(self.bot, message)
-        if not message.content.startswith(prefix):
-            return
-        commandcheck = message.content[len(prefix):]
-        command_used = False
-        for command in cm.commands:
-            if commandcheck.startswith(command):
-                command_used = True
-                break
-
-        if not command_used:
+        if not self.bot.command_invoked(message, dev=False):
             return
 
         notice = db.getlastnotice()

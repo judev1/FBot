@@ -92,8 +92,8 @@ class ImageCog(commands.Cog):
         else:
             await ctx.reply("That image is too big to " + process)
 
-    @commands.command(aliases=["avatar", "pfp"])
-    async def av(self, ctx, *to_av):
+    @commands.command(aliases=["av", "pfp"])
+    async def avatar(self, ctx, *to_av):
 
         async with ctx.channel.typing():
 

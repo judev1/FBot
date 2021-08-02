@@ -61,6 +61,17 @@ def setup():
                         expiry integer NOT NULL
                     );""")
 
+    c.execute("""CREATE TABLE IF NOT EXISTS triggers (
+                        user_id integer NOT NULL,
+                        trigger_id integer NOT NULL,
+                        message string NOT NULL,
+                        type string NOT NULL,
+                        "case" string NOT NULL,
+                        response string NOT NULL,
+                        guilds string NOT NULL
+                    );""")
+
+
     c.execute("""CREATE TABLE IF NOT EXISTS notices (
                         date integer NOT NULL,
                         title string NOT NULL,
@@ -386,6 +397,44 @@ def nextvote(user_id, site):
     if hours < 0 or mins < 0:
         return None
     return (mins, hours)
+
+# Premium
+
+def changetitle(user_id, title):
+    c = conn.cursor()
+    t = (title, user_id)
+    c.execute("UPDATE users SET title=? WHERE user_id=?;", t)
+    conn.commit()
+
+def gettitle(user_id):
+    c = conn.cursor()
+    t = (user_id,)
+    c.execute("SELECT title FROM users WHERE user_id=?;", t)
+    return c.fetchone()[0]
+
+def changecolour(user_id, colour):
+    c = conn.cursor()
+    t = (colour, user_id)
+    c.execute("UPDATE users SET colour=? WHERE user_id=?;", t)
+    conn.commit()
+
+def getcolour(user_id):
+    c = conn.cursor()
+    t = (user_id,)
+    c.execute("SELECT colour FROM users WHERE user_id=?;", t)
+    return c.fetchone()[0]
+
+def changeemoji(user_id, emoji):
+    c = conn.cursor()
+    t = (emoji, user_id)
+    c.execute("UPDATE users SET emoji=? WHERE user_id=?;", t)
+    conn.commit()
+
+def getemoji(user_id):
+    c = conn.cursor()
+    t = (user_id,)
+    c.execute("SELECT emoji FROM users WHERE user_id=?;", t)
+    return c.fetchone()[0]
 
 # Prefix
 

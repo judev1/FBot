@@ -6,4 +6,3 @@ spacy
 dbfn
 wand
 pillow
-discord-components

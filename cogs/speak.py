@@ -13,7 +13,8 @@ class Speak(commands.Cog):
         if arg == "normal": arg = "default"
         if arg in options:
             db.changemode(ctx.guild.id, arg)
-            await ctx.message.add_reaction("✅")
+            emoji = self.bot.get_emoji(ctx.author.id)
+            await ctx.message.add_reaction(emoji)
         else:
             await ctx.reply("That's not a valid mode")
 

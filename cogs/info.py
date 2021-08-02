@@ -42,14 +42,8 @@ class Info(commands.Cog):
         else:
             guild_id = message.guild.id
 
-        prefix = fn.getprefix(self.bot, message)
-        commandcheck = message.content[len(prefix):]
-        for command in cm.commands:
-            if commandcheck.startswith(command):
-                return
-        for command in cm.devcmds:
-            if commandcheck.startswith(command):
-                return
+        if self.bot.command_invoked(message):
+            return
 
         priority, status = "all", "on"
         if str(message.channel.type) != "private":

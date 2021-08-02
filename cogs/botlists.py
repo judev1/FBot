@@ -11,6 +11,7 @@ bot_id = "711934102906994699"
 bfdapi = f"https://discords.com/bots/api/bot/{bot_id}"
 dbggapi = f"https://discord.bots.gg/api/v1/bots/{bot_id}/stats"
 dblapi = f"https://discordbotlist.com/api/v1/bots/{bot_id}/stats"
+fatesapi = f"https://fateslist.xyz/api/v2/bots/{bot_id}/stats"
 
 class Botlists(commands.Cog):
 
@@ -23,13 +24,16 @@ class Botlists(commands.Cog):
     @commands.is_owner()
     async def scounts(self, ctx):
         servers = len(self.bot.guilds)
+        shards = len(self.bot.shards)
+        users = sum([guild.member_count for guild in self.bot.guilds])
+
         embed = self.bot.embed(ctx.author, f"Server Counts `{servers}`")
         msg = await ctx.send(embed=embed)
         session = aiohttp.ClientSession()
 
         # top.gg
         try:
-            await self.dbl.post_guild_count()
+            await self.dbl.post_guild_count(shard_count=shards)
             content = "**top.gg:** success"
         except:
             content = "**tog.gg:** failed"
@@ -45,7 +49,7 @@ class Botlists(commands.Cog):
         await msg.edit(embed=embed)
 
         # discord.bots.gg
-        data = {"guildCount": servers}
+        data = {"guildCount": servers, "shardCount": shards}
         headers = {"Authorization": os.getenv("DBGG_TOKEN")}
         async with session.post(dbggapi, data=data, headers=headers) as res:
             content += "\n**discord.bots.gg:** " + ("success" if res.status == 200 else "failed")
@@ -53,10 +57,18 @@ class Botlists(commands.Cog):
         await msg.edit(embed=embed)
 
         # discordbotlist.com
-        data = {"guilds": servers}
+        data = {"guilds": servers, "users": users}
         headers = {"Authorization": os.getenv("DBL_TOKEN")}
         async with session.post(dblapi, data=data, headers=headers):
             content += "\n**discordbotlist.com:** " + ("success" if res.status == 200 else "failed")
+            embed.description = content
+        await msg.edit(embed=embed)
+
+        # fateslist.xyz
+        data = {"guild_count": servers, "shard_count": shards, "user_count": users}
+        headers = {"Authorization": os.getenv("FATES_TOKEN")}
+        async with session.post(dblapi, data=data, headers=headers):
+            content += "\n**fateslist.xyz:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 

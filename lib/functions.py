@@ -15,6 +15,8 @@ blme = "https://botlist.me/bots/711934102906994699"
 yabl = "https://yabl.xyz/bot/711934102906994699"
 bdcl = "https://bots.discordlabs.org/bot/711934102906994699"
 
+ftlst = "https://fateslist.xyz/bot/711934102906994699"
+
 votetop = "https://top.gg/bot/711934102906994699/vote"
 votedbl = "https://discordbotlist.com/bots/fbot/upvote"
 votebfd = "https://discords.com/bots/bot/711934102906994699/vote"
@@ -23,6 +25,8 @@ voteligg = "https://listcord.gg/bot/711934102906994699"
 votedbeu = "https://discord-botlist.eu/bots/711934102906994699/vote"
 voteblsp = "https://discordlist.space/bot/711934102906994699/upvote"
 voteblme = "https://botlist.me/bots/711934102906994699/vote"
+
+voteftlst = "https://fateslist.xyz/bot/711934102906994699/vote"
 
 site = "https://fbot.breadhub.uk"
 server = "https://fbot.breadhub.uk/server"

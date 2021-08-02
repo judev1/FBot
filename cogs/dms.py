@@ -13,7 +13,8 @@ class DMs(commands.Cog):
     async def dms(self, ctx):
         channel = await ctx.author.create_dm()
         await channel.send("What do you want from me?!?")
-        await ctx.message.add_reaction("✅")
+        emoji = self.bot.get_emoji(ctx.author.id)
+        await ctx.message.add_reaction(emoji)
 
     @commands.command()
     @commands.is_owner()

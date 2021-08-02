@@ -48,14 +48,8 @@ class TriggerResponses(commands.Cog):
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        prefix = fn.getprefix(self.bot, message)
-        commandcheck = content[len(prefix):]
-        for command in cm.commands:
-            if commandcheck.startswith(command):
-                return
-        for command in cm.devcmds:
-            if commandcheck.startswith(command):
-                return
+        if self.bot.command_invoked(message):
+            return
 
         if content.lower().startswith("fball"):
             return
