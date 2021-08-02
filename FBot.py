@@ -90,10 +90,6 @@ class Bot(commands.AutoShardedBot):
 
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
-        serverlogs = self.settings.channels.shards
-        serverlogs = self.get_channel(serverlogs)
-        embed = self.embed(fn.user, f"Shard `{shard_id}` connected")
-        await serverlogs.send(embed=embed)
         self.shards_ready += 1
 
         if self.ready():
