@@ -113,10 +113,8 @@ class VotingHandler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + self.bot.settings.tokens.auth == auth:
-            site = "discordbotlist.com"
-        elif "bfd_" + self.bot.settings.tokens.auth == auth:
-            site = "botsfordiscord.com"
+        if self.bot.settings.tokens.auth == auth:
+            site = request.host
         else:
             return web.Response(status=401)
 

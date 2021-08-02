@@ -1,10 +1,9 @@
-
 {
     "tokens": {
         "bot": "bot_token",
 
         "topgg": "api_key",
-        "discords": "api_key",
+        "bfd": "api_key",
         "dbgg": "api_key",
         "dbl": "api_key",
         "fates": "api_key",
