@@ -64,7 +64,7 @@ class Bot(commands.AutoShardedBot):
         embed = self.embed(fn.user, f"Shard `{shard_id}` **{status}**")
         await serverlogs.send(embed=embed)
 
-    async def shard_embed(self, status):
+    async def bot_embed(self, status):
         serverlogs = self.settings.channels.shards
         serverlogs = self.get_channel(serverlogs)
         embed = self.embed(fn.user, f"Bot is **{status}**")
