@@ -179,4 +179,4 @@ class Bot(commands.AutoShardedBot):
         return True
 
 bot = Bot()
-bot.run(bot.settings.tokens.jude)
+bot.run(bot.settings.tokens.bot)
