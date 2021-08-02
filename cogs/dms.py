@@ -17,7 +17,6 @@ class DMs(commands.Cog):
         await ctx.message.add_reaction(emoji)
 
     @commands.command()
-    @commands.is_owner()
     async def send(self, ctx, channel: discord.TextChannel, *, content):
         await channel.send(content)
         await ctx.message.add_reaction("✅")
@@ -44,6 +43,10 @@ class DMs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         if message.channel.id in self.bot.dms:
             if message.author.id in self.bot.owner_ids:
                 user = self.bot.dms[message.channel.id]

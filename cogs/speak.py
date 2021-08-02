@@ -19,7 +19,6 @@ class Speak(commands.Cog):
             await ctx.reply("That's not a valid mode")
 
     @commands.command()
-    @commands.is_owner()
     async def devspeak(self, ctx, arg):
         if arg in options:
             db.changemode(ctx.guild.id, arg)

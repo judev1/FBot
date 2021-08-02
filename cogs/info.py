@@ -29,6 +29,10 @@ class Info(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         user = message.author
         stats = self.bot.stats
 
@@ -134,7 +138,6 @@ class Info(commands.Cog):
         await ctx.invoke(self.bot.get_command("server"))
 
     @commands.command()
-    @commands.is_owner()
     async def dev(self, ctx):
         await ctx.reply(f"Yeah {ctx.author.mention} is a dev, that's why he can use this command")
 

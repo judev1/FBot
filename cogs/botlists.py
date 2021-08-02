@@ -2,7 +2,6 @@ from discord.ext import commands
 import lib.functions as fn
 import lib.database as db
 import aiohttp
-import os
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -18,11 +17,15 @@ class Botlists(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.dbl = bot.dbl
-        self.voteschannel = self.bot.get_channel(757722305395949572).send
+
+    @commands.Cog.listener()
+    async def on_bot_ready(self):
+        voteschannel = self.bot.settings.channels.votes
+        self.voteschannel = self.bot.get_channel(voteschannel)
 
     @commands.command()
-    @commands.is_owner()
     async def scounts(self, ctx):
+        tokens = self.bot.settings.tokens
         servers = len(self.bot.guilds)
         shards = len(self.bot.shards)
         users = sum([guild.member_count for guild in self.bot.guilds])
@@ -42,23 +45,23 @@ class Botlists(commands.Cog):
 
         # botsfordiscord.com
         data = {"server_count": servers}
-        headers = {"Authorization": os.getenv("BFD_TOKEN")}
+        headers = {"Authorization": tokens.bfd}
         async with session.post(bfdapi, data=data, headers=headers) as res:
             content += "\n**discords.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
         # discord.bots.gg
-        data = {"guildCount": servers, "shardCount": shards}
-        headers = {"Authorization": os.getenv("DBGG_TOKEN")}
+        data = {"guildCount": servers}
+        headers = {"Authorization": tokens.dbgg}
         async with session.post(dbggapi, data=data, headers=headers) as res:
             content += "\n**discord.bots.gg:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
         # discordbotlist.com
-        data = {"guilds": servers, "users": users}
-        headers = {"Authorization": os.getenv("DBL_TOKEN")}
+        data = {"guilds": servers}
+        headers = {"Authorization": tokens.dbl}
         async with session.post(dblapi, data=data, headers=headers):
             content += "\n**discordbotlist.com:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
@@ -124,7 +127,7 @@ class Botlists(commands.Cog):
         elif site == "botsfordiscord.com":
             db.vote(user_id, "bfd")
             embed = self.bot.embed(user, site, f"{name} voted")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
@@ -135,7 +138,7 @@ class Botlists(commands.Cog):
 
         embed = self.bot.embed(user, "top test",
                 f"{name} tested out the webhook")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
@@ -147,7 +150,7 @@ class Botlists(commands.Cog):
 
         db.vote(user_id, "top")
         embed = self.bot.embed(user, "top.gg", f"{name} voted")
-        await self.voteschannel(embed=embed)
+        await self.voteschannel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Botlists(bot))

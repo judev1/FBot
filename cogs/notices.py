@@ -13,6 +13,10 @@ class Notices(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
 
+        if not self.bot.ready():
+            return
+
+
         if message.author.bot: return
 
         if str(message.channel.type) == "private":
@@ -43,20 +47,17 @@ class Notices(commands.Cog):
         return embed
 
     @commands.command()
-    @commands.is_owner()
     async def getnotice(self, ctx):
         embed = self.notice(ctx, *db.getlastnotice())
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def editnotice(self, ctx, *, text):
         title, message = text.split(" && ")
         db.editnotice(title, message)
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def notice(self, ctx, *, text):
         title, message = text.split(" && ")
         date = time.time()

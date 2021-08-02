@@ -46,7 +46,6 @@ class PPSize(commands.Cog):
         await ctx.send(text, allowed_mentions=AllowedMentions.all())
 
     @commands.command()
-    @commands.is_owner()
     async def setppsize(self, ctx, user_mention, ppsize: int):
         if (ppsize > 1950):
             await ctx.reply("Too big: ppsize exceeds max message length")

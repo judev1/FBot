@@ -46,7 +46,6 @@ class Joke(commands.Cog):
             await ctx.reply("You wish")
 
     @commands.command()
-    @commands.is_owner()
     async def jokeinfo(self, ctx):
         await ctx.reply("Active channels: " + str(active_channels))
 

@@ -72,6 +72,10 @@ class Snipe(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
+
+        if not self.bot.ready():
+            return
+
         if not message.guild: return
         if message.author.bot: return
 
@@ -100,6 +104,10 @@ class Snipe(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
+
+        if not self.bot.ready():
+            return
+
         if before.content == after.content: return
         if not before.guild: return
         if after.author.bot: return

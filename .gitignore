@@ -10,6 +10,6 @@ Temp/
 *.vs
 *.xml
 *.iml
-.env
 Pipfile.lock
 *.db-journal
+settings.json

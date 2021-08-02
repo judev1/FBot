@@ -1,4 +1,5 @@
 from discord.ext import commands
+import lib.functions as fn
 import lib.database as db
 
 joinmsg = ["**Whoa new server, cooooool!**",
@@ -19,18 +20,23 @@ joinmsg = ["**Whoa new server, cooooool!**",
            ":sleeping: **Sounds great! There can't be anything else, can there?**",
            "Well yes, there is but you'll have to find it out for yourself, with `fbot help` & `fbot cmds`, which will give you a list of commands! And if you find a bug, have a suggestion or just wanna chat, use `fbot server` to enter ~~hell~~ our server!"]
 
-class fakeuser: id = 0
-user = fakeuser()
-
 class JoinLeave(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.serverlogs = self.bot.get_channel(720923733132312587)
         self.joinmsg = joinmsg
 
     @commands.Cog.listener()
+    async def on_bot_ready(self):
+        serverlogs = self.bot.settings.channels.servers
+        self.serverlogs = self.bot.get_channel(serverlogs)
+
+    @commands.Cog.listener()
     async def on_guild_join(self, newguild):
+
+        if not self.bot.ready():
+            return
+
         db.addguild(newguild.id)
 
         system_channel = newguild.system_channel
@@ -38,13 +44,13 @@ class JoinLeave(commands.Cog):
             bot_perms = system_channel.permissions_for(newguild.get_member(self.bot.user.id))
 
             if bot_perms.send_messages:
-                embed = self.bot.embed(user, joinmsg[0], joinmsg[1])
+                embed = self.bot.embed(fn.user, joinmsg[0], joinmsg[1])
                 for i in range(2, 11, 2):
                     embed.add_field(name=joinmsg[i], value=joinmsg[i+1], inline=False)
                 await system_channel.send(embed=embed)
 
         memcount = newguild.member_count
-        embed = self.bot.embed(user, f"**Added** to `{newguild}`",
+        embed = self.bot.embed(fn.user, f"**Added** to `{newguild}`",
                                   str(newguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")
@@ -52,10 +58,14 @@ class JoinLeave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, oldguild):
+
+        if not self.bot.ready():
+            return
+
         db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count
-        embed = self.bot.embed(user, f"**Removed** from `{oldguild}`",
+        embed = self.bot.embed(fn.user, f"**Removed** from `{oldguild}`",
                                   str(oldguild.id))
         embed.add_field(name="Server count", value=f"`{len(self.bot.guilds)}`")
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")

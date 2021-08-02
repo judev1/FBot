@@ -33,6 +33,10 @@ class FBall(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         content = message.content.lower()
         if content.startswith("fball "):
             await message.reply(choice(responses))

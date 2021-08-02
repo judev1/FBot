@@ -23,7 +23,6 @@ class Cogs(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.is_owner()
     async def load(self, ctx, cog):
         if cog == "all":
             unable = []
@@ -43,7 +42,6 @@ class Cogs(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def unload(self, ctx, cog):
         if cog == "all":
             unable = []
@@ -64,7 +62,6 @@ class Cogs(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def reload(self, ctx, cog):
         if cog == "all":
             unable = []
@@ -87,7 +84,6 @@ class Cogs(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def cogs(self, ctx):
         colour = self.bot.get_colour(ctx.author.id)
         check = "'%l'[:-3] in self.bot.cogs"

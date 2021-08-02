@@ -37,6 +37,25 @@ patreon = "https://www.patreon.com/fbotbot"
 import lib.database as db
 import os
 
+class Classify:
+
+    def __init__(self, dictionary: dict):
+        for name in dictionary:
+            value = dictionary[name]
+            if type(value) is dict:
+                value = Classify(value)
+            setattr(self, name, value)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def get(self, attribute):
+        if attribute in self.__dict__:
+            return getattr(self, attribute)
+
+class fakeuser: id = 0
+user = fakeuser()
+
 def formatperm(perm):
     text = []
     perm = perm.lower()
@@ -48,8 +67,8 @@ def formatperm(perm):
     return " ".join(text)
 
 def getprefix(bot, message):
-    if not bot.ready:
-        return "f" * 4097
+    if not bot.ready():
+        return "fbot"
     prefix = "fbot"
     if str(message.channel.type) != "private":
         prefix = db.getprefix(message.guild.id)
@@ -98,10 +117,8 @@ class VotingHandler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if "dbl_" + os.getenv("WEBHOOK_AUTH") == auth:
-            site = "discordbotlist.com"
-        elif "bfd_" + os.getenv("WEBHOOK_AUTH") == auth:
-            site = "botsfordiscord.com"
+        if self.bot.settings.tokens.auth == auth:
+            site = request.host
         else:
             return web.Response(status=401)
 

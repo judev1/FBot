@@ -11,7 +11,7 @@ import time
 def load(csv):
     start = time.time()
     csv.load()
-    return round((time.time() - start) * 1000, 2) 
+    return round((time.time() - start) * 1000, 2)
 
 class Dev(commands.Cog):
 
@@ -19,7 +19,6 @@ class Dev(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    @commands.is_owner()
     async def csvreload(self, ctx):
 
         tms, cms = load(tr.tr), load(cm.cmds)
@@ -29,7 +28,6 @@ class Dev(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def eval(self, ctx, *, content):
 
         bot = self.bot
@@ -64,7 +62,6 @@ class Dev(commands.Cog):
         await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
     @commands.command(name="await")
-    @commands.is_owner()
     async def _await(self, CTX, *, content):
         global bot, ctx
         bot, ctx = self.bot, CTX
@@ -95,7 +92,6 @@ class Dev(commands.Cog):
         await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
 
     @commands.command()
-    @commands.is_owner()
     async def exploit(self, ctx):
 
         bot = await ctx.guild.fetch_member(self.bot.user.id)
@@ -116,21 +112,18 @@ class Dev(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def devon(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         db.changestatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def devoff(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         db.changestatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def devrespond(self, ctx, *, arg):
         if arg in ("few", "some", "all"):
             db.changepriority(ctx.guild.id, arg)
@@ -139,7 +132,6 @@ class Dev(commands.Cog):
             await ctx.reply("Must be `few`, `some`, or `all`")
 
     @commands.command()
-    @commands.is_owner()
     async def devmodtoggle(self, ctx, arg):
         db.addchannel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
@@ -150,14 +142,12 @@ class Dev(commands.Cog):
             await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def presence(self, ctx, *, content):
         await self.bot.change_presence(status=discord.Status.online,
                                        activity=discord.Game(name=content))
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def leave(self, ctx, guild: discord.Guild):
         if ctx.guild.id == guild.id:
             await ctx.reply("Can't leave the server you are invoking this command in")
@@ -166,7 +156,6 @@ class Dev(commands.Cog):
             await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def lookup(self, ctx, guild: discord.Guild):
         memcount = guild.member_count
 
@@ -188,7 +177,6 @@ class Dev(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def servers(self, ctx):
 
         guilds = []
@@ -204,7 +192,6 @@ class Dev(commands.Cog):
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
 
     @commands.command()
-    @commands.is_owner()
     async def search(self, ctx, *, query):
 
         matches = []
@@ -226,7 +213,6 @@ class Dev(commands.Cog):
             await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def host(self, ctx):
         await ctx.reply("This instance is running on: " + socket.gethostname())
 
