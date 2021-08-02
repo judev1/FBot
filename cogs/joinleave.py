@@ -33,6 +33,10 @@ class JoinLeave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, newguild):
+
+        if not self.bot.ready():
+            return
+
         db.addguild(newguild.id)
 
         system_channel = newguild.system_channel
@@ -54,6 +58,10 @@ class JoinLeave(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, oldguild):
+
+        if not self.bot.ready():
+            return
+
         db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count

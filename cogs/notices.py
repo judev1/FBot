@@ -13,6 +13,10 @@ class Notices(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
 
+        if not self.bot.ready():
+            return
+
+
         if message.author.bot: return
 
         if str(message.channel.type) == "private":

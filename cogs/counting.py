@@ -21,6 +21,10 @@ class Counting(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         try:
             guild_id = message.guild.id
 
@@ -117,6 +121,10 @@ class Counting(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
 
+        if not self.bot.ready():
+            return
+
+
         if not payload.guild_id:
             return
         if payload.channel_id != db.getcountingchannel(payload.guild_id):
@@ -135,6 +143,9 @@ class Counting(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):
 
+        if not self.bot.ready():
+            return
+
         if not payload.guild_id:
             return
         if payload.channel_id != db.getcountingchannel(payload.guild_id):
@@ -152,6 +163,9 @@ class Counting(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+
+        if not self.bot.ready():
+            return
 
         if not payload.guild_id:
             return

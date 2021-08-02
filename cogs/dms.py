@@ -42,6 +42,10 @@ class DMs(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         if message.channel.id in self.bot.dms:
             if message.author.id in self.bot.owner_ids:
                 user = self.bot.dms[message.channel.id]

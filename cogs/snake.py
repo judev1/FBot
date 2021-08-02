@@ -127,6 +127,10 @@ class Snake(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
+
+        if not self.bot.ready():
+            return
+
         if user.id not in self.games: return
         emoji = reaction.emoji
         if emoji in emojis:

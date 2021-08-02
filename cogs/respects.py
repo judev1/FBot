@@ -34,6 +34,9 @@ class Respects(commands.Cog):
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
 
+        if not self.bot.ready():
+            return
+
         message = reaction.message
         channel = message.channel
         if user.bot: return

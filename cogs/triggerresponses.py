@@ -37,6 +37,9 @@ class TriggerResponses(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
 
+        if not self.bot.ready():
+            return
+
         if message.author.bot: return
 
         name = message.author.display_name

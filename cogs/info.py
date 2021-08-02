@@ -29,6 +29,10 @@ class Info(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+
+        if not self.bot.ready():
+            return
+
         user = message.author
         stats = self.bot.stats
 
