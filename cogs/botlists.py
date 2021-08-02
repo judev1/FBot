@@ -17,6 +17,9 @@ class Botlists(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.dbl = bot.dbl
+
+    @commands.Cog.listener()
+    async def on_bot_ready(self):
         self.voteschannel = self.bot.get_channel(757722305395949572).send
 
     @commands.command()

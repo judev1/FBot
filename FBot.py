@@ -31,8 +31,8 @@ class FBot(commands.AutoShardedBot):
         #intents.members = True # missing intents
 
         SHARD_COUNT = 3 # 1k servers per shard, rounded up
-        self.shards_ready = 0
-        self.ready = False
+
+        print(" > Preparing the bot")
 
         super().__init__(command_prefix=fn.getprefix, owner_ids=self.devs, intents=intents,
                          shard_count=SHARD_COUNT)
@@ -45,48 +45,58 @@ class FBot(commands.AutoShardedBot):
         fn.VotingHandler(self)
         self.add_check(self.predicate)
 
-        print("Connecting...\n")
+        db.setup()
+        print("\n > Loaded the database")
+
+        for csv in [tr, cmds]:
+            csv.load()
+
+        self.remove_command("help")
+        for cog in fn.getcogs():
+            if cog not in []:
+                print(f"\nLoading {cog}...", end="")
+                try: self.reload_extension("cogs." + cog[:-3])
+                except: self.load_extension("cogs." + cog[:-3])
+                finally: print("Done", end="")
+        print("\n\n > Loaded cogs\n")
+
+    def ready(self):
+        if self.shard_count == len(self.shards):
+            if self.is_ready():
+                return True
+        return False
+
+    async def prep(self):
+        print(f"\n > All shards ready, finishing preperations")
+
+        self.ftime.set()
+        print(f" > Session started at {self.ftime.start}\n")
+
+        db.checkguilds(self.guilds)
+
+        self.premium = await self.get_premium()
+        self.cache = cache.Cache(self.devs, self.premium)
+
+        for command in cm.commands:
+            self.cache.cooldowns.add(command, tuple(cm.commands[command][3:5]))
+        for command in cm.devcmds:
+            self.cache.cooldowns.add(command, (0, 0))
+        print(" > Finished setting up cooldowns\n")
+
+        await self.change_presence(status=discord.Status.online,
+                                activity=discord.Game(name="'FBot help'"))
+
+        print(f" > Bot is ready")
+        self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
 
-        self.shards_ready += 1
+        if self.ready():
+            await self.prep()
 
-        if self.shards_ready == self.shard_count:
-            print(f"\n > All shards ready, {self.user} is ready")
-
-            self.ftime.set()
-            print(f" > Session started at {bot.ftime.start}\n")
-
-            db.setup()
-            db.checkguilds(self.guilds)
-            print(" > Setup FBot.db")
-
-            self.premium = await self.get_premium()
-            self.cache = cache.Cache(self.devs, self.premium)
-            for csv in [tr, cmds]:
-                csv.load()
-
-            for command in cm.commands:
-                self.cache.cooldowns.add(command, tuple(cm.commands[command][3:5]))
-            for command in cm.devcmds:
-                self.cache.cooldowns.add(command, (0, 0))
-            print(" > Finished setting up cooldowns\n")
-
-            self.remove_command("help")
-            for cog in fn.getcogs():
-                if cog not in []:
-                    print(f"Loading {cog}...", end="")
-                    try: self.reload_extension("cogs." + cog[:-3])
-                    except: self.load_extension("cogs." + cog[:-3])
-                    finally: print("Done")
-            print("\n > Finished loading cogs")
-
-            await self.change_presence(status=discord.Status.online,
-                                    activity=discord.Game(name="'FBot help'"))
-
-            self.ready = True
-            self.shards_ready = 0
+    async def on_shard_disconnect(self, shard_id):
+        print(f"\n > Shard {shard_id} disconnected", end="")
 
     async def get_premium(self):
 
@@ -126,6 +136,9 @@ class FBot(commands.AutoShardedBot):
         user = ctx.author.id
         command = ctx.command.name
 
+        if not self.ready():
+            return
+
         if command in cm.devcmds:
             if user not in self.owner_ids:
                 return
@@ -161,4 +174,4 @@ class FBot(commands.AutoShardedBot):
 
 load_dotenv()
 bot = FBot()
-bot.run(os.getenv("FBOT_TOKEN"))
+bot.run(os.getenv("JUDE_TOKEN"))

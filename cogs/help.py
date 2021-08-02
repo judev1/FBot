@@ -69,7 +69,7 @@ class Help(commands.Cog):
     @commands.command()
     async def help(self, ctx, *, command):
 
-        command = " ".join(command
+        command = " ".join(command)
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
