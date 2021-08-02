@@ -33,7 +33,7 @@ class Bot(commands.AutoShardedBot):
 
         self.shards_ready = 0
 
-        super().__init__(command_prefix=fn.getprefix, owner_ids=self.settings.devs, intents=intents,
+        super().__init__(command_prefix=fn.getprefix, intents=intents,
                          shard_count=self.settings.shards)
 
         self.ftime = fn.ftime()
@@ -138,8 +138,8 @@ class Bot(commands.AutoShardedBot):
             return
 
         if command in cm.devcmds:
-            if user not in self.owner_ids:
-                return
+            if user not in self.settings.devs:
+                raise commands.NotOwner()
 
         if str(ctx.channel.type) != "private":
             bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))
