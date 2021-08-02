@@ -72,13 +72,11 @@ class Counting(commands.Cog):
             await ctx.reply("Only administrators can remove the counting channel")
 
     @commands.command()
-    @commands.is_owner()
     async def devset(self, ctx):
         db.setcountingchannel(ctx.channel.id, ctx.guild.id)
         await ctx.send("Set current channel to counting channel")
 
     @commands.command()
-    @commands.is_owner()
     async def devremove(self, ctx):
         db.removecountingchannel(ctx.guild.id)
         await ctx.send("Removed the counting channel")
@@ -109,7 +107,6 @@ class Counting(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def setnumber(self, ctx, *, number):
         if not number.isdigit():
             await ctx.send("Not a number")

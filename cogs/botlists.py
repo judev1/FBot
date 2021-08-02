@@ -20,7 +20,6 @@ class Botlists(commands.Cog):
         self.voteschannel = self.bot.get_channel(757722305395949572).send
 
     @commands.command()
-    @commands.is_owner()
     async def scounts(self, ctx):
         servers = len(self.bot.guilds)
         embed = self.bot.embed(ctx.author, f"Server Counts `{servers}`")

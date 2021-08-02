@@ -167,7 +167,6 @@ class Help(commands.Cog):
                 break
 
     @commands.command()
-    @commands.is_owner()
     async def devcmds(self, ctx):
         colour = self.bot.get_colour(ctx.author.id)
         book = reactionbook(self.bot, ctx, LINES=20)
@@ -176,7 +175,6 @@ class Help(commands.Cog):
         await book.createbook(MODE="numbers", COLOUR=colour)
 
     @commands.command()
-    @commands.is_owner()
     async def cmdlist(self, ctx):
         commands = [i.name for i in self.bot.walk_commands()]
         embed = self.bot.embed(ctx.author, "FBot Commands",

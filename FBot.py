@@ -30,7 +30,7 @@ class FBot(commands.AutoShardedBot):
         intents.reactions = True
         #intents.members = True # missing intents
 
-        SHARD_COUNT = 5 # To be increased to 10, once we hit 5k
+        SHARD_COUNT = 1 # To be increased to 10, once we hit 5k
         self.shards_ready = 0
         self.ready = False
 
@@ -161,4 +161,4 @@ class FBot(commands.AutoShardedBot):
 
 load_dotenv()
 bot = FBot()
-bot.run(os.getenv("FBOT_TOKEN"))
+bot.run(os.getenv("JUDE_TOKEN"))

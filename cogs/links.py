@@ -49,7 +49,6 @@ class Links(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    @commands.is_owner()
     async def newinvite(self, ctx, guild: discord.Guild):
         try:
             invite = await guild.system_channel.create_invite(

@@ -16,7 +16,6 @@ class DMs(commands.Cog):
         await ctx.message.add_reaction("✅")
 
     @commands.command()
-    @commands.is_owner()
     async def send(self, ctx, channel: discord.TextChannel, *, content):
         await channel.send(content)
         await ctx.message.add_reaction("✅")
