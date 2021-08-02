@@ -125,6 +125,11 @@ class FBot(commands.AutoShardedBot):
 
         user = ctx.author.id
         command = ctx.command.name
+
+        if command in cm.devcmds:
+            if user not in self.owner_ids:
+                return
+
         if str(ctx.channel.type) != "private":
             bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))
 
