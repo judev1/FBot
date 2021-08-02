@@ -67,7 +67,9 @@ class Help(commands.Cog):
         return embed
 
     @commands.command()
-    async def help(self, ctx, *command):
+    async def help(self, ctx, *, command):
+
+        command = " ".join(command
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
