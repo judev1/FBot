@@ -98,27 +98,23 @@ class Botlists(commands.Cog):
     @commands.Cog.listener()
     async def on_vote(self, site, data):
 
-        if site == "discords.com":
+        if site == "discords":
             user_id = int(data["user"])
-        elif site == "discordbotlist.com":
+        elif site == "discordbotlist":
             user_id = int(data["id"])
-        else:
-            embed = self.bot.embed(user, site, "Someone used a webhook")
-            await self.voteschannel.send(embed=embed)
-            return
 
         db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = f"<@{user_id}> [unknown]"
         else: name = f"{name.mention} (*{name.name}*)"
 
-        if site == "discords.com":
+        if site == "discords":
             if data["type"] == "vote":
                 db.vote(user_id, "bfd")
                 embed = self.bot.embed(user, site, f"{name} voted")
             elif data["type"] == "test":
                 embed = self.bot.embed(user, site + " test", f"{name} tested out the webhook")
-        elif site == "discordbotlist.com":
+        elif site == "discordbotlist":
             db.vote(user_id, "dbl")
             embed = self.bot.embed(user, site, f"{name} voted")
         await self.voteschannel.send(embed=embed)

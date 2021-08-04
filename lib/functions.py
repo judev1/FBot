@@ -98,7 +98,8 @@ class VotingHandler:
 
         async def start():
             app = web.Application(loop=self.bot.loop)
-            app.router.add_post("/vote", self.on_post_request)
+            app.router.add_post("/vote", self.on_bfd_post)
+            app.router.add_post("/vote", self.on_dbl_post)
 
             runner = web.AppRunner(app)
             await runner.setup()
@@ -111,14 +112,22 @@ class VotingHandler:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(start())
 
-    async def on_post_request(self, request):
+    async def on_bfd_post(self, request):
         auth = request.headers.get("Authorization")
         if self.bot.settings.tokens.auth != auth:
             return web.Response(status=401)
 
-        site = request.request_info.url.host
         data = await request.json()
-        self.bot.dispatch("vote", site, data)
+        self.bot.dispatch("vote", "discords", data)
+        return web.Response(status=200)
+
+    async def on_dbl_post(self, request):
+        auth = request.headers.get("Authorization")
+        if self.bot.settings.tokens.auth != auth:
+            return web.Response(status=401)
+
+        data = await request.json()
+        self.bot.dispatch("vote", "discordbotlist", data)
         return web.Response(status=200)
 
 from datetime import datetime, timezone
