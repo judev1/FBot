@@ -98,8 +98,8 @@ class VotingHandler:
 
         async def start():
             app = web.Application(loop=self.bot.loop)
-            app.router.add_post("/vote", self.on_bfd_post)
-            app.router.add_post("/vote", self.on_dbl_post)
+            app.router.add_post("/bfdvote", self.on_bfd_post)
+            app.router.add_post("/dblvote", self.on_dbl_post)
 
             runner = web.AppRunner(app)
             await runner.setup()
