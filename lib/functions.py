@@ -116,7 +116,7 @@ class VotingHandler:
         if self.bot.settings.tokens.auth != auth:
             return web.Response(status=401)
 
-        site = request.request_info().url.host
+        site = request.request_info.url.host
         data = await request.json()
         self.bot.dispatch("vote", site, data)
         return web.Response(status=200)
