@@ -39,11 +39,11 @@ class Botlists(commands.Cog):
         embed.description = content
         await msg.edit(embed=embed)
 
-        # botsfordiscord.com
+        # discords.com/bots
         data = {"server_count": servers}
         headers = {"Authorization": tokens.bfd}
         async with session.post(bfdapi, data=data, headers=headers) as res:
-            content += "\n**discords.com:** " + ("success" if res.status == 200 else "failed")
+            content += "\n**discords.com/bots:** " + ("success" if res.status == 200 else "failed")
             embed.description = content
         await msg.edit(embed=embed)
 
@@ -85,7 +85,7 @@ class Botlists(commands.Cog):
         db.addvoter(user.id)
         embed.add_field(name=":mailbox_with_mail:  **__SAVED__**", inline=False, value="Your votes appear in your profile and on leaderboards")
         embed.add_field(name="top.gg", value=f"[{get_value('top')}]({fn.votetop} 'Vote here')")
-        embed.add_field(name="botsfordiscord", value=f"[{get_value('bfd')}]({fn.votebfd} 'Vote here')")
+        embed.add_field(name="discords.com/bots", value=f"[{get_value('bfd')}]({fn.votebfd} 'Vote here')")
         embed.add_field(name="discordbotlist", value=f"[{get_value('dbl')}]({fn.votedbl} 'Vote here')")
 
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
@@ -98,22 +98,28 @@ class Botlists(commands.Cog):
     @commands.Cog.listener()
     async def on_vote(self, site, data):
 
-        if site == "botsfordiscord.com":
+        if site == "discords.com":
             user_id = int(data["user"])
-        else: user_id = int(data["id"])
+        elif site == "discordbotlist.com":
+            user_id = int(data["id"])
+        else:
+            embed = self.bot.embed(user, site, "Someone used a webhook")
+            await self.voteschannel.send(embed=embed)
+            return
 
         db.register(user_id)
         name = await self.bot.fetch_user(user_id)
-        if not name: name = "User"
+        if not name: name = f"<@{user_id}> [unknown]"
         else: name = f"{name.mention} (*{name.name}*)"
 
-        if site == "discordbotlist.com":
+        if site == "discords.com":
+            if data["type"] == "vote":
+                db.vote(user_id, "bfd")
+                embed = self.bot.embed(user, site, f"{name} voted")
+            elif data["type"] == "test":
+                embed = self.bot.embed(user, site + " test", f"{name} tested out the webhook")
+        elif site == "discordbotlist.com":
             db.vote(user_id, "dbl")
-            embed = self.bot.embed(user, site, f"{name} voted")
-        elif data["type"] == "test":
-            embed = self.bot.embed(user, site + " test", f"{name} tested out the webhook")
-        elif site == "botsfordiscord.com":
-            db.vote(user_id, "bfd")
             embed = self.bot.embed(user, site, f"{name} voted")
         await self.voteschannel.send(embed=embed)
 

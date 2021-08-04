@@ -113,11 +113,10 @@ class VotingHandler:
 
     async def on_post_request(self, request):
         auth = request.headers.get("Authorization")
-        if self.bot.settings.tokens.auth == auth:
-            site = request.host
-        else:
+        if self.bot.settings.tokens.auth != auth:
             return web.Response(status=401)
 
+        site = request.request_info().url.host
         data = await request.json()
         self.bot.dispatch("vote", site, data)
         return web.Response(status=200)

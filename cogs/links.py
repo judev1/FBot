@@ -40,7 +40,7 @@ class Links(commands.Cog):
         embed.add_field(name="discordbotlist.com", value=f"[Click here]({fn.dbl})")
         embed.add_field(name="top.gg", value=f"[Click here]({fn.top})")
         embed.add_field(name="listcord.gg", value=f"[Click here]({fn.ligg})")
-        embed.add_field(name="botsfordiscord.com", value=f"[Click here]({fn.bfd})")
+        embed.add_field(name="discords.com/votes", value=f"[Click here]({fn.bfd})")
         embed.add_field(name="botlist.me", value=f"[Click here]({fn.blme})")
         embed.add_field(name="botlist.space", value=f"[Click here]({fn.blsp})")
         embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.dbeu})")
