@@ -14,7 +14,7 @@ class Errorhandler(commands.Cog):
 
     @commands.Cog.listener()
     async def on_bot_ready(self):
-        errorlogs = self.bot.settings.channels.votes
+        errorlogs = self.bot.settings.channels.errors
         self.errorlogs = self.bot.get_channel(errorlogs)
 
     @commands.Cog.listener()
