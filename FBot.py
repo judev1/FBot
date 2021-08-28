@@ -36,6 +36,8 @@ class Bot(commands.AutoShardedBot):
         super().__init__(command_prefix=fn.getprefix, intents=intents,
                          shard_count=self.settings.shards)
 
+        self.ready_shards_list = [False] * self.shard_count # TESTING
+
         self.ftime = fn.ftime()
 
         self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
@@ -60,7 +62,8 @@ class Bot(commands.AutoShardedBot):
         print("\n\n > Loaded cogs\n")
 
     def ready(self):
-        if self.shard_count == self.shards_ready:
+        #if self.shard_count == self.shards_ready:
+        if all(self.ready_shards_list): # TESTING
             if self.is_ready():
                 return True
         return False
@@ -91,10 +94,38 @@ class Bot(commands.AutoShardedBot):
     async def on_shard_ready(self, shard_id):
         print(f" > Shard {shard_id} is ready")
         self.shards_ready += 1
+        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        self.ready_shards_list[shard_id] = True
+        print(f"DEBUG list={self.ready_shards_list}")
 
         if self.ready():
+            print("DEBUG self.ready() == True")
+            print(f"DEBUG self.shards_ready={self.shards_ready}, self.shard_count={self.shard_count}")
             self.shards_ready = self.shard_count
             await self.prep()
+
+    async def on_shard_resumed(self, shard_id):
+        print(f"DEBUG on_shard_resumed CALLED FOR ID {shard_id}")
+        self.shards_ready += 1
+        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        self.ready_shards_list[shard_id] = True
+        print(f"DEBUG list={self.ready_shards_list}")
+
+        if self.ready():
+            print("DEBUG self.ready() == True")
+            print(f"DEBUG self.shards_ready={self.shards_ready}, self.shard_count={self.shard_count}")
+            self.shards_ready = self.shard_count
+            await self.prep()
+
+    async def on_shard_connect(self, shard_id):
+        print(f"DEBUG on_shard_connect CALLED FOR ID {shard_id}")
+
+    async def on_shard_disconnect(self, shard_id):
+        print(f"DEBUG shard_id {shard_id} HAS DISCONNECTED")
+        self.shards_ready -= 1
+        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        self.ready_shards_list[shard_id] = False
+        print(f"DEBUG list={self.ready_shards_list}")
 
     async def get_premium(self):
 
