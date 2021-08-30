@@ -92,40 +92,28 @@ class Bot(commands.AutoShardedBot):
         self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
-        print(f" > Shard {shard_id} is ready")
+        
         self.shards_ready += 1
-        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
-        print(f"DEBUG list={self.ready_shards_list}")
 
         if self.ready():
-            print("DEBUG self.ready() == True")
-            print(f"DEBUG self.shards_ready={self.shards_ready}, self.shard_count={self.shard_count}")
             self.shards_ready = self.shard_count
             await self.prep()
 
     async def on_shard_resumed(self, shard_id):
-        print(f"DEBUG on_shard_resumed CALLED FOR ID {shard_id}")
         self.shards_ready += 1
-        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
-        print(f"DEBUG list={self.ready_shards_list}")
 
         if self.ready():
-            print("DEBUG self.ready() == True")
-            print(f"DEBUG self.shards_ready={self.shards_ready}, self.shard_count={self.shard_count}")
             self.shards_ready = self.shard_count
             await self.prep()
 
-    async def on_shard_connect(self, shard_id):
-        print(f"DEBUG on_shard_connect CALLED FOR ID {shard_id}")
-
     async def on_shard_disconnect(self, shard_id):
-        print(f"DEBUG shard_id {shard_id} HAS DISCONNECTED")
         self.shards_ready -= 1
-        print(f"DEBUG self.shards_ready={self.shards_ready}")
+        print(f" > Shard {shard_id} DISCONNECTED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = False
-        print(f"DEBUG list={self.ready_shards_list}")
 
     async def get_premium(self):
 
