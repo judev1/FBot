@@ -1,8 +1,0 @@
-discord.py
-dblpy
-nest-asyncio
-spacy
-dbfn
-wand
-pillow
-discord-components
