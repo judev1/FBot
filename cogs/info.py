@@ -139,7 +139,7 @@ class Info(commands.Cog):
     @commands.command()
     async def devs(self, ctx):
         embed = self.bot.embed(ctx.author, title="This is the team that makes FBot great!")
-        embed.add_field(name="Developers", value="justjude#2296 (<@!671791003065384987>)\nLines#9260 (<@!216260005827969024>)\nCodeize#6946 (<@!668423998777982997>)\nScreaMyCZE#0016 (<@!311178459919417344>)\n\nIf you have any questions or concerns, or just want to hang out, click the link in the next embed to join the support server!")
+        embed.add_field(name="Developers", value="justjude#2296 (<@!671791003065384987>)\nLines#9260 (<@!216260005827969024>)\nCodeize#0001 (<@!668423998777982997>)\nScreaMyCZE#0016 (<@!311178459919417344>)\n\nIf you have any questions or concerns, or just want to hang out, click the link in the next embed to join the support server!")
         await ctx.reply(embed=embed)
         await ctx.invoke(self.bot.get_command("server"))
 
