@@ -86,7 +86,7 @@ class Errorhandler(commands.Cog):
             embed = self.bot.embed(ctx.author, "An unusual error has occurred",
                     "The devs have been notified, please contact:\n"
                     "`@justjude#2296` or `@Lines#9260`\n"
-                    f"OR join our [support server]({fn.server}) "
+                    f"OR join our [support server]({fn.links.server}) "
                     "and give us a ping")
             try:
                 try:
@@ -113,7 +113,7 @@ class Errorhandler(commands.Cog):
                     pages[0] = content + pages[0]
                 book.createpages(pages, ITEM_PER_PAGE=True)
 
-                await book.createbook(MODE="arrows", COLOUR=fn.red, TIMEOUT=180)
+                await book.createbook(MODE="arrows", COLOUR=fn.colours.red, TIMEOUT=180)
             except: pass
 
 def setup(bot):

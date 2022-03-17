@@ -9,17 +9,17 @@ class Links(commands.Cog):
 
     @commands.command()
     async def invite(self, ctx):
-        embed = self.bot.embed(ctx.author, "Invite FBot to your server!", url=fn.invite)
+        embed = self.bot.embed(ctx.author, "Invite FBot to your server!", url=fn.links.invite)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def server(self, ctx):
-        embed = self.bot.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.server)
+        embed = self.bot.embed(ctx.author, "Join our server, it's for support and fun!", url=fn.links.server)
         await ctx.send(embed=embed)
 
     @commands.command()
     async def github(self, ctx):
-        embed = self.bot.embed(ctx.author, "All FBot's code is on github, give it a star!", url=fn.github)
+        embed = self.bot.embed(ctx.author, "All FBot's code is on github, give it a star!", url=fn.links.github)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -28,23 +28,23 @@ class Links(commands.Cog):
         embed = self.bot.embed(ctx.author, "FBot links",)
 
         embed.add_field(name=":closed_book: **__GENERAL LINKS__**", inline=False, value="The standard discord links for FBot")
-        embed.add_field(name="Invite FBot", value=f"[Click here]({fn.invite})")
-        embed.add_field(name="Support Server", value=f"[Click here]({fn.server})")
+        embed.add_field(name="Invite FBot", value=f"[Click here]({fn.links.invite})")
+        embed.add_field(name="Support Server", value=f"[Click here]({fn.links.server})")
 
         embed.add_field(name=":green_book: **__EXTERNAL LINKS__**", inline=False, value="Other non-discord FBot affliated sites")
-        embed.add_field(name="Our Patreon", value=f"[Click here]({fn.patreon})")
-        embed.add_field(name="Our Website", value=f"[Click here]({fn.site})")
-        embed.add_field(name="Our Github", value=f"[Click here]({fn.github})")
+        embed.add_field(name="Our Patreon", value=f"[Click here]({fn.links.patreon})")
+        embed.add_field(name="Our Website", value=f"[Click here]({fn.links.site})")
+        embed.add_field(name="Our Github", value=f"[Click here]({fn.links.github})")
 
         embed.add_field(name=":blue_book: **__BOT LISTS__**", inline=False, value="All the bot lists which FBot is shown on")
-        embed.add_field(name="discordbotlist.com", value=f"[Click here]({fn.dbl})")
-        embed.add_field(name="top.gg", value=f"[Click here]({fn.top})")
-        embed.add_field(name="listcord.gg", value=f"[Click here]({fn.ligg})")
-        embed.add_field(name="discords.com/votes", value=f"[Click here]({fn.bfd})")
-        embed.add_field(name="botlist.me", value=f"[Click here]({fn.blme})")
-        embed.add_field(name="botlist.space", value=f"[Click here]({fn.blsp})")
-        embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.dbeu})")
-        embed.add_field(name="discord.bots.gg", value=f"[Click here]({fn.dbgg})")
+        embed.add_field(name="discordbotlist.com", value=f"[Click here]({fn.links.dbl})")
+        embed.add_field(name="top.gg", value=f"[Click here]({fn.links.top})")
+        embed.add_field(name="listcord.gg", value=f"[Click here]({fn.links.ligg})")
+        embed.add_field(name="discords.com/votes", value=f"[Click here]({fn.links.bfd})")
+        embed.add_field(name="botlist.me", value=f"[Click here]({fn.links.blme})")
+        embed.add_field(name="botlist.space", value=f"[Click here]({fn.links.blsp})")
+        embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.links.dbeu})")
+        embed.add_field(name="discord.bots.gg", value=f"[Click here]({fn.links.dbgg})")
 
         await ctx.send(embed=embed)
 

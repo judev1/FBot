@@ -50,4 +50,4 @@ Like what we do? Support us on [Patreon](https://www.patreon.com/fbotbot) and en
 ## **Bot list widgets**
 [![Discord Bots](https://top.gg/api/widget/711934102906994699.svg)](https://top.gg/bot/711934102906994699)
 [![Bots for Discord](https://discords.com/bots/api/bot/711934102906994699/widget)](https://discords.com/bots/bot/711934102906994699)
-[![Discord Bot List](https://discordbotlist.com/bots/fbot/widget)](https://discordbotlist.com/bots/fbot)
+[![Discord Bot List](https://discordbotlist.com/api/v1/bots/711934102906994699/widget)](https://discordbotlist.com/bots/fbot)
