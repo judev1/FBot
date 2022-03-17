@@ -45,14 +45,21 @@ class Classify:
             value = dictionary[name]
             if type(value) is dict:
                 value = Classify(value)
-            setattr(self, name, value)
+            self[name] = value
 
     def __repr__(self):
         return str(self.__dict__)
 
-    def get(self, attribute):
-        if attribute in self.__dict__:
-            return getattr(self, attribute)
+    def __iter__(self):
+        for item in self.__dict__:
+            yield item
+
+    def __getitem__(self, item):
+        if item in self.__dict__:
+            return getattr(self, item)
+
+    def __setitem__(self, item, value):
+        setattr(self, item, value)
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -61,3 +68,6 @@ with open("data/data.json", "r") as file:
     data = Classify(json.load(file))
     colours = data.colours
     links = data.links
+
+for colour in colours:
+    colours[colour] = int(colours[colour], 16)

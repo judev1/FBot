@@ -8,4 +8,4 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 RUN pip install discord dblpy dbfn python-dotenv nest_asyncio wand pillow requests
 COPY . .
 
-CMD [ "python3", "FBot.py" ]
+CMD [ "python3", "app.py" ]
