@@ -27,28 +27,30 @@ class Errorhandler(commands.Cog):
             if cog._get_overridden_method(cog.cog_command_error) is not None:
                 return
 
-        if type(error) is commands.CommandNotFound:
+        error_type = type(error)
+
+        if error_type is commands.CommandNotFound:
             return
-        elif type(error) is commands.MissingPermissions:
+        elif error_type is commands.MissingPermissions:
             return
-        elif type(error) is commands.NotOwner:
+        elif error_type is commands.NotOwner:
             return
-        elif type(error) is commands.MessageNotFound:
+        elif error_type is commands.MessageNotFound:
             return
-        elif type(error) is commands.DisabledCommand:
+        elif error_type is commands.DisabledCommand:
             await ctx.reply("**This command is disabled.** If you'd like to find out more join our support server")
-        elif type(error) is commands.BadArgument:
+        elif error_type is commands.BadArgument:
             await ctx.reply("**Bad argument.** Whoops! Looks like one of the arguments you entered is a bit off...")
-        elif type(error) is commands.MissingRequiredArgument:
+        elif error_type is commands.MissingRequiredArgument:
             await ctx.reply("**Command missing an argument.** Whoops! You've missed an argument for this command")
-        elif type(error) is commands.NoPrivateMessage:
+        elif error_type is commands.NoPrivateMessage:
             await ctx.reply("**Server only command.** This command can only be used in a server")
-        elif type(error) is commands.UserNotFound:
+        elif error_type is commands.UserNotFound:
             await ctx.reply("**No user found.** Hmm we couldn't find that user, maybe try something else")
-        elif type(error) is commands.CommandOnCooldown:
+        elif error_type is commands.CommandOnCooldown:
             retry = round(error.retry_after, 2)
             await ctx.reply(f"**You're on cooldown!.** Please wait `{retry}s` to use this command", delete_after=5)
-        elif type(error) is commands.CheckFailure:
+        elif error_type is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
             embed = self.bot.embed(user, errorlines[0], *errorlines[2:])
@@ -61,14 +63,14 @@ class Errorhandler(commands.Cog):
                     try: await channel.send(embed=embed)
                     except: await channel.reply(error)
                 except: pass
-        elif type(error) is commands.UserNotFound:
+        elif error_type is commands.UserNotFound:
             await ctx.reply("User not found")
-        elif type(error) is commands.ChannelNotFound:
+        elif error_type is commands.ChannelNotFound:
             await ctx.reply("Channel not found")
-        elif type(error) is commands.GuildNotFound:
+        elif error_type is commands.GuildNotFound:
             await ctx.reply("Guild not found")
         else:
-            if type(error) is commands.CommandInvokeError:
+            if error_type is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:
                     error = error.original
                     if error.text == "Missing Permissions":
