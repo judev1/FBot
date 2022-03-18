@@ -2,15 +2,16 @@ import nest_asyncio
 nest_asyncio.apply()
 
 from discord.ext import commands
+import discord
+import json
+import dbl
+
 from lib.commands import cmds
 from lib.triggers import tr
 import lib.functions as fn
 import lib.commands as cm
 import lib.database as db
 import lib.cache as cache
-import discord
-import json
-import dbl
 
 emojis = {True: "✅", False: "⛔"}
 
@@ -29,12 +30,17 @@ class Bot(commands.AutoShardedBot):
         intents.guilds = True
         intents.messages = True
         intents.reactions = True
-        intents.members = True # missing intents
+        #intents.members = True # missing intents
 
         self.shards_ready = 0
 
-        super().__init__(command_prefix=fn.getprefix, owner_ids=self.settings.devs, intents=intents,
-                         shard_count=self.settings.shards)
+        super().__init__(
+            command_prefix=fn.getprefix,
+            intents=intents,
+            shard_count=self.settings.shards
+        )
+
+        self.ready_shards_list = [False] * self.shard_count # TESTING
 
         self.ftime = fn.ftime()
 
@@ -60,7 +66,8 @@ class Bot(commands.AutoShardedBot):
         print("\n\n > Loaded cogs\n")
 
     def ready(self):
-        if self.shard_count == self.shards_ready:
+        #if self.shard_count == self.shards_ready:
+        if all(self.ready_shards_list): # TESTING
             if self.is_ready():
                 return True
         return False
@@ -89,12 +96,28 @@ class Bot(commands.AutoShardedBot):
         self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
-        print(f" > Shard {shard_id} is ready")
+
         self.shards_ready += 1
+        print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
+        self.ready_shards_list[shard_id] = True
 
         if self.ready():
             self.shards_ready = self.shard_count
             await self.prep()
+
+    async def on_shard_resumed(self, shard_id):
+        self.shards_ready += 1
+        print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
+        self.ready_shards_list[shard_id] = True
+
+        if self.ready():
+            self.shards_ready = self.shard_count
+            await self.prep()
+
+    async def on_shard_disconnect(self, shard_id):
+        self.shards_ready -= 1
+        print(f" > Shard {shard_id} DISCONNECTED, {self.shards_ready}/{self.shard_count} online")
+        self.ready_shards_list[shard_id] = False
 
     async def get_premium(self):
 
@@ -141,13 +164,11 @@ class Bot(commands.AutoShardedBot):
         return discord.Embed(title=title, description=desc, colour=colour, url=url)
 
     def command_invoked(self, message, dev=True, commands=None, cogs=None):
-
         def in_commands(command):
             if commands:
                 if command.cog.qualified_name in cogs:
                     return True
             return False
-
         def in_cogs(command):
             if cogs:
                 if command.name in commands:
@@ -156,13 +177,11 @@ class Bot(commands.AutoShardedBot):
                     if alias in commands:
                         return True
             return False
-
         def no_dev(command):
             if dev:
                 if command.cog.qualified_name == "dev":
                     return False
             return True
-
         prefix = fn.getprefix(self, message)
         without_prefix = message.content[len(prefix):]
         for command in self.commands:
@@ -172,7 +191,6 @@ class Bot(commands.AutoShardedBot):
                 continue
             elif no_dev(command):
                 continue
-
             if without_prefix.startswith(command.name):
                 return command
             for alias in command.aliases:
@@ -188,8 +206,8 @@ class Bot(commands.AutoShardedBot):
             return
 
         if command in cm.devcmds:
-            if user not in self.owner_ids:
-                return
+            if user not in self.settings.devs:
+                raise commands.NotOwner()
 
         if str(ctx.channel.type) != "private":
             bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))

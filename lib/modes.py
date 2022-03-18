@@ -1,7 +1,4 @@
 import random
-import spacy
-
-nlp = spacy.load("en_core_web_sm")
 
 def capitalise(text):
 
@@ -135,7 +132,7 @@ def fuck(text):
     temp = []
     for word in text.split():
         word, start, end = santitise_word(word)
-        if word_type(word) in ["NOUN", "ADJ", "VERB"]:
+        if random.choice([True, False]):
             word = "fucking " + word
         temp.append(start + word + end)
     text = " ".join(temp)

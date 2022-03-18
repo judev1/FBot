@@ -40,7 +40,7 @@ class Help(commands.Cog):
         desc = data[9]
         if desc == "": desc = data[10]
         server = "*Something not making sense? Spot a mistake?*"
-        server += f"\n*Join our [support server]({fn.server}) and let us know!*"
+        server += f"\n*Join our [support server]({fn.links.server}) and let us know!*"
 
         usage = data[8].replace("{prefix}", prefix)
 
@@ -69,9 +69,7 @@ class Help(commands.Cog):
         return embed
 
     @commands.command()
-    async def help(self, ctx, *, command):
-
-        command = " ".join(command)
+    async def help(self, ctx, *command):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
@@ -93,9 +91,9 @@ class Help(commands.Cog):
 
             embed.add_field(name=f"{LINK_EMOJI} **__HELPFUL LINKS__**",
             value="Some useful links for reference", inline=False)
-            embed.add_field(name="**Our Patreon**", value=f"[*Help support us!*]({fn.patreon})")
-            embed.add_field(name="**Invite FBot**", value=f"[*Or `{prefix}invite`*]({fn.invite})")
-            embed.add_field(name="**Our Support Server**", value=f"[*You won't regret it...*]({fn.server})")
+            embed.add_field(name="**Our Patreon**", value=f"[*Help support us!*]({fn.links.patreon})")
+            embed.add_field(name="**Invite FBot**", value=f"[*Or `{prefix}invite`*]({fn.links.invite})")
+            embed.add_field(name="**Our Support Server**", value=f"[*You won't regret it...*]({fn.links.server})")
 
             await ctx.send(embed=embed)
         else:
@@ -125,7 +123,7 @@ class Help(commands.Cog):
         for i, category in enumerate(cm.categories):
             if category == "temp": break
             embeds[0].add_field(name=f"{emojis[i+1]} **{category}**",
-            value=f"[Hover for more]({fn.votetop} '{descriptions[i]}')")
+            value=f"[Hover for more]({fn.links.votetop} '{descriptions[i]}')")
             embed = self.bot.embed(ctx.author,
             f"{emojis[i+1]} **__{category} Commands__**",
             f"*Use* `{prefix}help <command>` *to find more about a command*")

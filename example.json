@@ -13,7 +13,8 @@
     "channels": {
         "servers": channel_id,
         "votes": channel_id,
-        "errors": channel_id
+        "errors": channel_id,
+        "temp": channel_id
     },
     "roles": {
         "premium": channel_id

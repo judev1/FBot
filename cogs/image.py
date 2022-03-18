@@ -10,8 +10,12 @@ import re
 
 black = (0, 0, 0)
 white = (255, 255, 255)
-nogodfont = ImageFont.truetype("arial.ttf", 30)
-godfont = ImageFont.truetype("arial.ttf", 50)
+try: # Windows
+    nogodfont = ImageFont.truetype("arial.ttf", 30)
+    godfont = ImageFont.truetype("arial.ttf", 50)
+except: # Linux
+    nogodfont = ImageFont.truetype("/usr/src/app/data/arial.ttf", 30)
+    godfont = ImageFont.truetype("/usr/src/app/data/arial.ttf", 50)
 
 bigpp_img = wand_image(filename="data/imgs/bigpp.png")
 smolpp_img = wand_image(filename="data/imgs/smolpp.png")
@@ -25,6 +29,11 @@ class ImageCog(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_bot_ready(self):
+        temp = self.bot.settings.channels.temp
+        self.temp = self.bot.get_channel(temp)
 
     async def save_image(self, path, member, attachments, to_process, author):
         if not os.path.exists("data/Temp/"):
@@ -76,13 +85,12 @@ class ImageCog(commands.Cog):
 
             path = "data/Temp/" + str(ctx.author.id) + "_"
             file = File(fp=path + filename)
-            message = await ctx.send(file=file)
+            message = await self.temp.send(file=file)
 
             embed = self.bot.embed(ctx.author, "FBot " + process.capitalize())
             embed.set_image(url=message.attachments[0].proxy_url)
 
             await ctx.reply(embed=embed)
-            await message.delete()
 
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
