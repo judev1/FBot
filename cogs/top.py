@@ -6,11 +6,11 @@ LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 
 toptypes = {
-    "votes": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
     "voters": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
     "voting": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
-    "counting": ("counting", "server", "with a highscore of `{}`", "with {}"),
-    "counters": ("counting", "server", "with a highscore of `{}`", "with {}")
+    "votes": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
+    "counters": ("counting", "server", "with a highscore of `{}`", "with {}"),
+    "counting": ("counting", "server", "with a highscore of `{}`", "with {}")
 }
 
 medals = {1: ":first_place:", 2: ":second_place:", 3: ":third_place:"}
@@ -37,11 +37,11 @@ class Top(commands.Cog):
             if data[USAGE] == "server":
                 obj_id = ctx.guild.id
                 if str(ctx.channel.type) == "private":
-                    await ctx.reply(f"Top {toptype} can only be used in a server")
+                    await ctx.reply(f"Top {data[NAME]} can only be used in a server")
                     return
 
             async with ctx.channel.typing():
-                top, selftop, rank = db.gettop(toptype, 12, obj_id)
+                top, selftop, rank = db.gettop(data[NAME], 12, obj_id)
                 embed = self.bot.embed(
                     ctx.author,
                     f"FBot Top {data[NAME]}",
@@ -51,7 +51,7 @@ class Top(commands.Cog):
                 cache = self.bot.cache.names
                 for rank, row in enumerate(top):
 
-                    ID, typeitem = row
+                    ID, total = row
                     name = cache.get(ID)
 
                     if not name:
@@ -64,8 +64,11 @@ class Top(commands.Cog):
                             name = fn.formatname(await self.bot.fetch_user(ID))
                         cache.add(ID, name)
 
+                    if len(name) > 20:
+                        name = name[:18] + "..."
+
                     if obj_id == ID:
-                        name = f"**--> __{name}__ <--**"
+                        name = f"**__{name}__**"
 
                     rank += 1
                     medal = ":medal:"
@@ -73,12 +76,12 @@ class Top(commands.Cog):
                         medal = medals[rank]
 
                     if int(str(rank)[-1]) in [1, 2, 3] and rank not in [11, 12, 13]:
-                        rank = f"{medal} {rank}{prefixes[rank]} with "
+                        rank = f"{medal} {rank}{prefixes[rank]}"
                     else:
-                        rank = f":medal: {rank}th with "
+                        rank = f":medal: {rank}th"
 
                     embed.add_field(
-                        name=rank + data[RANK].format(typeitem),
+                        name=f"{rank} {data[RANK].format(total)}",
                         value=name
                     )
 
