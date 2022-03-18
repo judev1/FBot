@@ -21,7 +21,7 @@ dodger,,Fun,Minigames,60,15,No,"send_messages, add_reactions, (manage_messages)"
 say,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}say Yes it is me, FBot",,Send a message as FBot,
 uwu,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}uwu I really do not condone the use of 'uwu',,Send an uwuified message as FBot,
 confused,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}confused This is not a question,,Literally just adds a question mark to the end,
-pirate,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}pirate Please hand over all of your gold,,Send an pirated message as FBot,
+pirate,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}pirate Please hand over all of your gold,,Send a pirated message as FBot,
 triggered,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}triggered I am very content,,Send an triggered message as FBot,
 italian,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,"{prefix}italian Look at me, I'm a real Italian!",,Correctly translates any text into Italian,
 fuck,[text | reply],Fun,Say,4,2,No,"send_messages, (manage_messages)",no extra,{prefix}fuck Please refrain from swearing as it is not very good for you,,Fuck is a very versitile word,
