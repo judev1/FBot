@@ -38,6 +38,16 @@ def getcogs():
             cogs.append(cog)
     return cogs
 
+def formatname(name):
+    if not name:
+        name = "Deleted User"
+    else:
+        name = name.name.replace("*", "")
+        name = name.replace("`", "")
+        name = name.replace("_", "")
+        name = name.replace("||", "")
+    return name
+
 class Classify:
 
     def __init__(self, dictionary: dict):
