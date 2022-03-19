@@ -124,14 +124,6 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="session", aliases=["uptime"])
-    async def _Session(self, ctx):
-        ftime = self.bot.ftime
-        embed = self.bot.embed(ctx.author, "FBot's Session")
-        embed.add_field(name="Session start", value=ftime.start)
-        embed.add_field(name="Uptime", value=ftime.uptime())
-        await ctx.send(embed=embed)
-
     @commands.command(name="premium")
     async def _Premium(self, ctx):
         await ctx.reply("https://fbot.breadhub.uk/premium")

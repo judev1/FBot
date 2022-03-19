@@ -50,7 +50,6 @@ help,(command),Utility,,16,4,No,"send_messages, embed_links",no extra,{prefix}he
 cmds,,Utility,,40,10,No,"send_messages, embed_links, add_reactions, (manage_messages)",no extra,{prefix}cmds,,Gives an overview of commands,
 info,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}info,,Gets information about FBot,
 servinfo,,Information,,8,2,Yes,"send_messages, embed_links",no extra,{prefix}servinfo,"Take a wild guess Einstein.. it gives you all the precious info about your little 7 member server that nobody cares about. Just kidding! We care about it.. only beacuse FBot is in it though.",Gets information about the server,
-session,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}session,,Gets information about FBot's current session,
 ping,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}ping,"Pong! No 999 ping here like you, peasant. FBot is smooooooth. Shows the current latency between the Disccord API and FBot.",Gets FBot's ping,
 stats,,Information,,8,2,No,"send_messages, embed_links",no extra,{prefix}stats,,Gets message processing stats for a period,
 devs,,Information,,0,0,Yes,"send_messages, embed_links",no extra,{prefix}devs,,Gives a list of the devs,
