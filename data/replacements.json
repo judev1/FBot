@@ -1,0 +1,398 @@
+{
+    "uwu": {
+        "chars": [
+            ["er", "uw"],
+            ["r", "w"],
+            ["l", "w"],
+
+            ["ith", "iv"],
+            ["f", "v"],
+            ["ove", "uv"],
+            ["th", "d"],
+            ["is", "iws"],
+
+            ["na", "nya"],
+            ["ne", "nye"],
+            ["ni", "nyi"],
+            ["no", "nyo"],
+            ["nu", "nyu"]
+        ],
+        "tails": [
+            "~ owo",
+            "~ uwu",
+            "~ >w<",
+            "~ XD"
+        ]
+    },
+    "pirate": {
+        "words": [
+            ["hello", "ahoy"],
+            ["hi", "ahoy"],
+
+            ["your", "yer"],
+            ["you", "ye"],
+            ["my", "me"],
+            ["myself", "meself"],
+            ["is", "be"],
+            ["am", "be"],
+            ["will", "gunna"]
+        ],
+        "starts": [
+            ["h", "'"]
+        ],
+        "ends": [
+            ["nd", "n'"]
+        ],
+        "chars": [
+            ["ing", "in'"],
+            ["it is", "'tis'"],
+            ["r", "RRR"]
+        ],
+        "tails": [
+            " arr",
+            " aye matey",
+            " shiver me timbers",
+            " ahoy",
+            " yoho",
+            " yarr",
+            " blimey"
+        ],
+        "adjectives": [
+            "yellow-bellied",
+            "lice-infested",
+            "pox-faced",
+            "salty",
+            "mangy",
+            "scurvy",
+            "foul",
+            "lily-livered"
+        ],
+        "insults": [
+            "landlubber",
+            "bilge-rat",
+            "swine",
+            "swabbie",
+            "sea dog",
+            "scum",
+            "scallywag"
+        ]
+    },
+    "biblical": {
+        "words": [
+            ["are", "art"],
+            ["am", "be"],
+
+            ["had", "hath"],
+            ["its", "'tis"],
+            ["you", "thou"],
+            ["your", "thou"],
+            ["my", "mine"],
+            ["the", "thy"],
+
+            ["yes", "ye"],
+            ["no", "nay"]
+        ],
+        "ends": [
+            ["d", "deth"],
+            ["t", "teth"],
+            ["k", "keth"],
+            ["y", "yeth"],
+            ["m", "meth"],
+
+            ["ave", "aveth"],
+            ["ome", "ometh"],
+            ["as", "ast"]
+        ],
+        "chars": [
+            ["ere", "'re'"]
+        ]
+    },
+    "roadman": {
+        "words": [
+            ["hello", "wagwan"],
+            ["hi", "wagwan"],
+
+            ["you", "yous"],
+            ["am", "is"],
+            ["are", "is"],
+            ["have", "has"],
+            ["do", "does"],
+            ["my", "me"],
+            ["myself", "meself"],
+            ["thing", "ting"],
+
+            ["really", "bare"],
+            ["rlly", "bare"],
+            ["rly", "bare"],
+
+            ["excited", "gassed"]
+        ],
+        "starts": [
+            ["thi", "ti"],
+            ["h", "'"]
+        ],
+        "chars": [
+            ["isn't it", "innit"],
+            ["is it not", "innit"],
+
+            ["i was", "me was"],
+
+            ["ing", "in'"],
+            ["th", "d"]
+        ],
+        "heads": [
+            "Allow it, ",
+            "Orite bruv ",
+            "Orite fam ",
+            "Wagwan my g ",
+            "Innit ",
+            "Peak, ",
+            "Safe, "
+        ],
+        "tails": [
+            " yeah",
+            " fam",
+            " innit",
+            " bruv",
+            " blud",
+            " my g"
+        ]
+    },
+    "australian": {
+        "chars": [
+            ["A", "∀"],
+            ["B", "q"],
+            ["C", "Ɔ"],
+            ["D", "p"],
+            ["E", "Ǝ"],
+            ["F", "Ⅎ"],
+            ["G", "פ"],
+            ["H", "H"],
+            ["I", "I"],
+            ["J", "ſ"],
+            ["K", "ʞ"],
+            ["L", "˥"],
+            ["M", "W"],
+            ["N", "N"],
+            ["O", "O"],
+            ["P", "Ԁ"],
+            ["Q", "Q"],
+            ["R", "ɹ"],
+            ["S", "S"],
+            ["T", "┴"],
+            ["U", "∩"],
+            ["V", "Λ"],
+            ["W", "M"],
+            ["X", "X"],
+            ["Y", "⅄"],
+            ["Z", "Z"],
+
+            ["a", "ɐ"],
+            ["c", "ɔ"],
+            ["e", "ǝ"],
+            ["f", "ɟ"],
+            ["g", "ƃ"],
+            ["h", "ɥ"],
+            ["i", "ᴉ"],
+            ["j", "ɾ"],
+            ["k", "ʞ"],
+            ["l", "l"],
+            ["m", "ɯ"],
+            ["o", "o"],
+            ["r", "ɹ"],
+            ["s", "s"],
+            ["t", "ʇ"],
+            ["v", "ʌ"],
+            ["w", "ʍ"],
+            ["x", "x"],
+            ["y", "ʎ"],
+            ["z", "z"],
+            ["z", "z"],
+
+            [".", "˙"],
+            ["!", "¡"],
+            ["?", "¿"],
+
+            ["b", "~~t~~"],
+            ["q", "b"],
+            ["~~t~~", "q"],
+
+            ["d", "~~t~~"],
+            ["p", "d"],
+            ["~~t~~", "p"],
+
+            ["n", "~~t~~"],
+            ["u", "n"],
+            ["~~t~~", "u"],
+
+            [",", "~~t~~"],
+            ["'", ","],
+            ["~~t~~", "'"]
+        ]
+    },
+    "german": {
+        "ends": [
+            ["er", "a"]
+        ],
+        "chars": [
+            ["orc", "ors"],
+            ["oc", "os"],
+            ["ce", "se"],
+            ["ch", "sh"],
+            ["c", "k"],
+
+            ["ph", "f"],
+
+            ["pp", "p"],
+            ["rr", "r"],
+            ["tt", "t"],
+            ["ss", "z"],
+            ["dd", "d"],
+            ["ss", "s"],
+            ["ff", "f"],
+            ["gg", "g"],
+            ["kk", "k"],
+            ["ll", "l"],
+            ["bb", "b"],
+            ["nn", "n"],
+            ["mm", "m"],
+
+            ["ou", "u"],
+            ["ie", "e"],
+            ["ea", "e"],
+            ["ew", "u"],
+            ["ow", "o"],
+            ["oo", "u"],
+
+            ["and", "und"],
+            ["es", "ez"],
+
+            ["th", "z"],
+            ["v", "f"],
+            ["wh", "v"],
+            ["w", "v"],
+
+            ["sp", "shp"],
+            ["sw", "shw"]
+        ]
+    },
+    "italian": {
+        "ends": [
+            ["", "a"]
+        ]
+    },
+    "russian": {
+        "chars": [
+            ["A", "Д"],
+            ["B", "q"],
+            ["C", "Ɔ"],
+            ["D", "p"],
+            ["E", "Ǝ"],
+            ["F", "Ⅎ"],
+            ["G", "פ"],
+            ["H", "H"],
+            ["I", "I"],
+            ["J", "ſ"],
+            ["K", "ʞ"],
+            ["L", "˥"],
+            ["M", "W"],
+            ["N", "N"],
+            ["O", "O"],
+            ["P", "Ԁ"],
+            ["Q", "Q"],
+            ["R", "ɹ"],
+            ["S", "S"],
+            ["T", "┴"],
+            ["U", "∩"],
+            ["V", "Λ"],
+            ["W", "M"],
+            ["X", "X"],
+            ["Y", "⅄"],
+            ["Z", "Z"],
+
+            ["a", "*д*"],
+            ["b", ""],
+            ["c", "ɔ"],
+            ["d", "p"],
+            ["e", "ǝ"],
+            ["f", "ɟ"],
+            ["g", "ƃ"],
+            ["h", "ɥ"],
+            ["i", "ᴉ"],
+            ["j", "ɾ"],
+            ["k", "ʞ"],
+            ["l", "l"],
+            ["m", "ɯ"],
+            ["n", "u"],
+            ["o", "o"],
+            ["p", "d"],
+            ["q", "b"],
+            ["r", "ɹ"],
+            ["s", "s"],
+            ["t", "ʇ"],
+            ["u", "n"],
+            ["v", "ʌ"],
+            ["w", "ʍ"],
+            ["x", "x"],
+            ["y", "ʎ"],
+            ["z", "z"]
+        ]
+    },
+    "safe": {
+        "words": [
+            ["fucking", "frickity licking"],
+            ["fucker", "fricker licker"],
+            ["fuck", "frickity lick stick"],
+            ["dickhead", "poopoohead"],
+            ["dick", "poopoo"],
+            ["cock", "glock"],
+            ["twat", "meanie"],
+            ["prick", "cactus spike"],
+            ["pussy", "kitty cat"],
+            ["cunt", "cat"],
+            ["shit", "shirt"],
+            ["arse", "apple"],
+            ["ass", "apple"],
+            ["bloody", "blorpy"],
+            ["bitch", "birch tree"],
+            ["bastard", "brass tree"],
+            ["wanker", "winker"]
+        ]
+    },
+    "confused": {
+        "words": [
+            ["who", "WHO"],
+            ["what", "WHAT"],
+            ["why", "WHY"],
+            ["where", "WHERE"],
+            ["when", "WHEN"],
+            ["how", "HOW"]
+        ],
+        "ends": [
+            ["?", "??"],
+            [".", "?"],
+            ["!", "!?"]
+        ],
+        "tails": [
+            "??"
+        ]
+    },
+    "insults": [
+        "fucker",
+        "fuck",
+        "dickhead",
+        "dick",
+        "cock",
+        "twat",
+        "prick",
+        "cock",
+        "pussy",
+        "cunt",
+        "shit",
+        "arse",
+        "ass",
+        "bitch",
+        "bastard",
+        "wanker"
+    ]
+}
