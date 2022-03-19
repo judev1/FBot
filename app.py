@@ -25,6 +25,7 @@ class Bot(commands.AutoShardedBot):
 
         with open("settings.json", "r") as file:
             self.settings = fn.Classify(json.load(file))
+            self.devs = self.settings.devs
 
         intents = discord.Intents.none()
         intents.guilds = True
@@ -158,7 +159,7 @@ class Bot(commands.AutoShardedBot):
             return
 
         if command in cm.devcmds:
-            if user not in self.settings.devs:
+            if user not in self.devs:
                 raise commands.NotOwner()
 
         if str(ctx.channel.type) != "private":
