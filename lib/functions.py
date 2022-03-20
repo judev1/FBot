@@ -117,7 +117,8 @@ with open("./data/customcolours.json", "r") as file:
 for colour in custom_colours:
     colours[colour] = custom_colours[colour]
 
+colour_names = list(colours)
 hex_values = list(colours.values())
 colour_values = dict()
-for colour, value in zip(list(colours), hex_values):
+for colour, value in zip(colour_names, hex_values):
     colour_values[value] = colour

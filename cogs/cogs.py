@@ -16,7 +16,7 @@ def format_unable(unable):
 
 def errorembed(error, info):
     return Embed(title=f"**Error:** `{error}`",
-            description=f"```{info}```", colour=fn.colours.red)
+            description=f"```{info}```", colour=fn.data.colours.red)
 
 class Cogs(commands.Cog):
 

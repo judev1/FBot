@@ -113,7 +113,7 @@ class Premium(commands.Cog):
 
         if colour_provided:
             desc = f"That colour is {colour}"
-        elif fn.getcommand(ctx.message, commands=["setcolour"]):
+        elif fn.getcommand(self.bot, ctx.message, commands=["setcolour"]):
             desc = f"{ctx.author.mention}'s updated to {colour}"
         else:
             desc = f"{ctx.author.mention}'s colour is {colour}"

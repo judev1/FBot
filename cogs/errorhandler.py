@@ -114,7 +114,7 @@ class Errorhandler(commands.Cog):
                 pages[0] = content + pages[0]
             book.createpages(pages, ITEM_PER_PAGE=True)
 
-            await book.createbook(MODE="arrows", COLOUR=fn.colours.red, TIMEOUT=180)
+            await book.createbook(MODE="arrows", COLOUR=fn.data.colours.red, TIMEOUT=180)
 
 def setup(bot):
     bot.add_cog(Errorhandler(bot))

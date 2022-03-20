@@ -82,7 +82,7 @@ class Snipe(commands.Cog):
 
         bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
 
-        if fn.getcommand(message, cogs=["say"]):
+        if fn.getcommand(self.bot, message, cogs=["say"]):
             if not message.author.bot:
                 if  bot_perms.send_messages:
                     return

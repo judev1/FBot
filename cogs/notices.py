@@ -26,7 +26,8 @@ class Notices(commands.Cog):
         if not bot_perms.send_messages:
             return
 
-        if not fn.getcommand(message, dev=False):
+
+        if not fn.getcommand(self.bot, message, ignore_dev=False):
             return
 
         notice = db.getlastnotice()

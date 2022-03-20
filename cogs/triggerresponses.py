@@ -56,7 +56,7 @@ class TriggerResponses(commands.Cog):
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        if fn.getcommand(message):
+        if fn.getcommand(self.bot, message):
             return
 
         if content.lower().startswith("fball"):
