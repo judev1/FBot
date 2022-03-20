@@ -2,6 +2,7 @@ from discord.ext import commands
 import lib.functions as fn
 import lib.database as db
 import aiohttp
+import dbl
 
 class fakeuser: id = 0
 user = fakeuser()
@@ -15,12 +16,14 @@ class Botlists(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.dbl = bot.dbl
 
     @commands.Cog.listener()
     async def on_bot_ready(self):
         voteschannel = self.bot.settings.channels.votes
         self.voteschannel = self.bot.get_channel(voteschannel)
+
+        self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
+            webhook_auth=self.settings.tokens.auth, webhook_port=self.settings.port)
 
     @commands.command()
     async def scounts(self, ctx):

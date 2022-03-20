@@ -2,9 +2,9 @@ import nest_asyncio
 nest_asyncio.apply()
 
 from discord.ext import commands
+from discord import app_commands
 import discord
 import json
-import dbl
 
 from lib.commands import cmds
 from lib.triggers import tr
@@ -37,13 +37,7 @@ class Bot(commands.AutoShardedBot):
                          shard_count=self.settings.shards)
 
         self.ready_shards_list = [False] * self.shard_count # TESTING
-
         self.ftime = fn.ftime()
-
-        self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
-            webhook_auth=self.settings.tokens.auth, webhook_port=self.settings.port)
-
-        fn.VotingHandler(self)
         self.add_check(self.predicate)
 
         db.setup()
@@ -54,7 +48,7 @@ class Bot(commands.AutoShardedBot):
 
         self.remove_command("help")
         for cog in fn.getcogs():
-            if cog not in []:
+            if cog not in ["errorhandler.py"]:
                 print(f"\nLoading {cog}...", end="")
                 try: self.reload_extension("cogs." + cog[:-3])
                 except: self.load_extension("cogs." + cog[:-3])
@@ -74,6 +68,7 @@ class Bot(commands.AutoShardedBot):
         self.ftime.set()
         print(f" > Session started at {self.ftime.start}\n")
 
+        fn.VotingHandler(self)
         db.checkguilds(self.guilds)
 
         self.premium = await self.get_premium()
@@ -190,4 +185,4 @@ class Bot(commands.AutoShardedBot):
         return True
 
 bot = Bot()
-bot.run(bot.settings.tokens.bot)
+bot.run(bot.settings.tokens.jude)
