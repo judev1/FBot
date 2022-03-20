@@ -31,7 +31,6 @@ class Bot(commands.AutoShardedBot):
         intents.reactions = True
         #intents.members = True # missing intents
 
-        self.shards_ready = 0
 
         super().__init__(
             command_prefix=fn.getprefix,
@@ -39,7 +38,7 @@ class Bot(commands.AutoShardedBot):
             shard_count=self.settings.shards
         )
 
-        self.ready_shards_list = [False] * self.shard_count # TESTING
+        self.shards_ready = [False] * self.shard_count
 
         self.ftime = fn.ftime()
 
@@ -65,8 +64,7 @@ class Bot(commands.AutoShardedBot):
         print("\n\n > Loaded cogs\n")
 
     def ready(self):
-        #if self.shard_count == self.shards_ready:
-        if all(self.ready_shards_list): # TESTING
+        if all(self.shards_ready):
             if self.is_ready():
                 return True
         return False
@@ -95,28 +93,23 @@ class Bot(commands.AutoShardedBot):
         self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
-
-        self.shards_ready += 1
-        print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = True
+        self.shards_ready[shard_id] = True
+        ready, shards = sum(self.shards_ready), self.shard_count
+        print(f" > Shard {shard_id} CONNECTED, {ready}/{shards} online")
 
         if self.ready():
-            self.shards_ready = self.shard_count
             await self.prep()
 
     async def on_shard_resumed(self, shard_id):
-        self.shards_ready += 1
-        print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = True
-
-        if self.ready():
-            self.shards_ready = self.shard_count
-            await self.prep()
+        self.shards_ready[shard_id] = True
+        ready, shards = sum(self.shards_ready), self.shard_count
+        print(f" > Shard {shard_id} CONNECTED, {ready}/{shards} online")
 
     async def on_shard_disconnect(self, shard_id):
-        self.shards_ready -= 1
-        print(f" > Shard {shard_id} DISCONNECTED, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = False
+        if not self.shards_ready[shard_id]:
+            self.shards_ready[shard_id] = False
+            ready, shards = sum(self.shards_ready), self.shard_count
+            print(f" > Shard {shard_id} DISCONNECTED, {ready}/{shards} online")
 
     async def get_premium(self):
 
