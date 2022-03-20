@@ -13,7 +13,7 @@ class tr:
         global triggers
         global all_aliases
 
-        triggers - list()
+        triggers = list()
         all_aliases = list()
 
         with open("data/CSVs/Triggers.csv") as csv_file:
