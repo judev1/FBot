@@ -1,8 +1,9 @@
 from traceback import format_exception
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.functions as fn
 import discord
+
+import lib.functions as fn
 
 class Errorhandler(commands.Cog):
 
@@ -101,7 +102,7 @@ class Errorhandler(commands.Cog):
             book = reactionbook(self.bot, ctx, TITLE="Error Log")
             result = "".join(format_exception(error, error, error.__traceback__))
 
-            pages = []
+            pages = list()
             content = f"Error on message:\n```{ctx.message.content}```"
             content += f"```by {ctx.message.author.name} ({ctx.message.author.id})```"
             content += f"```{ctx.message.channel.type} channel (server: {ctx.message.guild})```"

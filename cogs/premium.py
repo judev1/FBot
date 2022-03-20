@@ -1,22 +1,8 @@
 from discord.ext import commands
 import lib.database as db
+import lib.functions as fn
 import random
 import string
-import json
-
-with open("./data/colours.json", "r") as file:
-    colours = json.load(file)
-with open("./data/customcolours.json", "r") as file:
-    customcolours = json.load(file)
-
-for colour in customcolours:
-    colours[colour] = customcolours[colour]
-
-colour_names = list(colours)
-hex_values = list(colours.values())
-colour_values = dict()
-for colour, value in zip(colour_names, hex_values):
-    colour_values[value] = colour
 
 class Premium(commands.Cog):
 
@@ -81,11 +67,11 @@ class Premium(commands.Cog):
 
         else:
 
-            if colour not in colours:
+            if colour not in fn.colours:
                 await ctx.reply("That's not a supported colour name")
                 return None
 
-            colour = colours[colour]
+            colour = fn.colours[colour]
 
         return colour
 
@@ -119,24 +105,24 @@ class Premium(commands.Cog):
             while len(hex_value) != 6:
                 hex_value = "0" + hex_value
 
-        if hex_value in hex_values:
-            colour_name = colour_values[hex_value]
+        if hex_value in fn.hex_values:
+            colour_name = fn.colour_values[hex_value]
             colour = f"`#{hex_value}`,\nIt's called {colour_name}!"
         else:
             colour = f"`#{hex_value}`"
 
         if colour_provided:
             desc = f"That colour is {colour}"
-        elif self.bot.command_invoked(ctx.message, commands=["setcolour"]):
+        elif fn.getcommand(ctx.message, commands=["setcolour"]):
             desc = f"{ctx.author.mention}'s updated to {colour}"
         else:
             desc = f"{ctx.author.mention}'s colour is {colour}"
 
         colour_trio = list()
         while len(colour_trio) != 3:
-           colour = random.choice(colour_names)
+           colour = random.choice(fn.colour_names)
            if colour not in colour_trio:
-               colour = f"[{colour}](https://www.colorhexa.com/{colours[colour]})"
+               colour = f"[{colour}](https://www.colorhexa.com/{fn.colours[colour]})"
                colour_trio.append(colour)
         colour_trio = ", ".join(colour_trio)
 

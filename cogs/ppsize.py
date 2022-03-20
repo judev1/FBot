@@ -1,9 +1,10 @@
 from discord.ext.commands import MemberConverter
 from discord import AllowedMentions
 from discord.ext import commands
-import lib.database as db
 import random
 import re
+
+import lib.database as db
 
 is_mention = re.compile("<@!?[0-9]{18}>")
 

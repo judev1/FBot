@@ -17,8 +17,22 @@ class cmds:
 
     def load():
 
-        global commands, devcmds, categories, perms, devcmdlist, functional, optional
-        commands, devcmds, categories, perms, devcmdlist, functional, optional = {}, {}, {}, {}, [], {}, {}
+        global commands
+        global devcmds
+        global devcmdlist
+        global categories
+        global perms
+        global functional
+        global optional
+
+        commands = dict()
+        devcmds = dict()
+        devcmdlist = list()
+        categories = dict()
+        perms = dict()
+        functional = dict()
+        optional = dict()
+
         with open("data/CSVs/Commands.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:

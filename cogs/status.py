@@ -1,5 +1,6 @@
 from discord.ext import commands
 from dbfn import reactionbook
+
 import lib.database as db
 
 circle = {"off": ":red_circle:", "on": ":green_circle:"}

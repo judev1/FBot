@@ -1,10 +1,11 @@
 from discord import AuditLogAction
 from discord.ext import commands
 from collections import deque
-import lib.functions as fn
 import discord
 import os
 import io
+
+import lib.functions as fn
 
 snipes = dict()
 max_snipes = 10
@@ -81,7 +82,7 @@ class Snipe(commands.Cog):
 
         bot_perms = message.channel.permissions_for(message.guild.get_member(self.bot.user.id))
 
-        if self.bot.command_invoked(message, cogs=["say"]):
+        if fn.getcommand(message, cogs=["say"]):
             if not message.author.bot:
                 if  bot_perms.send_messages:
                     return

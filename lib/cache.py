@@ -1,4 +1,3 @@
-import lib.database as db
 from time import time
 
 class Cooldowns:

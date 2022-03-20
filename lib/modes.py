@@ -130,7 +130,7 @@ def safe(text):
     return text
 
 def fuck(text):
-    new_text = []
+    new_text = list()
     for word in text.split():
         if choice([0, 0, 1]):
             word = "fucking " + word

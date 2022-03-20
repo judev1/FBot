@@ -244,7 +244,7 @@ def getallstatus(guild_id):
     c = conn.cursor()
     t = (guild_id,)
     c.execute("SELECT channel_id, status FROM channels WHERE guild_id=?;", t)
-    newdata = []
+    newdata = list()
     for channel in c.fetchall():
         newdata.append((channel[0], channel[1]))
     return newdata
@@ -320,7 +320,7 @@ def gettop(toptype, amount, obj_id):
     top = c.fetchall()
 
     if toptype == "votes":
-        newtop = []
+        newtop = list()
         for data in top:
             if toptype == "votes":
                 item = sum(data[1:])

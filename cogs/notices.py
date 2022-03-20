@@ -1,9 +1,9 @@
 from discord.ext import commands
-import lib.functions as fn
-import lib.commands as cm
-import lib.database as db
 import datetime
 import time
+
+import lib.functions as fn
+import lib.database as db
 
 class Notices(commands.Cog):
 
@@ -26,7 +26,7 @@ class Notices(commands.Cog):
         if not bot_perms.send_messages:
             return
 
-        if not self.bot.command_invoked(message, dev=False):
+        if not fn.getcommand(message, dev=False):
             return
 
         notice = db.getlastnotice()

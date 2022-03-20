@@ -1,7 +1,8 @@
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.functions as fn
 from discord import Embed
+
+import lib.functions as fn
 
 def format_unable(unable):
     first = True
@@ -25,7 +26,7 @@ class Cogs(commands.Cog):
     @commands.command()
     async def load(self, ctx, cog):
         if cog == "all":
-            unable = []
+            unable = list()
             for cog in fn.getcogs():
                 cog = cog[:-3]
                 try: self.bot.load_extension("cogs." + cog)
@@ -44,7 +45,7 @@ class Cogs(commands.Cog):
     @commands.command()
     async def unload(self, ctx, cog):
         if cog == "all":
-            unable = []
+            unable = list()
             for cog in fn.getcogs():
                 cog = cog[:-3]
                 if cog != "cogs":
@@ -64,7 +65,7 @@ class Cogs(commands.Cog):
     @commands.command()
     async def reload(self, ctx, cog):
         if cog == "all":
-            unable = []
+            unable = list()
             for cog in fn.getcogs():
                 cog = cog[:-3]
                 try:

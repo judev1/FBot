@@ -3,7 +3,7 @@ from random import choice
 import asyncio
 import os
 
-jokes = []
+jokes = list()
 for joke in os.listdir("data/Jokes"):
     with open("data/Jokes/" + joke, "r") as file:
         jokes.append(file.read().split("\n"))

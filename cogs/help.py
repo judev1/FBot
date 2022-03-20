@@ -1,6 +1,6 @@
-from lib.functions import formatperm
 from discord.ext import commands
 from dbfn import reactionbook
+
 import lib.functions as fn
 import lib.commands as cm
 import lib.database as db
@@ -52,14 +52,14 @@ class Help(commands.Cog):
         cat = "Category: " + data[1] + data[2]
         embed.set_author(name=cat)
 
-        bot_perms = []
+        bot_perms = list()
         for perm in data[6].split(","):
-            bot_perms.append("*" + formatperm(perm) + "*")
+            bot_perms.append("*" + fn.formatperm(perm) + "*")
         bot_perms = ",\n".join(bot_perms)
 
-        user_perms = []
+        user_perms = list()
         for perm in data[7].split(","):
-            user_perms.append("*" + formatperm(perm) + "*")
+            user_perms.append("*" + fn.formatperm(perm) + "*")
         user_perms = ",\n".join(user_perms)
 
         embed.add_field(name="**Server only?**", value=data[5])

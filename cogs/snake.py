@@ -92,7 +92,7 @@ class Snake(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.games = {}
+        self.games = dict()
 
     @commands.command(alliases=["snek"])
     async def snake(self, ctx):

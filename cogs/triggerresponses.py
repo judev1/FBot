@@ -1,10 +1,10 @@
 from discord.ext import commands
+from random import choice
+
 from lib.triggers import tr
 import lib.functions as fn
-import lib.commands as cm
 import lib.database as db
 import lib.modes as modes
-from random import choice
 
 responses = [
     "Someone has bad taste in photos",
@@ -56,7 +56,7 @@ class TriggerResponses(commands.Cog):
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        if self.bot.command_invoked(message):
+        if fn.getcommand(message):
             return
 
         if content.lower().startswith("fball"):

@@ -138,10 +138,12 @@ class Bot(commands.AutoShardedBot):
         if user_id in self.premium:
             return True
         return False
+
     def get_colour(self, user_id):
         if self.is_premium(user_id):
             return db.getcolour(user_id)
         return 0xf42f42
+
     def get_emoji(self, user_id):
         if self.is_premium(user_id):
             emoji = db.getemoji(user_id)
@@ -152,40 +154,6 @@ class Bot(commands.AutoShardedBot):
         colour = self.get_colour(user.id)
         desc = "\n".join(desc)
         return discord.Embed(title=title, description=desc, colour=colour, url=url)
-
-    def command_invoked(self, message, dev=True, commands=None, cogs=None):
-        def in_commands(command):
-            if commands:
-                if command.cog.qualified_name in cogs:
-                    return True
-            return False
-        def in_cogs(command):
-            if cogs:
-                if command.name in commands:
-                    return True
-                for alias in command.aliases:
-                    if alias in commands:
-                        return True
-            return False
-        def no_dev(command):
-            if dev:
-                if command.cog.qualified_name == "dev":
-                    return False
-            return True
-        prefix = fn.getprefix(self, message)
-        without_prefix = message.content[len(prefix):]
-        for command in self.commands:
-            if not in_cogs(command):
-                continue
-            elif not in_commands(command):
-                continue
-            elif no_dev(command):
-                continue
-            if without_prefix.startswith(command.name):
-                return command
-            for alias in command.aliases:
-                if without_prefix.startswith(alias):
-                    return command
 
     def predicate(self, ctx):
 
@@ -202,7 +170,8 @@ class Bot(commands.AutoShardedBot):
         if str(ctx.channel.type) != "private":
             bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))
 
-            valid, perms = [], {}
+            valid = list()
+            perms = dict()
             for perm in cm.perms[command]:
                 if not perm.startswith("("):
                     bot_perm = getattr(bot_perms, perm)

@@ -10,8 +10,12 @@ class tr:
 
     def load():
 
-        global triggers, all_aliases
-        triggers, all_aliases = [], []
+        global triggers
+        global all_aliases
+
+        triggers - list()
+        all_aliases = list()
+
         with open("data/CSVs/Triggers.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:

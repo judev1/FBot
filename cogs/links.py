@@ -1,6 +1,7 @@
 from discord.ext import commands
-import lib.functions as fn
 import discord
+
+import lib.functions as fn
 
 class Links(commands.Cog):
 

@@ -1,10 +1,11 @@
 from discord.ext import commands
+from math import ceil
+from time import time
+
 from lib.triggers import tr
 import lib.functions as fn
 import lib.commands as cm
 import lib.database as db
-from math import ceil
-from time import time
 
 class stats:
 
@@ -43,7 +44,7 @@ class Info(commands.Cog):
         else:
             guild_id = message.guild.id
 
-        if self.bot.command_invoked(message):
+        if fn.getcommand(message):
             return
 
         priority, status = "all", "on"

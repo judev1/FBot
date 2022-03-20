@@ -1,7 +1,8 @@
 from discord.ext import commands
+import aiohttp
+
 import lib.functions as fn
 import lib.database as db
-import aiohttp
 
 class fakeuser: id = 0
 user = fakeuser()

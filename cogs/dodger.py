@@ -83,7 +83,7 @@ class Dodger(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.games = {}
+        self.games = dict()
 
     @commands.command()
     async def dodger(self, ctx):

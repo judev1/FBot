@@ -8,7 +8,7 @@ from lib.ftime import ftime
 emojis = {True: "✅", False: "⛔"}
 
 def formatperm(perm):
-    text = []
+    text = list()
     perm = perm.lower()
     for word in perm.split("_"):
         if word.startswith("("):
@@ -33,8 +33,34 @@ def getprefix(bot, message):
         db.register(message.author.id)
     return prefix
 
+def getcommand(bot, message, ignore_dev=False, commands=list(), cogs=list()):
+
+    def in_commands(command):
+        if command.name in commands:
+            return True
+        for alias in command.aliases:
+            if alias in commands:
+                return True
+        return False
+
+    prefix = getprefix(bot, message)
+    without_prefix = message.content[len(prefix):]
+
+    for command in bot.commands:
+        if cogs and in_commands(command):
+            continue
+        elif commands and command.cog.qualified_name in cogs:
+            continue
+        elif ignore_dev and command.cog.qualified_name == "dev":
+            continue
+        if without_prefix.startswith(command.name):
+            return command
+        for alias in command.aliases:
+            if without_prefix.startswith(alias):
+                return command
+
 def getcogs():
-    cogs = []
+    cogs = list()
     for cog in os.listdir("cogs"):
         if os.path.isfile(os.path.join("cogs", cog)):
             cogs.append(cog)
@@ -78,8 +104,20 @@ user = guild = ShellObject()
 
 with open("data/data.json", "r") as file:
     data = Classify(json.load(file))
-    colours = data.colours
     links = data.links
 
-for colour in colours:
-    colours[colour] = int(colours[colour], 16)
+for colour in data.colours:
+    data.colours[colour] = int(data.colours[colour], 16)
+
+with open("./data/colours.json", "r") as file:
+    colours = json.load(file)
+with open("./data/customcolours.json", "r") as file:
+    custom_colours = json.load(file)
+
+for colour in custom_colours:
+    colours[colour] = custom_colours[colour]
+
+hex_values = list(colours.values())
+colour_values = dict()
+for colour, value in zip(list(colours), hex_values):
+    colour_values[value] = colour

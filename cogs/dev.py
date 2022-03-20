@@ -1,12 +1,13 @@
 from traceback import format_exception
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.database as db
-import lib.triggers as tr
-import lib.commands as cm
 import discord
 import socket
 import time
+
+import lib.database as db
+import lib.triggers as tr
+import lib.commands as cm
 
 def load(csv):
     start = time.time()
@@ -49,7 +50,7 @@ class Dev(commands.Cog):
         except Exception as e:
             result = "".join(format_exception(e, e, e.__traceback__))
 
-        pages = []
+        pages = list()
         content = f"Input:\n```py\n{content}```\n"
         for i in range(0, len(result), 2000):
             pages.append(f"Output:\n```py\n{result[i:i + 2000]}\n```")
@@ -75,7 +76,7 @@ class Dev(commands.Cog):
         except Exception as e:
             result = "".join(format_exception(e, e, e.__traceback__))
 
-        pages = []
+        pages = list()
         content = f"Input:\n```py\nawait {content}```\n"
 
         if result:
@@ -179,7 +180,7 @@ class Dev(commands.Cog):
     @commands.command()
     async def servers(self, ctx):
 
-        guilds = []
+        guilds = list()
         members = 0
         for guild in self.bot.guilds:
             guilds.append([guild.member_count, guild.name, guild.id])
@@ -194,7 +195,7 @@ class Dev(commands.Cog):
     @commands.command()
     async def search(self, ctx, *, query):
 
-        matches = []
+        matches = list()
         query = query.lower()
         for guild in self.bot.guilds:
             if query in guild.name.lower():
