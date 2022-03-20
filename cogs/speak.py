@@ -1,7 +1,7 @@
 from discord.ext import commands
 import lib.database as db
 
-options = ["default", "uwu", "confused", "pirate", "triggered", "italian", "fuck", "ironic", "patronise", "colonial", "safe", "biblical"]
+options = ["default", "uwu", "pirate", "biblical", "roadman", "australian", "german", "italian", "safe", "fuck", "triggered", "ironic", "patronise", "confused"]
 
 class Speak(commands.Cog):
 

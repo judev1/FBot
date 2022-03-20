@@ -5,6 +5,8 @@ import lib.database as db
 from lib.votinghandler import VotingHandler
 from lib.ftime import ftime
 
+emojis = {True: "✅", False: "⛔"}
+
 def formatperm(perm):
     text = []
     perm = perm.lower()
@@ -38,6 +40,16 @@ def getcogs():
             cogs.append(cog)
     return cogs
 
+def formatname(name):
+    if not name:
+        name = "Deleted User"
+    else:
+        name = name.name.replace("*", "")
+        name = name.replace("`", "")
+        name = name.replace("_", "")
+        name = name.replace("||", "")
+    return name
+
 class Classify:
 
     def __init__(self, dictionary: dict):
@@ -61,8 +73,8 @@ class Classify:
     def __setitem__(self, item, value):
         setattr(self, item, value)
 
-class fakeuser: id = 0
-user = fakeuser()
+class ShellObject: id = -1
+user = guild = ShellObject()
 
 with open("data/data.json", "r") as file:
     data = Classify(json.load(file))

@@ -1,239 +1,161 @@
-import random
+from random import choice
+import json
 
-def capitalise(text):
+with open("data/replacements.json", "r", encoding="utf-8") as file:
+    maps = json.load(file)
 
-    new_text = ""
-    new_sentence = True
-    for char in text:
-        if new_sentence:
-            if char.isalpha():
-                char = char.upper()
-                new_sentence = False
-        elif char == ".":
-            new_sentence = True
-        elif char == "'":
-            if new_text[-1] == "i":
-                new_text = new_text[:-1] + "I"
-        new_text += char
-
-    return new_text
+class PirateInsults:
+    def __repr__(self):
+        pirate = maps['pirate']
+        return f"{choice(pirate['adjectives'])} {choice(pirate['insults'])}"
+pirate_insult = PirateInsults
 
 def sanitise_text(text):
-
-    text = text.lower()
-    text = text.replace("*", "")
-    text = text.replace("~", "")
-    text = text.replace("`", "")
-    text = text.replace("_", "")
-    text = text.replace("|", "")
-
     text = text.replace('“', '"')
     text = text.replace("’", "'")
-
     return text
 
-def santitise_word(word):
+def replace_words(text, words):
+    for old, new in words:
+        new_text = list()
+        for word in text.split(" "):
+            if old == word:
+                new_text.append(new)
+            elif old.capitalize() == word:
+                new_text.append(new[0].upper() + new[1:])
+            elif old.upper() == word:
+                new_text.append(new.upper())
+            else:
+                new_text.append(word)
+        text = " ".join(new_text)
+    return text
 
-    start = ""
-    for char in word:
-        if not char.isalpha():
-            start += char
-            word = word[1:]
-            continue
-        break
+def replace_starts(text, words):
+    for old, new in words:
+        new_text = list()
+        for word in text.split(" "):
+            if not old:
+                new_text.append(new + word)
+            elif word.startswith(old):
+                new_text.append(new + word[len(old):])
+            elif word.startswith(old.capitalize()):
+                new_text.append(new[0].upper() + new[1:] + word[len(old):])
+            elif word.startswith(old.upper()):
+                new_text.append(new.upper() + word[len(old):])
+            else:
+                new_text.append(word)
+        text = " ".join(new_text)
+    return text
 
-    end = ""
-    for char in word[::-1]:
-        if not char.isalpha():
-            end = char + end
-            word = word[:-1]
-            continue
-        break
+def replace_ends(text, words):
+    for old, new in words:
+        new_text = list()
+        for word in text.split(" "):
+            if not old:
+                new_text.append(word + new)
+            elif word.endswith(old):
+                new_text.append(word[:-len(old)] + new)
+            elif word.endswith(old.capitalize()):
+                new_text.append(word[:-len(old)] + new[0].upper() + new[1:])
+            elif word.endswith(old.upper()):
+                new_text.append(word[:-len(old)] + new.upper())
+            else:
+                new_text.append(word)
+        text = " ".join(new_text)
+    return text
 
-    return word, start, end
-
-def word_type(word):
-    try: return nlp(word)[0].pos_
-    except: return None
+def replace_chars(text, letters):
+    for old, new in letters:
+        if old in text:
+            text = text.replace(old, new)
+        elif old.capitalize() in text:
+            text = text.replace(old.capitalize(), new[0].upper() + new[1:])
+        elif old.upper() in text:
+            text = text.replace(old.upper(), new.upper())
+    return text
 
 def uwu(text):
-
-    uwus = ["owo", "uwu", ">w<", "XD"]
-
-    text = text.replace("er", "uw")
-    text = text.replace("r", "w")
-    text = text.replace("l", "w")
-
-    text = text.replace("ith", "iv")
-    text = text.replace("f", "v")
-    text = text.replace("ove", "uv")
-    text = text.replace("th", "d")
-    text = text.replace("is", "iws")
-
-    text = text.replace("na", "nya")
-    text = text.replace("ne", "nye")
-    text = text.replace("ni", "nyi")
-    text = text.replace("no", "nyo")
-    text = text.replace("nu", "nyu")
-
-    return text + "~ " + random.choice(uwus)
-
-def confused(text):
-
-    if text.endswith("?"):
-        text += "??"
-    else:
-        text += "?"
-
-    return text
+    settings = maps["uwu"]
+    text = replace_chars(text, settings["chars"])
+    return text + choice(settings["tails"])
 
 def pirate(text):
-
-    text = text.replace("you", "ye")
-    text = text.replace("ing", "in'")
-    text = text.replace("and", "an'")
-
-    temp = []
-    for word in text.split():
-        word, start, end = santitise_word(word)
-        if word.startswith("h"):
-            word = "'" + word[1:]
-        elif word.startswith("th"):
-            word = "'" + word[2:]
-        elif word == "my":
-            word = "me"
-        elif word == "is":
-            word = "be"
-        temp.append(start + word + end)
-    text = " ".join(temp)
-
-    return text + " arr"
-
-def triggered(text):
-
-    text = text.upper()
-
-    return "**__" + text + "__**"
-
-def italian(text):
-
-    temp = []
-    for word in text.split():
-        word, start, end = santitise_word(word)
-        if not word.endswith("a"):
-            word += "a"
-        temp.append(start + word + end)
-    text = " ".join(temp)
-
-    return "*" + text + "*"
-
-def fuck(text):
-
-    temp = []
-    for word in text.split():
-        word, start, end = santitise_word(word)
-        if random.choice([True, False]):
-            word = "fucking " + word
-        temp.append(start + word + end)
-    text = " ".join(temp)
-
-    return text
-
-def ironic(text):
-
-    temp = text
-    text = ""
-    for char in temp:
-        text += random.choice([char.lower(), char.upper()])
-
-    return text
-
-def patronise(text):
-
-    text = " ".join(list(text))
-
-    return text
-
-def colonial(text):
-
-    temp = []
-    for word in text.split():
-        word, start, end = santitise_word(word)
-        if word.startswith("h"):
-            word = "'" + word[1:]
-        elif word.startswith("th"):
-            word = "'" + word[2:]
-        temp.append(start + word + end)
-    text = " ".join(temp)
-
-    text = text.replace("t", "'")
-    text = text.replace("ing", "in'")
-
-    return text
-
-def safe(text):
-
-    words = {
-        "fucking": "frickity lick sticks",
-        "fucker": "fricker licker",
-        "fuck": "frick",
-        "dickhead": "poopoohed",
-        "dick": "poopoo",
-        "cock": "glock",
-        "twat": "meanie",
-        "prick": "cactus spike",
-        "cock": "glock",
-        "pussy": "kitty cat",
-        "cunt": "cat",
-        "shit": "shirt",
-        "arse": "apple",
-        "ass": "apple",
-        "bloody": "blorpy",
-        "bitch": "birch tree",
-        "bastard": "brass tree",
-        "wanker": "winker",
-    }
-
-    for word in words:
-        text = text.replace(word, words[word])
-
-    return text
+    settings = maps["pirate"]
+    insults = map(lambda x: (x, pirate_insult), maps["insults"])
+    text = replace_words(text, settings["words"])
+    text = replace_words(text, insults)
+    text = replace_starts(text, settings["starts"])
+    text = replace_ends(text, settings["ends"])
+    text = replace_chars(text, settings["chars"])
+    return text + choice(settings["tails"])
 
 def biblical(text):
+    settings = maps["biblical"]
+    text = replace_words(text, settings["words"])
+    text = replace_ends(text, settings["ends"])
+    text = replace_chars(text, settings["chars"])
+    return text
 
-    temp = []
+def roadman(text):
+    settings = maps["roadman"]
+    text = replace_words(text, settings["words"])
+    text = replace_starts(text, settings["starts"])
+    text = replace_chars(text, settings["chars"])
+    text = choice(settings["heads"]) + text
+    return text + choice(settings["tails"])
+
+def australian(text):
+    settings = maps["australian"]
+    text = "G'day " + text
+    print(text)
+    text = text[::-1]
+    for old, new in settings["chars"]:
+        text = text.replace(old, new)
+    return text
+
+def german(text):
+    settings = maps["german"]
+    text = replace_ends(text, settings["ends"])
+    text = replace_chars(text, settings["chars"])
+    return text
+
+def italian(text):
+    settings = maps["italian"]
+    text = replace_ends(text, settings["ends"])
+    return f"*{text}*"
+
+def safe(text):
+    settings = maps["safe"]
+    text = replace_words(text, settings["words"])
+    return text
+
+def fuck(text):
+    new_text = []
     for word in text.split():
+        if choice([0, 0, 1]):
+            word = "fucking " + word
+        new_text.append(word)
+    return " ".join(new_text)
 
-        word, start, end = santitise_word(word)
+def triggered(text):
+    return f"**{text.upper()}**"
 
-        if word == "are":
-            word = "art"
-        elif word == "am":
-            word = "be"
-        elif word.endswith(("d", "t", "k", "y", "m", "o")):
-            word += "eth"
-        elif word.endswith("e"):
-            if word not in ["the", "be"]:
-                word += "ith"
-        elif word.endswith(("ave", "ome")):
-            word += "th"
-        elif word.endswith("as"):
-            word += "t"
-        elif word == "had":
-            word = "hath"
-        elif word in ["its", "it's"]:
-            word = "it tis"
-        elif word == "is":
-            word = "tis"
-        elif word == "you":
-            word = "thou"
-        elif word == "my":
-            word = "mine"
-        elif word == "the":
-            word = random.choice(["thy", "thine"])
-        temp.append(start + word + end)
-    text = " ".join(temp)
+def ironic(text):
+    new_text = ""
+    for char in text:
+        new_text += choice([char.lower(), char.upper()])
+    return new_text
 
-    text = text.replace("ere", "'re")
+def patronise(text):
+    return " ".join(text)
 
+def confused(text):
+    settings = maps["confused"]
+    text = replace_words(text, settings["words"])
+    text = replace_ends(text, settings["ends"])
+    return text + choice(settings["tails"])
+
+def safe(text):
+    settings = maps["safe"]
+    text = replace_words(text, settings["words"])
     return text

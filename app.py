@@ -13,8 +13,6 @@ import lib.commands as cm
 import lib.database as db
 import lib.cache as cache
 
-emojis = {True: "✅", False: "⛔"}
-
 class Bot(commands.AutoShardedBot):
 
     premium = list()
@@ -25,6 +23,7 @@ class Bot(commands.AutoShardedBot):
 
         with open("settings.json", "r") as file:
             self.settings = fn.Classify(json.load(file))
+            self.devs = self.settings.devs
 
         intents = discord.Intents.none()
         intents.guilds = True
@@ -146,12 +145,10 @@ class Bot(commands.AutoShardedBot):
         if user_id in self.premium:
             return True
         return False
-
     def get_colour(self, user_id):
         if self.is_premium(user_id):
             return db.getcolour(user_id)
         return 0xf42f42
-
     def get_emoji(self, user_id):
         if self.is_premium(user_id):
             emoji = db.getemoji(user_id)
@@ -206,7 +203,7 @@ class Bot(commands.AutoShardedBot):
             return
 
         if command in cm.devcmds:
-            if user not in self.settings.devs:
+            if user not in self.devs:
                 raise commands.NotOwner()
 
         if str(ctx.channel.type) != "private":
@@ -225,7 +222,7 @@ class Bot(commands.AutoShardedBot):
                 for perm in perms:
                     if perm.startswith("("):
                         perms[perm] = getattr(bot_perms, perm[1:-1])
-                    page += f"{emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
+                    page += f"{fn.emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
                 raise commands.CheckFailure(message=page)
         else:
             if cm.commands[command][5] == "*Yes*":

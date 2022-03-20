@@ -86,6 +86,7 @@ class ImageCog(commands.Cog):
             path = "data/Temp/" + str(ctx.author.id) + "_"
             file = File(fp=path + filename)
             message = await self.temp.send(file=file)
+            file.close()
 
             embed = self.bot.embed(ctx.author, "FBot " + process.capitalize())
             embed.set_image(url=message.attachments[0].proxy_url)
@@ -94,8 +95,8 @@ class ImageCog(commands.Cog):
 
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
-            try: os.remove(path + "zoom_to_" + process)
-            except: pass
+            if os.path.exists(path + "zoom_to_" + process):
+                os.remove(path + "zoom_to_" + process)
             os.remove(path + filename)
         else:
             await ctx.reply("That image is too big to " + process)

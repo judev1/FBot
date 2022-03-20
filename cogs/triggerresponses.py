@@ -6,28 +6,33 @@ import lib.database as db
 import lib.modes as modes
 from random import choice
 
-tf = ["will", "will not"]
-responses = ["Someone has bad taste in photos",
-             "Your right to live has now been revoked",
-             "I wish I hadn't seen that",
-             "MY EYES! MY EYES! WHY WOULD YOU SEND THAT!?",
-             "Oh my, what have I just witnessed",
-             "That be kinda stanky ngl",
-             "Spare me, please",
-             "I'm not feeling that, delete immediatley",
-             "That is not vibe"]
-funny = ["Hmm, maybe I'll laugh too next time",
-         "HAHAHA, was that the reaction you were looking for?",
-         "It would be easier to laugh if it were funny",
-         "That is **h i l a r i o u s**",
-         "L O L",
-         "Wow my dude that is so funny"]
-answers = ["Good question",
-           "idk",
-           "Why are you asking me?",
-           "I don't think we'll ever know"]
+responses = [
+    "Someone has bad taste in photos",
+    "Your right to live has now been revoked",
+    "I wish I hadn't seen that",
+    "MY EYES! MY EYES! WHY WOULD YOU SEND THAT!?",
+    "Oh my, what have I just witnessed",
+    "That be kinda stanky ngl",
+    "Spare me, please",
+    "I'm not feeling that, delete immediatley",
+    "That is not vibe"
+]
 
-fbot = open("./data/imgs/FBot.png", "rb").read()
+funny = [
+    "Hmm, maybe I'll laugh too next time",
+    "HAHAHA, was that the reaction you were looking for?",
+    "It would be easier to laugh if it were funny",
+    "That is **h i l a r i o u s**",
+    "L O L",
+    "Wow my dude that is so funny"
+]
+
+answers = [
+    "Good question",
+    "idk",
+    "Why are you asking me?",
+    "I don't think we'll ever know"
+]
 
 class TriggerResponses(commands.Cog):
 

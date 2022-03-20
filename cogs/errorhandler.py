@@ -4,9 +4,6 @@ from dbfn import reactionbook
 import lib.functions as fn
 import discord
 
-class fakeuser: id = 0
-user = fakeuser()
-
 class Errorhandler(commands.Cog):
 
     def __init__(self, bot):
@@ -53,15 +50,14 @@ class Errorhandler(commands.Cog):
         elif error_type is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
-            embed = self.bot.embed(user, errorlines[0], *errorlines[2:])
+            embed = self.bot.embed(fn.user, errorlines[0], *errorlines[2:])
             try:
                 try: await ctx.send(embed=embed)
                 except: await ctx.reply(error)
             except:
                 try:
                     channel = await ctx.author.create_dm()
-                    try: await channel.send(embed=embed)
-                    except: await channel.reply(error)
+                    await channel.send(embed=embed)
                 except: pass
         elif error_type is commands.UserNotFound:
             await ctx.reply("User not found")
@@ -85,38 +81,39 @@ class Errorhandler(commands.Cog):
                         await ctx.reply("Looks like that member doesn't exist")
                         return
                     await ctx.reply(error.original.text)
-            embed = self.bot.embed(ctx.author, "An unusual error has occurred",
-                    "The devs have been notified, please contact:\n"
-                    "`@justjude#2296` or `@Lines#9260`\n"
-                    f"OR join our [support server]({fn.links.server}) "
-                    "and give us a ping")
+
+            embed = self.bot.embed(
+                ctx.author, "An unusual error has occurred",
+                "The devs have been notified, please contact:\n"
+                "`@justjude#2296` or `@Lines#9260`\nOR join our "
+                f"[support server]({fn.links.server}) and give us a ping"
+            )
+
             try:
+                await ctx.send(embed=embed)
+            except:
                 try:
-                    await ctx.send(embed=embed)
-                except:
-                    try:
-                        channel = await ctx.author.create_dm()
-                        await channel.send(embed=embed)
-                    except: pass
+                    channel = await ctx.author.create_dm()
+                    await channel.send(embed=embed)
+                except: pass
 
-                ctx.channel = self.errorlogs
-                book = reactionbook(self.bot, ctx, TITLE="Error Log")
-                result = "".join(format_exception(error, error, error.__traceback__))
+            ctx.channel = self.errorlogs
+            book = reactionbook(self.bot, ctx, TITLE="Error Log")
+            result = "".join(format_exception(error, error, error.__traceback__))
 
-                pages = []
-                content = f"Error on message:\n```{ctx.message.content}```"
-                content += f"```by {ctx.message.author.name} ({ctx.message.author.id})```"
-                content += f"```{ctx.message.channel.type} channel (server: {ctx.message.guild})```"
-                for i in range(0, len(result), 2000):
-                    pages.append(f"```py\n{result[i:i + 1000]}\n```")
-                if len(content + pages[0]) > 2000:
-                    pages.insert(0, content)
-                else:
-                    pages[0] = content + pages[0]
-                book.createpages(pages, ITEM_PER_PAGE=True)
+            pages = []
+            content = f"Error on message:\n```{ctx.message.content}```"
+            content += f"```by {ctx.message.author.name} ({ctx.message.author.id})```"
+            content += f"```{ctx.message.channel.type} channel (server: {ctx.message.guild})```"
+            for i in range(0, len(result), 2000):
+                pages.append(f"```py\n{result[i:i + 1000]}\n```")
+            if len(content + pages[0]) > 2000:
+                pages.insert(0, content)
+            else:
+                pages[0] = content + pages[0]
+            book.createpages(pages, ITEM_PER_PAGE=True)
 
-                await book.createbook(MODE="arrows", COLOUR=fn.colours.red, TIMEOUT=180)
-            except: pass
+            await book.createbook(MODE="arrows", COLOUR=fn.colours.red, TIMEOUT=180)
 
 def setup(bot):
     bot.add_cog(Errorhandler(bot))

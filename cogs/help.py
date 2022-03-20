@@ -103,7 +103,7 @@ class Help(commands.Cog):
                     await ctx.send(embed=self.command_embed(user, cmd, prefix))
                     return
 
-            if ctx.author.id in self.bot.owner_ids:
+            if ctx.author.id in self.bot.devs:
                 for cmd in cm.devcmds:
                     if command.startswith(cmd):
                         await ctx.send(embed=self.command_embed(user, cmd, prefix))

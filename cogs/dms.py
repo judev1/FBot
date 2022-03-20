@@ -48,7 +48,7 @@ class DMs(commands.Cog):
             return
 
         if message.channel.id in self.bot.dms:
-            if message.author.id in self.bot.owner_ids:
+            if message.author.id in self.bot.devs:
                 user = self.bot.dms[message.channel.id]
                 author = f"`{message.author}` "
                 await user.dm_channel.send(author + message.content)

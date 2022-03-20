@@ -319,22 +319,6 @@ def gettop(toptype, amount, obj_id):
     c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC LIMIT {amount};")
     top = c.fetchall()
 
-    c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC;")
-    for rank, data in enumerate(c):
-        if data[0] == obj_id:
-            selftop = data[1:]
-            if toptype == "votes":
-                selftop = sum(selftop)
-            else:
-                selftop = selftop[0]
-            break
-
-    rank = str(rank + 1)
-    if rank.endswith("1") and not rank.endswith("11"): rank += "st"
-    elif rank.endswith("2") and not rank.endswith("12"): rank += "nd"
-    elif rank.endswith("3") and not rank.endswith("13"): rank += "rd"
-    else: rank += "th"
-
     if toptype == "votes":
         newtop = []
         for data in top:
@@ -343,7 +327,16 @@ def gettop(toptype, amount, obj_id):
             newtop.append([data[0], item])
         top = newtop
 
-    return (top, selftop, rank)
+    score = 0
+    rank = 0
+    if obj_id != -1:
+        c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC;")
+        for rank, data in enumerate(c):
+            if data[0] == obj_id:
+                score = sum(data[1:])
+                break
+
+    return (top, score, rank + 1)
 
 # Voting
 
