@@ -4,9 +4,6 @@ from dbfn import reactionbook
 import lib.functions as fn
 import discord
 
-class fakeuser: id = 0
-user = fakeuser()
-
 class Errorhandler(commands.Cog):
 
     def __init__(self, bot):
@@ -53,15 +50,14 @@ class Errorhandler(commands.Cog):
         elif error_type is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
-            embed = self.bot.embed(user, errorlines[0], *errorlines[2:])
+            embed = self.bot.embed(fn.user, errorlines[0], *errorlines[2:])
             try:
                 try: await ctx.send(embed=embed)
                 except: await ctx.reply(error)
             except:
                 try:
                     channel = await ctx.author.create_dm()
-                    try: await channel.send(embed=embed)
-                    except: await channel.reply(error)
+                    await channel.send(embed=embed)
                 except: pass
         elif error_type is commands.UserNotFound:
             await ctx.reply("User not found")
@@ -85,11 +81,13 @@ class Errorhandler(commands.Cog):
                         await ctx.reply("Looks like that member doesn't exist")
                         return
                     await ctx.reply(error.original.text)
-            embed = self.bot.embed(ctx.author, "An unusual error has occurred",
-                    "The devs have been notified, please contact:\n"
-                    "`@justjude#2296` or `@Lines#9260`\n"
-                    f"OR join our [support server]({fn.links.server}) "
-                    "and give us a ping")
+
+            embed = self.bot.embed(
+                ctx.author, "An unusual error has occurred",
+                "The devs have been notified, please contact:\n"
+                "`@justjude#2296` or `@Lines#9260`\nOR join our "
+                f"[support server]({fn.links.server}) and give us a ping"
+            )
 
             try:
                 await ctx.send(embed=embed)

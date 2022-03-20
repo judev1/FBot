@@ -17,9 +17,6 @@ class stats:
         self.triggers_processed = 0
         self.other_messages_processed = 0
 
-class fakeuser: id = 0
-fakeuser = fakeuser()
-
 class Info(commands.Cog):
 
     def __init__(self, bot):
@@ -42,7 +39,7 @@ class Info(commands.Cog):
             stats.other_messages_processed += 1
             return
         if str(message.channel.type) == "private":
-            guild_id = -1
+            guild_id = fn.guild.id
         else:
             guild_id = message.guild.id
 
@@ -121,6 +118,43 @@ class Info(commands.Cog):
         embed.add_field(name="Language", value=guild.preferred_locale)
         embed.add_field(name="Created", value=created)
         embed.set_thumbnail(url=guild.icon_url)
+
+        await ctx.send(embed=embed)
+
+    @commands.command(name="perms", aliases=["permissions"])
+    async def _Perms(self, ctx):
+
+        bot_perms = ctx.channel.permissions_for(
+            ctx.guild.get_member(self.bot.user.id)
+        )
+
+        functional = dict()
+        optional = dict()
+        for perm in cm.functional:
+            bot_perm = getattr(bot_perms, perm)
+            functional[perm] = bot_perm
+        for perm in cm.optional:
+            bot_perm = getattr(bot_perms, perm[1:-1])
+            optional[perm[1:-1]] = bot_perm
+
+        def formatperms(perms):
+            pages = list()
+            for perm in perms:
+                pages.append(f"{fn.emojis[perms[perm]]} ~ {fn.formatperm(perm)}")
+            return "\n".join(pages)
+
+        embed = self.bot.embed(
+            ctx.author,
+            f"**FBot's Permissions in #{ctx.channel}**"
+        )
+        embed.add_field(
+            name="Functional Permissions",
+            value=formatperms(functional)
+        )
+        embed.add_field(
+            name="Optional Permissions",
+            value=formatperms(optional)
+        )
 
         await ctx.send(embed=embed)
 

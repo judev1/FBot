@@ -17,13 +17,18 @@ class cmds:
 
     def load():
 
-        global commands, devcmds, categories, perms, devcmdlist
-        commands, devcmds, categories, perms, devcmdlist = {}, {}, {}, {}, []
+        global commands, devcmds, categories, perms, devcmdlist, functional, optional
+        commands, devcmds, categories, perms, devcmdlist, functional, optional = {}, {}, {}, {}, [], {}, {}
         with open("data/CSVs/Commands.csv") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=",")
             for row in csv_reader:
 
                 perms[row[C_NAME]] = row[C_BOT].split(", ")
+                for perm in row[C_BOT].split(", "):
+                    if not perm.startswith("("):
+                        functional[perm] = perm
+                    else:
+                        optional[perm] = perm
 
                 if row[C_ARGS] != "":
                     row[C_ARGS] = " " + row[C_ARGS]
@@ -49,6 +54,10 @@ class cmds:
                 else:
                     devcmds[row[C_NAME]] = row[1:]
                     devcmdlist.append(row)
+
+        for perm in optional.copy():
+            if perm in functional:
+                del optional[perm]
 
         print(" > Loaded Commands.csv")
 

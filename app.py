@@ -13,8 +13,6 @@ import lib.commands as cm
 import lib.database as db
 import lib.cache as cache
 
-emojis = {True: "✅", False: "⛔"}
-
 class Bot(commands.AutoShardedBot):
 
     premium = list()
@@ -178,7 +176,7 @@ class Bot(commands.AutoShardedBot):
                 for perm in perms:
                     if perm.startswith("("):
                         perms[perm] = getattr(bot_perms, perm[1:-1])
-                    page += f"{emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
+                    page += f"{fn.emojis[perms[perm]]} ~ {fn.formatperm(perm)}\n"
                 raise commands.CheckFailure(message=page)
         else:
             if cm.commands[command][5] == "*Yes*":
