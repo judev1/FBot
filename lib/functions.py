@@ -66,6 +66,22 @@ def getcogs():
             cogs.append(cog)
     return cogs
 
+async def get_member(bot, guild, obj):
+
+    if obj.isdigit():
+        member = await bot.fetch_user(int(obj))
+        if member: return member
+
+    if guild:
+        member = guild.get_member_named(obj)
+        if member: return member
+
+    obj = obj.split("<@")[-1].split("!")[-1].split(">")[0]
+    if obj.isdigit():
+        member = await bot.fetch_user(int(obj))
+        if member: return member
+    return None
+
 def formatname(name):
     if not name:
         name = "Deleted User"

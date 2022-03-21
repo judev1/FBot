@@ -8,6 +8,8 @@ from discord import File
 import requests
 import re
 
+import lib.functions as fn
+
 black = (0, 0, 0)
 white = (255, 255, 255)
 try: # Windows
@@ -62,22 +64,6 @@ class ImageCog(commands.Cog):
                             pixels[x, y] = (255, 255, 255, 255)
             resized_img.convert("RGB").save(resized_path, "JPEG")
 
-    async def get_member(self, guild, obj):
-
-        if obj.isdigit():
-            member = await self.bot.fetch_user(int(obj))
-            if member: return member
-
-        if guild:
-            member = guild.get_member_named(obj)
-            if member: return member
-
-        obj = obj.split("<@")[-1].split("!")[-1].split(">")[0]
-        if obj.isdigit():
-            member = await self.bot.fetch_user(int(obj))
-            if member: return member
-        return None
-
     async def clean_up(self, ctx, process, success):
         if success:
             if process in ["blur"]: filename = process + "red.jpg"
@@ -108,7 +94,7 @@ class ImageCog(commands.Cog):
 
             to_av = " ".join(to_av)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_av)
+            member = await fn.get_member(self.bot, ctx.guild, to_av)
 
             try:
                 await self.save_image(path + "to_avatar", member,
@@ -130,7 +116,7 @@ class ImageCog(commands.Cog):
 
             to_bigpp = " ".join(to_bigpp)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_bigpp)
+            member = await fn.get_member(self.bot, ctx.guild, to_bigpp)
 
             try:
                 await self.save_image(path + "to_bigpp", member,
@@ -154,7 +140,7 @@ class ImageCog(commands.Cog):
 
             to_smolpp = " ".join(to_smolpp)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_smolpp)
+            member = await fn.get_member(self.bot, ctx.guild, to_smolpp)
 
             try:
                 await self.save_image(path + "to_smolpp", member,
@@ -178,7 +164,7 @@ class ImageCog(commands.Cog):
 
             to_bonk = " ".join(to_bonk)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_bonk)
+            member = await fn.get_member(self.bot, ctx.guild, to_bonk)
 
             try:
                 await self.save_image(path + "to_bonk", member,
@@ -210,7 +196,7 @@ class ImageCog(commands.Cog):
 
             to_blur = " ".join(to_blur)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_blur)
+            member = await fn.get_member(self.bot, ctx.guild, to_blur)
 
             try:
                 await self.save_image(path + "to_blur", member,
@@ -234,7 +220,7 @@ class ImageCog(commands.Cog):
 
             to_trigger = " ".join(to_trigger)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_trigger)
+            member = await fn.get_member(self.bot, ctx.guild, to_trigger)
 
             try:
                 await self.save_image(path + "to_trigger", member,
@@ -259,7 +245,7 @@ class ImageCog(commands.Cog):
 
             to_sneak = " ".join(to_sneak)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_sneak)
+            member = await fn.get_member(self.bot, ctx.guild, to_sneak)
 
             try:
                 await self.save_image(path + "to_sneak", member,
@@ -282,7 +268,7 @@ class ImageCog(commands.Cog):
 
             to_god = " ".join(to_god)
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            member = await self.get_member(ctx.guild, to_god)
+            member = await fn.get_member(self.bot, ctx.guild, to_god)
 
             try:
                 await self.save_image(path + "to_god", member,

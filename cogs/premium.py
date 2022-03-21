@@ -1,8 +1,10 @@
 from discord.ext import commands
-import lib.database as db
-import lib.functions as fn
+import asyncio
 import random
 import string
+
+import lib.database as db
+import lib.functions as fn
 
 class Premium(commands.Cog):
 
@@ -136,6 +138,33 @@ class Premium(commands.Cog):
         ping = (self.bot.latency * 100000) // 100
         embed = self.bot.embed(ctx.author, f"FBots Ping: `{ping}ms`")
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def mock(self, ctx, victim, *, text):
+        victim = await fn.get_member(self.bot, ctx.guild, victim)
+        if not victim:
+            #raise commands.UserNotFound()
+            await msg.delete()
+            msg = await ctx.send("Not a valid user")
+            await asyncio.sleep(1)
+
+        mockhook = None
+        webhooks = await ctx.channel.webhooks()
+        for webhook in webhooks:
+            if webhook.name == "FBot Mockhook":
+                mockhook = webhook
+        if not mockhook:
+            with open("data/imgs/FBot.png", "rb") as avatar:
+                mockhook = await ctx.channel.create_webhook(
+                    name="FBot Mockhook", avatar=avatar.read()
+                )
+
+        await ctx.message.delete()
+        await mockhook.send(
+            content=text,
+            username=victim.display_name,
+            avatar_url=victim.avatar_url
+        )
 
 def setup(bot):
     bot.add_cog(Premium(bot))

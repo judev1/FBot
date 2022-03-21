@@ -32,6 +32,7 @@
         "server": "https://fbot.breadhub.uk/server",
         "invite": "https://fbot.breadhub.uk/invite",
         "github": "https://github.com/judev1/FBot",
-        "patreon": "https://www.patreon.com/fbotbot"
+        "patreon": "https://www.patreon.com/fbotbot",
+        "pfp": "https://raw.githubusercontent.com/judev1/FBot/master/data/imgs/FBot.png"
     }
 }
