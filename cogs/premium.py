@@ -143,7 +143,6 @@ class Premium(commands.Cog):
     async def mock(self, ctx, victim, *, text):
         victim = await fn.get_member(self.bot, ctx.guild, victim)
         if not victim:
-            #raise commands.UserNotFound()
             await msg.delete()
             msg = await ctx.send("Not a valid user")
             await asyncio.sleep(1)

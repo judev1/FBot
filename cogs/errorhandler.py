@@ -27,7 +27,9 @@ class Errorhandler(commands.Cog):
 
         error_type = type(error)
 
-        if error_type is commands.CommandNotFound:
+        if error_type is discord.Forbidden:
+            return
+        elif error_type is commands.CommandNotFound:
             return
         elif error_type is commands.MissingPermissions:
             return
@@ -35,6 +37,14 @@ class Errorhandler(commands.Cog):
             return
         elif error_type is commands.MessageNotFound:
             return
+        elif error_type is commands.UserNotFound:
+            await ctx.reply("User not found")
+        elif error_type is commands.ChannelNotFound:
+            await ctx.reply("Channel not found")
+        elif error_type is commands.GuildNotFound:
+            await ctx.reply("Guild not found")
+        elif error_type is fn.NotPremiumUser:
+            await ctx.reply("**Premium only command.** This command requires FBot premium to use")
         elif error_type is commands.DisabledCommand:
             await ctx.reply("**This command is disabled.** If you'd like to find out more join our support server")
         elif error_type is commands.BadArgument:
@@ -43,8 +53,6 @@ class Errorhandler(commands.Cog):
             await ctx.reply("**Command missing an argument.** Whoops! You've missed an argument for this command")
         elif error_type is commands.NoPrivateMessage:
             await ctx.reply("**Server only command.** This command can only be used in a server")
-        elif error_type is commands.UserNotFound:
-            await ctx.reply("**No user found.** Hmm we couldn't find that user, maybe try something else")
         elif error_type is commands.CommandOnCooldown:
             retry = round(error.retry_after, 2)
             await ctx.reply(f"**You're on cooldown!.** Please wait `{retry}s` to use this command", delete_after=5)
@@ -60,12 +68,6 @@ class Errorhandler(commands.Cog):
                     channel = await ctx.author.create_dm()
                     await channel.send(embed=embed)
                 except: pass
-        elif error_type is commands.UserNotFound:
-            await ctx.reply("User not found")
-        elif error_type is commands.ChannelNotFound:
-            await ctx.reply("Channel not found")
-        elif error_type is commands.GuildNotFound:
-            await ctx.reply("Guild not found")
         else:
             if error_type is commands.CommandInvokeError:
                 if type(error.original) is discord.Forbidden:

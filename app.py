@@ -29,8 +29,7 @@ class Bot(commands.AutoShardedBot):
         intents.guilds = True
         intents.messages = True
         intents.reactions = True
-        #intents.members = True # missing intents
-
+        intents.members = True
 
         super().__init__(
             command_prefix=fn.getprefix,
@@ -39,7 +38,6 @@ class Bot(commands.AutoShardedBot):
         )
 
         self.shards_ready = [False] * self.shard_count
-
         self.ftime = fn.ftime()
 
         self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
@@ -122,18 +120,6 @@ class Bot(commands.AutoShardedBot):
 
         return premium
 
-    #async def on_member_update(self, before, after):
-
-    #    if before.roles == after.roles:
-    #        return
-
-    #    for role in after.roles:
-    #        if role.id == self.settings.roles.premium:
-    #            self.premium.add(after.id)
-    #            return
-
-    #    self.premium.remove(after.id)
-
     def is_premium(self, user_id):
         if user_id in self.premium:
             return True
@@ -166,6 +152,10 @@ class Bot(commands.AutoShardedBot):
         if command in cm.devcmds:
             if user not in self.devs:
                 raise commands.NotOwner()
+
+        if ctx.command.cog.qualified_name in "Premium":
+            if user not in self.devs:
+                raise fn.NotPremiumUser()
 
         if str(ctx.channel.type) != "private":
             bot_perms = ctx.channel.permissions_for(ctx.guild.get_member(self.user.id))

@@ -1,3 +1,4 @@
+from discord.ext import commands
 import json
 import os
 
@@ -114,6 +115,9 @@ class Classify:
 
     def __setitem__(self, item, value):
         setattr(self, item, value)
+
+class NotPremiumUser(commands.CommandError):
+    pass
 
 class ShellObject: id = -1
 user = guild = ShellObject()
