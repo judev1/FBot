@@ -13,6 +13,92 @@ import lib.commands as cm
 import lib.database as db
 import lib.cache as cache
 
+def temp():
+    import sqlite3
+    import os
+
+    os.rename("./data/FBot.db", "./data/OLD.db")
+
+    db.setup()
+    c = db.conn.cursor()
+    old_c = sqlite3.connect("./data/OLD.db").cursor()
+
+    old_c.execute("""SELECT guild_id, notice,
+                            prefix, modtoggle, priority, mode FROM guilds;""")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO guilds (
+                                guild_id, notice,
+                                prefix, modtoggle, priority, mode, language,
+                                name, picture,
+                                commands, triggers, joined, removed
+                            )
+                            VALUES (
+                                ?, ?,
+                                ?, ?, ?, ?, 'english',
+                                '', '',
+                                0, 0, 0, 0
+                            );""", data)
+
+    old_c.execute("SELECT guild_id, channel_id, status FROM channels;")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO channels (
+                            guild_id, channel_id, status,
+                            shout
+                        )
+                        VALUES (
+                            ?, ?, ?,
+                            'no'
+                        );""", data)
+
+    old_c.execute("SELECT user_id, ppsize, commands, triggers FROM users;")
+    for data in old_c.fetchall():
+        c.execute(f"""INSERT INTO users (
+                            user_id, ppsize,
+                            commands, triggers,
+                            expiry, title, colour, emoji, say, delete_say, claims
+                        )
+                        VALUES (
+                            ?, ?,
+                            ?, ?,
+                            0, '', {0xf42f42}, '', 'fbot', 'no', 0
+                        );""", data)
+
+    old_c.execute("SELECT * FROM counting;")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO counting (
+                            guild_id, channel_id, number, user_id, record
+                        )
+                        VALUES (
+                            ?, ?, ?, ?, ?
+                        );""", data)
+
+    old_c.execute("SELECT user_id, topvotes, total_topvotes, last_topvote FROM votes;")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO topvotes (
+                            user_id, votes, total_votes, last_vote
+                        )
+                        VALUES (
+                            ?, ?, ?, ?,
+                        );""", data)
+
+    old_c.execute("SELECT user_id, dblvotes, total_dblvotes, last_dblvote FROM votes;")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO dblvotes (
+                            user_id, votes, total_votes, last_vote
+                        )
+                        VALUES (
+                            ?, ?, ?, ?,
+                        );""", data)
+
+    old_c.execute("SELECT user_id, bfdvotes, total_bfdvotes, last_bfdvote FROM votes;")
+    for data in old_c.fetchall():
+        c.execute("""INSERT INTO bfdvotes (
+                            user_id, votes, total_votes, last_vote
+                        )
+                        VALUES (
+                            ?, ?, ?, ?,
+                        );""", data)
+
 class Bot(commands.AutoShardedBot):
 
     premium = list()
@@ -46,7 +132,7 @@ class Bot(commands.AutoShardedBot):
         fn.VotingHandler(self)
         self.add_check(self.predicate)
 
-        db.setup()
+        temp() # db.setup()
         print("\n > Loaded the database")
 
         for csv in [tr, cmds]:
@@ -75,8 +161,8 @@ class Bot(commands.AutoShardedBot):
 
         db.checkguilds(self.guilds)
 
-        self.premium = await self.get_premium()
-        self.cache = cache.Cache(self.settings.devs, self.premium)
+        self.cache = cache.Cache(self.settings.devs)
+        self.update_premium()
 
         for command in cm.commands:
             self.cache.cooldowns.add(command, tuple(cm.commands[command][3:5]))
@@ -109,19 +195,12 @@ class Bot(commands.AutoShardedBot):
             ready, shards = sum(self.shards_ready), self.shard_count
             print(f" > Shard {shard_id} DISCONNECTED, {ready}/{shards} online")
 
-    async def get_premium(self):
-
-        guild = self.get_guild(self.settings.server)
-        role = guild.get_role(self.settings.roles.premium)
-
-        premium = set()
-        for member in role.members:
-            premium.add(member.id)
-
-        return premium
+    def update_premium(self):
+        for user_id, expiry in db.getallpremium():
+            self.cache.premium.add(user_id, True, expiry)
 
     def is_premium(self, user_id):
-        if user_id in self.premium:
+        if self.cache.premium.get(user_id):
             return True
         return False
 

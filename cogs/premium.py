@@ -2,6 +2,7 @@ from discord.ext import commands
 import asyncio
 import random
 import string
+import time
 
 import lib.database as db
 import lib.functions as fn
@@ -10,6 +11,19 @@ class Premium(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def givepremium(self, ctx, member, duration):
+        member = await fn.get_member(self.bot, ctx.guild, member)
+        if not member:
+            await msg.delete()
+            msg = await ctx.send("Not a valid user")
+            await asyncio.sleep(1)
+
+        duration = eval(duration)*60
+        expiry = time.time() + duration
+        db.addpremium(member.id, expiry)
+        self.bot.cache.premium.add(member.id, True, expiry)
 
     @commands.command()
     async def setname(self, ctx, *, title):

@@ -79,7 +79,7 @@ leave,server_id,Dev,Utility,0,0,No,send_messages,dev,{prefix}leave 7177357659367
 presence,text,Dev,Utility,0,0,No,send_messages,dev,{prefix}presence 'FBot help',Set FBot's presence,,
 send,#channel text,Dev,Utility,0,0,No,send_messages,dev,{prefix}send #general HELLO,Send a message to any channel fbot has access to,,
 userdm,@user text,Dev,Utility,0,0,No,send_messages,dev,{prefix}userdm @Lines No one can see your tears here,Sends a message to a user,,
-opendm,@user text,Dev,Utility,0,0,No,send_messages,dev,{prefix}opendm @judstjude Thought I was annoying in your server?,Opens up a sort of dev chatroom with a user in the current channel,,
+opendm,@user text,Dev,Utility,0,0,No,send_messages,dev,{prefix}opendm @justjude Thought I was annoying in your server?,Opens up a sort of dev chatroom with a user in the current channel,,
 closedm,,Dev,Utility,0,0,No,send_messages,dev,{prefix}closedm,Closes the chatroom in the current channel,,
 scounts,,Dev,Utility,0,0,No,send_messages,dev,{prefix}scounts,Updates FBot's server count on various botlists,,
 getnotice,,Dev,Notices,0,0,No,send_messages,dev,{prefix}getnotice,Gets the most recent notice,,
@@ -104,3 +104,4 @@ devset,,Dev,Counting,0,0,Yes,send_messages,dev,{prefix}devset,Sets the counting 
 devremove,,Dev,Counting,0,0,Yes,send_messages,dev,{prefix}devremove,Removes the counting channel,,
 setnumber,number,Dev,Counting,0,0,Yes,send_messages,dev,{prefix}setnumber 69,Sets the number,,
 setppsize,number,Dev,Counting,0,0,Yes,send_messages,dev,{prefix}setppsize 0,Sets a users ppsize,,
+givepremium,@member duration,Dev,Premium,0,0,Yes,send_messages,dev,{prefix}givepremium @Lines 60,Gives premium to a user for a number of minutes,,

@@ -29,7 +29,11 @@ def setup():
 
                         name string NOT NULL,
                         picture string NOT NULL,
-                        triggers string NOT NULL
+
+                        commands integer NOT NULL,
+                        triggers integer NOT NULL,
+                        joined integer NOT NULL,
+                        removed integer NOT NULL
                     );""")
 
     c.execute("""CREATE TABLE IF NOT EXISTS channels (
@@ -47,6 +51,7 @@ def setup():
                         commands integer NOT NULL,
                         triggers integer NOT NULL,
 
+                        expiry integer NOT NULL,
                         title string NOT NULL,
                         colour integer NOT NULL,
                         emoji string NOT NULL,
@@ -55,20 +60,18 @@ def setup():
                         claims integer NOT NULL
                     );""")
 
+    c.execute("""CREATE TABLE IF NOT EXISTS interactions (
+                        user_id integer NOT NULL,
+                        guild_id integer NOT NULL,
+                        type string NOT NULL,
+                        name string NOT NULL,
+                        sent integer NOT NULL
+                    );""")
+
     c.execute("""CREATE TABLE IF NOT EXISTS claims (
                         guild_id integer NOT NULL,
                         channel_id integer NOT NULL,
                         expiry integer NOT NULL
-                    );""")
-
-    c.execute("""CREATE TABLE IF NOT EXISTS triggers (
-                        user_id integer NOT NULL,
-                        trigger_id integer NOT NULL,
-                        message string NOT NULL,
-                        type string NOT NULL,
-                        "case" string NOT NULL,
-                        response string NOT NULL,
-                        guilds string NOT NULL
                     );""")
 
 
@@ -86,17 +89,25 @@ def setup():
                         record integer NOT NULL
                     );""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS votes (
+    c.execute("""CREATE TABLE IF NOT EXISTS topvotes (
                         user_id integer NOT NULL,
-                        topvotes integer NOT NULL,
-                        dblvotes integer NOT NULL,
-                        bfdvotes integer NOT NULL,
-                        total_topvotes integer NOT NULL,
-                        total_dblvotes integer NOT NULL,
-                        total_bfdvotes integer NOT NULL,
-                        last_topvote integer NOT NULL,
-                        last_dblvote integer NOT NULL,
-                        last_bfdvote integer NOT NULL
+                        votes integer NOT NULL,
+                        total_votes integer NOT NULL,
+                        last_vote integer NOT NULL
+                    );""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS dblvotes (
+                        user_id integer NOT NULL,
+                        votes integer NOT NULL,
+                        total_votes integer NOT NULL,
+                        last_vote integer NOT NULL
+                    );""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS bfdvotes (
+                        user_id integer NOT NULL,
+                        votes integer NOT NULL,
+                        total_votes integer NOT NULL,
+                        last_vote integer NOT NULL
                     );""")
 
     conn.commit()
@@ -152,16 +163,18 @@ def checkguilds(guilds):
 
 def addguild(guild_id):
     c = conn.cursor()
-    t = (guild_id, time.time())
+    t = (guild_id, time.time(), time.time())
     c.execute("""INSERT INTO guilds (
                         guild_id, notice,
                         prefix, modtoggle, priority, mode, language,
-                        name, picture, triggers
+                        name, picture, triggers,
+                        commands, triggers, joined, removed
                     )
                     VALUES (
                         ?, ?,
                         'fbot', 'off', 'all', 'default', 'english',
-                        '', '', '{}'
+                        '', '',
+                        0, 0, ?, 0
                     );""", t)
     t = (guild_id,)
     c.execute("""INSERT INTO counting (
@@ -187,12 +200,10 @@ def addchannel(channel_id, guild_id):
     if not c.fetchone():
         t = (guild_id, channel_id)
         c.execute("""INSERT INTO channels (
-                        guild_id, channel_id, status,
-                        shout
+                        guild_id, channel_id, status, shout
                     )
                     VALUES (
-                        ?, ?, 'off',
-                        'no'
+                        ?, ?, 'off', 'no'
                     );""", t)
         conn.commit()
 
@@ -295,12 +306,12 @@ def register(user_id):
         c.execute(f"""INSERT INTO users (
                         user_id, ppsize,
                         commands, triggers,
-                        title, colour, emoji, say, delete_say, claims
+                        expiry, title, colour, emoji, say, delete_say, claims
                     )
                     VALUES (
                         ?, -1,
                         0, 0,
-                        '', {0xf42f42}, '', 'fbot', 'yes', 0
+                        0, '', {0xf42f42}, '', 'fbot', 'no', 0
                     );""", t)
         conn.commit()
 
@@ -340,28 +351,22 @@ def gettop(toptype, amount, obj_id):
 
 # Voting
 
-def addvoter(user_id):
+def addvoter(user_id, site):
     c = conn.cursor()
     t = (user_id,)
     c.execute("SELECT user_id FROM votes WHERE user_id=?;", t)
     if not c.fetchone():
-        c.execute("""INSERT INTO votes (
-                        user_id,
-                        topvotes, dblvotes, bfdvotes,
-                        total_topvotes, total_dblvotes, total_bfdvotes,
-                            last_topvote, last_dblvote, last_bfdvote
+        c.execute(f"""INSERT INTO {site}votes (
+                        user_id, votes, total_votes, last_bfdvote
                     )
                     VALUES (
-                        ?,
-                        0, 0, 0,
-                        0, 0, 0,
-                        0, 0, 0
+                        ?, 0, 0, 0
                     );""", t)
         conn.commit()
 
 def vote(user_id, site):
     user_id = int(user_id)
-    addvoter(user_id)
+    addvoter(user_id, site)
 
     c = conn.cursor()
     t = (user_id,)
@@ -392,6 +397,25 @@ def nextvote(user_id, site):
     return (mins, hours)
 
 # Premium
+
+def getallpremium():
+    c = conn.cursor()
+    t = (time.time(),)
+    c.execute("SELECT user_id, expiry FROM users WHERE expiry>?;", t)
+    return c.fetchall()
+
+def ispremium(user_id):
+    c = conn.cursor()
+    t = (user_id)
+    c.execute("SELECT user_id FROM users WHERE user_id=?;", t)
+    return bool(c.fetchone())
+
+def addpremium(user_id, expiry):
+    c = conn.cursor()
+    t = (expiry, user_id)
+    c.execute("UPDATE users SET expiry=? WHERE user_id=?;", t)
+    conn.commit()
+
 
 def changetitle(user_id, title):
     c = conn.cursor()
