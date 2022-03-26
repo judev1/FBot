@@ -167,7 +167,7 @@ def addguild(guild_id):
     c.execute("""INSERT INTO guilds (
                         guild_id, notice,
                         prefix, modtoggle, priority, mode, language,
-                        name, picture, triggers,
+                        name, picture,
                         commands, triggers, joined, removed
                     )
                     VALUES (

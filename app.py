@@ -176,6 +176,9 @@ class Bot(commands.AutoShardedBot):
         print(f" > Bot is ready")
         self.dispatch("bot_ready")
 
+    async def on_disconnect(self, shard_id):
+        self.shards_ready = [False]*3
+
     async def on_shard_ready(self, shard_id):
         self.shards_ready[shard_id] = True
         ready, shards = sum(self.shards_ready), self.shard_count
@@ -233,7 +236,7 @@ class Bot(commands.AutoShardedBot):
                 raise commands.NotOwner()
 
         if ctx.command.cog.qualified_name in "Premium":
-            if user not in self.devs:
+            if not self.is_premium(user):
                 raise fn.NotPremiumUser()
 
         if str(ctx.channel.type) != "private":

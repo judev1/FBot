@@ -24,7 +24,7 @@ class Cooldowns:
                 del self._cooldowns[user]
             else: break
 
-        for user in cooldowns.copy():
+        for user in self._cooldowns.copy():
             if now >= cooldowns[user]:
                 del cooldowns[user]
             else: break
