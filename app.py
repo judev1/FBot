@@ -5,6 +5,7 @@ from discord.ext import commands
 import discord
 import json
 import dbl
+import asyncio
 
 from lib.commands import cmds
 from lib.triggers import tr
@@ -16,6 +17,9 @@ import lib.cache as cache
 def temp():
     import sqlite3
     import os
+
+    print("ALERT: This method is to be used to migrate the database. It is to be used ONCE. Below is a temp() call that runs this function, once this function is run, replace the call with db.setup()")
+    asyncio.sleep(5)
 
     os.rename("./data/FBot.db", "./data/OLD.db")
 
@@ -111,11 +115,15 @@ class Bot(commands.AutoShardedBot):
             self.settings = fn.Classify(json.load(file))
             self.devs = self.settings.devs
 
-        intents = discord.Intents.none()
-        intents.guilds = True
-        intents.messages = True
-        intents.reactions = True
-        intents.members = True
+        intents = discord.Intents.all()
+        intents.presences = False
+        intents.bans = False
+        intents.integrations = False
+        intents.typing = False
+        intents.webhooks = False
+        intents.invites = False
+        intents.members = False
+        # This is a hotfix to allow for local development of the bot, while keeping the integrity of the production bot up and making sure it doesn't crash. It will get a proper fix soon(tm)
 
         super().__init__(
             command_prefix=fn.getprefix,
