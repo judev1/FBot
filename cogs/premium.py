@@ -1,4 +1,5 @@
 from discord.ext import commands
+from datetime import datetime
 import asyncio
 import random
 import string
@@ -24,6 +25,10 @@ class Premium(commands.Cog):
         expiry = time.time() + duration
         db.addpremium(member.id, expiry)
         self.bot.cache.premium.add(member.id, True, expiry)
+
+        await ctx.message.add_reaction("✅")
+        date = datetime.fromtimestamp(expiry).strftime("%H:%M, %d/%m/%y UTC")
+        await ctx.send(f"**{member.display_name}** has been given premium until {date}")
 
     @commands.command()
     async def setname(self, ctx, *, title):
