@@ -30,6 +30,7 @@ def setup():
                         name string NOT NULL,
                         picture string NOT NULL,
 
+                        custom_commands string NOT NULL,
                         commands integer NOT NULL,
                         triggers integer NOT NULL,
                         joined integer NOT NULL,
@@ -44,6 +45,7 @@ def setup():
                         shout string NOT NULL
                     );""")
 
+    # Keeping commands and triggers for backwards compatibility
     c.execute("""CREATE TABLE IF NOT EXISTS users (
                         user_id integer NOT NULL,
                         ppsize integer NOT NULL,
@@ -74,6 +76,16 @@ def setup():
                         expiry integer NOT NULL
                     );""")
 
+    c.execute("""CREATE TABLE IF NOT EXISTS custom_commands (
+                        trigger_id integer PRIMARY KEY AUTOINCREMENT,
+                        user_id primary integer NOT NULL,
+                        message string NOT NULL,
+                        type string NOT NULL,
+                        'case' string NOT NULL,
+                        response string NOT NULL,
+                        priority string NOT NULL,
+                        uses integer NOT NULL
+                    );""")
 
     c.execute("""CREATE TABLE IF NOT EXISTS notices (
                         date integer NOT NULL,
@@ -167,13 +179,13 @@ def addguild(guild_id):
     c.execute("""INSERT INTO guilds (
                         guild_id, notice,
                         prefix, modtoggle, priority, mode, language,
-                        name, picture,
+                        name, picture, custom_commands,
                         commands, triggers, joined, removed
                     )
                     VALUES (
                         ?, ?,
                         'fbot', 'off', 'all', 'default', 'english',
-                        '', '',
+                        '', '', '[]',
                         0, 0, ?, 0
                     );""", t)
     t = (guild_id,)

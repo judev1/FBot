@@ -33,13 +33,13 @@ def temp():
         c.execute("""INSERT INTO guilds (
                                 guild_id, notice,
                                 prefix, modtoggle, priority, mode, language,
-                                name, picture,
+                                name, picture, custom_commands,
                                 commands, triggers, joined, removed
                             )
                             VALUES (
                                 ?, ?,
                                 ?, ?, ?, ?, 'english',
-                                '', '',
+                                '', '', '[]'
                                 0, 0, 0, 0
                             );""", data)
 
