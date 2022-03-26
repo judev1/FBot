@@ -188,9 +188,8 @@ def addguild(guild_id):
 def removeguild(guild_id):
     c = conn.cursor()
     t = (guild_id,)
-    c.execute("DELETE FROM guilds WHERE guild_id=?;", t)
-    c.execute("DELETE FROM channels WHERE guild_id=?;", t)
-    c.execute("DELETE FROM counting WHERE guild_id=?;", t)
+    t = (time.time(), guild_id)
+    c.execute("UPDATE guilds SET removed=? WHERE guild_id=?;", t)
     conn.commit()
 
 def addchannel(channel_id, guild_id):
