@@ -24,84 +24,82 @@ def temp():
     os.rename("./data/FBot.db", "./data/OLD.db")
 
     db.setup()
-    c = db.conn.cursor()
     old_c = sqlite3.connect("./data/OLD.db").cursor()
 
     old_c.execute("""SELECT guild_id, notice,
                             prefix, modtoggle, priority, mode FROM guilds;""")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO guilds (
-                                guild_id, notice,
-                                prefix, modtoggle, priority, mode, language,
-                                name, picture, custom_commands,
-                                commands, triggers, joined, removed
-                            )
-                            VALUES (
-                                ?, ?,
-                                ?, ?, ?, ?, 'english',
-                                '', '', '[]'
-                                0, 0, 0, 0
-                            );""", data)
+        db.update("""
+            INSERT INTO guilds (
+                guild_id, notice,
+                prefix, modtoggle, priority, mode, language,
+                name, picture, custom_commands,
+                commands, triggers, joined, removed
+            ) VALUES (
+                ?, ?,
+                ?, ?, ?, ?, 'english',
+                '', '', '[]'
+                0, 0, 0, 0
+            )""", data)
 
     old_c.execute("SELECT guild_id, channel_id, status FROM channels;")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO channels (
-                            guild_id, channel_id, status,
-                            shout
-                        )
-                        VALUES (
-                            ?, ?, ?,
-                            'no'
-                        );""", data)
+        db.update("""
+            INSERT INTO channels (
+                guild_id, channel_id, status, shout
+            ) VALUES (
+                ?, ?, ?, 'no'
+            )""", data)
 
     old_c.execute("SELECT user_id, ppsize, commands, triggers FROM users;")
     for data in old_c.fetchall():
-        c.execute(f"""INSERT INTO users (
-                            user_id, ppsize,
-                            commands, triggers,
-                            expiry, title, colour, emoji, say, delete_say, claims
-                        )
-                        VALUES (
-                            ?, ?,
-                            ?, ?,
-                            0, '', {0xf42f42}, '', 'fbot', 'no', 0
-                        );""", data)
+        db.update(f"""
+            INSERT INTO users (
+                user_id, ppsize,
+                commands, triggers,
+                expiry, title, colour, emoji, say, delete_say,
+                claims, custom_commands
+            ) VALUES (
+                ?, ?,
+                ?, ?,
+                0, '', {0xf42f42}, '', 'fbot', 'no', 0, 0
+            )""", data)
 
     old_c.execute("SELECT * FROM counting;")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO counting (
-                            guild_id, channel_id, number, user_id, record
-                        )
-                        VALUES (
-                            ?, ?, ?, ?, ?
-                        );""", data)
+        db.update("""
+            INSERT INTO counting (
+                guild_id, channel_id, number, user_id, record
+            ) VALUES (
+                ?, ?, ?, ?, ?
+            )""", data)
 
     old_c.execute("SELECT user_id, topvotes, total_topvotes, last_topvote FROM votes;")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO topvotes (
-                            user_id, votes, total_votes, last_vote
-                        )
-                        VALUES (
-                            ?, ?, ?, ?,
-                        );""", data)
+        db.update("""
+            INSERT INTO topvotes (
+                    user_id, votes, total_votes, last_vote
+                ) VALUES (
+                    ?, ?, ?, ?,
+                )""", data)
 
     old_c.execute("SELECT user_id, dblvotes, total_dblvotes, last_dblvote FROM votes;")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO dblvotes (
-                            user_id, votes, total_votes, last_vote
-                        )
-                        VALUES (
-                            ?, ?, ?, ?,
-                        );""", data)
+        db.update("""
+            INSERT INTO dblvotes (
+                user_id, votes, total_votes, last_vote
+            ) VALUES (
+                ?, ?, ?, ?,
+            );""", data)
 
     old_c.execute("SELECT user_id, bfdvotes, total_bfdvotes, last_bfdvote FROM votes;")
     for data in old_c.fetchall():
-        c.execute("""INSERT INTO bfdvotes (
-                            user_id, votes, total_votes, last_vote
-                        )
-                        VALUES (
-                            ?, ?, ?, ?,
-                        );""", data)
+        db.update("""
+            INSERT INTO bfdvotes (
+                user_id, votes, total_votes, last_vote
+            ) VALUES (
+                ?, ?, ?, ?,
+            )""", data)
 
 class Bot(commands.AutoShardedBot):
 

@@ -77,7 +77,8 @@ def setup():
             emoji string NOT NULL,
             say string NOT NULL,
             delete_say string NOT NULL,
-            claims integer NOT NULL
+            claims integer NOT NULL,
+            custom_triggers integer NOT NULL,
         )""")
 
     update("""
