@@ -30,13 +30,13 @@ class Notices(commands.Cog):
         if not fn.getcommand(self.bot, message, ignore_dev=False):
             return
 
-        notice = db.getlastnotice()
+        notice = db.getnotice()
         if notice:
             last_notice = db.getservernotice(message.guild.id)
             if last_notice < notice[0]:
                 embed = self.create_notice(message, *notice)
                 await message.channel.send(embed=embed)
-                db.updateservernotice(message.guild.id)
+                db.setservernotice(message.guild.id)
 
     def create_notice(self, ctx, date, title, message):
         message = eval(f'f"""{message}"""')
@@ -49,13 +49,13 @@ class Notices(commands.Cog):
 
     @commands.command()
     async def getnotice(self, ctx):
-        embed = self.create_notice(ctx, *db.getlastnotice())
+        embed = self.create_notice(ctx, *db.getnotice())
         await ctx.send(embed=embed)
 
     @commands.command()
     async def editnotice(self, ctx, *, text):
         title, message = text.split(" && ")
-        db.editnotice(title, message)
+        db.setnotice(title, message)
         await ctx.message.add_reaction("✅")
 
     @commands.command()

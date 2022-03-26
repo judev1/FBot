@@ -3,6 +3,23 @@ import sqlite3
 import time
 import os
 
+def fetchone(query, t=tuple()):
+    c = conn.cursor()
+    c.execute(query + ";", t)
+    result = c.fetchone()
+    if len(result) == 1:
+        return result[0]
+    return result
+
+def fetchall(query, t=tuple()):
+    c = conn.cursor()
+    c.execute(query + ";", t)
+    return c.fetchall()
+
+def update(query, t=tuple()):
+    conn.cursor().execute(query + ";", t)
+    conn.commit()
+
 def setup():
     global conn
     path = "./data/FBot.db"
@@ -15,317 +32,276 @@ def setup():
         with open(f"./data/db_backups/{filename}.db", "wb+") as newfile:
             newfile.writelines(file.readlines())
 
-    c = conn.cursor()
+    update("""
+        CREATE TABLE IF NOT EXISTS guilds (
+            guild_id integer NOT NULL,
+            notice string NOT NULL,
 
-    c.execute("""CREATE TABLE IF NOT EXISTS guilds (
-                        guild_id integer NOT NULL,
-                        notice string NOT NULL,
+            prefix string NOT NULL,
+            modtoggle string NOT NULL,
+            priority string NOT NULL,
+            mode string NOT NULL,
+            language string NOT NULL,
 
-                        prefix string NOT NULL,
-                        modtoggle string NOT NULL,
-                        priority string NOT NULL,
-                        mode string NOT NULL,
-                        language string NOT NULL,
+            name string NOT NULL,
+            picture string NOT NULL,
 
-                        name string NOT NULL,
-                        picture string NOT NULL,
+            custom_commands string NOT NULL,
+            commands integer NOT NULL,
+            triggers integer NOT NULL,
+            joined integer NOT NULL,
+            removed integer NOT NULL
+        )""")
 
-                        custom_commands string NOT NULL,
-                        commands integer NOT NULL,
-                        triggers integer NOT NULL,
-                        joined integer NOT NULL,
-                        removed integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS channels (
+            guild_id integer NOT NULL,
+            channel_id integer NOT NULL,
+            status string NOT NULL,
 
-    c.execute("""CREATE TABLE IF NOT EXISTS channels (
-                        guild_id integer NOT NULL,
-                        channel_id integer NOT NULL,
-                        status string NOT NULL,
-
-                        shout string NOT NULL
-                    );""")
+            shout string NOT NULL
+        )""")
 
     # Keeping commands and triggers for backwards compatibility
-    c.execute("""CREATE TABLE IF NOT EXISTS users (
-                        user_id integer NOT NULL,
-                        ppsize integer NOT NULL,
+    update("""
+        CREATE TABLE IF NOT EXISTS users (
+            user_id integer NOT NULL,
+            ppsize integer NOT NULL,
 
-                        commands integer NOT NULL,
-                        triggers integer NOT NULL,
+            commands integer NOT NULL,
+            triggers integer NOT NULL,
 
-                        expiry integer NOT NULL,
-                        title string NOT NULL,
-                        colour integer NOT NULL,
-                        emoji string NOT NULL,
-                        say string NOT NULL,
-                        delete_say string NOT NULL,
-                        claims integer NOT NULL
-                    );""")
+            expiry integer NOT NULL,
+            title string NOT NULL,
+            colour integer NOT NULL,
+            emoji string NOT NULL,
+            say string NOT NULL,
+            delete_say string NOT NULL,
+            claims integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS interactions (
-                        user_id integer NOT NULL,
-                        guild_id integer NOT NULL,
-                        type string NOT NULL,
-                        name string NOT NULL,
-                        sent integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS interactions (
+            user_id integer NOT NULL,
+            guild_id integer NOT NULL,
+            type string NOT NULL,
+            name string NOT NULL,
+            sent integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS claims (
-                        guild_id integer NOT NULL,
-                        channel_id integer NOT NULL,
-                        expiry integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS claims (
+            guild_id integer NOT NULL,
+            channel_id integer NOT NULL,
+            expiry integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS custom_commands (
-                        trigger_id integer PRIMARY KEY AUTOINCREMENT,
-                        user_id primary integer NOT NULL,
-                        message string NOT NULL,
-                        type string NOT NULL,
-                        'case' string NOT NULL,
-                        response string NOT NULL,
-                        priority string NOT NULL,
-                        uses integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS custom_commands (
+            trigger_id integer PRIMARY KEY AUTOINCREMENT,
+            user_id primary integer NOT NULL,
+            message string NOT NULL,
+            type string NOT NULL,
+            'case' string NOT NULL,
+            response string NOT NULL,
+            priority string NOT NULL,
+            uses integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS notices (
-                        date integer NOT NULL,
-                        title string NOT NULL,
-                        message string NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS notices (
+            date integer NOT NULL,
+            title string NOT NULL,
+            message string NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS counting (
-                        guild_id integer NOT NULL,
-                        channel_id integer NOT NULL,
-                        number integer NOT NULL,
-                        user_id integer NOT NULL,
-                        record integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS counting (
+            guild_id integer NOT NULL,
+            channel_id integer NOT NULL,
+            number integer NOT NULL,
+            user_id integer NOT NULL,
+            record integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS topvotes (
-                        user_id integer NOT NULL,
-                        votes integer NOT NULL,
-                        total_votes integer NOT NULL,
-                        last_vote integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS topvotes (
+            user_id integer NOT NULL,
+            votes integer NOT NULL,
+            total_votes integer NOT NULL,
+            last_vote integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS dblvotes (
-                        user_id integer NOT NULL,
-                        votes integer NOT NULL,
-                        total_votes integer NOT NULL,
-                        last_vote integer NOT NULL
-                    );""")
+    update("""
+        CREATE TABLE IF NOT EXISTS dblvotes (
+            user_id integer NOT NULL,
+            votes integer NOT NULL,
+            total_votes integer NOT NULL,
+            last_vote integer NOT NULL
+        )""")
 
-    c.execute("""CREATE TABLE IF NOT EXISTS bfdvotes (
-                        user_id integer NOT NULL,
-                        votes integer NOT NULL,
-                        total_votes integer NOT NULL,
-                        last_vote integer NOT NULL
-                    );""")
-
-    conn.commit()
+    update("""
+        CREATE TABLE IF NOT EXISTS bfdvotes (
+            user_id integer NOT NULL,
+            votes integer NOT NULL,
+            total_votes integer NOT NULL,
+            last_vote integer NOT NULL
+        )""")
 
 def checkguilds(guilds):
-    c = conn.cursor()
+
     guild_ids = dict()
     for guild in guilds:
         guild_ids[guild.id] = guild
 
+    query = "SELECT * FROM guilds where guild_id=?"
     for guild_id in guild_ids:
-        t = (guild_id,)
-        c.execute("SELECT * FROM guilds where guild_id=?;", t)
-        if not c.fetchone():
+        if not fetchone(query, (guild_id,)):
             addguild(guild_id)
 
-    count = [0, 0]
-    c.execute("SELECT guild_id FROM guilds;")
-    for guild_id in c.fetchall():
-        if not (guild_id[0] in guild_ids):
-            count[0] += 1
-            c.execute("DELETE FROM guilds WHERE guild_id=?;", guild_id)
-        else:
-            channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
-            c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
-            channels = c.fetchall()
-            for channel_id in channels:
-                if not (channel_id[0] in channel_ids):
-                    count[1] += 1
-                    c.execute("DELETE FROM channels WHERE channel_id=?;", channel_id)
-    print("Removed", count[0], "guilds from 'guilds'")
-    print("Removed", count[1], "channels from 'channels'")
+    count = 0
+    for guild_id in fetchall("SELECT guild_id FROM guilds"):
+        channels = guild_ids[guild_id[0]].channels
+        channel_ids = [channel.id for channel in channels]
+        query = "SELECT channel_id FROM channels WHERE guild_id=?"
+        for channel_id in fetchall(query, (guild_id,)):
+            if not (channel_id[0] in channel_ids):
+                count[1] += 1
+                query = "DELETE FROM channels WHERE channel_id=?"
+                update(query, (channel_id,))
+    print("Removed", count, "channels from 'channels'")
 
     count = 0
-    c.execute("SELECT guild_id FROM channels;")
-    for guild_id in c.fetchall():
+    for guild_id in fetchall("SELECT guild_id FROM channels"):
         if not (guild_id[0] in guild_ids):
             count += 1
-            c.execute("DELETE FROM channels WHERE guild_id=?;", guild_id)
+            query = "DELETE FROM channels WHERE guild_id=?"
+            update(query, (guild_id,))
     print("Removed", count, "guild channels from 'channels'")
 
-    count = 0
-    c.execute("SELECT guild_id FROM counting;")
-    for guild_id in c.fetchall():
-        if not (guild_id[0] in guild_ids):
-            count += 1
-            c.execute("DELETE FROM counting WHERE guild_id=?;", guild_id)
-    print("Removed", count, "guilds from 'counting'\n")
-
-    conn.commit()
 
 # General
 
 def addguild(guild_id):
-    c = conn.cursor()
-    t = (guild_id, time.time(), time.time())
-    c.execute("""INSERT INTO guilds (
-                        guild_id, notice,
-                        prefix, modtoggle, priority, mode, language,
-                        name, picture, custom_commands,
-                        commands, triggers, joined, removed
-                    )
-                    VALUES (
-                        ?, ?,
-                        'fbot', 'off', 'all', 'default', 'english',
-                        '', '', '[]',
-                        0, 0, ?, 0
-                    );""", t)
-    t = (guild_id,)
-    c.execute("""INSERT INTO counting (
-                        guild_id, channel_id, number, user_id, record
-                    )
-                    VALUES (
-                        ?, 0, 0, 0, 0
-                    );""", t)
-    conn.commit()
+    update("""
+        INSERT INTO guilds (
+            guild_id, notice,
+            prefix, modtoggle, priority, mode, language,
+            name, picture, custom_commands,
+            commands, triggers, joined, removed
+        )
+        VALUES (
+            ?, ?,
+            'fbot', 'off', 'all', 'default', 'english',
+            '', '', '[]',
+            0, 0, ?, 0
+        )""", (guild_id, time.time(), time.time()))
+    update("""
+        INSERT INTO counting (
+            guild_id, channel_id, number, user_id, record
+        ) VALUES (
+            ?, 0, 0, 0, 0
+        )""", (guild_id,))
 
 def removeguild(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    t = (time.time(), guild_id)
-    c.execute("UPDATE guilds SET removed=? WHERE guild_id=?;", t)
-    conn.commit()
+    query = "UPDATE guilds SET removed=? WHERE guild_id=?"
+    update(query, (time.time(), guild_id))
 
 def addchannel(channel_id, guild_id):
-    c = conn.cursor()
-    t = (channel_id,)
-    c.execute("SELECT * FROM channels where channel_id=?;", t)
-    if not c.fetchone():
+    query = "SELECT * FROM channels where channel_id=?;"
+    if not fetchone(query, (channel_id,)):
         t = (guild_id, channel_id)
-        c.execute("""INSERT INTO channels (
-                        guild_id, channel_id, status, shout
-                    )
-                    VALUES (
-                        ?, ?, 'off', 'no'
-                    );""", t)
-        conn.commit()
+        update("""
+            INSERT INTO channels (
+                guild_id, channel_id, status, shout
+            ) VALUES (
+                ?, ?, 'off', 'no'
+            )""", (channel_id,))
+
 
 # Config
 
-def changemodtoggle(guild_id, modtoggle):
-    c = conn.cursor()
-    t = (modtoggle, guild_id)
-    c.execute("UPDATE guilds SET modtoggle=? WHERE guild_id=?;", t)
-    conn.commit()
-
 def getmodtoggle(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT modtoggle FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT modtoggle FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
 
-def changemode(guild_id, mode):
-    c = conn.cursor()
-    t = (mode, guild_id)
-    c.execute("UPDATE guilds SET mode=? WHERE guild_id=?;", t)
-    conn.commit()
+def setmodtoggle(guild_id, modtoggle):
+    query = "UPDATE guilds SET modtoggle=? WHERE guild_id=?"
+    update(query, (modtoggle, guild_id))
 
 def getmode(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT mode FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT mode FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
+
+def setmode(guild_id, mode):
+    query = "UPDATE guilds SET mode=? WHERE guild_id=?"
+    update(query, (mode, guild_id))
 
 def getlang(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT language FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
-
-def changestatus(channel_id, status):
-    c = conn.cursor()
-    t = (status, channel_id)
-    c.execute("UPDATE channels SET status=? WHERE channel_id=?;", t)
-    conn.commit()
+    query = "SELECT language FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
 
 def getstatus(channel_id):
-    c = conn.cursor()
-    t = (channel_id,)
-    c.execute("SELECT status FROM channels WHERE channel_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT status FROM channels WHERE channel_id=?"
+    return fetchone(query, (channel_id,))
 
 def getallstatus(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT channel_id, status FROM channels WHERE guild_id=?;", t)
     newdata = list()
-    for channel in c.fetchall():
+    query = "SELECT channel_id, status FROM channels WHERE guild_id=?"
+    for channel in fetchall(query, (guild_id,)):
         newdata.append((channel[0], channel[1]))
     return newdata
+
+def setstatus(channel_id, status):
+    query = "UPDATE channels SET status=? WHERE channel_id=?"
+    update(query, (status, channel_id))
+
 
 # Notices
 
 def addnotice(date, title, message):
-    c = conn.cursor()
-    t = (date, title, message)
-    c.execute("""INSERT INTO notices (
-                    date, title, message
-                )
-                VALUES (
-                    ?, ?, ?
-                );""", t)
-    conn.commit()
+    update("""
+        INSERT INTO notices (
+            date, title, message
+        ) VALUES (
+            ?, ?, ?
+        )""", (date, title, message)
+    )
 
-def editnotice(title, message):
-    c = conn.cursor()
-    t = (title, message, getlastnotice()[0])
-    c.execute(f"UPDATE notices SET title=?, message=? WHERE date=?;", t)
-    return c.fetchone()
+def getnotice():
+    query = f"SELECT * FROM notices ORDER BY date DESC LIMIT 1"
+    return fetchone(query)
 
-def getlastnotice():
-    c = conn.cursor()
-    c.execute(f"SELECT * FROM notices ORDER BY date DESC LIMIT 1;")
-    return c.fetchone()
+def setnotice(title, message):
+    query = f"UPDATE notices SET title=?, message=? WHERE date=?"
+    update(query, (title, message, getnotice()[0]))
 
 def getservernotice(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute(f"SELECT notice FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = f"SELECT notice FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
 
-def updateservernotice(guild_id):
-    c = conn.cursor()
-    t = (time.time(), guild_id)
-    c.execute(f"UPDATE guilds SET notice=? WHERE guild_id=?;", t)
-    conn.commit()
+def setservernotice(guild_id):
+    query = f"UPDATE guilds SET notice=? WHERE guild_id=?"
+    update(query, (time.time(), guild_id))
+
 
 # Users
 
 def register(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT user_id FROM users WHERE user_id=?;", t)
-    if c.fetchone() is None:
-        c.execute(f"""INSERT INTO users (
-                        user_id, ppsize,
-                        commands, triggers,
-                        expiry, title, colour, emoji, say, delete_say, claims
-                    )
-                    VALUES (
-                        ?, -1,
-                        0, 0,
-                        0, '', {0xf42f42}, '', 'fbot', 'no', 0
-                    );""", t)
-        conn.commit()
+    query = "SELECT user_id FROM users WHERE user_id=?"
+    if fetchone(query, (user_id,)) is None:
+        update(f"""
+            INSERT INTO users (
+                user_id, ppsize, commands, triggers,
+                expiry, title, colour, emoji, say, delete_say, claims
+            ) VALUES (
+                ?, -1, 0, 0,
+                0, '', {0xf42f42}, '', 'fbot', 'no', 0
+            )
+        """, (user_id,)
+    )
 
+# comon jude rewrite this properly
 def gettop(toptype, amount, obj_id):
 
     if toptype == "votes":
@@ -337,9 +313,8 @@ def gettop(toptype, amount, obj_id):
     else:
         ORDER = DATA
 
-    c = conn.cursor()
-    c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC LIMIT {amount};")
-    top = c.fetchall()
+    query = f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC LIMIT {amount}"
+    top = fetchall(query)
 
     if toptype == "votes":
         newtop = list()
@@ -352,240 +327,176 @@ def gettop(toptype, amount, obj_id):
     score = 0
     rank = 0
     if obj_id != -1:
-        c.execute(f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC;")
-        for rank, data in enumerate(c):
+        query = f"SELECT {ID}, {DATA} FROM {TABLE} ORDER BY {ORDER} DESC"
+        for rank, data in enumerate(fetchall(query)):
             if data[0] == obj_id:
                 score = sum(data[1:])
                 break
 
     return (top, score, rank + 1)
 
+
 # Voting
 
 def addvoter(user_id, site):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT user_id FROM votes WHERE user_id=?;", t)
-    if not c.fetchone():
-        c.execute(f"""INSERT INTO {site}votes (
-                        user_id, votes, total_votes, last_bfdvote
-                    )
-                    VALUES (
-                        ?, 0, 0, 0
-                    );""", t)
-        conn.commit()
+    query = f"SELECT user_id FROM {site}votes WHERE user_id=?"
+    if not fetchone(query, (user_id,)):
+        update(f"""
+            INSERT INTO {site}votes (
+                user_id, votes, total_votes, last_bfdvote
+            ) VALUES (
+                ?, 0, 0, 0
+            )
+        """, (user_id,)
+    )
 
 def vote(user_id, site):
-    user_id = int(user_id)
     addvoter(user_id, site)
-
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute(f"UPDATE votes SET {site}votes={site}votes+1, "
-                f"total_{site}votes=total_{site}votes+1, "
-                f"last_{site}vote={time.time()} WHERE user_id=?;", t)
-
-    conn.commit()
+    update(f"""
+        UPDATE votes SET {site}votes={site}votes+1,
+        total_{site}votes=total_{site}votes+1,
+        last_{site}vote={time.time()} WHERE user_id=?
+    """, (user_id,))
 
 def nextvote(user_id, site):
-    c = conn.cursor()
-    user_id = int(user_id)
-    t = (user_id,)
-    c.execute(f"SELECT last_{site}vote FROM votes where user_id=?;", t)
-    lastvote = c.fetchone()[0]
-    if not lastvote: return None
+    query = f"SELECT last_vote FROM {site}votes where user_id=?"
+    lastvote = fetchone(query, (user_id,))
+
+    if not lastvote:
+        return None
+
     if site in ["top", "dbl"]:
         nextvote = (lastvote + 60*60*12) - time.time()
     elif site == "bfd":
         lastvote = datetime.fromtimestamp(lastvote)
         now = datetime(lastvote.year, lastvote.month, lastvote.day)
         nextvote = (now.timestamp() + 60*60*24) - time.time()
+
     rawhours = nextvote / 60 / 60
     mins = round((rawhours - int(rawhours)) * 60)
     hours = int(rawhours)
+
     if hours < 0 or mins < 0:
         return None
+
     return (mins, hours)
+
 
 # Premium
 
-def getallpremium():
-    c = conn.cursor()
-    t = (time.time(),)
-    c.execute("SELECT user_id, expiry FROM users WHERE expiry>?;", t)
-    return c.fetchall()
-
 def ispremium(user_id):
-    c = conn.cursor()
-    t = (user_id)
-    c.execute("SELECT user_id FROM users WHERE user_id=?;", t)
-    return bool(c.fetchone())
+    query = "SELECT user_id FROM users WHERE user_id=?"
+    return bool(fetchone(query, (user_id,)))
+
+def getallpremium():
+    query = "SELECT user_id, expiry FROM users WHERE expiry>?"
+    return fetchall(query, (time.time(),))
 
 def addpremium(user_id, expiry):
-    c = conn.cursor()
-    t = (expiry, user_id)
-    c.execute("UPDATE users SET expiry=? WHERE user_id=?;", t)
-    conn.commit()
-
-
-def changetitle(user_id, title):
-    c = conn.cursor()
-    t = (title, user_id)
-    c.execute("UPDATE users SET title=? WHERE user_id=?;", t)
-    conn.commit()
+    query = "UPDATE users SET expiry=? WHERE user_id=?"
+    update(query, (expiry, user_id))
 
 def gettitle(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT title FROM users WHERE user_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT title FROM users WHERE user_id=?"
+    return fetchone(query, (user_id,))
 
-def changecolour(user_id, colour):
-    c = conn.cursor()
-    t = (colour, user_id)
-    c.execute("UPDATE users SET colour=? WHERE user_id=?;", t)
-    conn.commit()
+def settitle(user_id, title):
+    query = "UPDATE users SET title=? WHERE user_id=?"
+    update(query, (title, user_id))
 
 def getcolour(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT colour FROM users WHERE user_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT colour FROM users WHERE user_id=?"
+    return fetchone(query, (user_id,))
 
-def changeemoji(user_id, emoji):
-    c = conn.cursor()
-    t = (emoji, user_id)
-    c.execute("UPDATE users SET emoji=? WHERE user_id=?;", t)
-    conn.commit()
+def setcolour(user_id, colour):
+    query = "UPDATE users SET colour=? WHERE user_id=?"
+    update(query, (colour, user_id))
 
 def getemoji(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT emoji FROM users WHERE user_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT emoji FROM users WHERE user_id=?"
+    return fetchone(query, (user_id,))
+
+def setemoji(user_id, emoji):
+    query = "UPDATE users SET emoji=? WHERE user_id=?"
+    update(query, (emoji, user_id))
+
 
 # Prefix
 
-def changeprefix(guild_id, prefix):
-    c = conn.cursor()
-    t = (prefix, guild_id)
-    c.execute("UPDATE guilds SET prefix=? WHERE guild_id=?;", t)
-    conn.commit()
-
 def getprefix(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT prefix FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT prefix FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
 
-def changepriority(guild_id, priority):
-    c = conn.cursor()
-    t = (priority, guild_id)
-    c.execute("UPDATE guilds SET priority=? WHERE guild_id=?;", t)
-    conn.commit()
+def setprefix(guild_id, prefix):
+    query = "UPDATE guilds SET prefix=? WHERE guild_id=?"
+    update(query, (prefix, guild_id))
 
 def getpriority(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT priority FROM guilds WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT priority FROM guilds WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
+
+def setpriority(guild_id, priority):
+    query = "UPDATE guilds SET priority=? WHERE guild_id=?"
+    update(query, (priority, guild_id))
+
 
 # ppsize
 
 def getppsize(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("SELECT ppsize FROM users WHERE user_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT ppsize FROM users WHERE user_id=?"
+    return fetchone(query, (user_id,))
 
-def updateppsize(user_id, size):
-    c = conn.cursor()
-    t = (size, user_id)
-    c.execute("UPDATE users SET ppsize=? WHERE user_id=?;", t)
-    conn.commit()
+def setppsize(user_id, size):
+    query = "UPDATE users SET ppsize=? WHERE user_id=?"
+    update(query, (size, user_id))
+
 
 # Stats
 
 def usecommand(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("UPDATE users SET commands=commands+1 WHERE user_id=?;", t)
-    conn.commit()
+    query = "UPDATE users SET commands=commands+1 WHERE user_id=?"
+    update(query, (user_id,))
 
 def usetrigger(user_id):
-    c = conn.cursor()
-    t = (user_id,)
-    c.execute("UPDATE users SET triggers=triggers+1 WHERE user_id=?;", t)
-    conn.commit()
+    query = "UPDATE users SET triggers=triggers+1 WHERE user_id=?"
+    update(query, (user_id,))
+
 
 # Counting
 
-def checkdouble(guild_id, user_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT user_id FROM counting WHERE guild_id=?;", t)
-    if user_id == c.fetchone()[0]:
-        t = (guild_id,)
-        c.execute("UPDATE counting SET number=0, user_id=0 WHERE guild_id=?;", t)
-        conn.commit()
-        return True
-    return False
-
 def getnumber(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT number FROM counting WHERE guild_id=?;", t)
-    return int(c.fetchone()[0])
+    query = "SELECT number FROM counting WHERE guild_id=?"
+    return int(fetchone(query, (guild_id,)))
 
 def getuser(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT user_id FROM counting WHERE guild_id=?;", t)
-    return int(c.fetchone()[0])
+    query = "SELECT user_id FROM counting WHERE guild_id=?"
+    return int(fetchone(query, (guild_id,)))
+
+def setnumber(number, author_id, guild_id):
+    query = "UPDATE counting SET number=?, user_id=? WHERE guild_id=?;"
+    update(query, (number, author_id, guild_id,))
+
+    query = "SELECT record FROM counting WHERE guild_id=?"
+    if number > fetchone(query, (guild_id,)):
+        query = "UPDATE counting SET record=? WHERE guild_id=?"
+        update(query, (number, guild_id,))
 
 def resetnumber(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("UPDATE counting SET number=0, user_id=0 WHERE guild_id=?;", t)
-    conn.commit()
-
-def updatenumber(number, author_id, guild_id):
-    c = conn.cursor()
-    t = (number, author_id, guild_id,)
-    c.execute("UPDATE counting SET number=?, user_id=? WHERE guild_id=?;", t)
-
-    t = (guild_id,)
-    c.execute("SELECT record FROM counting WHERE guild_id=?;", t)
-    if number > c.fetchone()[0]:
-        t = (number, guild_id,)
-        c.execute("UPDATE counting SET record=? WHERE guild_id=?;", t)
-        conn.commit()
+    query = "UPDATE counting SET number=0, user_id=0 WHERE guild_id=?"
+    update(query, (guild_id,))
 
 def gethighscore(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT record FROM counting WHERE guild_id=?;", t)
-    return c.fetchone()[0]
-
-def gethighscores(self):
-    c = conn.cursor()
-    c.execute("SELECT guild_id, record FROM counting ORDER BY record DESC LIMIT 5;")
-    return c.fetchall()
-
-def setcountingchannel(channel_id, guild_id):
-    c = conn.cursor()
-    t = (channel_id, guild_id)
-    c.execute("UPDATE counting SET channel_id=? WHERE guild_id=?;", t)
-    conn.commit()
-
-def removecountingchannel(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("UPDATE counting SET channel_id=0 WHERE guild_id=?;", t)
-    conn.commit()
+    query = "SELECT record FROM counting WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
 
 def getcountingchannel(guild_id):
-    c = conn.cursor()
-    t = (guild_id,)
-    c.execute("SELECT channel_id FROM counting WHERE guild_id=?;", t)
-    return c.fetchone()[0]
+    query = "SELECT channel_id FROM counting WHERE guild_id=?"
+    return fetchone(query, (guild_id,))
+
+def setcountingchannel(channel_id, guild_id):
+    query = "UPDATE counting SET channel_id=? WHERE guild_id=?"
+    update(query, (channel_id, guild_id))
+
+def removecountingchannel(guild_id):
+    query = "UPDATE counting SET channel_id=0 WHERE guild_id=?"
+    update(query, (guild_id,))

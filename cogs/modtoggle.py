@@ -10,7 +10,7 @@ class Modtoggle(commands.Cog):
     async def modtoggle(self, ctx, arg):
         if ctx.author.guild_permissions.administrator:
             if arg in {"on", "off"}:
-                db.changemodtoggle(ctx.guild.id, arg)
+                db.setmodtoggle(ctx.guild.id, arg)
                 emoji = self.bot.get_emoji(ctx.author.id)
                 await ctx.message.add_reaction(emoji)
             else:

@@ -88,7 +88,7 @@ class Status(commands.Cog):
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
-            db.changestatus(ctx.channel.id, "on")
+            db.setstatus(ctx.channel.id, "on")
             emoji = self.bot.get_emoji(ctx.author.id)
             await ctx.message.add_reaction(emoji)
         else: await ctx.reply("Only members with administrator privileges can toggle this")
@@ -101,7 +101,7 @@ class Status(commands.Cog):
         db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
-            db.changestatus(ctx.channel.id, "off")
+            db.setstatus(ctx.channel.id, "off")
             emoji = self.bot.get_emoji(ctx.author.id)
             await ctx.message.add_reaction(emoji)
         else: await ctx.reply("Only members with administrator privileges can toggle this")

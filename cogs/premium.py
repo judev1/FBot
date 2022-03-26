@@ -36,7 +36,7 @@ class Premium(commands.Cog):
         if len(title) > 50:
             await ctx.reply("Please keep your name under 50 characters")
         else:
-            db.changetitle(ctx.author.id, title)
+            db.settitle(ctx.author.id, title)
             emoji = self.bot.get_emoji(ctx.author.id)
             await ctx.message.add_reaction(emoji)
             await ctx.reply(f"It has been done, {title}")
@@ -105,7 +105,7 @@ class Premium(commands.Cog):
         colour = int(colour, 16)
 
         user = ctx.author
-        db.changecolour(user.id, colour)
+        db.setcolour(user.id, colour)
         embed = self.bot.embed(user, "Colour successfully set!")
         await ctx.send(embed=embed)
         await ctx.invoke(self.bot.get_command("colour"))

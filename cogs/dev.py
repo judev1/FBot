@@ -116,19 +116,19 @@ class Dev(commands.Cog):
     @commands.command()
     async def devon(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
-        db.changestatus(ctx.channel.id, "on")
+        db.setstatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def devoff(self, ctx):
         db.addchannel(ctx.channel.id, ctx.guild.id)
-        db.changestatus(ctx.channel.id, "off")
+        db.setstatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def devrespond(self, ctx, *, arg):
         if arg in ("few", "some", "all"):
-            db.changepriority(ctx.guild.id, arg)
+            db.setpriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("Must be `few`, `some`, or `all`")
@@ -136,11 +136,8 @@ class Dev(commands.Cog):
     @commands.command()
     async def devmodtoggle(self, ctx, arg):
         db.addchannel(ctx.channel.id, ctx.guild.id)
-        if arg == "on":
-            db.changemodtoggle(ctx.guild.id, arg)
-            await ctx.message.add_reaction("✅")
-        elif arg == "off":
-            db.changemodtoggle(ctx.guild.id, arg)
+        if arg in ["on", "off"]:
+            db.setmodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
 
     @commands.command()

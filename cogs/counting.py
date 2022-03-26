@@ -115,7 +115,7 @@ class Counting(commands.Cog):
         if not number.isdigit():
             await ctx.send("Not a number")
         else:
-            db.updatenumber(int(number), ctx.author.id, ctx.guild.id)
+            db.setnumber(int(number), ctx.author.id, ctx.guild.id)
             await ctx.message.add_reaction("✅")
 
     @commands.Cog.listener()

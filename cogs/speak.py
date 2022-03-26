@@ -12,7 +12,7 @@ class Speak(commands.Cog):
     async def speak(self, ctx, arg):
         if arg == "normal": arg = "default"
         if arg in options:
-            db.changemode(ctx.guild.id, arg)
+            db.setmode(ctx.guild.id, arg)
             emoji = self.bot.get_emoji(ctx.author.id)
             await ctx.message.add_reaction(emoji)
         else:
@@ -21,7 +21,7 @@ class Speak(commands.Cog):
     @commands.command()
     async def devspeak(self, ctx, arg):
         if arg in options:
-            db.changemode(ctx.guild.id, arg)
+            db.setmode(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("That's not a valid mode")

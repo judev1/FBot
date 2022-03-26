@@ -35,11 +35,11 @@ class PPSize(commands.Cog):
                         ppsize = db.getppsize(member.id)
                         if ppsize < 0:
                             ppsize = random.randint(0, 16)
-                            db.updateppsize(member.id, ppsize)
+                            db.setppsize(member.id, ppsize)
                     except:
                         db.register(member.id)
                         ppsize = random.randint(0, 16)
-                        db.updateppsize(member.id, ppsize)
+                        db.setppsize(member.id, ppsize)
 
                     if (ppsize is not None):
                         pp = "8" + "=" * ppsize + "D"
@@ -55,9 +55,7 @@ class PPSize(commands.Cog):
         else:
             converter = MemberConverter()
             member = await converter.convert(ctx, user_mention)
-            user_id = member.id
-
-            db.updateppsize(user_id, ppsize)
+            db.setppsize(member.id, ppsize)
 
 def setup(bot):
     bot.add_cog(PPSize(bot))

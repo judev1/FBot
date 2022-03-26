@@ -84,7 +84,7 @@ class Botlists(commands.Cog):
         embed = self.bot.embed(user, "FBot Vote")
 
         def get_value(site):
-            nextvote = db.nextvote(user.id, site)
+            nextvote = db.nextvote(int(user.id), site)
             if nextvote:
                 mins, hours = nextvote
                 if not hours:
