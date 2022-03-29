@@ -20,6 +20,7 @@ class cmds:
         global commands
         global devcmds
         global devcmdlist
+        global premium
         global categories
         global perms
         global functional
@@ -28,6 +29,7 @@ class cmds:
         commands = dict()
         devcmds = dict()
         devcmdlist = list()
+        premium = list()
         categories = dict()
         perms = dict()
         functional = dict()
@@ -68,6 +70,9 @@ class cmds:
                 else:
                     devcmds[row[C_NAME]] = row[1:]
                     devcmdlist.append(row)
+
+                if row[C_CAT] == "Premium":
+                    premium.append(row[C_NAME])
 
         for perm in optional.copy():
             if perm in functional:

@@ -297,10 +297,11 @@ def register(user_id):
         update(f"""
             INSERT INTO users (
                 user_id, ppsize, commands, triggers,
-                expiry, title, colour, emoji, say, delete_say, claims
+                expiry, title, colour, emoji, say, delete_say,
+                claims, custom_triggers
             ) VALUES (
                 ?, -1, 0, 0,
-                0, '', {0xf42f42}, '', 'fbot', 'no', 0
+                0, '', {0xf42f42}, '', 'fbot', 'no', 0, 0
             )
         """, (user_id,)
     )
