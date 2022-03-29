@@ -59,7 +59,7 @@ class Errorhandler(commands.Cog):
         elif error_type is commands.CheckFailure:
             error = str(error)
             errorlines = error.split("\n")
-            embed = self.bot.embed(fn.user, errorlines[0], *errorlines[2:])
+            embed = self.bot.embed(ctx.author, errorlines[0], *errorlines[2:])
             try:
                 try: await ctx.send(embed=embed)
                 except: await ctx.reply(error)
