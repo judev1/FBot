@@ -38,8 +38,6 @@ class tr:
         elif priority == "few":
             priority = 1
 
-        debug_mode = False
-
         for trigger in triggers:
             if trigger[T_CASE] == "anycase":
                 message_check = content.lower()
