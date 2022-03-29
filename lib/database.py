@@ -7,8 +7,9 @@ def fetchone(query, t=tuple()):
     c = conn.cursor()
     c.execute(query + ";", t)
     result = c.fetchone()
-    if len(result) == 1:
-        return result[0]
+    if result:
+        if len(result) == 1:
+            return result[0]
     return result
 
 def fetchall(query, t=tuple()):
@@ -78,7 +79,7 @@ def setup():
             say string NOT NULL,
             delete_say string NOT NULL,
             claims integer NOT NULL,
-            custom_triggers integer NOT NULL,
+            custom_triggers integer NOT NULL
         )""")
 
     update("""
@@ -100,12 +101,13 @@ def setup():
     update("""
         CREATE TABLE IF NOT EXISTS custom_commands (
             trigger_id integer PRIMARY KEY AUTOINCREMENT,
-            user_id primary integer NOT NULL,
+            user_id integer NOT NULL,
             message string NOT NULL,
             type string NOT NULL,
             'case' string NOT NULL,
             response string NOT NULL,
             priority string NOT NULL,
+            public string NOT NULL,
             uses integer NOT NULL
         )""")
 
@@ -162,14 +164,16 @@ def checkguilds(guilds):
 
     count = 0
     for guild_id in fetchall("SELECT guild_id FROM guilds"):
-        channels = guild_ids[guild_id[0]].channels
-        channel_ids = [channel.id for channel in channels]
-        query = "SELECT channel_id FROM channels WHERE guild_id=?"
-        for channel_id in fetchall(query, (guild_id,)):
-            if not (channel_id[0] in channel_ids):
-                count[1] += 1
-                query = "DELETE FROM channels WHERE channel_id=?"
-                update(query, (channel_id,))
+        guild_id = guild_id[0]
+        if guild_id in guild_ids:
+            channels = guild_ids[guild_id].channels
+            channel_ids = [channel.id for channel in channels]
+            query = "SELECT channel_id FROM channels WHERE guild_id=?"
+            for channel_id in fetchall(query, (guild_id,)):
+                if not (channel_id[0] in channel_ids):
+                    count[1] += 1
+                    query = "DELETE FROM channels WHERE channel_id=?"
+                    update(query, (channel_id,))
     print("Removed", count, "channels from 'channels'")
 
     count = 0
@@ -178,7 +182,7 @@ def checkguilds(guilds):
             count += 1
             query = "DELETE FROM channels WHERE guild_id=?"
             update(query, (guild_id,))
-    print("Removed", count, "guild channels from 'channels'")
+    print("Removed", count, "guild channels from 'channels'\n")
 
 
 # General
@@ -209,15 +213,14 @@ def removeguild(guild_id):
     update(query, (time.time(), guild_id))
 
 def addchannel(channel_id, guild_id):
-    query = "SELECT * FROM channels where channel_id=?;"
+    query = "SELECT * FROM channels where channel_id=?"
     if not fetchone(query, (channel_id,)):
-        t = (guild_id, channel_id)
         update("""
             INSERT INTO channels (
                 guild_id, channel_id, status, shout
             ) VALUES (
                 ?, ?, 'off', 'no'
-            )""", (channel_id,))
+            )""", (guild_id, channel_id,))
 
 
 # Config
@@ -474,7 +477,7 @@ def getuser(guild_id):
     return int(fetchone(query, (guild_id,)))
 
 def setnumber(number, author_id, guild_id):
-    query = "UPDATE counting SET number=?, user_id=? WHERE guild_id=?;"
+    query = "UPDATE counting SET number=?, user_id=? WHERE guild_id=?"
     update(query, (number, author_id, guild_id,))
 
     query = "SELECT record FROM counting WHERE guild_id=?"

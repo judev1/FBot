@@ -38,7 +38,7 @@ def temp():
             ) VALUES (
                 ?, ?,
                 ?, ?, ?, ?, 'english',
-                '', '', '[]'
+                '', '', '[]',
                 0, 0, 0, 0
             )""", data)
 
@@ -58,7 +58,7 @@ def temp():
                 user_id, ppsize,
                 commands, triggers,
                 expiry, title, colour, emoji, say, delete_say,
-                claims, custom_commands
+                claims, custom_triggers
             ) VALUES (
                 ?, ?,
                 ?, ?,
@@ -179,10 +179,10 @@ class Bot(commands.AutoShardedBot):
         await self.change_presence(status=discord.Status.online,
                                 activity=discord.Game(name="'FBot help'"))
 
-        print(f" > Bot is ready")
+        print(f" > Bot is ready\n")
         self.dispatch("bot_ready")
 
-    async def on_disconnect(self, shard_id):
+    async def on_disconnect(self):
         self.shards_ready = [False]*3
 
     async def on_shard_ready(self, shard_id):
