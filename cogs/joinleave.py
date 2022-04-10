@@ -3,23 +3,25 @@ from discord.ext import commands
 import lib.functions as fn
 import lib.database as db
 
-joinmsg = ["**Whoa new server, cooooool!**",
-           "Thanks for choosing FBot, here are some helpful tips and tricks to get you started",
+joinmsg = [
+    "**Whoa new server, cooooool!**",
+    "Thanks for choosing FBot, here are some helpful tips and tricks to get you started",
 
-           ":face_with_symbols_over_mouth: **How do I turn on FBot's spamming/message response feature?**",
-           "You can turn this on by using the command `fbot on` (it's case insensitive) in the desired channel and FBot will begin __replying__ to your messages. If only want admins to be able to toggle FBot, you can use `fbot modtoggle on`",
+    ":face_with_symbols_over_mouth: **How do I turn on FBot's spamming/message response feature?**",
+    "You can turn this on by using the command `fbot on` (it's case insensitive) in the desired channel and FBot will begin __replying__ to your messages. If only want admins to be able to toggle FBot, you can use `fbot modtoggle on`",
 
-           ":thinking: **How can I set up a counting channel with FBot?**",
-           "In the desired channel, use `fbot set` and simply start counting! The rules are simple: send the next number, and don't send two numbers in a row. You can check your highscore, the current number and more with `fbot counting`",
+    ":thinking: **How can I set up a counting channel with FBot?**",
+    "In the desired channel, use `fbot set` and simply start counting! The rules are simple: send the next number, and don't send two numbers in a row. You can check your highscore, the current number and more with `fbot counting`",
 
-           ":face_with_spiral_eyes: **I'm seeing *way too much* FBot, how can I chill it a bit?**",
-           "If you want FBot to respond to less messages you can use `fbot respond few`, by default fbot respond is set to `all`, but you can change it to few, some or all, depending on what suits your server",
+    ":face_with_spiral_eyes: **I'm seeing *way too much* FBot, how can I chill it a bit?**",
+    "If you want FBot to respond to less messages you can use `fbot respond few`, by default fbot respond is set to `all`, but you can change it to few, some or all, depending on what suits your server",
 
-           ":zany_face: **That's great and all but are there any other fun features?**",
-           "So. Fricken. Many. Image comamnds like `fbot god`, say commands like `fbot biblical`; where you can provide text or reply to a message, same goes for `fbot respects` which is used to pay respects, we've got minigames like `fbot snake`. And so, so much more!",
+    ":zany_face: **That's great and all but are there any other fun features?**",
+    "So. Fricken. Many. Image comamnds like `fbot god`, say commands like `fbot biblical`; where you can provide text or reply to a message, same goes for `fbot respects` which is used to pay respects, we've got minigames like `fbot snake`. And so, so much more!",
 
-           ":sleeping: **Sounds great! There can't be anything else, can there?**",
-           "Well yes, there is but you'll have to find it out for yourself, with `fbot help` & `fbot cmds`, which will give you a list of commands! And if you find a bug, have a suggestion or just wanna chat, use `fbot server` to enter ~~hell~~ our server!"]
+    ":sleeping: **Sounds great! There can't be anything else, can there?**",
+    "Well yes, there is but you'll have to find it out for yourself, with `fbot help` & `fbot cmds`, which will give you a list of commands! And if you find a bug, have a suggestion or just wanna chat, use `fbot server` to enter ~~hell~~ our server!"
+]
 
 class JoinLeave(commands.Cog):
 
