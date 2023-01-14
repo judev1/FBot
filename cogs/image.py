@@ -30,11 +30,6 @@ class ImageCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener()
-    async def on_bot_ready(self):
-        temp = self.bot.settings.channels.temp
-        self.temp = self.bot.get_channel(temp)
-
     async def save_image(self, path, member, ctx, to_process):
         if not os.path.exists("data/Temp/"):
             os.makedirs("data/Temp/")
