@@ -4,7 +4,6 @@ nest_asyncio.apply()
 from discord.ext import commands
 import discord
 import json
-import dbl
 
 from lib.commands import cmds
 from lib.triggers import tr
@@ -35,13 +34,8 @@ class Bot(commands.AutoShardedBot):
                          shard_count=self.settings.shards)
 
         self.ready_shards_list = [False] * self.shard_count # TESTING
-
         self.ftime = fn.ftime()
-
-        self.dbl = dbl.DBLClient(self, self.settings.tokens.topgg, webhook_path="/dblwebhook",
-            webhook_auth=self.settings.tokens.auth, webhook_port=self.settings.port)
-
-        fn.VotingHandler(self)
+        # fn.VotingHandler(self)
         self.add_check(self.predicate)
 
         db.setup()
