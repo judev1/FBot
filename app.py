@@ -46,8 +46,8 @@ class Bot(commands.AutoShardedBot):
 
     def ready(self):
         #if self.shard_count == self.shards_ready:
-        if all(self.ready_shards_list): # TESTING
-            # if self.is_ready():
+        # if all(self.ready_shards_list): # TESTING
+        if self.is_ready():
             return True
         return False
 
@@ -56,7 +56,7 @@ class Bot(commands.AutoShardedBot):
 
         self.remove_command("help")
         for cog in fn.getcogs():
-            if cog not in []:
+            if cog not in ["botlists.py"]:
                 print(f"\nLoading {cog}...", end="")
                 try: await self.reload_extension("cogs." + cog[:-3])
                 except: await self.load_extension("cogs." + cog[:-3])
@@ -185,4 +185,4 @@ import logging
 
 
 bot = Bot()
-bot.run(bot.settings.tokens.bot, log_level=50)
+bot.run(bot.settings.tokens.bot)#, log_level=50)
