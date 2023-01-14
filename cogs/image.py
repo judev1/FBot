@@ -14,8 +14,8 @@ try: # Windows
     nogodfont = ImageFont.truetype("arial.ttf", 30)
     godfont = ImageFont.truetype("arial.ttf", 50)
 except: # Linux
-    nogodfont = ImageFont.truetype("/usr/src/app/data/arial.ttf", 30)
-    godfont = ImageFont.truetype("/usr/src/app/data/arial.ttf", 50)
+    nogodfont = ImageFont.truetype("data/arial.ttf", 30)
+    godfont = ImageFont.truetype("data/arial.ttf", 50)
 
 bigpp_img = wand_image(filename="data/imgs/bigpp.png")
 smolpp_img = wand_image(filename="data/imgs/smolpp.png")
