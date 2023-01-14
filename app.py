@@ -46,8 +46,8 @@ class Bot(commands.AutoShardedBot):
 
     def ready(self):
         #if self.shard_count == self.shards_ready:
-        # if all(self.ready_shards_list): # TESTING
-        if self.is_ready():
+        # if self.is_ready():
+        if all(self.ready_shards_list): # TESTING
             return True
         return False
 
@@ -181,7 +181,6 @@ class Bot(commands.AutoShardedBot):
         self.stats.commands_processed += 1
         return True
 
-import logging
 
 
 bot = Bot()
