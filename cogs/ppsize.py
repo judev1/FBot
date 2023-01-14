@@ -58,5 +58,5 @@ class PPSize(commands.Cog):
 
             db.updateppsize(user_id, ppsize)
 
-def setup(bot):
-    bot.add_cog(PPSize(bot))
+async def setup(bot):
+    await bot.add_cog(PPSize(bot))

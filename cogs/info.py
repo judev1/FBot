@@ -117,7 +117,9 @@ class Info(commands.Cog):
         embed.add_field(name="Roles", value=len(guild.roles))
         embed.add_field(name="Language", value=guild.preferred_locale)
         embed.add_field(name="Created", value=created)
-        embed.set_thumbnail(url=guild.icon_url)
+
+        if guild.icon:
+            embed.set_thumbnail(url=guild.icon.url)
 
         await ctx.send(embed=embed)
 
@@ -173,5 +175,5 @@ class Info(commands.Cog):
     async def dev(self, ctx):
         await ctx.reply(f"Yeah {ctx.author.mention} is a dev, that's why he can use this command")
 
-def setup(bot):
-    bot.add_cog(Info(bot))
+async def setup(bot):
+    await bot.add_cog(Info(bot))

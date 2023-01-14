@@ -22,5 +22,5 @@ class Priority(commands.Cog):
                 await ctx.reply("Respond can only be set to `few`, `some` or `all`")
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 
-def setup(bot):
-    bot.add_cog(Priority(bot))
+async def setup(bot):
+    await bot.add_cog(Priority(bot))

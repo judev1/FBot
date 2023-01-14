@@ -93,5 +93,5 @@ class Top(commands.Cog):
         else:
             await ctx.reply("We don't have a leaderboard for that")
 
-def setup(bot):
-    bot.add_cog(Top(bot))
+async def setup(bot):
+    await bot.add_cog(Top(bot))

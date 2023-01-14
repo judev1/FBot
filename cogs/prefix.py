@@ -25,5 +25,5 @@ class Prefix(commands.Cog):
 
         await ctx.reply("Only members with administrator privileges can toggle this")
 
-def setup(bot):
-    bot.add_cog(Prefix(bot))
+async def setup(bot):
+    await bot.add_cog(Prefix(bot))

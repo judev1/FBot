@@ -113,5 +113,5 @@ class TriggerResponses(commands.Cog):
                     response = response[:1997] + "..."
                 await channel.send(response)
 
-def setup(bot):
-    bot.add_cog(TriggerResponses(bot))
+async def setup(bot):
+    await bot.add_cog(TriggerResponses(bot))

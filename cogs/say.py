@@ -13,7 +13,7 @@ class Say(commands.Cog):
 
         reference = ctx.message.reference
         if reference:
-            message = await ctx.fetch_message(id=reference.message_id)
+            message = await ctx.fetch_message(reference.message_id)
             text = message.content
         else:
             text = ctx.message.content
@@ -100,5 +100,5 @@ class Say(commands.Cog):
     async def confused(self, ctx):
         await self.send(ctx, filter=confused)
 
-def setup(bot):
-    bot.add_cog(Say(bot))
+async def setup(bot):
+    await bot.add_cog(Say(bot))

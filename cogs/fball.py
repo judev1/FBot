@@ -45,5 +45,5 @@ class FBall(commands.Cog):
     async def fball(self, ctx):
         await ctx.reply(choice(responses))
 
-def setup(bot):
-    bot.add_cog(FBall(bot))
+async def setup(bot):
+    await bot.add_cog(FBall(bot))

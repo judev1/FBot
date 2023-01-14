@@ -74,5 +74,5 @@ class Notices(commands.Cog):
         db.addnotice(date, title, message)
         await ctx.message.add_reaction("✅")
 
-def setup(bot):
-    bot.add_cog(Notices(bot))
+async def setup(bot):
+    await bot.add_cog(Notices(bot))

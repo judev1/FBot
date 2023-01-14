@@ -11,5 +11,5 @@ class Ping(commands.Cog):
         embed = self.bot.embed(ctx.author, f"FBots Ping: `{ping}ms`")
         await ctx.send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(Ping(bot))
+async def setup(bot):
+    await bot.add_cog(Ping(bot))

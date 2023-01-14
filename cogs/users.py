@@ -11,5 +11,5 @@ class Users(commands.Cog):
         await ctx.reply("This command is being reworked. Stay updated by clicking the link in the next embed!")
         await ctx.invoke(self.bot.get_command("server"))
 
-def setup(bot):
-    bot.add_cog(Users(bot))
+async def setup(bot):
+    await bot.add_cog(Users(bot))

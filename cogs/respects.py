@@ -16,7 +16,7 @@ class Respects(commands.Cog):
 
         reference = ctx.message.reference
         if reference:
-            message = await ctx.fetch_message(id=reference.message_id)
+            message = await ctx.fetch_message(reference.message_id)
             text = message.content
         else:
             text = ctx.message.content
@@ -50,5 +50,5 @@ class Respects(commands.Cog):
         respects[1].add(user.id)
         await channel.send(f"{user.mention} payed respects to **{respects[0]}**", allowed_mentions=AllowedMentions.none())
 
-def setup(bot):
-    bot.add_cog(Respects(bot))
+async def setup(bot):
+    await bot.add_cog(Respects(bot))

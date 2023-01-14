@@ -39,5 +39,5 @@ class Purge(commands.Cog):
 
         await ctx.reply("You must specify how many messages to purge!")
 
-def setup(bot):
-    bot.add_cog(Purge(bot))
+async def setup(bot):
+    await bot.add_cog(Purge(bot))

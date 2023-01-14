@@ -84,15 +84,15 @@ class Botlists(commands.Cog):
 
         db.addvoter(user.id)
         embed.add_field(name=":mailbox_with_mail:  **__SAVED__**", inline=False, value="Your votes appear in your profile and on leaderboards")
-        embed.add_field(name="top.gg", value=f"[{get_value('top')}]({fn.votetop} 'Vote here')")
-        embed.add_field(name="discords.com/bots", value=f"[{get_value('bfd')}]({fn.votebfd} 'Vote here')")
-        embed.add_field(name="discordbotlist", value=f"[{get_value('dbl')}]({fn.votedbl} 'Vote here')")
+        embed.add_field(name="top.gg", value=f"[{get_value('top')}]({fn.links.votetop} 'Vote here')")
+        embed.add_field(name="discords.com/bots", value=f"[{get_value('bfd')}]({fn.links.votebfd} 'Vote here')")
+        embed.add_field(name="discordbotlist", value=f"[{get_value('dbl')}]({fn.links.votedbl} 'Vote here')")
 
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
-        embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.voteligg} 'Please sign in first then and vote on this page')")
-        embed.add_field(name="discord-botlist.eu", value=f"[Vote here]({fn.votedbeu} 'Vote here')")
-        embed.add_field(name="botlist.space", value=f"[Vote here]({fn.voteblsp} 'Vote here')")
-        embed.add_field(name="botlist.me", value=f"[Vote here]({fn.voteblme} 'Vote here')")
+        embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.links.voteligg} 'Please sign in first then and vote on this page')")
+        embed.add_field(name="discord-botlist.eu", value=f"[Vote here]({fn.links.votedbeu} 'Vote here')")
+        embed.add_field(name="botlist.space", value=f"[Vote here]({fn.links.voteblsp} 'Vote here')")
+        embed.add_field(name="botlist.me", value=f"[Vote here]({fn.links.voteblme} 'Vote here')")
         await ctx.send(embed=embed)
 
     @commands.Cog.listener()
@@ -142,5 +142,5 @@ class Botlists(commands.Cog):
         embed = self.bot.embed(user, "top.gg", f"{name} voted")
         await self.voteschannel.send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(Botlists(bot))
+async def setup(bot):
+    await bot.add_cog(Botlists(bot))

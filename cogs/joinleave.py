@@ -71,5 +71,5 @@ class JoinLeave(commands.Cog):
         embed.add_field(name="Member count", value=f"`{memcount - 1}`")
         await self.serverlogs.send(embed=embed)
 
-def setup(bot):
-    bot.add_cog(JoinLeave(bot))
+async def setup(bot):
+    await bot.add_cog(JoinLeave(bot))

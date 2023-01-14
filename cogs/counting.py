@@ -190,5 +190,5 @@ class Counting(commands.Cog):
             last_number = db.getnumber(payload.guild_id)
             await channel.send(f"A message was given a fake check. The next number is `{last_number+1}`")
 
-def setup(bot):
-    bot.add_cog(Counting(bot))
+async def setup(bot):
+    await bot.add_cog(Counting(bot))

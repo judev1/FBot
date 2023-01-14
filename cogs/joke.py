@@ -49,5 +49,5 @@ class Joke(commands.Cog):
     async def jokeinfo(self, ctx):
         await ctx.reply("Active channels: " + str(active_channels))
 
-def setup(bot):
-    bot.add_cog(Joke(bot))
+async def setup(bot):
+    await bot.add_cog(Joke(bot))

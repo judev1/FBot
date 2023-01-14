@@ -35,20 +35,29 @@ class ImageCog(commands.Cog):
         temp = self.bot.settings.channels.temp
         self.temp = self.bot.get_channel(temp)
 
-    async def save_image(self, path, member, attachments, to_process, author):
+    async def save_image(self, path, member, ctx, to_process):
         if not os.path.exists("data/Temp/"):
             os.makedirs("data/Temp/")
         if member:
-            await member.avatar_url_as(format="png", static_format="png", size=512).save(path)
-        elif attachments:
-            await attachments[0].save(path)
+            avatar = member.avatar.with_format("png")
+            await avatar.with_size(512).save(path)
+        elif ctx.message.attachments:
+            await ctx.message.attachments[0].save(path)
         elif (is_img_url.match(to_process)):
             r = requests.get(url + to_process, allow_redirects=True)
             if r.status_code == 400: raise Exception()
             with open(path, "wb") as file:
                 file.write(r.content)
+        elif ctx.message.reference:
+            msg = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+            if msg.attachments:
+                await msg.attachments[0].save(path)
+            else:
+                avatar = msg.author.avatar.with_format("png")
+                await avatar.with_size(512).save(path)
         else:
-            await author.avatar_url_as(format="png", static_format="png", size=512).save(path)
+            avatar = ctx.author.avatar.with_format("png")
+            await avatar.with_size(512).save(path)
 
         resized_path = path.replace("to_", "resized_to_")
         with Image.open(path) as img:
@@ -84,14 +93,12 @@ class ImageCog(commands.Cog):
             else: filename = process + "ed.jpg"
 
             path = "data/Temp/" + str(ctx.author.id) + "_"
-            file = File(fp=path + filename)
-            message = await self.temp.send(file=file)
-            file.close()
-
             embed = self.bot.embed(ctx.author, "FBot " + process.capitalize())
-            embed.set_image(url=message.attachments[0].proxy_url)
+            embed.set_image(url="attachment://" + filename)
 
-            await ctx.reply(embed=embed)
+            file = File(fp=path + filename, filename=filename)
+            await ctx.reply(file=file, embed=embed)
+            file.close()
 
             os.remove(path + "to_" + process)
             os.remove(path + "resized_to_" + process)
@@ -99,7 +106,8 @@ class ImageCog(commands.Cog):
                 os.remove(path + "zoom_to_" + process)
             os.remove(path + filename)
         else:
-            await ctx.reply("That image is too big to " + process)
+            await ctx.reply(f"**Failed to {process} image.** "
+                "Might be too big or the url may be invalid, try again with a different image.")
 
     @commands.command(aliases=["avatar", "pfp"])
     async def av(self, ctx, *to_av):
@@ -111,9 +119,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_av)
 
             try:
-                await self.save_image(path + "to_avatar", member,
-                                      ctx.message.attachments,
-                                      to_av, ctx.author)
+                await self.save_image(path + "to_avatar", member, ctx, to_av)
             except:
                 success = False
             else:
@@ -133,9 +139,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_bigpp)
 
             try:
-                await self.save_image(path + "to_bigpp", member,
-                                      ctx.message.attachments,
-                                      to_bigpp, ctx.author)
+                await self.save_image(path + "to_bigpp", member, ctx, to_bigpp)
             except:
                 success = False
             else:
@@ -157,9 +161,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_smolpp)
 
             try:
-                await self.save_image(path + "to_smolpp", member,
-                                      ctx.message.attachments,
-                                      to_smolpp, ctx.author)
+                await self.save_image(path + "to_smolpp", member, ctx, to_smolpp)
             except:
                 success = False
             else:
@@ -181,9 +183,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_bonk)
 
             try:
-                await self.save_image(path + "to_bonk", member,
-                                      ctx.message.attachments,
-                                      to_bonk, ctx.author)
+                await self.save_image(path + "to_bonk", member, ctx, to_bonk)
             except:
                 success = False
             else:
@@ -213,9 +213,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_blur)
 
             try:
-                await self.save_image(path + "to_blur", member,
-                                      ctx.message.attachments,
-                                      to_blur, ctx.author)
+                await self.save_image(path + "to_blur", member, ctx, to_blur)
             except:
                 success = False
             else:
@@ -237,9 +235,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_trigger)
 
             try:
-                await self.save_image(path + "to_trigger", member,
-                                      ctx.message.attachments,
-                                      to_trigger, ctx.author)
+                await self.save_image(path + "to_trigger", member, ctx, to_trigger)
             except:
                 success = False
             else:
@@ -262,9 +258,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_sneak)
 
             try:
-                await self.save_image(path + "to_sneak", member,
-                                      ctx.message.attachments,
-                                      to_sneak, ctx.author)
+                await self.save_image(path + "to_sneak", member, ctx, to_sneak)
             except:
                 success = False
             else:
@@ -285,9 +279,7 @@ class ImageCog(commands.Cog):
             member = await self.get_member(ctx.guild, to_god)
 
             try:
-                await self.save_image(path + "to_god", member,
-                                      ctx.message.attachments,
-                                      to_god, ctx.author)
+                await self.save_image(path + "to_god", member, ctx, to_god)
             except:
                 success = False
             else:
@@ -332,5 +324,5 @@ class ImageCog(commands.Cog):
 
         await self.clean_up(ctx, "god", success)
 
-def setup(bot):
-    bot.add_cog(ImageCog(bot))
+async def setup(bot):
+    await bot.add_cog(ImageCog(bot))

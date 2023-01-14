@@ -25,11 +25,9 @@ class Bot(commands.AutoShardedBot):
             self.settings = fn.Classify(json.load(file))
             self.devs = self.settings.devs
 
-        intents = discord.Intents.none()
-        intents.guilds = True
-        intents.messages = True
-        intents.reactions = True
-        #intents.members = True # missing intents
+        intents = discord.Intents.default()
+        intents.members = True
+        intents.message_content = True
 
         self.shards_ready = 0
 
@@ -52,27 +50,24 @@ class Bot(commands.AutoShardedBot):
         for csv in [tr, cmds]:
             csv.load()
 
-        self.remove_command("help")
-        for cog in fn.getcogs():
-            if cog not in []:
-                print(f"\nLoading {cog}...", end="")
-                try: self.reload_extension("cogs." + cog[:-3])
-                except: self.load_extension("cogs." + cog[:-3])
-                finally: print("Done", end="")
-        print("\n\n > Loaded cogs\n")
-
     def ready(self):
         #if self.shard_count == self.shards_ready:
         if all(self.ready_shards_list): # TESTING
-            if self.is_ready():
-                return True
+            # if self.is_ready():
+            return True
         return False
 
     async def prep(self):
         print(f"\n > All shards ready, finishing preperations")
 
-        self.ftime.set()
-        print(f" > Session started at {self.ftime.start}\n")
+        self.remove_command("help")
+        for cog in fn.getcogs():
+            if cog not in []:
+                print(f"\nLoading {cog}...", end="")
+                try: await self.reload_extension("cogs." + cog[:-3])
+                except: await self.load_extension("cogs." + cog[:-3])
+                finally: print("Done", end="")
+        print("\n\n > Loaded cogs\n")
 
         db.checkguilds(self.guilds)
 
@@ -83,10 +78,13 @@ class Bot(commands.AutoShardedBot):
             self.cache.cooldowns.add(command, tuple(cm.commands[command][3:5]))
         for command in cm.devcmds:
             self.cache.cooldowns.add(command, (0, 0))
-        print(" > Finished setting up cooldowns\n")
+        print(" > Finished setting up cooldowns")
 
         await self.change_presence(status=discord.Status.online,
                                 activity=discord.Game(name="'FBot help'"))
+
+        self.ftime.set()
+        print(f" > Session started at {self.ftime.start}\n")
 
         print(f" > Bot is ready")
         self.dispatch("bot_ready")
@@ -189,5 +187,8 @@ class Bot(commands.AutoShardedBot):
         self.stats.commands_processed += 1
         return True
 
+import logging
+
+
 bot = Bot()
-bot.run(bot.settings.tokens.bot)
+bot.run(bot.settings.tokens.bot, log_level=50)

@@ -115,5 +115,5 @@ class Errorhandler(commands.Cog):
 
             await book.createbook(MODE="arrows", COLOUR=fn.colours.red, TIMEOUT=180)
 
-def setup(bot):
-    bot.add_cog(Errorhandler(bot))
+async def setup(bot):
+    await bot.add_cog(Errorhandler(bot))

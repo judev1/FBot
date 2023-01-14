@@ -172,7 +172,9 @@ class Dev(commands.Cog):
         embed.add_field(name="Roles", value=len(guild.roles))
         embed.add_field(name="Language", value=guild.preferred_locale)
         embed.add_field(name="Created", value=created)
-        embed.set_thumbnail(url=guild.icon_url)
+
+        if guild.icon:
+            embed.set_thumbnail(url=guild.icon.url)
 
         await ctx.send(embed=embed)
 
@@ -216,5 +218,5 @@ class Dev(commands.Cog):
     async def host(self, ctx):
         await ctx.reply("This instance is running on: " + socket.gethostname())
 
-def setup(bot):
-    bot.add_cog(Dev(bot))
+async def setup(bot):
+    await bot.add_cog(Dev(bot))

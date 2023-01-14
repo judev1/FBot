@@ -18,10 +18,10 @@ class Approve(commands.Cog):
 
             reference = ctx.message.reference
             if reference:
-                message = await ctx.fetch_message(id=reference.message_id)
+                message = await ctx.fetch_message(reference.message_id)
                 await message.reply(content, mention_author=False)
             else:
                 await ctx.send(content)
 
-def setup(bot):
-    bot.add_cog(Approve(bot))
+async def setup(bot):
+    await bot.add_cog(Approve(bot))

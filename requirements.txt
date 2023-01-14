@@ -1,8 +1,9 @@
-discord.py
-dblpy
-nest-asyncio
-spacy
-dbfn
-wand
-pillow
-discord-components
+aiohttp==3.8.3
+dbfn==1.0.6
+dblpy==0.4.0
+discord==2.1.0
+nest_asyncio==1.5.6
+pillow==9.2.0
+requests==2.28.1
+spacy==3.4.1
+wand==0.6.11

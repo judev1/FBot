@@ -231,49 +231,71 @@
         ]
     },
     "german": {
+        "words": [
+            ["one", "ein"],
+            ["my", "mein"],
+            ["yes", "ja"],
+            ["no", "nein"],
+            ["hello", "hallo"],
+            ["hi", "hallo"],
+            ["and", "und"],
+            ["the", "der"]
+        ],
+        "starts": [
+            ["c", "k"],
+            ["sh", "sch"],
+            ["sl", "shl"],
+            ["sm", "shm"],
+            ["sp", "shp"],
+            ["st", "sht"],
+            ["st", "sht"]
+        ],
         "ends": [
-            ["er", "a"]
+            ["p", "pt"],
+            ["ed", "et"],
+            ["at", "as"],
+            ["ing", "ink"]
         ],
         "chars": [
-            ["orc", "ors"],
-            ["oc", "os"],
-            ["ce", "se"],
-            ["ch", "sh"],
-            ["c", "k"],
+            ["ie", "ee"],
+            ["ir", "er"],
+            ["oi", "eu"],
+            ["oe", "uh"],
+            ["ou", "oo"],
 
-            ["ph", "f"],
+            ["ibe", "eib"],
+            ["ide", "eid"],
+            ["ife", "eif"],
+            ["ige", "eig"],
+            ["ike", "eik"],
+            ["ile", "eil"],
+            ["ime", "eim"],
+            ["ine", "ein"],
+            ["ipe", "eip"],
+            ["ire", "eir"],
+            ["ise", "eis"],
+            ["ive", "eiv"],
+            ["iwe", "eiw"],
+            ["ixe", "eix"],
+            ["ize", "eiz"],
 
-            ["pp", "p"],
-            ["rr", "r"],
-            ["tt", "t"],
-            ["ss", "z"],
-            ["dd", "d"],
-            ["ss", "s"],
-            ["ff", "f"],
-            ["gg", "g"],
-            ["kk", "k"],
-            ["ll", "l"],
-            ["bb", "b"],
-            ["nn", "n"],
-            ["mm", "m"],
+            ["ck", "k"],
+            ["ct", "kt"],
+            ["lly", "liyh"],
+            ["ly", "liyh"],
+            ["ld", "d"],
 
-            ["ou", "u"],
-            ["ie", "e"],
-            ["ea", "e"],
-            ["ew", "u"],
-            ["ow", "o"],
-            ["oo", "u"],
+            ["ss", "ß"],
+            ["z", "~~t~~"],
+            ["sh", "~~y~~"],
+            ["s", "z"],
+            ["~~y~~", "sh"],
+            ["~~t~~", "ts"],
 
-            ["and", "und"],
-            ["es", "ez"],
-
-            ["th", "z"],
-            ["v", "f"],
-            ["wh", "v"],
+            ["ow", "~~t~~"],
             ["w", "v"],
-
-            ["sp", "shp"],
-            ["sw", "shw"]
+            ["~~t~~", "ow"],
+            ["ph", "f"]
         ]
     },
     "italian": {

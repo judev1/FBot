@@ -25,5 +25,5 @@ class Speak(commands.Cog):
         else:
             await ctx.reply("That's not a valid mode")
 
-def setup(bot):
-    bot.add_cog(Speak(bot))
+async def setup(bot):
+    await bot.add_cog(Speak(bot))

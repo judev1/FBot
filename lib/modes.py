@@ -15,6 +15,9 @@ def sanitise_text(text):
     text = text.replace("’", "'")
     return text
 
+def capitalise(text):
+    return text[0].upper() + text[1:]
+
 def replace_words(text, words):
     for old, new in words:
         new_text = list()
@@ -114,7 +117,11 @@ def australian(text):
     return text
 
 def german(text):
+    # might be funny to check for nouns with adjectives in front of them and make them a
+    # single word
     settings = maps["german"]
+    text = replace_words(text, settings["words"])
+    text = replace_starts(text, settings["starts"])
     text = replace_ends(text, settings["ends"])
     text = replace_chars(text, settings["chars"])
     return text

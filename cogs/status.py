@@ -103,5 +103,5 @@ class Status(commands.Cog):
             await ctx.message.add_reaction("✅")
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 
-def setup(bot):
-    bot.add_cog(Status(bot))
+async def setup(bot):
+    await bot.add_cog(Status(bot))

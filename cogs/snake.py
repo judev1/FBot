@@ -137,5 +137,5 @@ class Snake(commands.Cog):
             self.games[user.id].direction = emojinames[emojis.index(emoji)]
         await reaction.message.remove_reaction(reaction, user)
 
-def setup(bot):
-    bot.add_cog(Snake(bot))
+async def setup(bot):
+    await bot.add_cog(Snake(bot))
