@@ -29,6 +29,7 @@ class Bot(commands.AutoShardedBot):
         intents.message_content = True
 
         self.shards_ready = 0
+        self.bot_ready = True
 
         super().__init__(command_prefix=fn.getprefix, intents=intents,
                          shard_count=self.settings.shards)
@@ -44,7 +45,7 @@ class Bot(commands.AutoShardedBot):
         for csv in [tr, cmds]:
             csv.load()
 
-    def ready(self):
+    def are_shards_ready(self):
         #if self.shard_count == self.shards_ready:
         # if self.is_ready():
         if all(self.ready_shards_list): # TESTING
@@ -81,6 +82,7 @@ class Bot(commands.AutoShardedBot):
         print(f" > Session started at {self.ftime.start}\n")
 
         print(f" > Bot is ready")
+        self.bot_ready = True
         self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
@@ -89,7 +91,7 @@ class Bot(commands.AutoShardedBot):
         print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
 
-        if self.ready():
+        if self.are_shards_ready():
             self.shards_ready = self.shard_count
             await self.prep()
 
@@ -98,12 +100,13 @@ class Bot(commands.AutoShardedBot):
         print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
 
-        if self.ready():
+        if self.are_shards_ready():
             self.shards_ready = self.shard_count
             await self.prep()
 
     async def on_shard_disconnect(self, shard_id):
         self.shards_ready -= 1
+        self.bot_ready = False
         print(f" > Shard {shard_id} DISCONNECTED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = False
 
@@ -145,7 +148,7 @@ class Bot(commands.AutoShardedBot):
         user = ctx.author.id
         command = ctx.command.name
 
-        if not self.ready():
+        if not self.are_shards_ready():
             return
 
         if command in cm.devcmds:

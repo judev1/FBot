@@ -97,10 +97,14 @@ def checkguilds(guilds):
         guild_ids[guild.id] = guild
 
     for guild_id in guild_ids:
-        t = (guild_id,)
-        c.execute("SELECT * FROM guilds where guild_id=?;", t)
-        if not c.fetchone():
-            addguild(guild_id)
+        try:
+            t = (guild_id,)
+            c.execute("SELECT * FROM guilds where guild_id=?;", t)
+            if not c.fetchone():
+                addguild(guild_id)
+        except:
+            print(e)
+            print("Error: Could not check guild", guild_id)
 
     count = [0, 0]
     c.execute("SELECT guild_id FROM guilds;")
@@ -109,13 +113,17 @@ def checkguilds(guilds):
             count[0] += 1
             c.execute("DELETE FROM guilds WHERE guild_id=?;", guild_id)
         else:
-            channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
-            c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
-            channels = c.fetchall()
-            for channel_id in channels:
-                if not (channel_id[0] in channel_ids):
-                    count[1] += 1
-                    c.execute("DELETE FROM channels WHERE channel_id=?;", channel_id)
+            try:
+                channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
+                c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
+                channels = c.fetchall()
+                for channel_id in channels:
+                    if not (channel_id[0] in channel_ids):
+                        count[1] += 1
+                        c.execute("DELETE FROM channels WHERE channel_id=?;", channel_id)
+            except Exception as e:
+                print(e)
+                print("Error: Could not check channels for guild", guild_id[0])
     print("Removed", count[0], "guilds from 'guilds'")
     print("Removed", count[1], "channels from 'channels'")
 
