@@ -45,6 +45,9 @@ class Bot(commands.AutoShardedBot):
         for csv in [tr, cmds]:
             csv.load()
 
+    def ready(self):
+        return self.bot_ready
+
     def are_shards_ready(self):
         #if self.shard_count == self.shards_ready:
         # if self.is_ready():
@@ -148,7 +151,7 @@ class Bot(commands.AutoShardedBot):
         user = ctx.author.id
         command = ctx.command.name
 
-        if not self.are_shards_ready():
+        if not self.ready():
             return
 
         if command in cm.devcmds:
