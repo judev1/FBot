@@ -102,7 +102,7 @@ def checkguilds(guilds):
             c.execute("SELECT * FROM guilds where guild_id=?;", t)
             if not c.fetchone():
                 addguild(guild_id)
-        except:
+        except Exception as e:
             print(e)
             print("Error: Could not check guild", guild_id)
 
