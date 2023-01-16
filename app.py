@@ -89,6 +89,8 @@ class Bot(commands.AutoShardedBot):
         self.dispatch("bot_ready")
 
     async def on_shard_ready(self, shard_id):
+        await self.change_presence(status=discord.Status.online,
+                                activity=discord.Game(name="Loading up..."))
 
         self.shards_ready += 1
         print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
