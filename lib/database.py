@@ -96,45 +96,44 @@ def checkguilds(guilds):
     for guild in guilds:
         guild_ids[guild.id] = guild
 
-    for i, guild_id in enumerate(guild_ids):
-        t = (guild_id,)
-        c.execute("SELECT * FROM guilds where guild_id=?;", t)
+    count = 0
+    for guild in guilds:
+        c.execute("SELECT guild_id FROM guilds where guild_id=?;", (guild.id,))
         if not c.fetchone():
-            addguild(guild_id)
+            addguild(guild.id)
+            count += 1
+    print("Added", count, "guilds to 'guilds'")
 
     count = [0, 0]
-    c.execute("SELECT guild_id FROM guilds;")
-    for i, guild_id in enumerate(c.fetchall()):
-        if not (guild_id[0] in guild_ids):
+    for row in c.execute("SELECT guild_id FROM guilds;"):
+        guild_id = row[0]
+        if not (guild_id in guild_ids):
+            c.execute("DELETE FROM guilds WHERE guild_id=?;", (guild_id,))
             count[0] += 1
-            c.execute("DELETE FROM guilds WHERE guild_id=?;", guild_id)
-            # Deliberately not deleting channels or counting
         else:
-            channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
-            c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
-            channels = c.fetchall()
-            for channel_id in channels:
-                if not (channel_id[0] in channel_ids):
+            channel_ids = [channel.id for channel in guild_ids[guild_id].channels]
+            for row in c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", (guild_id,)):
+                channel_id = row[0]
+                if not (channel_id in channel_ids):
+                    c.execute("DELETE FROM channels WHERE channel_id=?;", (channel_id,))
                     count[1] += 1
-                    c.execute("DELETE FROM channels WHERE channel_id=?;", channel_id)
-
     print("Removed", count[0], "guilds from 'guilds'")
     print("Removed", count[1], "channels from 'channels'")
 
     count = 0
-    c.execute("SELECT guild_id FROM channels;")
-    for guild_id in c.fetchall():
-        if not (guild_id[0] in guild_ids):
+    for row in c.execute("SELECT guild_id FROM channels;"):
+        guild_id = row[0]
+        if not (guild_id in guild_ids):
+            c.execute("DELETE FROM channels WHERE guild_id=?;", (guild_id,))
             count += 1
-            c.execute("DELETE FROM channels WHERE guild_id=?;", guild_id)
     print("Removed", count, "guild channels from 'channels'")
 
     count = 0
-    c.execute("SELECT guild_id FROM counting;")
-    for guild_id in c.fetchall():
-        if not (guild_id[0] in guild_ids):
+    for row in c.execute("SELECT guild_id FROM counting;"):
+        guild_id = row[0]
+        if not (guild_id in guild_ids):
+            c.execute("DELETE FROM counting WHERE guild_id=?;", (guild_id,))
             count += 1
-            c.execute("DELETE FROM counting WHERE guild_id=?;", guild_id)
     print("Removed", count, "guilds from 'counting'\n")
 
     conn.commit()
