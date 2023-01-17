@@ -68,7 +68,7 @@ class Bot(commands.AutoShardedBot):
                 finally: print("Done", end="")
         print("\n\n > Loaded cogs\n")
 
-        db.checkguilds(self.guilds)
+        await db.checkguilds(self.guilds)
 
         self.premium = await self.get_premium()
         self.cache = cache.Cache(self.settings.devs, self.premium)

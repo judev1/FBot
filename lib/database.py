@@ -90,7 +90,7 @@ def setup():
 
     conn.commit()
 
-def checkguilds(guilds):
+async def checkguilds(guilds):
     c = conn.cursor()
     guild_ids = dict()
     for guild in guilds:
