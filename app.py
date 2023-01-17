@@ -29,12 +29,13 @@ class Bot(commands.AutoShardedBot):
         intents.message_content = True
 
         self.shards_ready = 0
-        self.bot_ready = True
+        self.bot_ready = False
+        self.prepping = False
 
         super().__init__(command_prefix=fn.getprefix, intents=intents,
                          shard_count=self.settings.shards)
 
-        self.ready_shards_list = [False] * self.shard_count # TESTING
+        self.ready_shards_list = [False] * self.shard_count
         self.ftime = fn.ftime()
         # fn.VotingHandler(self)
         self.add_check(self.predicate)
@@ -49,13 +50,13 @@ class Bot(commands.AutoShardedBot):
         return self.bot_ready
 
     def are_shards_ready(self):
-        #if self.shard_count == self.shards_ready:
-        # if self.is_ready():
-        if all(self.ready_shards_list): # TESTING
+        if all(self.ready_shards_list):
+            self.shards_ready = self.shard_count
             return True
         return False
 
     async def prep(self):
+        self.prepping = True
         print(f"\n > All shards ready, finishing preperations")
 
         self.remove_command("help")
@@ -84,20 +85,24 @@ class Bot(commands.AutoShardedBot):
         self.ftime.set()
         print(f" > Session started at {self.ftime.start}\n")
 
-        print(f" > Bot is ready")
         self.bot_ready = True
+        self.prepping = False
+        print(f" > Bot is ready")
         self.dispatch("bot_ready")
 
+    async def on_shard_connect(self, shard_id):
+        if shard_id == 0:
+            print(f" > Shard 0 CONNECTED, updating status to 'Loading up...'")
+            await self.change_presence(status=discord.Status.online,
+                                    activity=discord.Game(name="Loading up..."))
+
     async def on_shard_ready(self, shard_id):
-        await self.change_presence(status=discord.Status.online,
-                                activity=discord.Game(name="Loading up..."))
 
         self.shards_ready += 1
         print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
 
-        if self.are_shards_ready():
-            self.shards_ready = self.shard_count
+        if self.are_shards_ready() and not self.prepping:
             await self.prep()
 
     async def on_shard_resumed(self, shard_id):
@@ -105,8 +110,7 @@ class Bot(commands.AutoShardedBot):
         print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
 
-        if self.are_shards_ready():
-            self.shards_ready = self.shard_count
+        if self.are_shards_ready() and not self.prepping:
             await self.prep()
 
     async def on_shard_disconnect(self, shard_id):

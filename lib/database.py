@@ -96,19 +96,11 @@ def checkguilds(guilds):
     for guild in guilds:
         guild_ids[guild.id] = guild
 
-    print(" !! DEBUGGING: Please note that servers being checked are servers that the bot is in,")
-    print("              not servers that are in the database\n")
-
     for i, guild_id in enumerate(guild_ids):
-        print(" !! DEBUGGING: CHECKING SERVER", i, guild_id)
-        print(" !! DEBUGGING: Sever name:", guild_ids[guild_id].name, "Server size:", guild_ids[guild_id].member_count)
         t = (guild_id,)
         c.execute("SELECT * FROM guilds where guild_id=?;", t)
         if not c.fetchone():
             addguild(guild_id)
-
-    print("\n !! DEBUGGING: Now checking servers and channels in the database that the bot is not")
-    print("               in/no longer exist\n")
 
     count = [0, 0]
     c.execute("SELECT guild_id FROM guilds;")
@@ -118,18 +110,15 @@ def checkguilds(guilds):
             c.execute("DELETE FROM guilds WHERE guild_id=?;", guild_id)
             # Deliberately not deleting channels or counting
         else:
-            print(" !! DEBUGGING: CHECKING SERVER CHANNELS", i, guild_id[0])
             channel_ids = [channel.id for channel in guild_ids[guild_id[0]].channels]
-            print(" !! DEBUGGING: Server channels:", channel_ids)
             c.execute("SELECT channel_id FROM channels WHERE guild_id=?;", guild_id)
             channels = c.fetchall()
             for channel_id in channels:
                 if not (channel_id[0] in channel_ids):
                     count[1] += 1
-                    print(" !! DEBUGGING: DELETING CHANNEL", channel_id[0])
                     c.execute("DELETE FROM channels WHERE channel_id=?;", channel_id)
 
-    print("\nRemoved", count[0], "guilds from 'guilds'")
+    print("Removed", count[0], "guilds from 'guilds'")
     print("Removed", count[1], "channels from 'channels'")
 
     count = 0
