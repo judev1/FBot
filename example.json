@@ -1,4 +1,10 @@
 {
+    "database": {
+        "host": "host",
+        "user": "user",
+        "password": "password",
+        "database": "database"
+    },
     "tokens": {
         "bot": "bot_token",
 
@@ -25,5 +31,6 @@
         user_id,
         user_id
     ],
-    "port": port_number
+    "voting_port": port_number,
+    "patreon_port": port_number
 }

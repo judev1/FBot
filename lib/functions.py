@@ -1,7 +1,6 @@
 import json
 import os
 
-import lib.database as db
 from lib.votinghandler import VotingHandler
 from lib.ftime import ftime
 
@@ -17,12 +16,12 @@ def formatperm(perm):
             text.append(word[0].upper() + word[1:])
     return " ".join(text)
 
-def getprefix(bot, message):
+async def getprefix(bot, message):
     if not bot.ready():
         return "fbot"
     prefix = "fbot"
     if str(message.channel.type) != "private":
-        prefix = db.getprefix(message.guild.id)
+        prefix = await bot.db.getprefix(message.guild.id)
     if prefix == "fbot":
         content = message.content
         if content[:5].lower() == "fbot ": prefix = content[:5]
@@ -30,7 +29,7 @@ def getprefix(bot, message):
         elif content[:23].lower() == "<@!711934102906994699> ":
             prefix = content[:6]
     if not message.author.bot:
-        db.register(message.author.id)
+        await bot.db.register(message.author.id)
     return prefix
 
 def getcogs():

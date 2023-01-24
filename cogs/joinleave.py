@@ -1,6 +1,5 @@
 from discord.ext import commands
 import lib.functions as fn
-import lib.database as db
 
 joinmsg = ["**Whoa new server, cooooool!**",
            "Thanks for choosing FBot, here are some helpful tips and tricks to get you started",
@@ -37,7 +36,7 @@ class JoinLeave(commands.Cog):
         if not self.bot.ready():
             return
 
-        db.addguild(newguild.id)
+        await self.bot.db.addguild(newguild.id)
 
         system_channel = newguild.system_channel
         if system_channel:
@@ -62,7 +61,7 @@ class JoinLeave(commands.Cog):
         if not self.bot.ready():
             return
 
-        db.removeguild(oldguild.id)
+        await self.bot.db.removeguild(oldguild.id)
 
         memcount = oldguild.member_count
         embed = self.bot.embed(fn.user, f"**Removed** from `{oldguild}`",

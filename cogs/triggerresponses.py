@@ -2,7 +2,6 @@ from discord.ext import commands
 from lib.triggers import tr
 import lib.functions as fn
 import lib.commands as cm
-import lib.database as db
 import lib.modes as modes
 from random import choice
 
@@ -56,7 +55,7 @@ class TriggerResponses(commands.Cog):
                 message.guild.get_member(self.bot.user.id)).send_messages:
                 return
 
-        prefix = fn.getprefix(self.bot, message)
+        prefix = await fn.getprefix(self.bot, message)
         commandcheck = content[len(prefix):]
         for command in cm.commands:
             if commandcheck.startswith(command):
@@ -73,10 +72,10 @@ class TriggerResponses(commands.Cog):
                 return
 
         if str(message.channel.type) != "private":
-            prefix = db.getprefix(message.guild.id)
-            db.addchannel(message.channel.id, message.guild.id)
-            priority = db.getpriority(message.guild.id)
-            mode = db.getmode(message.guild.id)
+            prefix = await self.bot.db.getprefix(message.guild.id)
+            await self.bot.db.addchannel(message.channel.id, message.guild.id)
+            priority = await self.bot.db.getpriority(message.guild.id)
+            mode = await self.bot.db.getmode(message.guild.id)
         else:
             priority = "all"
             prefix = "fbot "
@@ -88,7 +87,7 @@ class TriggerResponses(commands.Cog):
         if content in [f"<@!{self.bot.user.id}>", f"<@{self.bot.user.id}>"]:
             await message.reply(f"My prefix is `{prefix}`. Use `{prefix}help` for more help")
 
-        elif str(message.channel.type) == "private" or db.getstatus(message.channel.id) == "on":
+        elif str(message.channel.type) == "private" or await self.bot.db.getstatus(message.channel.id) == "on":
 
             if message.attachments:
                 response = choice(responses)

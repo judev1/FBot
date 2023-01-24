@@ -17,7 +17,7 @@ class Say(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = fn.getprefix(self.bot, ctx.message)
+            prefix = await fn.getprefix(self.bot, ctx.message)
             command = ctx.command.name
             if not text.lower().startswith(prefix + command):
                 for alias in ctx.command.aliases:

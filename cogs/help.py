@@ -3,7 +3,6 @@ from discord.ext import commands
 from dbfn import reactionbook
 import lib.functions as fn
 import lib.commands as cm
-import lib.database as db
 
 descriptions = ["Commands to get FBot spamming, check FBot's spamming, and limit FBots spamming",
 "All the commands you need to start making FBux... and debt!",
@@ -71,7 +70,7 @@ class Help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = db.getprefix(ctx.guild.id)
+            prefix = await self.bot.db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
 
         command = " ".join(command).lower()
@@ -114,7 +113,7 @@ class Help(commands.Cog):
 
         prefix = "fbot"
         if str(ctx.channel.type) != "private":
-            prefix = db.getprefix(ctx.guild.id)
+            prefix = await self.bot.db.getprefix(ctx.guild.id)
         if prefix == "fbot": prefix = "fbot "
         colour = self.bot.get_colour(ctx.author.id)
 

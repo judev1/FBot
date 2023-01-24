@@ -1,5 +1,4 @@
 from discord.ext import commands
-import lib.database as db
 
 class Modtoggle(commands.Cog):
 
@@ -10,7 +9,7 @@ class Modtoggle(commands.Cog):
     async def modtoggle(self, ctx, arg):
         if ctx.author.guild_permissions.administrator:
             if arg in {"on", "off"}:
-                db.changemodtoggle(ctx.guild.id, arg)
+                await self.bot.db.changemodtoggle(ctx.guild.id, arg)
                 await ctx.message.add_reaction("✅")
             else:
                 await ctx.reply("Modtoggle can only be set to `on` or `off`")

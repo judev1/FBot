@@ -28,47 +28,48 @@ class Bot(commands.AutoShardedBot):
         intents.members = True
         intents.message_content = True
 
-        self.shards_ready = 0
-        self.bot_ready = False
-        self.prepping = False
-
         super().__init__(command_prefix=fn.getprefix, intents=intents,
                          shard_count=self.settings.shards)
 
-        self.ready_shards_list = [False] * self.shard_count
-        self.ftime = fn.ftime()
-        # fn.VotingHandler(self)
-        self.add_check(self.predicate)
+        self.shards_connected = 0
+        self.shards_ready = list()
 
-        db.setup()
-        print("\n > Loaded the database")
-
-        for csv in [tr, cmds]:
-            csv.load()
+        self.prepped = False
+        self.bot_ready = False
+        self.cleaning = False
 
     def ready(self):
         return self.bot_ready
 
     def are_shards_ready(self):
-        if all(self.ready_shards_list):
-            self.shards_ready = self.shard_count
+        if len(self.shards_ready) == self.shard_count and not self.cleaning:
             return True
         return False
 
     async def prep(self):
-        self.prepping = True
-        print(f"\n > All shards ready, finishing preperations")
+
+        self.ftime = fn.ftime()
+        self.ftime.set()
+        print(f"\n > All shards ready, finishing preparations")
+        print(f" > Session started at {self.ftime.start}\n")
+
+        # fn.VotingHandler(self)
+        self.add_check(self.predicate)
+
+        self.db = await db.connect(self.settings)
+        print(" > Loaded the database")
+
+        for csv in [tr, cmds]:
+            csv.load()
 
         self.remove_command("help")
         for cog in fn.getcogs():
-            if cog not in ["botlists.py"]:
+            if cog not in []:
                 print(f"\nLoading {cog}...", end="")
                 try: await self.reload_extension("cogs." + cog[:-3])
                 except: await self.load_extension("cogs." + cog[:-3])
                 finally: print("Done", end="")
         print("\n\n > Loaded cogs\n")
-
-        await db.checkguilds(self.guilds)
 
         self.premium = await self.get_premium()
         self.cache = cache.Cache(self.settings.devs, self.premium)
@@ -82,42 +83,104 @@ class Bot(commands.AutoShardedBot):
         await self.change_presence(status=discord.Status.online,
                                 activity=discord.Game(name="'FBot help'"))
 
-        self.ftime.set()
-        print(f" > Session started at {self.ftime.start}\n")
+        self.prepped = True
 
-        self.bot_ready = True
-        self.prepping = False
+    async def cleanup(self):
+        c = await self.db.connection(autoclose=False)
+        guild_ids = dict()
+        for guild in bot.guilds:
+            guild_ids[guild.id] = guild
+
+        count = [0, 0]
+        for guild in bot.guilds:
+            await c.execute("SELECT guild_id FROM guilds WHERE guild_id=%s;", (guild.id,))
+            if not await c.fetchone():
+                await self.db.addguild(guild.id)
+                count[0] += 1
+            # doesnt work for some god foresaken reason
+            await c.execute("SELECT guild_id FROM counting WHERE guild_id=%s;", (guild.id,))
+            result = await c.fetchone()
+            if not result:
+                await self.db.addcounting(guild.id)
+                count[1] += 1
+        print("Added", count[0], "guilds to 'guilds'")
+        print("Added", count[1], "missing guilds to 'counting'")
+
+        count = [0, 0]
+        await c.execute("SELECT guild_id FROM guilds;")
+        for row in await c.fetchall():
+            guild_id = row[0]
+            if not (guild_id in guild_ids):
+                await self.db.removeguild(guild_id)
+                count[0] += 1
+            else:
+                channel_ids = [channel.id for channel in guild_ids[guild_id].channels]
+                await c.execute("SELECT channel_id FROM channels WHERE guild_id=%s;", (guild_id,))
+                for row in await c.fetchall():
+                    channel_id = row[0]
+                    if not (channel_id in channel_ids):
+                        await c.execute("DELETE FROM channels WHERE channel_id=%s;", (channel_id,))
+                        count[1] += 1
+        print("Removed", count[0], "guilds from 'guilds'")
+        print("Removed", count[1], "channels from 'channels'")
+
+        count = 0
+        await c.execute("SELECT guild_id FROM channels;")
+        for row in await c.fetchall():
+            guild_id = row[0]
+            if not (guild_id in guild_ids):
+                await c.execute("DELETE FROM channels WHERE guild_id=%s;", (guild_id,))
+                count += 1
+        print("Removed", count, "guild channels from 'channels'")
+
+        count = 0
+        await c.execute("SELECT guild_id FROM counting;")
+        for row in await c.fetchall():
+            guild_id = row[0]
+            if not (guild_id in guild_ids):
+                await c.execute("DELETE FROM counting WHERE guild_id=%s;", (guild_id,))
+                count += 1
+        print("Removed", count, "guilds from 'counting'\n")
+
+        await c.close()
+
+        self.cleaning = False
         print(f" > Bot is ready")
         self.dispatch("bot_ready")
+        self.bot_ready = True
 
     async def on_shard_connect(self, shard_id):
-        if shard_id == 0:
-            print(f" > Shard 0 CONNECTED, updating status to 'Loading up...'")
-            await self.change_presence(status=discord.Status.online,
-                                    activity=discord.Game(name="Loading up..."))
+        self.shards_connected += 1
+        print(f" > Shard {shard_id} CONNECTED, {self.shards_connected}/{self.shard_count} connected")
 
     async def on_shard_ready(self, shard_id):
+        if not shard_id in self.shards_ready:
+            self.shards_ready.append(shard_id)
+        print(f" > Shard {shard_id} READY, {len(self.shards_ready)}/{self.shard_count} ready")
 
-        self.shards_ready += 1
-        print(f" > Shard {shard_id} READY, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = True
-
-        if self.are_shards_ready() and not self.prepping:
-            await self.prep()
+        if self.are_shards_ready():
+            if not self.prepped:
+                await self.prep()
+            if not self.cleaning:
+                self.cleaning = True
+                print(" > Cleaning up the database")
+                await self.cleanup()
 
     async def on_shard_resumed(self, shard_id):
-        self.shards_ready += 1
-        print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = True
+        self.shards_connected += 1
+        if not shard_id in self.shards_ready:
+            self.shards_ready.append(shard_id)
+        print(f" > Shard {shard_id} RESUMED, {len(self.shards_ready)}/{self.shard_count} ready")
 
-        if self.are_shards_ready() and not self.prepping:
-            await self.prep()
+        if self.are_shards_ready() and not self.cleaning and self.prepped:
+            await self.cleanup()
 
     async def on_shard_disconnect(self, shard_id):
-        self.shards_ready -= 1
+        self.shards_connected -= 1
+        if shard_id in self.shards_ready:
+            self.shards_ready.remove(shard_id)
         self.bot_ready = False
-        print(f" > Shard {shard_id} DISCONNECTED, {self.shards_ready}/{self.shard_count} online")
-        self.ready_shards_list[shard_id] = False
+        print(f" > Shard {shard_id} DISCONNECTED, {len(self.shards_ready)}/{self.shard_count} online")
 
     async def get_premium(self):
 
@@ -193,7 +256,5 @@ class Bot(commands.AutoShardedBot):
         self.stats.commands_processed += 1
         return True
 
-
-
 bot = Bot()
-bot.run(bot.settings.tokens.bot)#, log_level=50)
+bot.run(bot.settings.tokens.bot, log_level=50)

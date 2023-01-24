@@ -2,7 +2,6 @@ from discord.ext import commands
 from lib.triggers import tr
 import lib.functions as fn
 import lib.commands as cm
-import lib.database as db
 from math import ceil
 from time import time
 
@@ -43,7 +42,7 @@ class Info(commands.Cog):
         else:
             guild_id = message.guild.id
 
-        prefix = fn.getprefix(self.bot, message)
+        prefix = await fn.getprefix(self.bot, message)
         commandcheck = message.content[len(prefix):]
         for command in cm.commands:
             if commandcheck.startswith(command):
@@ -54,14 +53,14 @@ class Info(commands.Cog):
 
         priority, status = "all", "on"
         if str(message.channel.type) != "private":
-            db.addchannel(message.channel.id, guild_id)
-            priority = db.getpriority(guild_id)
-            status = db.getstatus(message.channel.id)
+            await self.bot.db.addchannel(message.channel.id, guild_id)
+            priority = await self.bot.db.getpriority(guild_id)
+            status = await self.bot.db.getstatus(message.channel.id)
         if status == "on":
             trigger_detected = tr.respond(message, priority)[0]
             if trigger_detected:
                 stats.triggers_processed += 1
-                db.usetrigger(user.id)
+                await self.bot.db.usetrigger(user.id)
                 return
         stats.other_messages_processed += 1
 

@@ -1,7 +1,6 @@
 from discord.ext.commands import MemberConverter
 from discord import AllowedMentions
 from discord.ext import commands
-import lib.database as db
 import random
 import re
 
@@ -31,14 +30,14 @@ class PPSize(commands.Cog):
                     text = "Bots don't have pps, you do know that?"
                 else:
                     try:
-                        ppsize = db.getppsize(member.id)
+                        ppsize = await self.bot.db.getppsize(member.id)
                         if ppsize < 0:
                             ppsize = random.randint(0, 16)
-                            db.updateppsize(member.id, ppsize)
+                            await self.bot.db.updateppsize(member.id, ppsize)
                     except:
-                        db.register(member.id)
+                        await self.bot.db.register(member.id)
                         ppsize = random.randint(0, 16)
-                        db.updateppsize(member.id, ppsize)
+                        await self.bot.db.updateppsize(member.id, ppsize)
 
                     if (ppsize is not None):
                         pp = "8" + "=" * ppsize + "D"
@@ -56,7 +55,7 @@ class PPSize(commands.Cog):
             member = await converter.convert(ctx, user_mention)
             user_id = member.id
 
-            db.updateppsize(user_id, ppsize)
+            await self.bot.db.updateppsize(user_id, ppsize)
 
 async def setup(bot):
     await bot.add_cog(PPSize(bot))

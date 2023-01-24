@@ -20,7 +20,7 @@ class Respects(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = len(fn.getprefix(self.bot, ctx.message))
+            prefix = len(await fn.getprefix(self.bot, ctx.message))
             text = text[prefix + 9:]
 
         if text:

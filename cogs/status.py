@@ -1,6 +1,5 @@
 from discord.ext import commands
 from dbfn import reactionbook
-import lib.database as db
 
 circle = {"off": ":red_circle:", "on": ":green_circle:"}
 volume = {"few": ":mute:", "some": ":sound:", "all": ":loud_sound:"}
@@ -21,13 +20,13 @@ class Status(commands.Cog):
         if str(ctx.channel.type) == "private":
             embed = self.bot.embed(user, "FBot is always on in DMs")
         else:
-            db.addchannel(ctx.channel.id, ctx.guild.id)
+            await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
 
-            status = db.getstatus(ctx.channel.id)
-            modtoggle = db.getmodtoggle(ctx.guild.id)
-            priority = db.getpriority(ctx.guild.id)
-            mode = db.getmode(ctx.guild.id)
-            language = db.getlang(ctx.guild.id)
+            status = await self.bot.db.getstatus(ctx.channel.id)
+            modtoggle = await self.bot.db.getmodtoggle(ctx.guild.id)
+            priority = await self.bot.db.getpriority(ctx.guild.id)
+            mode = await self.bot.db.getmode(ctx.guild.id)
+            language = await self.bot.db.getlang(ctx.guild.id)
 
             embed = self.bot.embed(user, "FBot Config",
                     f"{circle[status]} FBot is `{status}`",
@@ -41,14 +40,14 @@ class Status(commands.Cog):
     @commands.command()
     async def status(self, ctx):
         user = ctx.author
-        db.addchannel(ctx.channel.id, ctx.guild.id)
+        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
 
         guild_id = ctx.guild.id
-        channels = db.getallstatus(guild_id)
+        channels = await self.bot.db.getallstatus(guild_id)
         view_channel = "self.bot.get_channel(%0).overwrites_for(self.ctx.guild.default_role).pair()[1].view_channel"
 
-        modtoggle = db.getmodtoggle(ctx.guild.id)
-        priority = db.getpriority(ctx.guild.id)
+        modtoggle = await self.bot.db.getmodtoggle(ctx.guild.id)
+        priority = await self.bot.db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
         colour = self.bot.get_colour(user.id)
 
@@ -60,17 +59,17 @@ class Status(commands.Cog):
     @commands.command()
     async def modstatus(self, ctx):
         user = ctx.author
-        db.addchannel(ctx.channel.id, ctx.guild.id)
+        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
 
         if not ctx.author.guild_permissions.administrator:
             await ctx.reply("Only members with administrator privileges can toggle this")
             return
 
         guild = ctx.guild
-        channels = db.getallstatus(guild.id)
+        channels = await self.bot.db.getallstatus(guild.id)
 
-        modtoggle = db.getmodtoggle(ctx.guild.id)
-        priority = db.getpriority(ctx.guild.id)
+        modtoggle = await self.bot.db.getmodtoggle(ctx.guild.id)
+        priority = await self.bot.db.getpriority(ctx.guild.id)
         header = f"{circle[modtoggle]} Modtoggle is `{modtoggle}`\n{volume[priority]} Responds to `{priority}`"
         colour = self.bot.get_colour(user.id)
 
@@ -84,10 +83,10 @@ class Status(commands.Cog):
         if not ctx.guild:
             await ctx.reply("**FBot is always on in DMs**")
             return
-        db.addchannel(ctx.channel.id, ctx.guild.id)
+        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
 
-        if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
-            db.changestatus(ctx.channel.id, "on")
+        if ctx.author.guild_permissions.administrator or await self.bot.db.getmodtoggle(ctx.guild.id) == "off":
+            await self.bot.db.changestatus(ctx.channel.id, "on")
             await ctx.message.add_reaction("✅")
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 
@@ -96,10 +95,10 @@ class Status(commands.Cog):
         if not ctx.guild:
             await ctx.reply("**You can never turn off FBot in DMs**")
             return
-        db.addchannel(ctx.channel.id, ctx.guild.id)
+        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
 
-        if ctx.author.guild_permissions.administrator or db.getmodtoggle(ctx.guild.id) == "off":
-            db.changestatus(ctx.channel.id, "off")
+        if ctx.author.guild_permissions.administrator or await self.bot.db.getmodtoggle(ctx.guild.id) == "off":
+            await self.bot.db.changestatus(ctx.channel.id, "off")
             await ctx.message.add_reaction("✅")
         else: await ctx.reply("Only members with administrator privileges can toggle this")
 

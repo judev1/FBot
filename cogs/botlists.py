@@ -1,6 +1,5 @@
 from discord.ext import commands
 import lib.functions as fn
-import lib.database as db
 import aiohttp
 
 class fakeuser: id = 0
@@ -15,7 +14,7 @@ class Botlists(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.dbl = bot.dbl
+        # self.dbl = bot.dbl
 
     @commands.Cog.listener()
     async def on_bot_ready(self):
@@ -70,8 +69,8 @@ class Botlists(commands.Cog):
         user = ctx.author
         embed = self.bot.embed(user, "FBot Vote")
 
-        def get_value(site):
-            nextvote = db.nextvote(user.id, site)
+        async def get_value(site):
+            nextvote = await self.bot.db.nextvote(user.id, site)
             if nextvote:
                 mins, hours = nextvote
                 if not hours:
@@ -82,11 +81,15 @@ class Botlists(commands.Cog):
                 value = "You can vote!"
             return value
 
-        db.addvoter(user.id)
+        top = await get_value("top")
+        bfd = await get_value("bfd")
+        dbl = await get_value("dbl")
+
+        await self.bot.db.addvoter(user.id)
         embed.add_field(name=":mailbox_with_mail:  **__SAVED__**", inline=False, value="Your votes appear in your profile and on leaderboards")
-        embed.add_field(name="top.gg", value=f"[{get_value('top')}]({fn.links.votetop} 'Vote here')")
-        embed.add_field(name="discords.com/bots", value=f"[{get_value('bfd')}]({fn.links.votebfd} 'Vote here')")
-        embed.add_field(name="discordbotlist", value=f"[{get_value('dbl')}]({fn.links.votedbl} 'Vote here')")
+        embed.add_field(name="top.gg", value=f"[{top}]({fn.links.votetop} 'Vote here')")
+        embed.add_field(name="discords.com/bots", value=f"[{bfd}]({fn.links.votebfd} 'Vote here')")
+        embed.add_field(name="discordbotlist", value=f"[{dbl}]({fn.links.votedbl} 'Vote here')")
 
         embed.add_field(name=":mailbox_closed: **__NOT SAVED__**", inline=False, value="Your votes do not appear in your profile or on leaderboards")
         embed.add_field(name="listcord.gg", value=f"[Vote here]({fn.links.voteligg} 'Please sign in first then and vote on this page')")
@@ -103,26 +106,26 @@ class Botlists(commands.Cog):
         elif site == "discordbotlist":
             user_id = int(data["id"])
 
-        db.register(user_id)
+        await self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = f"<@{user_id}> [unknown]"
         else: name = f"{name.mention} (*{name.name}*)"
 
         if site == "discords":
             if data["type"] == "vote":
-                db.vote(user_id, "bfd")
+                await self.bot.db.vote(user_id, "bfd")
                 embed = self.bot.embed(user, site, f"{name} voted")
             elif data["type"] == "test":
                 embed = self.bot.embed(user, site + " test", f"{name} tested out the webhook")
         elif site == "discordbotlist":
-            db.vote(user_id, "dbl")
+            await self.bot.db.vote(user_id, "dbl")
             embed = self.bot.embed(user, site, f"{name} voted")
         await self.voteschannel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
         user_id = data["user"]
-        db.register(user_id)
+        await self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
 
@@ -133,12 +136,12 @@ class Botlists(commands.Cog):
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         user_id = data["user"]
-        db.register(user_id)
+        await self.bot.db.register(user_id)
         name = await self.bot.fetch_user(user_id)
         if not name: name = "User"
         else: name = f"{name.mention} (*{name.name}*)"
 
-        db.vote(user_id, "top")
+        await self.bot.db.vote(user_id, "top")
         embed = self.bot.embed(user, "top.gg", f"{name} voted")
         await self.voteschannel.send(embed=embed)
 
