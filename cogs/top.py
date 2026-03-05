@@ -6,9 +6,6 @@ LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 
 toptypes = {
-    "voters": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
-    "voting": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
-    "votes": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
     "counters": ("counting", "server", "with a highscore of `{}`", "with {}"),
     "counting": ("counting", "server", "with a highscore of `{}`", "with {}")
 }
