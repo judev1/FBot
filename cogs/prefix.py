@@ -20,7 +20,7 @@ class Prefix(commands.Cog):
                 else:
                     db.changeprefix(ctx.guild.id, arg)
                     await ctx.message.add_reaction("✅")
-                    await ctx.reply(f"Use `{arg}help` or {self.bot.user.mention} if you get stuck")
+                    await ctx.reply(f"Use `{arg}help` or {self.bot.user.mention} if you get stuck, or do `{arg}prefix reset` to reset the prefix!")
             return
 
         await ctx.reply("Only members with administrator privileges can toggle this")
