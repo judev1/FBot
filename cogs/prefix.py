@@ -1,4 +1,5 @@
 from discord.ext import commands
+import lib.database as db
 
 class Prefix(commands.Cog):
 
@@ -9,7 +10,7 @@ class Prefix(commands.Cog):
     async def prefix(self, ctx, *, arg):
         if ctx.author.guild_permissions.administrator:
             if arg == "reset":
-                await self.bot.db.changeprefix(ctx.guild.id, "fbot")
+                db.changeprefix(ctx.guild.id, "fbot")
                 await ctx.message.add_reaction("✅")
             else:
                 if arg.startswith(("'", '"')) or arg.endswith(("'", '"')):
@@ -17,9 +18,9 @@ class Prefix(commands.Cog):
                 if len(arg) > 10:
                     await ctx.reply("Prefixes cannot be longer than 10 characters")
                 else:
-                    await self.bot.db.changeprefix(ctx.guild.id, arg)
+                    db.changeprefix(ctx.guild.id, arg)
                     await ctx.message.add_reaction("✅")
-                    await ctx.reply(f"Use `{arg}help` or {self.bot.user.mention} if you get stuck")
+                    await ctx.reply(f"Use `{arg}help` or {self.bot.user.mention} if you get stuck, or do `{arg}prefix reset` to reset the prefix!")
             return
 
         await ctx.reply("Only members with administrator privileges can toggle this")

@@ -1,6 +1,7 @@
 from traceback import format_exception
 from discord.ext import commands
 from dbfn import reactionbook
+import lib.database as db
 import lib.triggers as tr
 import lib.commands as cm
 import discord
@@ -112,32 +113,32 @@ class Dev(commands.Cog):
 
     @commands.command()
     async def devon(self, ctx):
-        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
-        await self.bot.db.changestatus(ctx.channel.id, "on")
+        db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.changestatus(ctx.channel.id, "on")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def devoff(self, ctx):
-        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
-        await self.bot.db.changestatus(ctx.channel.id, "off")
+        db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.changestatus(ctx.channel.id, "off")
         await ctx.message.add_reaction("✅")
 
     @commands.command()
     async def devrespond(self, ctx, *, arg):
         if arg in ("few", "some", "all"):
-            await self.bot.db.changepriority(ctx.guild.id, arg)
+            db.changepriority(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("Must be `few`, `some`, or `all`")
 
     @commands.command()
     async def devmodtoggle(self, ctx, arg):
-        await self.bot.db.addchannel(ctx.channel.id, ctx.guild.id)
+        db.addchannel(ctx.channel.id, ctx.guild.id)
         if arg == "on":
-            await self.bot.db.changemodtoggle(ctx.guild.id, arg)
+            db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         elif arg == "off":
-            await self.bot.db.changemodtoggle(ctx.guild.id, arg)
+            db.changemodtoggle(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
 
     @commands.command()

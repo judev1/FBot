@@ -17,8 +17,7 @@ class VotingHandler:
             runner = web.AppRunner(app)
             await runner.setup()
 
-            port = self.bot.settings.voting_port
-            server = web.TCPSite(runner, "0.0.0.0", port)
+            server = web.TCPSite(runner, "0.0.0.0", 2296)
             await server.start()
 
         self.bot = bot

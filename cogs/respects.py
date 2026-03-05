@@ -20,7 +20,7 @@ class Respects(commands.Cog):
             text = message.content
         else:
             text = ctx.message.content
-            prefix = len(await fn.getprefix(self.bot, ctx.message))
+            prefix = len(fn.getprefix(self.bot, ctx.message))
             text = text[prefix + 9:]
 
         if text:
@@ -48,7 +48,7 @@ class Respects(commands.Cog):
         if user.id in respects[1]: return
 
         respects[1].add(user.id)
-        await channel.send(f"{user.mention} payed respects to **{respects[0]}**", allowed_mentions=AllowedMentions.none())
+        await channel.send(f"{user.mention} paid respects to **{respects[0]}**", allowed_mentions=AllowedMentions.none())
 
 async def setup(bot):
     await bot.add_cog(Respects(bot))

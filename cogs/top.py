@@ -1,13 +1,11 @@
 from discord.ext import commands
 import lib.functions as fn
+import lib.database as db
 
 LARROW_EMOJI = "⬅️"
 RARROW_EMOJI = "➡️"
 
 toptypes = {
-    "voters": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
-    "voting": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
-    "votes": ("votes", "anywhere", "with `{}` vote(s) this month", "with {} votes"),
     "counters": ("counting", "server", "with a highscore of `{}`", "with {}"),
     "counting": ("counting", "server", "with a highscore of `{}`", "with {}")
 }
@@ -45,7 +43,7 @@ class Top(commands.Cog):
                     obj_id = ctx.guild.id
 
             async with ctx.channel.typing():
-                top, score, rank = await self.bot.db.gettop(data[NAME], 12, obj_id)
+                top, score, rank = db.gettop(data[NAME], 12, obj_id)
                 embed = self.bot.embed(
                     ctx.author,
                     f"FBot Top {data[NAME]}",

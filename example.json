@@ -1,18 +1,6 @@
 {
-    "database": {
-        "host": "host",
-        "user": "user",
-        "password": "password",
-        "database": "database"
-    },
     "tokens": {
         "bot": "bot_token",
-
-        "topgg": "api_key",
-        "bfd": "api_key",
-        "dbgg": "api_key",
-        "dbl": "api_key",
-        "fates": "api_key",
 
         "auth": "webhook_auth"
     },
@@ -30,7 +18,5 @@
     "devs": [
         user_id,
         user_id
-    ],
-    "voting_port": port_number,
-    "patreon_port": port_number
+    ]
 }

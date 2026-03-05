@@ -24,19 +24,8 @@ class Links(commands.Cog):
 
         embed.add_field(name=":closed_book: **__GENERAL LINKS__**", inline=False, value="The standard discord links for FBot")
         embed.add_field(name="Support Server", value=f"[Click here]({fn.links.server})")
-        embed.add_field(name="Our Patreon", value=f"[Click here]({fn.links.patreon})")
         embed.add_field(name="Our Github", value=f"[Click here]({fn.links.github})")
-
-        embed.add_field(name=":blue_book: **__BOT LISTS__**", inline=False, value="All the bot lists which FBot is shown on")
-        embed.add_field(name="top.gg", value=f"[Click here]({fn.links.top})")
-        embed.add_field(name="discordbotlist", value=f"[Click here]({fn.links.dbl})")
-        embed.add_field(name="listcord.gg", value=f"[Click here]({fn.links.ligg})")
-        embed.add_field(name="discords.com", value=f"[Click here]({fn.links.bfd})")
-        embed.add_field(name="botlist.me", value=f"[Click here]({fn.links.blme})")
-        embed.add_field(name="botlist.space", value=f"[Click here]({fn.links.blsp})")
-        embed.add_field(name="discord-botlist.eu", value=f"[Click here]({fn.links.dbeu})")
-        embed.add_field(name="discord.bots.gg", value=f"[Click here]({fn.links.dbgg})")
-
+        
         await ctx.send(embed=embed)
 
     @commands.command()
