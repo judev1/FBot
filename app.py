@@ -4,6 +4,7 @@ nest_asyncio.apply()
 from discord.ext import commands
 import discord
 import json
+import asyncio
 
 from lib.commands import cmds
 from lib.triggers import tr
@@ -13,8 +14,6 @@ import lib.database as db
 import lib.cache as cache
 
 class Bot(commands.AutoShardedBot):
-
-    premium = list()
 
     def __init__(self):
 
@@ -103,15 +102,15 @@ class Bot(commands.AutoShardedBot):
         self.ready_shards_list[shard_id] = True
 
         if self.are_shards_ready() and not self.prepping:
-            await self.prep()
+            asyncio.create_task(self.prep())
 
     async def on_shard_resumed(self, shard_id):
         self.shards_ready += 1
         print(f" > Shard {shard_id} RESUMED, {self.shards_ready}/{self.shard_count} online")
         self.ready_shards_list[shard_id] = True
 
-        if self.are_shards_ready() and not self.prepping:
-            await self.prep()
+        if self.are_shards_ready() and not self.prepping and not self.bot_ready:
+            asyncio.create_task(self.prep())
 
     async def on_shard_disconnect(self, shard_id):
         self.shards_ready -= 1
@@ -189,7 +188,7 @@ class Bot(commands.AutoShardedBot):
         cooldown = self.cache.cooldowns.get(user, command)
         if cooldown:
             self.stats.commands_ratelimited += 1
-            raise commands.CommandOnCooldown(commands.BucketType.user, cooldown)
+            raise commands.CommandOnCooldown(commands.Cooldown(1, cooldown), cooldown, commands.BucketType.user)
         self.stats.commands_processed += 1
         return True
 
