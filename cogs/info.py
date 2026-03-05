@@ -160,10 +160,6 @@ class Info(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(name="premium")
-    async def _Premium(self, ctx):
-        await ctx.reply("https://fbot.breadhub.uk/premium")
-
     @commands.command()
     async def devs(self, ctx):
         embed = self.bot.embed(ctx.author, title="This is the team that makes FBot great!")
