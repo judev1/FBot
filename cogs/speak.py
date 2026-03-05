@@ -1,4 +1,5 @@
 from discord.ext import commands
+import lib.database as db
 
 options = ["default", "uwu", "pirate", "biblical", "roadman", "australian", "german", "italian", "safe", "fuck", "triggered", "ironic", "patronise", "confused"]
 
@@ -11,7 +12,7 @@ class Speak(commands.Cog):
     async def speak(self, ctx, arg):
         if arg == "normal": arg = "default"
         if arg in options:
-            await self.bot.db.changemode(ctx.guild.id, arg)
+            db.changemode(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("That's not a valid mode")
@@ -19,7 +20,7 @@ class Speak(commands.Cog):
     @commands.command()
     async def devspeak(self, ctx, arg):
         if arg in options:
-            await self.bot.db.changemode(ctx.guild.id, arg)
+            db.changemode(ctx.guild.id, arg)
             await ctx.message.add_reaction("✅")
         else:
             await ctx.reply("That's not a valid mode")

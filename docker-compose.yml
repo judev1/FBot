@@ -1,0 +1,7 @@
+services:
+  fbot:
+    container_name: fbot
+    image: fbot:latest
+    build:
+      context: ./
+      dockerfile: .docker/images/fbot/Dockerfile
