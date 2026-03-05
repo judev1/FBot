@@ -6,6 +6,7 @@ settings.json
 __pycache__/
 .vscode/
 Temp/
+env/
 
 *.pyc
 *.db
